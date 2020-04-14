@@ -1,6 +1,7 @@
 package Routers
 
 import (
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Controller/Admin"
 	"GinSkeleton/App/Http/Middleware/Authorization"
 	"GinSkeleton/App/Http/Validattor/CodeList"
@@ -9,15 +10,12 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"GinSkeleton/App/Global/Variable"
-	// GinSkeleton/Vendors/
-	// . "GinSkeleton/Middleware" 这种语法可以直接调用Middleware 里面的函数，不需要 middleware.函数名指定，但是引入的文件多会导致混乱，不推荐
 )
 
 func InitRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
-	f, _ := os.Create(Variable.BASE_PATH+"/Storage/logs/gin.log")
+	f, _ := os.Create(Variable.BASE_PATH + "/Storage/logs/gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	// 初始化控制器
