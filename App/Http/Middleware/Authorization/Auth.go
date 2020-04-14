@@ -1,6 +1,7 @@
 package Authorization
 
 import (
+	"GinSkeleton/App/Global/Errors"
 	"fmt"
 	"strings"
 
@@ -24,7 +25,7 @@ func CheckAuth() gin.HandlerFunc {
 			context.JSON(401,
 				gin.H{
 					"code": 401,
-					"msg":  "NoAuthorazation",
+					"msg":  Errors.Errors_NoAuthorization,
 				})
 			//暂停执行
 			context.Abort()
