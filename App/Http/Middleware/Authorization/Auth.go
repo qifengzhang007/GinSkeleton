@@ -3,6 +3,7 @@ package Authorization
 import (
 	"GinSkeleton/App/Global/Errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	//"GinSkeleton/Vendors/github.com/dgrijalva/jwt-go"
@@ -24,7 +25,7 @@ func CheckAuth() gin.HandlerFunc {
 		if len(V_HeaderParams.Authorization) < 1 {
 			context.JSON(401,
 				gin.H{
-					"code": 401,
+					"code": http.StatusUnauthorized,
 					"msg":  Errors.Errors_NoAuthorization,
 				})
 			//暂停执行
