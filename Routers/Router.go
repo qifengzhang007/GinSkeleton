@@ -5,7 +5,7 @@ import (
 	"GinSkeleton/App/Http/Controller/Admin"
 	"GinSkeleton/App/Http/Middleware/Authorization"
 	"GinSkeleton/App/Http/Validattor/CodeList"
-	"GinSkeleton/App/Http/Validattor/Factory"
+	ValidatorFactory "GinSkeleton/App/Http/Validattor/Factory"
 	ValidatorUsers "GinSkeleton/App/Http/Validattor/Users"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -43,7 +43,7 @@ func InitRouter() *gin.Engine {
 		v_noAuth := V_Backend.Group("users/")
 		{
 
-			v_noAuth.POST("register", Factory.CreateValidatorFactory("Users", "Register"))
+			v_noAuth.POST("register", ValidatorFactory.CreateValidatorFactory("Users", "Register"))
 			v_noAuth.POST("login", (&ValidatorUsers.Login{}).CheckParams)
 		}
 
