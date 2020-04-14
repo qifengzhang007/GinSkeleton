@@ -6,11 +6,19 @@ import (
 	"GinSkeleton/App/Http/Middleware/Authorization"
 	"GinSkeleton/App/Http/Validattor/CodeList"
 	ValidatorUsers "GinSkeleton/App/Http/Validattor/Users"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 	"os"
 )
+
+func init() {
+
+	fmt.Println("测试反射应用于")
+	fmt.Println((&ValidatorUsers.Login{}).CheckParams) //  输出函数的指针
+
+}
 
 func InitRouter() *gin.Engine {
 
@@ -20,7 +28,6 @@ func InitRouter() *gin.Engine {
 
 	// 初始化控制器
 	AdminUsers := &Admin.Users{}
-	//CodeListController:=&Admin.CodeList{}
 
 	router := gin.Default()
 
@@ -34,8 +41,8 @@ func InitRouter() *gin.Engine {
 		//  【不需要】中间件验证的路由  用户组、路由组
 		v_noAuth := V_Backend.Group("users/")
 		{
-			v_noAuth.POST("register", (&ValidatorUsers.UsersLogin{}).CheckParams)
-			v_noAuth.POST("login", (&ValidatorUsers.UsersLogin{}).CheckParams)
+			v_noAuth.POST("register", (&ValidatorUsers.Register{}).CheckParams)
+			v_noAuth.POST("login", (&ValidatorUsers.Login{}).CheckParams)
 		}
 
 		// 需要中间件验证的路由

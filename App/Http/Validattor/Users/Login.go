@@ -6,13 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UsersLogin struct {
+type Login struct {
 	Base
 	Pass string `form:"pass" json:"pass"`
 }
 
-func (c *UsersLogin) CheckParams(context *gin.Context) {
-	var v_form_params *UsersLogin = &UsersLogin{
+func (c *Login) CheckParams(context *gin.Context) {
+	var v_form_params *Login = &Login{
 		//&CodelistBase{},
 	}
 	if err := context.ShouldBind(v_form_params); err != nil {
