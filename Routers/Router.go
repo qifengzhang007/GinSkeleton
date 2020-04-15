@@ -25,7 +25,7 @@ func InitRouter() *gin.Engine {
 	//  创建一个路由组，模拟调用中间件
 	V_Backend := router.Group("/Admin/")
 	{
-		//  【不需要】中间件验证的路由  用户组、路由组
+		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")
 		{
 			v_noAuth.POST("register", ValidatorFactory.Create("Users", "Register"))
