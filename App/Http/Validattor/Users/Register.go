@@ -30,3 +30,5 @@ func (c *Register) CheckParams(context *gin.Context) {
 	// 验证完成，调用控制器
 	(&Admin.Users{}).Register(context)
 }
+
+//  请记得将表单验证器注册在容器工厂

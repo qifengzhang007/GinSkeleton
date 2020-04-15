@@ -1,6 +1,7 @@
 package Routers
 
 import (
+	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Middleware/Authorization"
 	ValidatorFactory "GinSkeleton/App/Http/Validattor/Factory"
@@ -28,8 +29,8 @@ func InitRouter() *gin.Engine {
 		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")
 		{
-			v_noAuth.POST("register", ValidatorFactory.Create("Users", "Register"))
-			v_noAuth.POST("login", ValidatorFactory.Create("Users", "Login"))
+			v_noAuth.POST("register", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersRegister"))
+			v_noAuth.POST("login", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersLogin"))
 		}
 
 		// 需要中间件验证的路由
@@ -39,13 +40,13 @@ func InitRouter() *gin.Engine {
 			v_users := V_Backend.Group("users/")
 			{
 				// 查询
-				v_users.GET("index", ValidatorFactory.Create("Users", "Show"))
+				v_users.GET("index", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersShow"))
 				// 新增
-				v_users.POST("create", ValidatorFactory.Create("Users", "Store"))
+				v_users.POST("create", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersStore"))
 				// 更新
-				v_users.POST("edit", ValidatorFactory.Create("Users", "Update"))
+				v_users.POST("edit", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersUpdate"))
 				// 删除
-				v_users.POST("delete", ValidatorFactory.Create("Users", "Destroy"))
+				v_users.POST("delete", ValidatorFactory.Create(Consts.Validattor_Prefix+"UsersDestroy"))
 
 				// post 文件上传
 				//V_Backend.POST("avatar", AdminUsers.UploadAvatar)
@@ -54,10 +55,10 @@ func InitRouter() *gin.Engine {
 			// CodeList 模块 增、删、改、查 操作
 			v_codelist := V_Backend.Group("stockcode/")
 			{
-				v_codelist.GET("index", ValidatorFactory.Create("CodeList", "Show"))
-				v_codelist.POST("create", ValidatorFactory.Create("CodeList", "Store"))
-				v_codelist.POST("edit", ValidatorFactory.Create("CodeList", "Update"))
-				v_codelist.POST("delete", ValidatorFactory.Create("CodeList", "Destroy"))
+				v_codelist.GET("index", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListShow"))
+				v_codelist.POST("create", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListStore"))
+				v_codelist.POST("edit", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListUpdate"))
+				v_codelist.POST("delete", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListDestroy"))
 			}
 
 		}

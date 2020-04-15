@@ -5,15 +5,23 @@
  - using code:	gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /                         --> GinSkeleton/Routers.InitRouter.func1 (3 handlers)
-[GIN-debug] POST   /Admin/users/register     --> GinSkeleton/App/Http/Validattor/Users.(*UsersLogin).CheckParams-fm (3 handlers)
-[GIN-debug] POST   /Admin/users/login        --> GinSkeleton/App/Http/Validattor/Users.(*UsersLogin).CheckParams-fm (3 handlers)
-[GIN-debug] GET    /Admin/users/showlist     --> GinSkeleton/App/Http/Validattor/Users.(*ShowList).CheckParams-fm (4 handlers)
-[GIN-debug] POST   /Admin/users/create       --> GinSkeleton/App/Http/Validattor/Users.(*Create).CheckParams-fm (4 handlers)
-[GIN-debug] POST   /Admin/users/update       --> GinSkeleton/App/Http/Controller/Admin.(*Users).Update-fm (4 handlers)
-[GIN-debug] POST   /Admin/users/delete       --> GinSkeleton/App/Http/Controller/Admin.(*Users).Delete-fm (4 handlers)
-[GIN-debug] POST   /Admin/avatar             --> GinSkeleton/App/Http/Controller/Admin.(*Users).UploadAvatar-fm (4 handlers)
-[GIN-debug] GET    /Admin/stockcode/showlist --> GinSkeleton/App/Http/Validattor/CodeList.(*ShowList).CheckParams-fm (4 handlers)
-[GIN-debug] POST   /Admin/stockcode/create   --> GinSkeleton/App/Http/Validattor/CodeList.(*Create).CheckParams-fm (4 handlers)
-[GIN-debug] POST   /Admin/stockcode/update   --> GinSkeleton/App/Http/Validattor/CodeList.(*Update).CheckParams-fm (4 handlers)
-[GIN-debug] POST   /Admin/stockcode/delete   --> GinSkeleton/App/Http/Validattor/CodeList.(*Delete).CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/register     --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (3 handlers)
+[GIN-debug] POST   /Admin/users/login        --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (3 handlers)
+[GIN-debug] GET    /Admin/users/index        --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/create       --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/edit         --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/delete       --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] GET    /Admin/stockcode/index    --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/stockcode/create   --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/stockcode/edit     --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/stockcode/delete   --> GinSkeleton/App/Http/Validattor/Interface.ValidatorInterface.CheckParams-fm (4 handlers)
 [GIN-debug] Listening and serving HTTP on :2020
+[GIN] 2020/04/15 - 16:10:49 | 200 |       997.2µs |       127.0.0.1 | POST     "/Admin/users/register"
+[GIN] 2020/04/15 - 16:10:52 | 200 |      5.9825ms |       127.0.0.1 | POST     "/Admin/users/login"
+[GIN] 2020/04/15 - 16:10:55 | 200 |            0s |       127.0.0.1 | POST     "/Admin/users/create"
+[GIN] 2020/04/15 - 16:11:02 | 200 |       997.9µs |       127.0.0.1 | POST     "/Admin/users/edit"
+[GIN] 2020/04/15 - 16:11:05 | 200 |            0s |       127.0.0.1 | POST     "/Admin/users/delete"
+[GIN] 2020/04/15 - 16:11:08 | 200 |       997.6µs |       127.0.0.1 | GET      "/Admin/users/index?name=%E5%BC%A0%E4%B8%89%E4%B8%B0"
+[GIN] 2020/04/15 - 16:11:12 | 200 |       997.8µs |       127.0.0.1 | GET      "/Admin/stockcode/index"
+[GIN] 2020/04/15 - 16:11:14 | 200 |       997.2µs |       127.0.0.1 | GET      "/Admin/stockcode/index"
+[GIN] 2020/04/15 - 16:11:17 | 200 |       997.1µs |       127.0.0.1 | GET      "/Admin/stockcode/index"
