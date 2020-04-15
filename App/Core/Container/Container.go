@@ -1,11 +1,9 @@
 package Container
 
-// 容器以 键 => 值 方式存储结构体、函数等，方便后续调用
-
-// 定义一个全局事件存储变量
+// 定义一个全局键值对存储容器
 var containerStoreList = make(map[string]interface{}, 0)
 
-// 创建一个事件管理工厂
+// 创建一个容器工厂
 func CreatecontainersFactory() *containers {
 	return &containers{}
 }
@@ -30,7 +28,7 @@ func (e *containers) Delete(key string) {
 	delete(containerStoreList, key)
 }
 
-//  3.从容器获取相关键对应的值
+//  3.传递键，从容器获取值
 func (e *containers) Get(key string) interface{} {
 	if value, exists := e.keyExistsContainer(key); exists == true {
 		return value

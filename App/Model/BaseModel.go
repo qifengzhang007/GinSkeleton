@@ -33,7 +33,7 @@ func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
 
 	}
 	// 注册链接释放事件
-	Event.CreateEventManageFactory().Register(Variable.EVENT_DESTRORY_SUFFIX+"DB", res.Close)
+	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"DB", res.Close)
 	return res
 }
 

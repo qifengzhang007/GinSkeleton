@@ -1,7 +1,8 @@
 package Destruct
 
 import (
-	Event2 "GinSkeleton/App/Core/Event"
+	"GinSkeleton/App/Core/Event"
+	"GinSkeleton/App/Global/Variable"
 	"os"
 	"os/signal"
 	"syscall"
@@ -17,7 +18,9 @@ func init() {
 
 		switch received {
 		case os.Interrupt, os.Kill, syscall.SIGQUIT:
-			(Event2.CreateEventManageFactory()).Dispatch("")
+			// 检测到程序退出时，释放数据库句柄
+
+			(Event.CreateEventManageFactory()).CallEvent(Variable.Event_Destroy_Prefix + "DB")
 		}
 		os.Exit(1)
 	}()
