@@ -8,7 +8,7 @@ import (
 )
 
 type Update struct {
-	*CodelistBase
+	CodelistBase
 	Id         int       `form:"id" binding:"required"`
 	Updated_at time.Time `form:"updated_at" binding:"required" time_format:"2006-01-02"`
 }
