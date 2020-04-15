@@ -42,5 +42,6 @@ func Create(ModuleName string, ValidatorName string) func(context *gin.Context) 
 	default:
 		log.Panicln(Errors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + ModuleName + ", 名称：" + ValidatorName)
 	}
+
 	return res
 }
