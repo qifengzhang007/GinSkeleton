@@ -3,6 +3,8 @@ package Errors
 const (
 	//系统部分
 	Errors_FuncEvent_Already_Exists string = "注册函数类事件失败，键名已经被注册"
+	Errors_FuncEvent_NotRegister    string = "没有找到键名对应的函数"
+	Errors_FuncEvent_NotCall        string = "注册的函数无法正确执行"
 	Errors_BasePath                 string = "初始化项目根目录失败"
 	Errors_NoAuthorization          string = "鉴权未通过，请检查token是否有效"
 	// 数据库部分
