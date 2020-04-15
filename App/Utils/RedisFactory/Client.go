@@ -1,7 +1,9 @@
 package RedisFactory
 
 import (
+	"GinSkeleton/App/Core/Event"
 	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Helper"
 	"github.com/gomodule/redigo/redis"
 	"log"
@@ -10,8 +12,7 @@ import (
 
 func createRedisClientPool() *redis.Pool {
 	configFac := Helper.CreateYamlFactory()
-
-	return &redis.Pool{
+	redis_pool := &redis.Pool{
 		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
 		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数
 		IdleTimeout: configFac.GetDuration("Redis.IdleTimeout") * time.Second, //最大的空闲连接等待时间，超过此时间后，空闲连接将被关闭
@@ -32,6 +33,11 @@ func createRedisClientPool() *redis.Pool {
 			return conn, err
 		},
 	}
+	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
+	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"Redis", func(args ...interface{}) {
+		redis_pool.Close()
+	})
+	return redis_pool
 }
 
 //  从连接池获取一个redis连接
