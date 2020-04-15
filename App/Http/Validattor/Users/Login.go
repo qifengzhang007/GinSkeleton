@@ -29,3 +29,5 @@ func (c *Login) CheckParams(context *gin.Context) {
 	// 验证完成，调用控制器
 	(&Admin.Users{}).Login(context)
 }
+
+//  【必须的操作】 请记得去验证器工厂注册
