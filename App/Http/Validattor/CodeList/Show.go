@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ShowList struct {
+type Show struct {
 	CodelistBase
 }
 
-func (c *ShowList) CheckParams(context *gin.Context) {
-	var v_form_params *ShowList = &ShowList{
+func (c *Show) CheckParams(context *gin.Context) {
+	var v_form_params *Show = &Show{
 		//&CodelistBase{},
 	}
 	if err := context.ShouldBind(v_form_params); err != nil {
@@ -23,5 +23,5 @@ func (c *ShowList) CheckParams(context *gin.Context) {
 		return
 	}
 	// 验证完成，调用控制器
-	(&Admin.CodeList{}).ShowLists(context)
+	(&Admin.CodeList{}).Show(context)
 }

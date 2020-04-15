@@ -2,7 +2,6 @@ package Users
 
 import (
 	"GinSkeleton/App/Http/Controller/Admin"
-	_ "GinSkeleton/App/Http/Validattor/Factory"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )

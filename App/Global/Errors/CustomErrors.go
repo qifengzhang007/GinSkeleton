@@ -11,4 +11,6 @@ const (
 	//redis部分
 	Errors_Redis_InitConnFail string = "初始化redis连接池失败"
 	Errors_Redis_AuhtFail     string = "Redis Auht鉴权失败，密码错误"
+	// 验证器错误
+	Errors_Valiadator_Not_Exists string = "不存在的验证器"
 )

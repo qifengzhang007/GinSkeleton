@@ -13,7 +13,7 @@ type CodeList struct {
 }
 
 // 1.查询数据
-func (u *CodeList) ShowLists(context *gin.Context) {
+func (u *CodeList) Show(context *gin.Context) {
 
 	//  get 方式 context.Query("code" ；post 方式 context.name:三六零, code:601366
 	fmt.Printf("参数：\nname:%s, code:%s\n", context.Query("name"), context.Query("code"))
@@ -28,7 +28,7 @@ func (u *CodeList) ShowLists(context *gin.Context) {
 }
 
 // 2.新增数据
-func (u *CodeList) Create(context *gin.Context) {
+func (u *CodeList) Store(context *gin.Context) {
 
 	//  create 模拟 post 数据
 	fmt.Printf("参数：\nname:%s, code:%s\n", context.PostForm("name"), context.PostForm("code"))
@@ -60,7 +60,7 @@ func (u *CodeList) Update(context *gin.Context) {
 }
 
 // 3.删除数据
-func (u *CodeList) Delete(context *gin.Context) {
+func (u *CodeList) Destroy(context *gin.Context) {
 
 	//  create 模拟 post 数据
 	ID := context.PostForm("id")

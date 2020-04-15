@@ -1,5 +1,5 @@
 package Users
 
 type Base struct {
-	Name string `form:"username" json:"username"  bind:"required"`
+	Name string `form:"name" json:"name"  bind:"required"`
 }

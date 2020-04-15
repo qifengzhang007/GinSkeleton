@@ -118,7 +118,7 @@ func (c *Users) ParseUserToken(token string) {
 }
 
 //3.模拟查询一条用户记录
-func (c *Users) ShowList(context *gin.Context) {
+func (c *Users) Show(context *gin.Context) {
 
 	Model.CreateUserFactory().ShowList(context.DefaultQuery("username", ""))
 
@@ -136,7 +136,7 @@ func (c *Users) ShowList(context *gin.Context) {
 }
 
 //3.模拟新增一条用户记录
-func (c *Users) Create(context *gin.Context) {
+func (c *Users) Store(context *gin.Context) {
 	username := context.PostForm("username")
 	age := context.DefaultPostForm("age", "")
 	sex := context.DefaultPostForm("sex", "")
@@ -171,7 +171,7 @@ func (c *Users) Update(context *gin.Context) {
 }
 
 //5.模拟删除一条用户记录
-func (c *Users) Delete(context *gin.Context) {
+func (c *Users) Destroy(context *gin.Context) {
 	userid := context.PostForm("id")
 	fmt.Printf("userid:%s 将被删除\n", userid)
 	context.JSON(http.StatusOK, gin.H{
