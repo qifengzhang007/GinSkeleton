@@ -1,7 +1,9 @@
 package MysqlFactory
 
 import (
+	"GinSkeleton/App/Core/Event"
 	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Helper"
 	"database/sql"
 	"log"
@@ -27,6 +29,12 @@ func Init_sql_driver() *sql.DB {
 	db.SetMaxIdleConns(SetMaxIdleConns)
 	db.SetMaxOpenConns(SetMaxOpenConns)
 	db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
+
+	// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
+	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"DB", func(args ...interface{}) {
+		db.Close()
+	})
+
 	return db
 }
 

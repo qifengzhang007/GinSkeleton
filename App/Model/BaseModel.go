@@ -1,8 +1,6 @@
 package Model
 
 import (
-	"GinSkeleton/App/Core/Event"
-	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/MysqlFactory"
 	"database/sql"
 )
@@ -32,8 +30,6 @@ func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
 	default:
 
 	}
-	// 注册链接释放事件
-	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"DB", res.Close)
 	return res
 }
 
@@ -66,9 +62,4 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 	}
 	return nil
 
-}
-
-// 关闭数据库连接
-func (b *BaseModel) Close(args ...interface{}) {
-	b.db_driver.Close()
 }
