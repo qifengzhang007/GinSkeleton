@@ -17,7 +17,7 @@ func init() {
 		received := <-c
 
 		switch received {
-		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGINT:
+		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGILL, syscall.SIGTERM:
 			// 检测到程序退出时，按照键的前缀统一执行销毁类事件
 			(Event.CreateEventManageFactory()).FuzzyCall(Variable.Event_Destroy_Prefix)
 			os.Exit(1)
