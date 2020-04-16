@@ -31,10 +31,9 @@ func Init_sql_driver() *sql.DB {
 	db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 
 	// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"DB", func(args ...interface{}) {
+	Event.CreateEventManageFactory().Set(Variable.Event_Destroy_Prefix+"DB", func(args ...interface{}) {
 		db.Close()
 	})
-
 	return db
 }
 

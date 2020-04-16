@@ -1,10 +1,5 @@
 package Test
 
-import (
-	"fmt"
-	"os"
-)
-
 //  这里写需要测试的代码即可
 func init() {
 	//test_path()
@@ -13,8 +8,9 @@ func init() {
 
 // 测试路径相关的函数
 func test_path() {
-	fmt.Println("Test目录获取路径")
-	fmt.Println(os.Getwd())
+	/*	fmt.Println("Test目录获取路径")
+		fmt.Println(os.Getwd())
+	*/
 }
 
 // 测试杂项

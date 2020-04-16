@@ -3,6 +3,7 @@ package Event
 import (
 	"GinSkeleton/App/Global/Errors"
 	"log"
+	"strings"
 	"sync"
 )
 
@@ -19,19 +20,27 @@ func CreateEventManageFactory() *EventManage {
 type EventManage struct {
 }
 
-//  1.注册事件， 强烈建议注册事件的时候，根据不同的类型添加对应的前缀
-func (e *EventManage) Register(key string, key_func func(args ...interface{})) {
+//  1.注册事件
+func (e *EventManage) Set(key string, key_func func(args ...interface{})) bool {
 	//判断key下是否已有事件
-	if _, exists := e.keyExistsEvent(key); exists == false {
+	if _, exists := e.Get(key); exists == false {
 		smap.Store(key, key_func)
-	} else {
-		log.Panic(Errors.Errors_FuncEvent_Already_Exists + ", 键名：" + key)
+		return true
 	}
+	return false
 }
 
-//  2.执行事件
-func (e *EventManage) CallEvent(key string, args ...interface{}) {
-	if value_interface, exists := e.keyExistsEvent(key); exists {
+// 2.获取事件
+func (e *EventManage) Get(key string) (interface{}, bool) {
+	if value, exists := smap.Load(key); exists {
+		return value, exists
+	}
+	return nil, false
+}
+
+//  3.执行事件
+func (e *EventManage) Call(key string, args ...interface{}) {
+	if value_interface, exists := e.Get(key); exists {
 		if fn, ok := value_interface.(func(args ...interface{})); ok {
 			fn(args...)
 		} else {
@@ -43,15 +52,20 @@ func (e *EventManage) CallEvent(key string, args ...interface{}) {
 	}
 }
 
-//  3.删除事件
+//  4.删除事件
 func (e *EventManage) Delete(key string) {
 	smap.Delete(key)
 }
 
-//判断某个键是否已经存在某个事件
-func (e *EventManage) keyExistsEvent(key string) (interface{}, bool) {
-	if value, exists := smap.Load(key); exists {
-		return value, exists
-	}
-	return nil, false
+//  5.根据键的前缀，模糊调用. 使用请谨慎.
+func (e *EventManage) FuzzyCall(key_pre string) {
+
+	smap.Range(func(key, value interface{}) bool {
+		if keyname, ok := key.(string); ok {
+			if strings.HasPrefix(keyname, key_pre) {
+				e.Call(keyname)
+			}
+		}
+		return true
+	})
 }
