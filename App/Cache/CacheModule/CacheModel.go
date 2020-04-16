@@ -2,8 +2,8 @@ package CacheModule
 
 import "GinSkeleton/App/Utils/RedisFactory"
 
-// 缓存模块，先做一些简单的缓存功能，仅支持最基本的 key value，
-// 其他类型的键值请自行调用已封装的全功能版本 redis 客户端
+// 缓存模块，先做一些简单的缓存功能，仅支持最基本的 key value（string类型），
+// 其他类型的键值请自行调用已本项目已经封装的全功能版本 redis 客户端
 
 type CacheModel struct {
 	cache *RedisFactory.RedisClient

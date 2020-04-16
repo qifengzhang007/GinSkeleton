@@ -1,6 +1,9 @@
 package Container
 
-import "sync"
+import (
+	"strings"
+	"sync"
+)
 
 // 定义一个全局键值对存储容器
 
@@ -18,7 +21,7 @@ type containers struct {
 //  1.以键值对的形式将代码注册到容器
 func (e *containers) Set(key string, value interface{}) (res bool) {
 
-	if _, exists := e.keyExistsContainer(key); exists == false {
+	if e.Get(key) == nil {
 		smap.Store(key, value)
 		res = true
 	}
@@ -33,17 +36,21 @@ func (e *containers) Delete(key string) {
 //  3.传递键，从容器获取值
 func (e *containers) Get(key string) interface{} {
 
-	if value, exists := e.keyExistsContainer(key); exists {
+	if value, exists := smap.Load(key); exists {
 		return value
 	}
 	return nil
 }
 
-//判断某个键是否已经存在于容器
-func (e *containers) keyExistsContainer(key string) (interface{}, bool) {
+// 按照键的前缀模糊删除容器中注册的内容
+func (e *containers) FuzzyDelete(key_pre string) {
 
-	if value, exists := smap.Load(key); exists {
-		return value, exists
-	}
-	return nil, false
+	smap.Range(func(key, value interface{}) bool {
+		if keyname, ok := key.(string); ok {
+			if strings.HasPrefix(keyname, key_pre) {
+				smap.Delete(keyname)
+			}
+		}
+		return true
+	})
 }

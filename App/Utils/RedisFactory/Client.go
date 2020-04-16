@@ -34,7 +34,7 @@ func createRedisClientPool() *redis.Pool {
 		},
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
-	Event.CreateEventManageFactory().Register(Variable.Event_Destroy_Prefix+"Redis", func(args ...interface{}) {
+	Event.CreateEventManageFactory().Set(Variable.Event_Destroy_Prefix+"Redis", func(args ...interface{}) {
 		redis_pool.Close()
 	})
 	return redis_pool

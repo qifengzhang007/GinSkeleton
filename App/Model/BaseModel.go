@@ -1,8 +1,10 @@
 package Model
 
 import (
+	"GinSkeleton/App/Global/Errors"
 	"GinSkeleton/App/Utils/MysqlFactory"
 	"database/sql"
+	"log"
 )
 
 var sql_driver *sql.DB
@@ -26,9 +28,8 @@ func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
 		} else {
 			res = &BaseModel{db_driver: sql_driver}
 		}
-		fallthrough
 	default:
-
+		log.Panic(Errors.Errors_Db_Driver_NotExists)
 	}
 	return res
 }
