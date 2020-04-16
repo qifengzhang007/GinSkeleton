@@ -22,7 +22,7 @@ func Init_sql_driver() *sql.DB {
 	SetMaxIdleConns := configFac.GetInt("Mysql.SetMaxIdleConns")
 	SetMaxOpenConns := configFac.GetInt("Mysql.SetMaxOpenConns")
 	SetConnMaxLifetime := configFac.GetDuration("Mysql.SetConnMaxLifetime")
-	db, err := sql.Open(DbType, string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=true&loc=Local")
+	db, err := sql.Open(DbType, string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(Errors.Errors_Db_SqlDriverInitFail)
 	}
