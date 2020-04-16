@@ -19,9 +19,8 @@ func init() {
 		switch received {
 		case os.Interrupt, os.Kill, syscall.SIGQUIT:
 			// 检测到程序退出时，释放数据库句柄
-
-			(Event.CreateEventManageFactory()).CallEvent(Variable.Event_Destroy_Prefix + "DB")
-			(Event.CreateEventManageFactory()).CallEvent(Variable.Event_Destroy_Prefix + "Redis")
+			Event.CreateEventManageFactory().CallEvent(Variable.Event_Destroy_Prefix + "DB")
+			Event.CreateEventManageFactory().CallEvent(Variable.Event_Destroy_Prefix + "Redis")
 		}
 		os.Exit(1)
 	}()
