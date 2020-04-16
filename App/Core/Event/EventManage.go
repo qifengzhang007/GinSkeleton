@@ -2,7 +2,6 @@ package Event
 
 import (
 	"GinSkeleton/App/Global/Errors"
-	"fmt"
 	"log"
 	"strings"
 	"sync"
@@ -65,7 +64,6 @@ func (e *EventManage) FuzzyCall(key_pre string) {
 		if keyname, ok := key.(string); ok {
 			if strings.HasPrefix(keyname, key_pre) {
 				e.Call(keyname)
-				fmt.Println("释放的键名：" + keyname)
 			}
 		}
 		return true
