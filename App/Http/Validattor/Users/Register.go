@@ -2,6 +2,7 @@ package Users
 
 import (
 	"GinSkeleton/App/Http/Controller/Admin"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +10,7 @@ import (
 type Register struct {
 	Base
 	Phone string `form:"phone" json:"phone"  bind:"required"`
-	Pass  string `form:"pass" json:"pass bind:"required""`
+	Pass  string `form:"pass" json:"pass bind:"required"`
 }
 
 func (c *Register) CheckParams(context *gin.Context) {
@@ -27,8 +28,12 @@ func (c *Register) CheckParams(context *gin.Context) {
 		fmt.Println("参数不符合规定，name、pass、Phone 长度有问题，不允许注册")
 		return
 	}
-	// 验证完成，调用控制器
-	(&Admin.Users{}).Register(context)
+	// 验证完成，调用控制器,同时将验证器传递给下一步
+
+	if v_bytes, eror := json.Marshal(v_form_params); eror == nil {
+		context.Set("formRegister", v_bytes)
+		(&Admin.Users{}).Register(context)
+	}
 }
 
 //  请记得将表单验证器注册在容器工厂

@@ -17,10 +17,11 @@ func init() {
 	var key string
 
 	// Users 模块表单验证器注册
-	key = Consts.Validattor_Prefix + "UsersLogin"
-	Container.CreatecontainersFactory().Set(key, &Users.Login{})
 	key = Consts.Validattor_Prefix + "UsersRegister"
 	Container.CreatecontainersFactory().Set(key, &Users.Register{})
+	key = Consts.Validattor_Prefix + "UsersLogin"
+	Container.CreatecontainersFactory().Set(key, &Users.Login{})
+
 	key = Consts.Validattor_Prefix + "UsersShow"
 	Container.CreatecontainersFactory().Set(key, &Users.Show{})
 	key = Consts.Validattor_Prefix + "UsersStore"

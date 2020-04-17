@@ -3,6 +3,8 @@ package Admin
 import (
 	CacheModule2 "GinSkeleton/App/Cache/CacheModule"
 	MyJwt2 "GinSkeleton/App/Http/Middleware/MyJwt"
+	//"encoding/json"
+	//V_Users "GinSkeleton/App/Http/Validattor/Users"
 	"GinSkeleton/App/Model"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -16,15 +18,17 @@ type Users struct {
 
 // 1.模拟用户注册
 func (u *Users) Register(context *gin.Context) {
-	//  1.模拟用户注册
+	var register_code = -1
+	var register_res = "Fial"
+	// 获取表单验证器
+	/*	if v_bytes,ok:=context.Get("formRegister");ok{
+		var tem interface{}
+		json.Unmarshal([]byte(v_bytes),tem)
+	}*/
+
 	context.JSON(200, gin.H{
-		"code": 0,
-		"msg":  "OK",
-		"data": gin.H{
-			"user":   "张三丰,模拟用户注册信息",
-			"age":    20,
-			"remark": "备注信息，2020-02-09",
-		},
+		"code": register_code,
+		"msg":  register_res,
 	})
 
 }

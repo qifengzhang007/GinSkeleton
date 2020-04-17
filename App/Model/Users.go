@@ -8,6 +8,38 @@ import (
 
 type usersModel struct {
 	*BaseModel
+	Id       int64  `json:"id"`
+	Username string `json:"username" form:"name" binding:"required,min=3,max=30"`
+	Pass     string `json:"pass" form:"pass" binding:"required,min=3,max=30"`
+	Phone    string `json:"phone" form:"phone"`
+}
+
+// 用户注册,
+func (u *usersModel) Register(username string, pass string) bool {
+	sql := "INSERT  INTO tb_users(username,pass) SELECT ?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
+	if u.ExecuteSql(sql, username, pass, username) > 0 {
+		return true
+	}
+	return false
+}
+
+// 用户登录,
+func (u *usersModel) Login(username string, pass string) *usersModel {
+	sql := "select id, pass,phone  from tb_users where  username=?  limit 1"
+	rows := u.QuerySql(sql)
+	var user_info = &usersModel{
+		Username: username,
+	}
+	for rows.Next() {
+		rows.Scan(&user_info.Id, &user_info.Pass, &user_info.Phone)
+		rows.Close()
+		break
+	}
+	// 账号密码验证成功，办法token
+	if user_info.Pass == pass {
+		return user_info
+	}
+	return nil
 }
 
 func (u *usersModel) ShowList(username string) {
@@ -35,7 +67,7 @@ func CreateUserFactory() *usersModel {
 	dbDriver := CreateBaseSqlFactory("mysql")
 	if dbDriver != nil {
 		return &usersModel{
-			dbDriver,
+			BaseModel: dbDriver,
 		}
 	}
 	log.Fatal("usersModel工厂初始化失败")
