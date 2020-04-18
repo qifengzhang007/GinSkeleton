@@ -8,6 +8,7 @@ Mysql:
   Prefix: "tb_"
   User: "root"
   Pass: "DRsXT5ZJ6Oi55LPQ"
+  Charset: "utf8"
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
   SetConnMaxLifetime: 60

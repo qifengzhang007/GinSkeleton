@@ -4,7 +4,7 @@ import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Middleware/Authorization"
-	ValidatorFactory "GinSkeleton/App/Http/Validattor/Factory"
+	ValidatorFactory "GinSkeleton/App/Http/Validattor/Core/Factory"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"

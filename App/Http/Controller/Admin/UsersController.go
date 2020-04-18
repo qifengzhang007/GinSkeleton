@@ -2,6 +2,7 @@ package Admin
 
 import (
 	CacheModule2 "GinSkeleton/App/Cache/CacheModule"
+	"GinSkeleton/App/Global/Consts"
 	MyJwt2 "GinSkeleton/App/Http/Middleware/MyJwt"
 	//"encoding/json"
 	//V_Users "GinSkeleton/App/Http/Validattor/Users"
@@ -18,18 +19,24 @@ type Users struct {
 
 // 1.模拟用户注册
 func (u *Users) Register(context *gin.Context) {
-	var register_code = -1
-	var register_res = "Fial"
-	// 获取表单验证器
-	/*	if v_bytes,ok:=context.Get("formRegister");ok{
-		var tem interface{}
-		json.Unmarshal([]byte(v_bytes),tem)
-	}*/
 
-	context.JSON(200, gin.H{
-		"code": register_code,
-		"msg":  register_res,
-	})
+	// 获取表单绑定的结构体数据（按照键=》值）形式，注意前面有前缀
+	name := context.GetString(Consts.Validattor_Prefix + "name")
+	pass := context.GetString(Consts.Validattor_Prefix + "pass")
+	phone := context.GetString(Consts.Validattor_Prefix + "phone")
+	fmt.Printf("控制器获取数据，name:%s, pass:%s, phone:%s\n", name, pass, phone)
+
+	if Model.CreateUserFactory().Register(name, pass) {
+		context.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "用户注册成功！",
+		})
+	} else {
+		context.JSON(-200, gin.H{
+			"code": -200,
+			"msg":  "注册失败！",
+		})
+	}
 
 }
 

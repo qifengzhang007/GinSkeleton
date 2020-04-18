@@ -18,11 +18,12 @@ func Init_sql_driver() *sql.DB {
 	Port := configFac.GetString("Mysql.Port")
 	User := configFac.GetString("Mysql.User")
 	Pass := configFac.GetString("Mysql.Pass")
+	Charset := configFac.GetString("Mysql.Charset")
 	DataBase := configFac.GetString("Mysql.DataBase")
 	SetMaxIdleConns := configFac.GetInt("Mysql.SetMaxIdleConns")
 	SetMaxOpenConns := configFac.GetInt("Mysql.SetMaxOpenConns")
 	SetConnMaxLifetime := configFac.GetDuration("Mysql.SetConnMaxLifetime")
-	db, err := sql.Open(DbType, string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local")
+	db, err := sql.Open(DbType, string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local&charset="+Charset)
 	if err != nil {
 		log.Fatal(Errors.Errors_Db_SqlDriverInitFail)
 	}

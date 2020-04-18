@@ -1,8 +1,8 @@
 package Test
 
 import (
+	"encoding/json"
 	"fmt"
-	"reflect"
 )
 
 //  这里写需要测试的代码即可
@@ -22,7 +22,7 @@ func test_path() {
 func mergeStruct() {
 
 	type Base struct {
-		Id int
+		Id int `json:"id"`
 	}
 	// 模拟gin原始结构体
 	type structA struct {
@@ -33,8 +33,8 @@ func mergeStruct() {
 	//  模拟表单验证器模型
 	type structB struct {
 		Base
-		RealName string
-		Addr     string
+		RealName string `json:"realname"`
+		Addr     string `json:"addr"`
 	}
 
 	//  将结构体B的字段以及值合并到A结构体
@@ -48,20 +48,24 @@ func mergeStruct() {
 		Addr:     "武当",
 	}
 
-	//vfb:=reflect.ValueOf(b)
-	vfbe := reflect.ValueOf(b).Elem()
-
-	//获取全部字段
-	fmt.Println("B结构体字段数量：", vfbe.NumField())
-	for i := 1; i <= vfbe.NumField(); i++ {
-
-		//vfbe.Field(i-1).SetString("修改值")
-		fmt.Printf("字段：%v,%v\n", vfbe.Field(i-1).Type(), vfbe.Field(i-1).Kind())
-
-		/*		if val,ok:=vfbe1.(structB);ok{
-				fmt.Println("输出最新值：%#v\n",val.RealName)
-			}*/
+	if v_bytes, error := json.Marshal(b); error == nil {
+		fmt.Println(string(v_bytes))
 	}
+
+	////vfb:=reflect.ValueOf(b)
+	//vfbe := reflect.ValueOf(b).Elem()
+	//
+	////获取全部字段
+	//fmt.Println("B结构体字段数量：", vfbe.NumField())
+	//for i := 1; i <= vfbe.NumField(); i++ {
+	//
+	//	//vfbe.Field(i-1).SetString("修改值")
+	//	fmt.Printf("字段：%v,%v\n", vfbe.Field(i-1).Type(), vfbe.Field(i-1).Kind())
+	//
+	//	/*		if val,ok:=vfbe1.(structB);ok{
+	//			fmt.Println("输出最新值：%#v\n",val.RealName)
+	//		}*/
+	//}
 
 	/*	if vfbe_val,ok:=vfbe.Interface().Elem();ok{
 		fmt.Println("获取B结构体的数量",vfbe_val.FieldNum());

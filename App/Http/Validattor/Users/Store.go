@@ -29,6 +29,5 @@ func (c *Store) CheckParams(context *gin.Context) {
 			"code": -100,
 			"msg":  "参数校验失败，请检查账号、密码长度",
 		})
-		fmt.Printf("这里不会执行！！！")
 	}
 }

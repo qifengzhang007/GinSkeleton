@@ -1,18 +1,14 @@
-package Factory
+package RegisterValidator
 
 import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Global/Errors"
 	"GinSkeleton/App/Http/Validattor/CodeList"
-	"GinSkeleton/App/Http/Validattor/Interface"
 	"GinSkeleton/App/Http/Validattor/Users"
-	"github.com/gin-gonic/gin"
-	"log"
-	"reflect"
 )
 
-func init() {
+// 各个业务模块验证器必须进行注册（初始化）
+func RegisterValidator() {
 	//  key 按照前缀+模块+验证动作 格式，将各个模块验证注册在容器
 	var key string
 
@@ -40,19 +36,4 @@ func init() {
 	Container.CreatecontainersFactory().Set(key, &CodeList.Update{})
 	key = Consts.Validattor_Prefix + "CodeListDestroy"
 	Container.CreatecontainersFactory().Set(key, &CodeList.Destroy{})
-
-}
-
-// 表单参数验证器工厂
-func Create(key string) func(context *gin.Context) {
-
-	if value := Container.CreatecontainersFactory().Get(key); value != nil {
-		valueof := reflect.ValueOf(value)
-		valueofInterface := valueof.Interface()
-		if value, ok := valueofInterface.(Interface.ValidatorInterface); ok {
-			return value.CheckParams
-		}
-	}
-	log.Panicln(Errors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + key)
-	return nil
 }

@@ -17,7 +17,7 @@ func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
 		if sql_driver == nil {
 			sql_driver = MysqlFactory.Init_sql_driver()
 		}
-		// Ping() 命令表示检测数据连接是否ok，必要时从连接池建立一个连接
+		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
 		if err := sql_driver.Ping(); err != nil {
 			// 重试
 			sql_driver = MysqlFactory.GetOneEffectivePing()
