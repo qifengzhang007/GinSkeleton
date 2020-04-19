@@ -1,28 +1,34 @@
 package Users
 
 import (
+	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Http/Controller/Admin"
-	"fmt"
+	"GinSkeleton/App/Http/Validattor/Core/DaTaTransfer"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 type Destroy struct {
-	Id int `form:"id" binding:"required"`
+	Id int `form:"id"  json:"id" binding:"required"`
 }
 
-func (c *Destroy) CheckParams(context *gin.Context) {
+func (d *Destroy) CheckParams(context *gin.Context) {
 
-	var v_form_Destroy = &Destroy{}
-	context.ShouldBind(v_form_Destroy)
+	context.ShouldBind(&d)
 
-	fmt.Println(v_form_Destroy.Id)
-
-	if v_form_Destroy.Id > 0 {
-		// 验证完成，调用控制器
-		(&Admin.Users{}).Destroy(context)
-
+	if d.Id > 0 {
+		//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+		extraAddBindDataContext := DaTaTransfer.DataAddContext(d, Consts.Validattor_Prefix, context)
+		if extraAddBindDataContext == nil {
+			log.Panic("UserShow表单参数验证器json化失败..")
+		} else {
+			// 验证完成，调用控制器
+			(&Admin.Users{}).Destroy(extraAddBindDataContext)
+		}
 	} else {
-
-		return
+		context.JSON(-100, gin.H{
+			"code": -100,
+			"msg":  "参数校验失败，请检查Id(>0)",
+		})
 	}
 }

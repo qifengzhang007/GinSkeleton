@@ -6,7 +6,7 @@ const (
 	Errors_FuncEvent_NotRegister    string = "没有找到键名对应的函数"
 	Errors_FuncEvent_NotCall        string = "注册的函数无法正确执行"
 	Errors_BasePath                 string = "初始化项目根目录失败"
-	Errors_NoAuthorization          string = "鉴权未通过，请检查token是否有效"
+	Errors_NoAuthorization          string = "token鉴权未通过，请通过token授权接口重新获取token,"
 	// 数据库部分
 	Errors_Db_Driver_NotExists  string = "数据库驱动不存在"
 	Errors_Db_SqlDriverInitFail string = "数据库驱动初始化失败"
@@ -16,4 +16,7 @@ const (
 	Errors_Redis_AuhtFail     string = "Redis Auht鉴权失败，密码错误"
 	// 验证器错误
 	Errors_Valiadator_Not_Exists string = "不存在的验证器"
+	//token部分
+	Errors_TOken_Invalid string = "无效的token"
+	Errors_TOken_Expired string = "过期的token"
 )

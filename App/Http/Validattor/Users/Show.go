@@ -1,27 +1,32 @@
 package Users
 
 import (
+	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Http/Controller/Admin"
-	"fmt"
+	"GinSkeleton/App/Http/Validattor/Core/DaTaTransfer"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 type Show struct {
 	Base
+	Page   float64 `form:"page" json:"page" binding:"required"`
+	Limits float64 `form:"limits" json:"limits" binding:"required"`
 }
 
-func (c *Show) CheckParams(context *gin.Context) {
+func (s *Show) CheckParams(context *gin.Context) {
 
-	fmt.Printf("验证器获取的参数:\n%#v\n", context.Query("username"))
-	if len(context.Query("name")) >= 1 {
-		// 验证完成，调用控制器
-		(&Admin.Users{}).Show(context)
-
-	} else {
-		context.JSON(-100, gin.H{
-			"code": -100,
-			"msg":  "参数校验失败，请检查 name 关键词是否有效",
-		})
-		fmt.Printf("这里不会执行！！！")
+	if err := context.ShouldBind(&s); err != nil {
+		log.Panic("UserShow, shouldBind出错")
+		return
 	}
+	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	extraAddBindDataContext := DaTaTransfer.DataAddContext(s, Consts.Validattor_Prefix, context)
+	if extraAddBindDataContext == nil {
+		log.Panic("UserShow表单参数验证器json化失败..")
+	} else {
+		// 验证完成，调用控制器,并将追加标案参数验证器的上下文传递给控制器
+		(&Admin.Users{}).Show(extraAddBindDataContext)
+	}
+
 }

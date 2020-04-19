@@ -2,7 +2,9 @@ package Authorization
 
 import (
 	"GinSkeleton/App/Global/Errors"
-	"fmt"
+	"GinSkeleton/App/Global/Variable"
+	"GinSkeleton/App/Service/Users/Token"
+	"GinSkeleton/App/Utils/Response"
 	"net/http"
 	"strings"
 
@@ -22,21 +24,23 @@ func CheckAuth() gin.HandlerFunc {
 		//  推荐使用ShouldbindHeader 方式获取头参数
 		context.ShouldBindHeader(&V_HeaderParams)
 
-		if len(V_HeaderParams.Authorization) < 1 {
-			context.JSON(401,
-				gin.H{
-					"code": http.StatusUnauthorized,
-					"msg":  Errors.Errors_NoAuthorization,
-				})
+		if len(V_HeaderParams.Authorization) >= 20 {
+			token := strings.Split(V_HeaderParams.Authorization, " ")
+			if len(token) == 2 && len(token[1]) >= 20 {
+				token_is_effective := Token.CreateUserFactory().IsEffective(token[1])
+				if token_is_effective {
+					context.Set(Variable.USERS_TOKEN_KEY, token[1])
+					context.Next()
+				} else {
+					Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, Errors.Errors_NoAuthorization, "")
+					//暂停执行
+					context.Abort()
+				}
+			}
+		} else {
+			Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, Errors.Errors_NoAuthorization, "")
 			//暂停执行
 			context.Abort()
-		} else {
-			token := strings.Split(V_HeaderParams.Authorization, " ")
-			fmt.Printf("\n数组长度：%d, token=>%s\n", len(token), token[1]) // 返回：2 ,token有效值
-
-			context.Set("UserToken", token[1])
-			fmt.Printf("中间件验证用户token：%s 完成！", token[1])
-			context.Next()
 		}
 
 	}

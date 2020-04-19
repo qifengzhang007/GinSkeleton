@@ -1,6 +1,7 @@
 package Users
 
 import (
+	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Http/Controller/Admin"
 	"GinSkeleton/App/Http/Validattor/Core/DaTaTransfer"
 	"fmt"
@@ -13,22 +14,23 @@ type Register struct {
 	Pass  string `form:"pass" json:"pass" bind:"required"`
 }
 
-func (c *Register) CheckParams(context *gin.Context) {
-	var v_form_params *Register = &Register{}
-	if err := context.ShouldBind(v_form_params); err != nil {
+func (r *Register) CheckParams(context *gin.Context) {
+	if err := context.ShouldBind(&r); err != nil {
 		fmt.Printf("验证器出错")
 		return
 	}
-	fmt.Printf("%#v\n", v_form_params)
-	fmt.Println(v_form_params.Name)
 
-	if len(v_form_params.Name) < 3 || len((*v_form_params).Pass) < 6 || len((*v_form_params).Phone) != 11 {
+	if len(r.Name) < 3 || len(r.Pass) < 6 || len(r.Phone) != 11 {
 		fmt.Println("参数不符合规定，name、pass、Phone 长度有问题，不允许注册")
 		return
 	}
 	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
-	extraAddBindData := DaTaTransfer.DataAddContext(v_form_params, context)
-	(&Admin.Users{}).Register(extraAddBindData)
+	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.Validattor_Prefix, context)
+	if extraAddBindDataContext == nil {
+		fmt.Println("表单参数验证器json化失败..")
+	} else {
+		(&Admin.Users{}).Register(extraAddBindDataContext)
+	}
 }
 
 //  请记得将表单验证器注册在容器工厂

@@ -1,14 +1,15 @@
 package Admin
 
 import (
-	CacheModule2 "GinSkeleton/App/Cache/CacheModule"
 	"GinSkeleton/App/Global/Consts"
-	MyJwt2 "GinSkeleton/App/Http/Middleware/MyJwt"
+	"GinSkeleton/App/Service/Users/Curd"
+	userstoken "GinSkeleton/App/Service/Users/Token"
+	"GinSkeleton/App/Utils/Response"
+
 	//"encoding/json"
 	//V_Users "GinSkeleton/App/Http/Validattor/Users"
 	"GinSkeleton/App/Model"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -17,182 +18,107 @@ import (
 type Users struct {
 }
 
-// 1.模拟用户注册
+// 1.用户注册
 func (u *Users) Register(context *gin.Context) {
 
 	// 获取表单绑定的结构体数据（按照键=》值）形式，注意前面有前缀
 	name := context.GetString(Consts.Validattor_Prefix + "name")
 	pass := context.GetString(Consts.Validattor_Prefix + "pass")
-	phone := context.GetString(Consts.Validattor_Prefix + "phone")
-	fmt.Printf("控制器获取数据，name:%s, pass:%s, phone:%s\n", name, pass, phone)
+	//phone := context.GetString(Consts.Validattor_Prefix + "phone")
 
 	if Model.CreateUserFactory().Register(name, pass) {
-		context.JSON(200, gin.H{
-			"code": 200,
-			"msg":  "用户注册成功！",
-		})
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
-		context.JSON(-200, gin.H{
-			"code": -200,
-			"msg":  "注册失败！",
-		})
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Register_Fail_Code, Consts.Curd_Register_Fail_Msg, "")
 	}
-
 }
 
-//  2.模拟用户登录, 账号、密码 换token
+//  2.用户登录
 func (u *Users) Login(context *gin.Context) {
 
-	testRedis() // 测试redis
+	//  由于本项目骨架已经将表单验证器的参数绑定在上下文，可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取
+	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取
+	name := context.GetString(Consts.Validattor_Prefix + "name")
+	pass := context.GetString(Consts.Validattor_Prefix + "pass")
+	phone := context.GetString(Consts.Validattor_Prefix + "phone")
 
-	userid := 2020 // 模拟一个用户id
-	username := context.PostForm("username")
-	pass := context.PostForm("pass")
-	phone := "16601770915" // 模拟一个用户phone
-	var Usertoken string
-
-	fmt.Printf("username:%s,pass:%s, 验证账号、密码在数据库的合法性\n", username, pass)
-	// 根据以上参数生成token，返回
-	custome_claims := MyJwt2.CustomClaims{
-		ID:    userid,
-		Name:  username,
-		Phone: phone,
-		// 特别注意，针对前文的匿名结构体，初始化的时候必须指定键名，并且不带 jwt. 否则报错：Mixture of field: value and value initializers
-		StandardClaims: jwt.StandardClaims{
-			NotBefore: int64(time.Now().Unix() - 10),   // 生效开始时间
-			ExpiresAt: int64(time.Now().Unix() + 3600), // 失效截止时间
-		},
-	}
-
-	if token, err := MyJwt2.CreateMyJWT().CreateToken(custome_claims); err == nil {
-		fmt.Printf("账号密码换取token成功：%s\n", token)
-		Usertoken = token
-	}
-
-	u.ParseUserToken(Usertoken)
-	// 返回 json数据
-	context.JSON(200, gin.H{
-		"code": 0,
-		"msg":  "登录成功",
-		"data": gin.H{
-			"user":   username,
-			"age":    20,
-			"token":  Usertoken,
-			"remark": "备注信息，2020-02-09",
-		},
-	})
-
-}
-
-//  测试redis操作，假设登录成功将用户信息存储在redis
-func testRedis() {
-
-	cacheFactory := CacheModule2.CreateCacheFactory()
-	res := cacheFactory.KeyExists("username")
-	fmt.Printf("username键是否存在：%v\n", res)
-	if res == false {
-		res := cacheFactory.Set("username", "张三丰2012")
-		fmt.Printf("username Set 值：%v\n", res)
-	}
-
-	res2 := cacheFactory.Get("username")
-
-	fmt.Printf("username键是否存在：%v,取出相关值：%v\n", res, res2)
-	cacheFactory.Release()
-
-	/*	RedisClient:=RedisFactory.GetOneRedisClient()
-		RedisClient.Execute("hSet","zhangqifeng","NO","070370122")
-		RedisClient.Execute("hSet","zhangqifeng","universe","河北工程大学")
-		res1,err1:=RedisClient.Execute("hGet","zhangqifeng","NO")
-		res2,err:=RedisClient.Execute("hGet","zhangqifeng","universe")
-
-		v_string1,v_err1:=RedisClient.String(res1,err1)
-		v_string2,v_err2:=RedisClient.String(res2,err)
-		if v_err2==nil && v_err1==nil{
-			fmt.Printf("username= %#v, ex_key= %s\n",v_string1,v_string2)
+	v_user_model := Model.CreateUserFactory().Login(name, pass)
+	if v_user_model != nil {
+		user_token_factory := userstoken.CreateUserFactory()
+		if usertoken, err := user_token_factory.GenerateToken(v_user_model.Id, v_user_model.Username, v_user_model.Phone, Consts.JwtToken_Created_ExpireAt); err == nil {
+			//同步更新数据库 tb_users 表 token 字段
+			if Model.CreateUserFactory().RefreshToken(v_user_model.Id, usertoken) {
+				v_data := gin.H{
+					"userid":     v_user_model.Id,
+					"name":       name,
+					"real_name":  v_user_model.RealName,
+					"phone":      phone,
+					"token":      usertoken,
+					"updated_at": time.Now().Format("2006-01-02 15:04:05"),
+				}
+				Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, v_data)
+				return
+			}
 		}
-
-		RedisClient.RelaseOneRedisClientPool()*/
+	}
+	Response.ReturnJson(context, http.StatusOK, Consts.Curd_Login_Fail_Code, Consts.Curd_Login_Fail_Msg, "")
 
 }
 
-// 解析用户token的数据信息
-func (c *Users) ParseUserToken(token string) {
-
-	fmt.Println(token)
-	if custome_claims, err := MyJwt2.CreateMyJWT().ParseToken(token); err == nil {
-		fmt.Printf("token解析：%#v", custome_claims)
+//3.用户查询（show）
+func (c *Users) Show(context *gin.Context) {
+	name := context.GetString(Consts.Validattor_Prefix + "name")
+	page := context.GetFloat64(Consts.Validattor_Prefix + "page")
+	limits := context.GetFloat64(Consts.Validattor_Prefix + "limits")
+	limit_start := (page - 1) * limits
+	showlist := Model.CreateUserFactory().Show(name, limit_start, limits)
+	if showlist != nil {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, showlist)
 	} else {
-		fmt.Printf("token解析失败：%v", err)
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Select_Fail_Code, Consts.Curd_Select_Fail_Msg, "")
+	}
+}
+
+//4.用户新增(store)
+func (c *Users) Store(context *gin.Context) {
+	name := context.GetString(Consts.Validattor_Prefix + "name")
+	pass := context.GetString(Consts.Validattor_Prefix + "pass")
+	real_name := context.GetString(Consts.Validattor_Prefix + "real_name")
+	phone := context.GetString(Consts.Validattor_Prefix + "phone")
+	remark := context.GetString(Consts.Validattor_Prefix + "remark")
+
+	if Curd.CreateUserCurdFactory().Store(name, pass, real_name, phone, remark) {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
+	} else {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Creat_Fail_Code, Consts.Curd_Creat_Fail_Msg, "")
 	}
 
 }
 
-//3.模拟查询一条用户记录
-func (c *Users) Show(context *gin.Context) {
-
-	Model.CreateUserFactory().ShowList(context.DefaultQuery("username", ""))
-
-	/*	userid := context.Param("id")
-		fmt.Printf("userid:%d\n", userid)
-		context.JSON(http.StatusOK, gin.H{
-			"code": "200",
-			"msg":  "OK for select",
-			"data": gin.H{
-				"userid":   1,
-				"username": "张三丰",
-			},
-		},
-		)*/
-}
-
-//3.模拟新增一条用户记录
-func (c *Users) Store(context *gin.Context) {
-	username := context.PostForm("username")
-	age := context.DefaultPostForm("age", "")
-	sex := context.DefaultPostForm("sex", "")
-	fmt.Printf("username:%s， age：%s, sex:%s \n", username, age, sex)
-	context.JSON(http.StatusOK, gin.H{
-		"code": "200",
-		"msg":  "OK for create",
-		"data": gin.H{
-			"userid":   2020,
-			"username": username,
-		},
-	},
-	)
-}
-
-//4.模拟更新一条用户记录
+//5.用户更新(update)
 func (c *Users) Update(context *gin.Context) {
-	userid := context.PostForm("id")
-	username := context.PostForm("username")
-	age := context.PostForm("age")
-	sex := context.PostForm("sex")
-	fmt.Printf("userid:%s, username:%s， age：%s, sex:%s \n", userid, username, age, sex)
-	context.JSON(http.StatusOK, gin.H{
-		"code": "200",
-		"msg":  "OK for update",
-		"data": gin.H{
-			"userid":   userid,
-			"username": username,
-		},
-	},
-	)
+	userid := context.GetFloat64(Consts.Validattor_Prefix + "id")
+	name := context.GetString(Consts.Validattor_Prefix + "name")
+	pass := context.GetString(Consts.Validattor_Prefix + "pass")
+	real_name := context.GetString(Consts.Validattor_Prefix + "real_name")
+	phone := context.GetString(Consts.Validattor_Prefix + "phone")
+	remark := context.GetString(Consts.Validattor_Prefix + "remark")
+	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark) {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
+	} else {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Updat_Fail_Code, Consts.Curd_Updat_Fail_Msg, "")
+	}
+
 }
 
-//5.模拟删除一条用户记录
+//6.用户删除记录
 func (c *Users) Destroy(context *gin.Context) {
-	userid := context.PostForm("id")
-	fmt.Printf("userid:%s 将被删除\n", userid)
-	context.JSON(http.StatusOK, gin.H{
-		"code": "200",
-		"msg":  "OK for Delete",
-		"data": gin.H{
-			"userid": userid,
-		},
-	},
-	)
+	userid := context.GetFloat64(Consts.Validattor_Prefix + "id")
+	if Model.CreateUserFactory().Destroy(userid) {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
+	} else {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Delete_Fail_Code, Consts.Curd_Delete_Fail_Msg, "")
+	}
 }
 
 //  6.上传头像

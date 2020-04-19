@@ -45,7 +45,11 @@ func (b *BaseModel) ExecuteSql(sql string, args ...interface{}) int64 {
 		if res, err := stm.Exec(args...); err == nil {
 			if affectNum, err := res.RowsAffected(); err == nil {
 				return affectNum
+			} else {
+				log.Panic("执行类sql失败:", err)
 			}
+		} else {
+			log.Panic("(预处理)执行类sql失败:", err)
 		}
 	}
 	return -1

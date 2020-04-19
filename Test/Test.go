@@ -1,6 +1,7 @@
 package Test
 
 import (
+	CacheModule2 "GinSkeleton/App/Cache/CacheModule"
 	"encoding/json"
 	"fmt"
 )
@@ -70,6 +71,38 @@ func mergeStruct() {
 	/*	if vfbe_val,ok:=vfbe.Interface().Elem();ok{
 		fmt.Println("获取B结构体的数量",vfbe_val.FieldNum());
 	}*/
+
+}
+
+//  测试redis操作，假设登录成功将用户信息存储在redis
+func testRedis() {
+
+	cacheFactory := CacheModule2.CreateCacheFactory()
+	res := cacheFactory.KeyExists("username")
+	fmt.Printf("username键是否存在：%v\n", res)
+	if res == false {
+		res := cacheFactory.Set("username", "张三丰2012")
+		fmt.Printf("username Set 值：%v\n", res)
+	}
+
+	res2 := cacheFactory.Get("username")
+
+	fmt.Printf("username键是否存在：%v,取出相关值：%v\n", res, res2)
+	cacheFactory.Release()
+
+	/*	RedisClient:=RedisFactory.GetOneRedisClient()
+		RedisClient.Execute("hSet","zhangqifeng","NO","070370122")
+		RedisClient.Execute("hSet","zhangqifeng","universe","河北工程大学")
+		res1,err1:=RedisClient.Execute("hGet","zhangqifeng","NO")
+		res2,err:=RedisClient.Execute("hGet","zhangqifeng","universe")
+
+		v_string1,v_err1:=RedisClient.String(res1,err1)
+		v_string2,v_err2:=RedisClient.String(res2,err)
+		if v_err2==nil && v_err1==nil{
+			fmt.Printf("username= %#v, ex_key= %s\n",v_string1,v_string2)
+		}
+
+		RedisClient.RelaseOneRedisClientPool()*/
 
 }
 
