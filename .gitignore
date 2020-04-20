@@ -2,4 +2,5 @@
 .idea/
 .idea
 /public/*
-/storage/logs/*
+/Storage/logs/*
+/Storage/uploaded/*
