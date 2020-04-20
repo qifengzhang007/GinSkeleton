@@ -14,7 +14,7 @@ import (
 func InitRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
-	f, _ := os.Create(Variable.BASE_PATH + "/Storage/logs/gin.log")
+	f, _ := os.Create(Variable.BASE_PATH + Variable.Log_Save_Path)
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	router := gin.Default()

@@ -7,6 +7,9 @@ var (
 	//上传文件保存路径
 	UploadFileField    string = "files"                  // post上传文件时，表单的键名
 	UploadFileSavePath string = "/Storage/app/uploaded/" // 该路径与 base_path 进行拼接使用
+	//日志存储路径
+	Log_Save_Path string = "/Storage/logs/gin.log"
+
 	//  用户自行定义其他全局变量 ↓
 
 )

@@ -23,8 +23,11 @@ func Upload(context *gin.Context, save_path string, file_name string) bool {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_Fail_Code, Consts.Files_Upload_Fail_Msg+", 文件保存失败!", err.Error())
 		return false
 	}
-	//  上传成功
-	Response.ReturnJson(context, http.StatusCreated, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
+	//  上传成功,返回资源相对项目站点的存储路径
+	succ := gin.H{
+		"path": save_path + sava_file_name,
+	}
+	Response.ReturnJson(context, http.StatusCreated, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, succ)
 	return true
 
 }
