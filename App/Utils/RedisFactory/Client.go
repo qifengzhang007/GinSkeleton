@@ -24,7 +24,7 @@ func createRedisClientPool() *redis.Pool {
 			}
 			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			pass := configFac.GetString("Redis.Pass") //通过配置项设置redis密码
-			if len(pass) >= 5 {
+			if len(pass) >= 1 {
 				if _, err := conn.Do("AUTH", pass); err != nil {
 					conn.Close()
 					log.Fatal(Errors.Errors_Redis_AuhtFail, err)
