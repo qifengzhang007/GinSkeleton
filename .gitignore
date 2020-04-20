@@ -2,3 +2,4 @@
 .idea/
 .idea
 /public/*
+/storage/logs/*
