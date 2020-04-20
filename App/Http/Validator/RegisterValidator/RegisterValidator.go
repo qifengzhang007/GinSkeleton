@@ -3,7 +3,8 @@ package RegisterValidator
 import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Http/Validattor/Users"
+	"GinSkeleton/App/Http/Validator/UploadFiles"
+	"GinSkeleton/App/Http/Validator/Users"
 )
 
 // 各个业务模块验证器必须进行注册（初始化）
@@ -12,17 +13,21 @@ func RegisterValidator() {
 	var key string
 
 	// Users 模块表单验证器注册
-	key = Consts.Validattor_Prefix + "UsersRegister"
+	key = Consts.Validator_Prefix + "UsersRegister"
 	Container.CreatecontainersFactory().Set(key, &Users.Register{})
-	key = Consts.Validattor_Prefix + "UsersLogin"
+	key = Consts.Validator_Prefix + "UsersLogin"
 	Container.CreatecontainersFactory().Set(key, &Users.Login{})
 	// Users基本操作（CURD）
-	key = Consts.Validattor_Prefix + "UsersShow"
+	key = Consts.Validator_Prefix + "UsersShow"
 	Container.CreatecontainersFactory().Set(key, &Users.Show{})
-	key = Consts.Validattor_Prefix + "UsersStore"
+	key = Consts.Validator_Prefix + "UsersStore"
 	Container.CreatecontainersFactory().Set(key, &Users.Store{})
-	key = Consts.Validattor_Prefix + "UsersUpdate"
+	key = Consts.Validator_Prefix + "UsersUpdate"
 	Container.CreatecontainersFactory().Set(key, &Users.Update{})
-	key = Consts.Validattor_Prefix + "UsersDestroy"
+	key = Consts.Validator_Prefix + "UsersDestroy"
 	Container.CreatecontainersFactory().Set(key, &Users.Destroy{})
+
+	// 文件上传
+	key = Consts.Validator_Prefix + "UploadFiles"
+	Container.CreatecontainersFactory().Set(key, &UploadFiles.UploadAvatar{})
 }

@@ -2,14 +2,14 @@ package Admin
 
 import (
 	"GinSkeleton/App/Global/Consts"
+	"GinSkeleton/App/Global/Variable"
+	"GinSkeleton/App/Service/UploadFile"
 	"GinSkeleton/App/Service/Users/Curd"
 	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
-
 	//"encoding/json"
 	//V_Users "GinSkeleton/App/Http/Validattor/Users"
 	"GinSkeleton/App/Model"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -22,9 +22,9 @@ type Users struct {
 func (u *Users) Register(context *gin.Context) {
 
 	// 获取表单绑定的结构体数据（按照键=》值）形式，注意前面有前缀
-	name := context.GetString(Consts.Validattor_Prefix + "name")
-	pass := context.GetString(Consts.Validattor_Prefix + "pass")
-	//phone := context.GetString(Consts.Validattor_Prefix + "phone")
+	name := context.GetString(Consts.Validator_Prefix + "name")
+	pass := context.GetString(Consts.Validator_Prefix + "pass")
+	//phone := context.GetString(Consts.Validator_Prefix + "phone")
 
 	if Model.CreateUserFactory().Register(name, pass) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
@@ -38,9 +38,9 @@ func (u *Users) Login(context *gin.Context) {
 
 	//  由于本项目骨架已经将表单验证器的参数绑定在上下文，可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取
 	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取
-	name := context.GetString(Consts.Validattor_Prefix + "name")
-	pass := context.GetString(Consts.Validattor_Prefix + "pass")
-	phone := context.GetString(Consts.Validattor_Prefix + "phone")
+	name := context.GetString(Consts.Validator_Prefix + "name")
+	pass := context.GetString(Consts.Validator_Prefix + "pass")
+	phone := context.GetString(Consts.Validator_Prefix + "phone")
 
 	v_user_model := Model.CreateUserFactory().Login(name, pass)
 	if v_user_model != nil {
@@ -67,9 +67,9 @@ func (u *Users) Login(context *gin.Context) {
 
 //3.用户查询（show）
 func (c *Users) Show(context *gin.Context) {
-	name := context.GetString(Consts.Validattor_Prefix + "name")
-	page := context.GetFloat64(Consts.Validattor_Prefix + "page")
-	limits := context.GetFloat64(Consts.Validattor_Prefix + "limits")
+	name := context.GetString(Consts.Validator_Prefix + "name")
+	page := context.GetFloat64(Consts.Validator_Prefix + "page")
+	limits := context.GetFloat64(Consts.Validator_Prefix + "limits")
 	limit_start := (page - 1) * limits
 	showlist := Model.CreateUserFactory().Show(name, limit_start, limits)
 	if showlist != nil {
@@ -81,11 +81,11 @@ func (c *Users) Show(context *gin.Context) {
 
 //4.用户新增(store)
 func (c *Users) Store(context *gin.Context) {
-	name := context.GetString(Consts.Validattor_Prefix + "name")
-	pass := context.GetString(Consts.Validattor_Prefix + "pass")
-	real_name := context.GetString(Consts.Validattor_Prefix + "real_name")
-	phone := context.GetString(Consts.Validattor_Prefix + "phone")
-	remark := context.GetString(Consts.Validattor_Prefix + "remark")
+	name := context.GetString(Consts.Validator_Prefix + "name")
+	pass := context.GetString(Consts.Validator_Prefix + "pass")
+	real_name := context.GetString(Consts.Validator_Prefix + "real_name")
+	phone := context.GetString(Consts.Validator_Prefix + "phone")
+	remark := context.GetString(Consts.Validator_Prefix + "remark")
 
 	if Curd.CreateUserCurdFactory().Store(name, pass, real_name, phone, remark) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
@@ -97,12 +97,12 @@ func (c *Users) Store(context *gin.Context) {
 
 //5.用户更新(update)
 func (c *Users) Update(context *gin.Context) {
-	userid := context.GetFloat64(Consts.Validattor_Prefix + "id")
-	name := context.GetString(Consts.Validattor_Prefix + "name")
-	pass := context.GetString(Consts.Validattor_Prefix + "pass")
-	real_name := context.GetString(Consts.Validattor_Prefix + "real_name")
-	phone := context.GetString(Consts.Validattor_Prefix + "phone")
-	remark := context.GetString(Consts.Validattor_Prefix + "remark")
+	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
+	name := context.GetString(Consts.Validator_Prefix + "name")
+	pass := context.GetString(Consts.Validator_Prefix + "pass")
+	real_name := context.GetString(Consts.Validator_Prefix + "real_name")
+	phone := context.GetString(Consts.Validator_Prefix + "phone")
+	remark := context.GetString(Consts.Validator_Prefix + "remark")
 	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
@@ -113,7 +113,7 @@ func (c *Users) Update(context *gin.Context) {
 
 //6.用户删除记录
 func (c *Users) Destroy(context *gin.Context) {
-	userid := context.GetFloat64(Consts.Validattor_Prefix + "id")
+	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
 	if Model.CreateUserFactory().Destroy(userid) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
@@ -122,26 +122,7 @@ func (c *Users) Destroy(context *gin.Context) {
 }
 
 //  6.上传头像
-func (c *Users) UploadAvatar(context *gin.Context) {
-	//  1.获取上传的文件名
-	file, error := context.FormFile("avatar") //  file 是一个文件结构体（文件对象）
-	if error != nil {
-		context.String(http.StatusBadRequest, "上传文件发生错误")
-		return
-	}
-	fmt.Printf("%s", file)
-	//  保存文件
-	if err := context.SaveUploadedFile(file, "./src/GinSkeleton/"+file.Filename); err != nil {
-		context.String(http.StatusBadRequest, "文件保存失败，%v", err.Error())
-		return
-	}
-	//  上传成功
-	context.String(http.StatusCreated, "文件上传成功！")
-
+func (c *Users) UploadAvatar(context *gin.Context) bool {
+	save := Variable.BASE_PATH + Variable.UploadFileSavePath
+	return UploadFile.Upload(context, save, "")
 }
-
-/*// 7.展示用户的全部数据showlist
-func (c *Users) ShowList(ctx gin.Context){
-
-}
-*/

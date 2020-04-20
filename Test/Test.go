@@ -9,7 +9,6 @@ import (
 //  这里写需要测试的代码即可
 func init() {
 	//mergeStruct()
-
 }
 
 // 测试路径相关的函数
