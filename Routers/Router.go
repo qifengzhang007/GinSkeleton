@@ -23,7 +23,7 @@ func InitRouter() *gin.Engine {
 		context.String(http.StatusOK, "HelloWorld")
 	})
 
-	//  创建一个路由组，模拟调用中间件
+	//  创建一个路由组
 	V_Backend := router.Group("/Admin/")
 	{
 		//  【不需要】中间件验证的路由  用户注册、登录
@@ -48,6 +48,7 @@ func InitRouter() *gin.Engine {
 				// 删除
 				v_users.POST("delete", ValidatorFactory.Create(Consts.Validator_Prefix+"UsersDestroy"))
 			}
+			//文件上传公共路由
 			v_uploadfiles := V_Backend.Group("upload/")
 			{
 				v_uploadfiles.POST("files", ValidatorFactory.Create(Consts.Validator_Prefix+"UploadFiles"))
