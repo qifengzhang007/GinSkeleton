@@ -2,7 +2,14 @@ package Consts
 
 const (
 	// 表单验证器前缀
-	Validattor_Prefix string = "Form_Validator_"
+	Validator_Prefix                string = "Form_Validator_"
+	Validator_ParamsCheck_Fail_Code int    = -400300
+	Validator_ParamsCheck_Fail_Msg  string = "参数校验失败"
+
+	//服务器代码发生错误
+	Server_Occurred_Error_Code int    = -500100
+	Server_Occurred_Error_Msg  string = "服务器内部发生代码执行错误"
+
 	// token相关
 	JwtToken_SignKey          string = "GinSkeleton"
 	JwtToken_Created_ExpireAt int64  = 3600    // 创建时token默认有效期3600秒
@@ -13,7 +20,7 @@ const (
 
 	// CURD 常用业务状态码
 	Curd_Status_Ok_Code     int    = 200
-	Curd_Status_Ok_Msg      string = "操作成功"
+	Curd_Status_Ok_Msg      string = "Success"
 	Curd_Creat_Fail_Code    int    = -400200
 	Curd_Creat_Fail_Msg     string = "新增失败"
 	Curd_Updat_Fail_Code    int    = -400201
@@ -26,4 +33,8 @@ const (
 	Curd_Register_Fail_Msg  string = "注册失败"
 	Curd_Login_Fail_Code    int    = -400205
 	Curd_Login_Fail_Msg     string = "登录失败"
+
+	//文件上传
+	Files_Upload_Fail_Code int    = -400250
+	Files_Upload_Fail_Msg  string = "文件上传失败"
 )

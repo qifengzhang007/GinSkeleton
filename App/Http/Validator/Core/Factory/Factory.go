@@ -3,8 +3,8 @@ package Factory
 import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/Errors"
-	"GinSkeleton/App/Http/Validattor/Core/Interface"
-	"GinSkeleton/App/Http/Validattor/RegisterValidator"
+	"GinSkeleton/App/Http/Validator/Core/Interface"
+	"GinSkeleton/App/Http/Validator/RegisterValidator"
 	"github.com/gin-gonic/gin"
 	"log"
 	"reflect"

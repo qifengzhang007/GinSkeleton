@@ -1,7 +1,7 @@
 package DaTaTransfer
 
 import (
-	"GinSkeleton/App/Http/Validattor/Core/Interface"
+	"GinSkeleton/App/Http/Validator/Core/Interface"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
