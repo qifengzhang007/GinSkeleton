@@ -81,7 +81,7 @@ func (u *usersModel) ShowOneItem(userId int) *usersModel {
 	return nil
 }
 
-// 根据关键词查询
+// 查询（根据关键词模糊查询）
 func (u *usersModel) Show(username string, limit_start float64, limit_items float64) []usersModel {
 
 	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`, `token`  FROM  `tb_users`  WHERE `status`=1 and   username like ? LIMIT ?,?"

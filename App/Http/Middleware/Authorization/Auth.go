@@ -2,7 +2,6 @@ package Authorization
 
 import (
 	"GinSkeleton/App/Global/Errors"
-	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
 	"net/http"
@@ -29,7 +28,6 @@ func CheckAuth() gin.HandlerFunc {
 			if len(token) == 2 && len(token[1]) >= 20 {
 				token_is_effective := Token.CreateUserFactory().IsEffective(token[1])
 				if token_is_effective {
-					context.Set(Variable.USERS_TOKEN_KEY, token[1])
 					context.Next()
 				} else {
 					Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, Errors.Errors_NoAuthorization, "")

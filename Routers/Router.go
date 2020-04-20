@@ -52,15 +52,6 @@ func InitRouter() *gin.Engine {
 				//V_Backend.POST("avatar", AdminUsers.UploadAvatar)
 			}
 
-			// CodeList 模块 增、删、改、查 操作
-			v_codelist := V_Backend.Group("stockcode/")
-			{
-				v_codelist.GET("index", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListShow"))
-				v_codelist.POST("create", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListStore"))
-				v_codelist.POST("edit", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListUpdate"))
-				v_codelist.POST("delete", ValidatorFactory.Create(Consts.Validattor_Prefix+"CodeListDestroy"))
-			}
-
 		}
 
 	}

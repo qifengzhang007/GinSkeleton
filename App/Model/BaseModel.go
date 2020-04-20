@@ -61,7 +61,6 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 	if stm, err := b.db_driver.Prepare(sql); err == nil {
 		// 可变参数的二次传递，需要在后面添加三个点 ...  ，这里和php刚好相反
 		if Rows, err := stm.Query(args...); err == nil {
-			//defer Rows.Close()
 			return Rows
 		}
 	}

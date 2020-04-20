@@ -3,7 +3,6 @@ package RegisterValidator
 import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Http/Validattor/CodeList"
 	"GinSkeleton/App/Http/Validattor/Users"
 )
 
@@ -17,7 +16,7 @@ func RegisterValidator() {
 	Container.CreatecontainersFactory().Set(key, &Users.Register{})
 	key = Consts.Validattor_Prefix + "UsersLogin"
 	Container.CreatecontainersFactory().Set(key, &Users.Login{})
-
+	// Users基本操作（CURD）
 	key = Consts.Validattor_Prefix + "UsersShow"
 	Container.CreatecontainersFactory().Set(key, &Users.Show{})
 	key = Consts.Validattor_Prefix + "UsersStore"
@@ -26,14 +25,4 @@ func RegisterValidator() {
 	Container.CreatecontainersFactory().Set(key, &Users.Update{})
 	key = Consts.Validattor_Prefix + "UsersDestroy"
 	Container.CreatecontainersFactory().Set(key, &Users.Destroy{})
-
-	// codelist模块表单验证器注册
-	key = Consts.Validattor_Prefix + "CodeListShow"
-	Container.CreatecontainersFactory().Set(key, &CodeList.Show{})
-	key = Consts.Validattor_Prefix + "CodeListStore"
-	Container.CreatecontainersFactory().Set(key, &CodeList.Store{})
-	key = Consts.Validattor_Prefix + "CodeListUpdate"
-	Container.CreatecontainersFactory().Set(key, &CodeList.Update{})
-	key = Consts.Validattor_Prefix + "CodeListDestroy"
-	Container.CreatecontainersFactory().Set(key, &CodeList.Destroy{})
 }

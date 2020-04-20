@@ -6,9 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 将验证绑定的结构体数据传输到上下文，方便控制器获取
+// 将验证绑定的结构体字段（成员）数据传输到上下文，方便控制器获取
 /**
-validatorInterface 实现了验证器接口的接固体
+本函数参数说明：
+validatorInterface 实现了验证器接口的结构体
 extra_add_data_prefix  验证器绑定参数传递给控制器的数据前缀
 context  gin上下文
 */
