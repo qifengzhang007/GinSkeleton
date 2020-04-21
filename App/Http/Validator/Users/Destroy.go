@@ -27,7 +27,7 @@ func (d *Destroy) CheckParams(context *gin.Context) {
 			Response.ReturnJson(context, http.StatusBadRequest, Consts.Server_Occurred_Error_Code, Consts.Server_Occurred_Error_Msg+",UserShow表单参数验证器json化失败..", "")
 			return
 		} else {
-			// 验证完成，调用控制器
+			// 验证完成，调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
 			(&Admin.Users{}).Destroy(extraAddBindDataContext)
 		}
 	} else {

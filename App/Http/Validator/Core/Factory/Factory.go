@@ -4,15 +4,10 @@ import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/Errors"
 	"GinSkeleton/App/Http/Validator/Core/Interface"
-	"GinSkeleton/App/Http/Validator/RegisterValidator"
 	"github.com/gin-gonic/gin"
 	"log"
 	"reflect"
 )
-
-func init() {
-	RegisterValidator.RegisterValidator()
-}
 
 // 表单参数验证器工厂（请勿修改）
 func Create(key string) func(context *gin.Context) {

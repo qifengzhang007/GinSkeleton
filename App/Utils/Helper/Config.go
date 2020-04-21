@@ -11,9 +11,7 @@ import (
 func CreateYamlFactory() *ConfigYml {
 
 	yaml_config := viper.New()
-	//windows环境下为 %GOPATH，linux环境下为 $GOPATH
 	yaml_config.AddConfigPath(Variable.BASE_PATH + "/Config")
-	//yaml_config.AddConfigPath("%GOPATH/src/Config/")
 	// 需要读取的文件名
 	yaml_config.SetConfigName("config")
 	//设置配置文件类型
@@ -62,7 +60,17 @@ func (c *ConfigYml) GetInt64(keyname string) int64 {
 	return c.viper.GetInt64(keyname)
 }
 
+// float64
+func (c *ConfigYml) GetFloat64(keyname string) float64 {
+	return c.viper.GetFloat64(keyname)
+}
+
 // GetDuration
 func (c *ConfigYml) GetDuration(keyname string) time.Duration {
 	return c.viper.GetDuration(keyname)
+}
+
+// GetDuration
+func (c *ConfigYml) GetStringSlice(keyname string) []string {
+	return c.viper.GetStringSlice(keyname)
 }

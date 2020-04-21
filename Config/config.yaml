@@ -23,14 +23,13 @@ Redis:
   IdleTimeout: 60
   IndexDb: 1
 
-OthersDemoConfig:
-  Name: "foo"
-  Alias: "bar"
-  Sex: 1
-  Age: 18
-  Favorites:
-    - "array demo"
-    - "go"
-    - "php"
-    - "swoole"
-    - "python"
+FileUploadSetting:
+  Size: 32  #设置上传文件的最大值，单位：M
+  AllowMimeType:  #允许的文件mime类型列表
+    - "image/jpeg"  #jpg、jpeg图片格式
+    - "image/png" #png图片格式
+    - "image/x-icon"  #ico图片
+    - "image/bmp" #bmp图片
+    - "application/zip" #xlsx、docx、zip
+    - "application/x-gzip"  #tar.gz
+    - "text/plain; charset=utf-8"  #txt log json等文本文件
