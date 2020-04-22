@@ -24,9 +24,9 @@ func (u *Users) Register(context *gin.Context) {
 	// 获取表单绑定的结构体数据（按照键=》值）形式，注意前面有前缀
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
+	user_ip := context.ClientIP()
 	//phone := context.GetString(Consts.Validator_Prefix + "phone")
-
-	if Model.CreateUserFactory().Register(name, pass) {
+	if Model.CreateUserFactory().Register(name, pass, user_ip) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Register_Fail_Code, Consts.Curd_Register_Fail_Msg, "")

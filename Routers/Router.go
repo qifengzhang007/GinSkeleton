@@ -4,6 +4,7 @@ import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Middleware/Authorization"
+	"GinSkeleton/App/Http/Middleware/Cors"
 	ValidatorFactory "GinSkeleton/App/Http/Validator/Core/Factory"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -18,6 +19,7 @@ func InitRouter() *gin.Engine {
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	router := gin.Default()
+	router.Use(Cors.Next()) //允许跨域，如果nginx已经开启跨域，请注释该行
 
 	router.GET("/", func(context *gin.Context) {
 		context.String(http.StatusOK, "HelloWorld")
@@ -36,7 +38,7 @@ func InitRouter() *gin.Engine {
 		// 需要中间件验证的路由
 		V_Backend.Use(Authorization.CheckAuth())
 		{
-			// 用户组、路由组
+			// 用户组路由
 			v_users := V_Backend.Group("users/")
 			{
 				// 查询

@@ -30,9 +30,9 @@ type usersModel struct {
 }
 
 // 用户注册（写一个最简单的使用账号、密码注册即可）
-func (u *usersModel) Register(username string, pass string) bool {
-	sql := "INSERT  INTO tb_users(username,pass) SELECT ?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
-	if u.ExecuteSql(sql, username, pass, username) > 0 {
+func (u *usersModel) Register(username string, pass string, user_ip string) bool {
+	sql := "INSERT  INTO tb_users(username,pass,last_login_ip) SELECT ?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
+	if u.ExecuteSql(sql, username, pass, user_ip, username) > 0 {
 		return true
 	}
 	return false
