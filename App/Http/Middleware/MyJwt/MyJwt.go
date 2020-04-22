@@ -20,7 +20,7 @@ func GetSignKey() string {
 	return SignKey
 }
 
-// 这是SignKey
+// 设置SignKey（类似秘钥）
 func SetSignKey(key string) string {
 	SignKey = key
 	return SignKey

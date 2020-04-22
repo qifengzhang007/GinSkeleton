@@ -2,8 +2,6 @@ package Admin
 
 import (
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Global/Variable"
-	"GinSkeleton/App/Service/UploadFile"
 	"GinSkeleton/App/Service/Users/Curd"
 	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
@@ -119,10 +117,4 @@ func (c *Users) Destroy(context *gin.Context) {
 	} else {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Delete_Fail_Code, Consts.Curd_Delete_Fail_Msg, "")
 	}
-}
-
-//  6.上传头像
-func (c *Users) UploadAvatar(context *gin.Context) bool {
-	save := Variable.BASE_PATH + Variable.UploadFileSavePath
-	return UploadFile.Upload(context, save, "")
 }

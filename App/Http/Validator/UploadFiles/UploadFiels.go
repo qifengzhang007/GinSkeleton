@@ -13,10 +13,11 @@ import (
 	"strings"
 )
 
-type UploadAvatar struct {
+type UpFiels struct {
 }
 
-func (u *UploadAvatar) CheckParams(context *gin.Context) {
+// 文件上传公共模块表单参数验证器
+func (u *UpFiels) CheckParams(context *gin.Context) {
 	for key, value := range Helper.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
 		fmt.Println(key, value)
 	}
@@ -51,6 +52,6 @@ func (u *UploadAvatar) CheckParams(context *gin.Context) {
 	if !is_pass {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_MimeType_Fail_Code, Consts.Files_Upload_MimeType_Fail_Msg, "")
 	} else {
-		(&Admin.Users{}).UploadAvatar(context)
+		(&Admin.Upload{}).Start(context)
 	}
 }

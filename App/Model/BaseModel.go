@@ -29,7 +29,7 @@ func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
 			res = &BaseModel{db_driver: sql_driver}
 		}
 	default:
-		log.Panic(Errors.Errors_Db_Driver_NotExists)
+		log.Panic(MyErrors.Errors_Db_Driver_NotExists)
 	}
 	return res
 }

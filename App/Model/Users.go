@@ -21,12 +21,12 @@ func CreateUserFactory() *usersModel {
 type usersModel struct {
 	*BaseModel
 	Id       int    `json:"id"`
-	Username string `json:"username" form:"name" binding:"required,min=3,max=30"`
-	Pass     string `json:"pass" form:"pass" binding:"required,min=3,max=30"`
-	Phone    string `json:"phone" form:"phone"`
-	RealName string
+	Username string `json:"username"`
+	Pass     string `json:"pass"`
+	Phone    string `json:"phone"`
+	RealName string `json:"realname"`
+	Status   int    `json:"status"`
 	Token    string
-	Status   int
 }
 
 // 用户注册（写一个最简单的使用账号、密码注册即可）

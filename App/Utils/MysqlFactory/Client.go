@@ -25,7 +25,7 @@ func Init_sql_driver() *sql.DB {
 	SetConnMaxLifetime := configFac.GetDuration("Mysql.SetConnMaxLifetime")
 	db, err := sql.Open(DbType, string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local&charset="+Charset)
 	if err != nil {
-		log.Fatal(Errors.Errors_Db_SqlDriverInitFail)
+		log.Fatal(MyErrors.Errors_Db_SqlDriverInitFail)
 	}
 	db.SetMaxIdleConns(SetMaxIdleConns)
 	db.SetMaxOpenConns(SetMaxOpenConns)
@@ -49,7 +49,7 @@ func GetOneEffectivePing() *sql.DB {
 			v_db_driver = Init_sql_driver()
 			time.Sleep(time.Second * 1)
 			if i == max_retry_times {
-				log.Fatal(Errors.Errors_Db_GetConnFail)
+				log.Fatal(MyErrors.Errors_Db_GetConnFail)
 			}
 		} else {
 			break

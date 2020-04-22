@@ -44,11 +44,11 @@ func (e *EventManage) Call(key string, args ...interface{}) {
 		if fn, ok := value_interface.(func(args ...interface{})); ok {
 			fn(args...)
 		} else {
-			log.Panic(Errors.Errors_FuncEvent_NotCall + ", 键名：" + key + ", 相关函数无法调用")
+			log.Panic(MyErrors.Errors_FuncEvent_NotCall + ", 键名：" + key + ", 相关函数无法调用")
 		}
 
 	} else {
-		log.Panic(Errors.Errors_FuncEvent_NotRegister + ", 键名：" + key)
+		log.Panic(MyErrors.Errors_FuncEvent_NotRegister + ", 键名：" + key)
 	}
 }
 

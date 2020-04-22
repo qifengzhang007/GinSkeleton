@@ -29,5 +29,5 @@ func RegisterValidator() {
 
 	// 文件上传
 	key = Consts.Validator_Prefix + "UploadFiles"
-	Container.CreatecontainersFactory().Set(key, &UploadFiles.UploadAvatar{})
+	Container.CreatecontainersFactory().Set(key, &UploadFiles.UpFiels{})
 }

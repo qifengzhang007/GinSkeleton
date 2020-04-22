@@ -1,4 +1,4 @@
-package Errors
+package MyErrors
 
 const (
 	//系统部分
@@ -17,6 +17,6 @@ const (
 	// 验证器错误
 	Errors_Valiadator_Not_Exists string = "不存在的验证器"
 	//token部分
-	Errors_TOken_Invalid string = "无效的token"
-	Errors_TOken_Expired string = "过期的token"
+	Errors_Token_Invalid string = "无效的token"
+	Errors_Token_Expired string = "过期的token"
 )

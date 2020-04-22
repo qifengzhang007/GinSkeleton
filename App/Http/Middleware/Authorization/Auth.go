@@ -30,13 +30,13 @@ func CheckAuth() gin.HandlerFunc {
 				if token_is_effective {
 					context.Next()
 				} else {
-					Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, Errors.Errors_NoAuthorization, "")
+					Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, MyErrors.Errors_NoAuthorization, "")
 					//暂停执行
 					context.Abort()
 				}
 			}
 		} else {
-			Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, Errors.Errors_NoAuthorization, "")
+			Response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, MyErrors.Errors_NoAuthorization, "")
 			//暂停执行
 			context.Abort()
 		}

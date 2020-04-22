@@ -15,7 +15,7 @@ func init() {
 	if path, err := os.Getwd(); err == nil {
 		Variable.BASE_PATH = path
 	} else {
-		log.Fatal(Errors.Errors_BasePath)
+		log.Fatal(MyErrors.Errors_BasePath)
 	}
 	//2.初始化表单参数验证器，注册在容器
 	RegisterValidator.RegisterValidator()

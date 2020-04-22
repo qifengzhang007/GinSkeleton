@@ -57,7 +57,7 @@ func (u *userToken) RefreshToken(token string) (res bool) {
 			}
 		}
 	case Consts.JwtToken_Invalid:
-		log.Panic(Errors.Errors_TOken_Invalid)
+		log.Panic(MyErrors.Errors_Token_Invalid)
 	}
 
 	return res

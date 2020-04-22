@@ -20,14 +20,14 @@ func createRedisClientPool() *redis.Pool {
 			//此处对应redis ip及端口号
 			conn, err := redis.Dial("tcp", configFac.GetString("Redis.Host")+":"+configFac.GetString("Redis.Port"))
 			if err != nil {
-				log.Fatal(Errors.Errors_Redis_InitConnFail, err)
+				log.Fatal(MyErrors.Errors_Redis_InitConnFail, err)
 			}
 			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			pass := configFac.GetString("Redis.Pass") //通过配置项设置redis密码
 			if len(pass) >= 1 {
 				if _, err := conn.Do("AUTH", pass); err != nil {
 					conn.Close()
-					log.Fatal(Errors.Errors_Redis_AuhtFail, err)
+					log.Fatal(MyErrors.Errors_Redis_AuhtFail, err)
 				}
 			}
 			return conn, err
