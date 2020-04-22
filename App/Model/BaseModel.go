@@ -1,7 +1,7 @@
 package Model
 
 import (
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Utils/MysqlFactory"
 	"database/sql"
 	"log"

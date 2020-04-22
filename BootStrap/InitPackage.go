@@ -2,7 +2,7 @@ package BootStrap
 
 import (
 	_ "GinSkeleton/App/Core/Destruct" // 监听程序退出信号，用于资源的释放
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Validator/RegisterValidator"
 	_ "GinSkeleton/Test" //  用于测试代码

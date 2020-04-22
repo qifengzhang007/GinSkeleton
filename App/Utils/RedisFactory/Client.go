@@ -2,7 +2,7 @@ package RedisFactory
 
 import (
 	"GinSkeleton/App/Core/Event"
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Helper"
 	"github.com/gomodule/redigo/redis"

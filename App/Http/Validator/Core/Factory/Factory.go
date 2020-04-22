@@ -2,7 +2,7 @@ package Factory
 
 import (
 	"GinSkeleton/App/Core/Container"
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Http/Validator/Core/Interface"
 	"github.com/gin-gonic/gin"
 	"log"

@@ -2,7 +2,7 @@ package MysqlFactory
 
 import (
 	"GinSkeleton/App/Core/Event"
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Helper"
 	"database/sql"

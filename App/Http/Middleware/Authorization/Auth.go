@@ -1,7 +1,7 @@
 package Authorization
 
 import (
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
 	"net/http"

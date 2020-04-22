@@ -1,7 +1,7 @@
 package Event
 
 import (
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"log"
 	"strings"
 	"sync"

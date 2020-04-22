@@ -2,7 +2,7 @@ package Token
 
 import (
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Global/Errors"
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Http/Middleware/MyJwt"
 	"GinSkeleton/App/Model"
 	"github.com/dgrijalva/jwt-go"
