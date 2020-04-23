@@ -29,7 +29,7 @@ type Register struct {
 }
 
 func (r *Register) CheckParams(context *gin.Context) {
-	//1.先按照验证器提供的基本语法，可基本以校验90%以上的不合格参数
+	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(r); err != nil {
 		errs := gin.H{
 			"tips": "UserRegister参数校验失败，参数不符合规定，name长度(>=1)、pass长度(3,6)、Phone（=11位），不允许注册",
