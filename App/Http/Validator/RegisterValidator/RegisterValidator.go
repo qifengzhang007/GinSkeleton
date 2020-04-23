@@ -11,23 +11,25 @@ import (
 func RegisterValidator() {
 	//  key 按照前缀+模块+验证动作 格式，将各个模块验证注册在容器
 	var key string
+	//创建容器
+	v_container := Container.CreatecontainersFactory()
 
-	// Users 模块表单验证器注册
+	// Users 模块表单验证器按照 key => value 形式注册在容器，方便路由模块中调用
 	key = Consts.Validator_Prefix + "UsersRegister"
-	Container.CreatecontainersFactory().Set(key, &Users.Register{})
+	v_container.Set(key, &Users.Register{})
 	key = Consts.Validator_Prefix + "UsersLogin"
-	Container.CreatecontainersFactory().Set(key, &Users.Login{})
+	v_container.Set(key, &Users.Login{})
 	// Users基本操作（CURD）
 	key = Consts.Validator_Prefix + "UsersShow"
-	Container.CreatecontainersFactory().Set(key, &Users.Show{})
+	v_container.Set(key, &Users.Show{})
 	key = Consts.Validator_Prefix + "UsersStore"
-	Container.CreatecontainersFactory().Set(key, &Users.Store{})
+	v_container.Set(key, &Users.Store{})
 	key = Consts.Validator_Prefix + "UsersUpdate"
-	Container.CreatecontainersFactory().Set(key, &Users.Update{})
+	v_container.Set(key, &Users.Update{})
 	key = Consts.Validator_Prefix + "UsersDestroy"
-	Container.CreatecontainersFactory().Set(key, &Users.Destroy{})
+	v_container.Set(key, &Users.Destroy{})
 
 	// 文件上传
 	key = Consts.Validator_Prefix + "UploadFiles"
-	Container.CreatecontainersFactory().Set(key, &UploadFiles.UpFiels{})
+	v_container.Set(key, &UploadFiles.UpFiels{})
 }
