@@ -25,6 +25,11 @@ func InitRouter() *gin.Engine {
 		context.String(http.StatusOK, "HelloWorld")
 	})
 
+	//处理静态资源（不建议gin框架处理静态资源，参见 Public/readme.md 说明 ）
+	router.Static("/public", "./Public")             //  定义静态资源路由与实际目录映射关系
+	router.StaticFS("/dir", http.Dir("./Public"))    // 将Public目录内的文件列举展示
+	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
+
 	//  创建一个路由组
 	V_Backend := router.Group("/Admin/")
 	{
