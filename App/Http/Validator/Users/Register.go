@@ -10,7 +10,8 @@ import (
 )
 
 // 验证器是本项目骨架的先锋队，必须发挥它的极致优势，具体参考地址：
-//https://godoc.org/github.com/go-playground/validator   ,该验证器非常强大，强烈建议重点发挥
+//https://godoc.org/github.com/go-playground/validator   ,该验证器非常强大，强烈建议重点发挥，
+//请求正式进入控制器等后面的业务逻辑层之前，参数的校验必须在验证器层完成，后面就只管获取各种，代码一把梭
 
 // 给出一些最常用的验证规则：
 //required  必填；
