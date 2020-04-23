@@ -54,10 +54,19 @@ func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
 	return nil
 }
 
-//	刷新用户token字段值
+//	刷新用户token字段值，一般是token过期之后，重新更新
 func (u *usersModel) RefreshToken(userId int, token string) bool {
 	sql := "update  tb_users  set  token=? where   id=?"
 	if u.ExecuteSql(sql, token, userId) > 0 {
+		return true
+	}
+	return false
+}
+
+// 禁用一个用户的token请求（本质上就是把tb_users表的token字段设置为空字符串即可）
+func (u *usersModel) SetTokenInvalid(userId int) bool {
+	sql := "update  tb_users  set  token='' where   id=?"
+	if u.ExecuteSql(sql, userId) > 0 {
 		return true
 	}
 	return false
