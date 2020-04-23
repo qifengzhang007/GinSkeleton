@@ -4,7 +4,7 @@ DbType: "mysql"
 Mysql:
   Host: "127.0.0.1"
   DataBase: "db_stocks"
-  Port: 3308
+  Port: 3308  #注意，非3306，请自行调整
   Prefix: "tb_"
   User: "root"
   Pass: "DRsXT5ZJ6Oi55LPQ"
