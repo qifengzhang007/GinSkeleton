@@ -10,7 +10,7 @@ import (
 var smap sync.Map
 
 // 创建一个容器工厂
-func CreatecontainersFactory() *containers {
+func CreateContainersFactory() *containers {
 	return &containers{}
 }
 

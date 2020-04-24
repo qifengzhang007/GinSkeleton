@@ -12,7 +12,7 @@ func RegisterValidator() {
 	//  key 按照前缀+模块+验证动作 格式，将各个模块验证注册在容器
 	var key string
 	//创建容器
-	v_container := Container.CreatecontainersFactory()
+	v_container := Container.CreateContainersFactory()
 
 	// Users 模块表单验证器按照 key => value 形式注册在容器，方便路由模块中调用
 	key = Consts.Validator_Prefix + "UsersRegister"

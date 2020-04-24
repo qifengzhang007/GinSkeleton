@@ -19,7 +19,8 @@ type Users struct {
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
 
-	// 获取表单绑定的结构体数据（按照键=》值）形式，注意前面有前缀
+	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型
+	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	user_ip := context.ClientIP()
@@ -33,9 +34,6 @@ func (u *Users) Register(context *gin.Context) {
 
 //  2.用户登录
 func (u *Users) Login(context *gin.Context) {
-
-	//  由于本项目骨架已经将表单验证器的参数绑定在上下文，可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取
-	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
@@ -64,7 +62,7 @@ func (u *Users) Login(context *gin.Context) {
 }
 
 //3.用户查询（show）
-func (c *Users) Show(context *gin.Context) {
+func (u *Users) Show(context *gin.Context) {
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	page := context.GetFloat64(Consts.Validator_Prefix + "page")
 	limits := context.GetFloat64(Consts.Validator_Prefix + "limits")
@@ -78,7 +76,7 @@ func (c *Users) Show(context *gin.Context) {
 }
 
 //4.用户新增(store)
-func (c *Users) Store(context *gin.Context) {
+func (u *Users) Store(context *gin.Context) {
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	real_name := context.GetString(Consts.Validator_Prefix + "real_name")
@@ -94,7 +92,7 @@ func (c *Users) Store(context *gin.Context) {
 }
 
 //5.用户更新(update)
-func (c *Users) Update(context *gin.Context) {
+func (u *Users) Update(context *gin.Context) {
 	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
@@ -110,7 +108,7 @@ func (c *Users) Update(context *gin.Context) {
 }
 
 //6.用户删除记录
-func (c *Users) Destroy(context *gin.Context) {
+func (u *Users) Destroy(context *gin.Context) {
 	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
 	if Model.CreateUserFactory().Destroy(userid) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
