@@ -21,6 +21,7 @@
 >POST   /Admin/users/create       
 >POST   /Admin/users/edit         
 >POST   /Admin/users/delete       
+>POST   /Admin/upload/file         
 
 
 #### 版本 
