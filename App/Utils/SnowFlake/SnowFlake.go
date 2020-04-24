@@ -7,14 +7,14 @@ import (
 )
 
 // 创建一个snowflake工厂
-func CreateSnowFlakeFactory() (*snowflake, error) {
+func CreateSnowFlakeFactory() *snowflake {
 
 	v_snowflake := &snowflake{
 		lastTimestamp: time.Now().UnixNano() / 1e6,
 		machId:        Consts.SnowFlake_Machine_Id,
 		index:         0,
 	}
-	return v_snowflake, nil
+	return v_snowflake
 }
 
 type snowflake struct {
