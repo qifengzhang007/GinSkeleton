@@ -18,6 +18,10 @@ const (
 	JwtToken_Invalid          int    = -400100 //无效的token
 	JwtToken_Expired          int    = -400101 //过期的token
 
+	//snowfalake错误
+	SnowFlake_Machine_Id      int16  = 1024
+	SnowFlake_Machine_Illegal string = "SnowFlake数据越界，大于65535"
+
 	// CURD 常用业务状态码
 	Curd_Status_Ok_Code     int    = 200
 	Curd_Status_Ok_Msg      string = "Success"

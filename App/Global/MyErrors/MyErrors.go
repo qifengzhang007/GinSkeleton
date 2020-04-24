@@ -19,4 +19,7 @@ const (
 	//token部分
 	Errors_Token_Invalid string = "无效的token"
 	Errors_Token_Expired string = "过期的token"
+	//
+	Errors_Snowflake_Init_Fail  string = "初始化 snowflakeFctory 过程发生错误"
+	Errors_Snowflake_GetId_Fail string = "获取snowflake唯一ID过程发生错误"
 )
