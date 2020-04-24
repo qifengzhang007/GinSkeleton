@@ -48,7 +48,7 @@ func (u *UpFiels) CheckParams(context *gin.Context) {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Server_Occurred_Error_Code, Consts.Server_Occurred_Error_Msg+",检测文件mime类型发生错误。", "")
 		return
 	}
-	//凡是存在相等的类型，通过验证，调用控制器,并将追加标案参数验证器的上下文传递给控制器
+	//凡是存在相等的类型，通过验证，调用控制器
 	if !is_pass {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_MimeType_Fail_Code, Consts.Files_Upload_MimeType_Fail_Msg, "")
 	} else {
