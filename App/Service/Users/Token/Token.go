@@ -23,13 +23,13 @@ type userToken struct {
 }
 
 //生成token
-func (u *userToken) GenerateToken(userid int, username string, phone string, expire_at int64) (tokens string, err error) {
+func (u *userToken) GenerateToken(userid int64, username string, phone string, expire_at int64) (tokens string, err error) {
 
 	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
 	custome_claims := MyJwt.CustomClaims{
-		ID:    userid,
-		Name:  username,
-		Phone: phone,
+		UserId: userid,
+		Name:   username,
+		Phone:  phone,
 		// 特别注意，针对前文的匿名结构体，初始化的时候必须指定键名，并且不带 jwt. 否则报错：Mixture of field: value and value initializers
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 10),        // 生效开始时间
@@ -52,7 +52,7 @@ func (u *userToken) RefreshToken(token string) (res bool) {
 		//如果token已经过期，那么执行更新
 		if new_token, error := u.userJwt.RefreshToken(token, Consts.JwtToken_Refresh_ExpireAt); error == nil {
 			//cutomClaims.ID=userid
-			if Model.CreateUserFactory().RefreshToken(cutomClaims.ID, new_token) {
+			if Model.CreateUserFactory().RefreshToken(cutomClaims.UserId, new_token) {
 				res = true
 			}
 		}
@@ -88,7 +88,7 @@ func (u *userToken) isNotExpired(token string) (*MyJwt.CustomClaims, int) {
 func (u *userToken) IsEffective(token string) bool {
 	cutomClaims, code := u.isNotExpired(token)
 	if Consts.JwtToken_OK == code {
-		if user_item := Model.CreateUserFactory().ShowOneItem(cutomClaims.ID); user_item != nil {
+		if user_item := Model.CreateUserFactory().ShowOneItem(cutomClaims.UserId); user_item != nil {
 			if user_item.Token == token {
 				return true
 			}

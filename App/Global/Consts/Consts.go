@@ -23,20 +23,22 @@ const (
 	SnowFlake_Machine_Illegal string = "SnowFlake数据越界，大于65535"
 
 	// CURD 常用业务状态码
-	Curd_Status_Ok_Code     int    = 200
-	Curd_Status_Ok_Msg      string = "Success"
-	Curd_Creat_Fail_Code    int    = -400200
-	Curd_Creat_Fail_Msg     string = "新增失败"
-	Curd_Updat_Fail_Code    int    = -400201
-	Curd_Updat_Fail_Msg     string = "更新失败"
-	Curd_Delete_Fail_Code   int    = -400202
-	Curd_Delete_Fail_Msg    string = "删除失败"
-	Curd_Select_Fail_Code   int    = -400203
-	Curd_Select_Fail_Msg    string = "查询无数据"
-	Curd_Register_Fail_Code int    = -400204
-	Curd_Register_Fail_Msg  string = "注册失败"
-	Curd_Login_Fail_Code    int    = -400205
-	Curd_Login_Fail_Msg     string = "登录失败"
+	Curd_Status_Ok_Code         int    = 200
+	Curd_Status_Ok_Msg          string = "Success"
+	Curd_Creat_Fail_Code        int    = -400200
+	Curd_Creat_Fail_Msg         string = "新增失败"
+	Curd_Updat_Fail_Code        int    = -400201
+	Curd_Update_Fail_Msg        string = "更新失败"
+	Curd_Delete_Fail_Code       int    = -400202
+	Curd_Delete_Fail_Msg        string = "删除失败"
+	Curd_Select_Fail_Code       int    = -400203
+	Curd_Select_Fail_Msg        string = "查询无数据"
+	Curd_Register_Fail_Code     int    = -400204
+	Curd_Register_Fail_Msg      string = "注册失败"
+	Curd_Login_Fail_Code        int    = -400205
+	Curd_Login_Fail_Msg         string = "登录失败"
+	Curd_RefreshToken_Fail_Code int    = -400206
+	Curd_RefreshToken_Fail_Msg  string = "刷新Token失败"
 
 	//文件上传
 	Files_Upload_Fail_Code              int    = -400250

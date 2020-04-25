@@ -1,4 +1,4 @@
-package Helper
+package Config
 
 import (
 	"GinSkeleton/App/Global/Variable"

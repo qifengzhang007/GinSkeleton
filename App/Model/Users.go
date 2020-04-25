@@ -1,6 +1,7 @@
 package Model
 
 import (
+	"GinSkeleton/App/Utils/MD5Cryt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 )
@@ -20,7 +21,7 @@ func CreateUserFactory() *usersModel {
 
 type usersModel struct {
 	*BaseModel
-	Id       int    `json:"id"`
+	Id       int64  `json:"id"`
 	Username string `json:"username"`
 	Pass     string `json:"pass"`
 	Phone    string `json:"phone"`
@@ -48,14 +49,14 @@ func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
 		break
 	}
 	// 账号密码验证成功
-	if len(u.Pass) > 0 && (u.Pass == p_pass) {
+	if len(u.Pass) > 0 && (u.Pass == MD5Cryt.Base64Md5(p_pass)) {
 		return u
 	}
 	return nil
 }
 
 //	刷新用户token字段值，一般是token过期之后，重新更新
-func (u *usersModel) RefreshToken(userId int, token string) bool {
+func (u *usersModel) RefreshToken(userId int64, token string) bool {
 	sql := "update  tb_users  set  token=? where   id=?"
 	if u.ExecuteSql(sql, token, userId) > 0 {
 		return true
@@ -73,7 +74,7 @@ func (u *usersModel) SetTokenInvalid(userId int) bool {
 }
 
 //根据用户ID查询一条信息
-func (u *usersModel) ShowOneItem(userId int) *usersModel {
+func (u *usersModel) ShowOneItem(userId int64) *usersModel {
 
 	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`, `token`  FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
 	rows := u.QuerySql(sql, userId)
@@ -93,12 +94,12 @@ func (u *usersModel) ShowOneItem(userId int) *usersModel {
 // 查询（根据关键词模糊查询）
 func (u *usersModel) Show(username string, limit_start float64, limit_items float64) []usersModel {
 
-	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`, `token`  FROM  `tb_users`  WHERE `status`=1 and   username like ? LIMIT ?,?"
+	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   username like ? LIMIT ?,?"
 	rows := u.QuerySql(sql, "%"+username+"%", limit_start, limit_items)
 	if rows != nil {
 		v_temp := make([]usersModel, 0)
 		for rows.Next() {
-			err := rows.Scan(&u.Id, &u.Username, &u.RealName, &u.Phone, &u.Status, &u.Token)
+			err := rows.Scan(&u.Id, &u.Username, &u.RealName, &u.Phone, &u.Status)
 			if err == nil {
 				v_temp = append(v_temp, *u)
 			} else {

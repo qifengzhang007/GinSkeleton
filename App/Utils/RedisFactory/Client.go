@@ -4,14 +4,14 @@ import (
 	"GinSkeleton/App/Core/Event"
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
-	"GinSkeleton/App/Utils/Helper"
+	"GinSkeleton/App/Utils/Config"
 	"github.com/gomodule/redigo/redis"
 	"log"
 	"time"
 )
 
 func createRedisClientPool() *redis.Pool {
-	configFac := Helper.CreateYamlFactory()
+	configFac := Config.CreateYamlFactory()
 	redis_pool := &redis.Pool{
 		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
 		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数

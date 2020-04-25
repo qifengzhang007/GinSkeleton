@@ -4,8 +4,8 @@ import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Controller/Admin"
+	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/Files"
-	"GinSkeleton/App/Utils/Helper"
 	"GinSkeleton/App/Utils/Response"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -25,15 +25,15 @@ func (u *UpFiels) CheckParams(context *gin.Context) {
 		return
 	}
 	//超过系统设定的最大值：32M
-	if tmp_file.Size > Helper.CreateYamlFactory().GetInt64("FileUploadSetting.Size")*1024*1024 {
-		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_MoreThan_Max_Size_Code, Consts.Files_Upload_MoreThan_Max_Size_Msg+",系统允许的最大值（M）："+Helper.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
+	if tmp_file.Size > Config.CreateYamlFactory().GetInt64("FileUploadSetting.Size")*1024*1024 {
+		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_MoreThan_Max_Size_Code, Consts.Files_Upload_MoreThan_Max_Size_Msg+",系统允许的最大值（M）："+Config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
 		return
 	}
 	//不允许的文件mime类型
 	if fp, err := tmp_file.Open(); err == nil {
 		mimeType := Files.GetFilesMimeByFp(fp)
 
-		for _, value := range Helper.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
+		for _, value := range Config.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
 			if strings.ReplaceAll(value, " ", "") == strings.ReplaceAll(mimeType, " ", "") {
 				is_pass = true
 				break

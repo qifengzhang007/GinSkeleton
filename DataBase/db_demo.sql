@@ -1,16 +1,3 @@
-/*
-SQLyog Ultimate
-MySQL - 10.3.8-MariaDB : Database - db_stocks
-*********************************************************************
-*/
-
-/*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_stocks` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE `db_stocks`;
@@ -20,34 +7,26 @@ USE `db_stocks`;
 DROP TABLE IF EXISTS `tb_users`;
 
 CREATE TABLE `tb_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(30) DEFAULT '' COMMENT '账号',
-  `pass` varchar(30) DEFAULT '' COMMENT '密码',
-  `real_name` varchar(30) DEFAULT '' COMMENT '姓名',
-  `phone` char(11) DEFAULT '' COMMENT '手机',
-  `status` tinyint(4) DEFAULT 1 COMMENT '状态',
-  `token` varchar(300) DEFAULT '',
-  `remark` varchar(300) DEFAULT '' COMMENT '备注',
-  `last_login_time` datetime DEFAULT current_timestamp(),
-  `last_login_ip` char(30) DEFAULT '' COMMENT '最近一次登录ip',
-  `login_times` int(11) DEFAULT 1 COMMENT '累计登录次数',
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp(),
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(30) DEFAULT '' COMMENT '账号',
+  `pass` VARCHAR(128) DEFAULT '' COMMENT '密码',
+  `real_name` VARCHAR(30) DEFAULT '' COMMENT '姓名',
+  `phone` CHAR(11) DEFAULT '' COMMENT '手机',
+  `status` TINYINT(4) DEFAULT 1 COMMENT '状态',
+  `token` VARCHAR(300) DEFAULT '',
+  `remark` VARCHAR(300) DEFAULT '' COMMENT '备注',
+  `last_login_time` DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  `last_login_ip` CHAR(30) DEFAULT NULL COMMENT '最近一次登录ip',
+  `login_times` INT(11) DEFAULT 1 COMMENT '累计登录次数',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 /*Data for the table `tb_users` */
 
-insert  into `tb_users`(`id`,`username`,`pass`,`real_name`,`phone`,`status`,`token`,`remark`,`last_login_time`,`last_login_ip`,`login_times`,`created_at`,`updated_at`) values
-(1,'admin','admin9527','管理员','156xxxxxxxx',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEsIm5hbWUiOiIiLCJwaG9uZSI6IjE2NjAxNzcwOTE1IiwiZXhwIjoxNTg3MzE3NjE0LCJuYmYiOjE1ODczMTQwMDR9._P5BnoYB1fDPHYc98L_GSCVyOMrTBkEVEAN2GUgtFK4','','2020-04-19 23:43:50',NULL,1,'2020-04-19 02:41:54','2020-04-19 02:41:54'),
-(2,'zhangsanfeng','wewewewewewe','张三丰','156xxxxxxxx',1,'','','2020-04-19 23:43:50',NULL,1,'2020-04-19 02:42:19','2020-04-19 02:42:19'),
-(3,'testadmin','hello20154','测试1','156xxxxxxxx',1,'','','2020-04-19 23:43:50',NULL,1,'2020-04-19 02:48:11','2020-04-19 02:48:11'),
-(4,'zhangcuishan','yuikjll54','张翠山','156xxxxxxxx',1,'','','2020-04-19 23:43:50',NULL,1,'2020-04-19 12:32:10','2020-04-19 12:32:10'),
-(5,'zhangwuji','secret20212','张无忌','156xxxxxxxx',1,'','测试数据','2020-04-19 23:43:50',NULL,1,'2020-04-19 22:47:43','2020-04-19 22:47:43'),
-(8,'zhangcuishan','yuikjll54','张翠山','156xxxxxxxx',1,'0','','2020-04-19 23:43:50',NULL,1,'2020-04-19 23:28:35','2020-04-19 23:28:35'),
-(9,'lisi2021','secret20212','李四','156xxxxxxxx',1,'','测试数据','2020-04-20 00:36:06',NULL,1,'2020-04-20 00:36:06','2020-04-20 00:36:06'),
-(10,'lisi2025','secret20212','李四','156xxxxxxxx',1,'','测试数据','2020-04-20 00:38:46',NULL,1,'2020-04-20 00:38:46','2020-04-20 00:38:46');
+INSERT  INTO `tb_users`(`id`,`username`,`pass`,`real_name`,`phone`,`status`,`token`,`remark`,`last_login_time`,`last_login_ip`,`login_times`,`created_at`,`updated_at`) VALUES
+(1,'admin','87d9bb400c0634691f0e3baaf1e2fd0d','','',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjExLCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODc4NDAxMDYsIm5iZiI6MTU4NzgzMDQwMn0._mZcHdzzmsYYXPxuoVyXzw7U_9Rku7fCmkoWJ9EEdaQ','','2020-04-25 23:51:28','127.0.0.1',1,'2020-04-25 23:51:28','2020-04-25 23:51:28'),
+(2,'hello','188bda0c10088d7c2e6d7c00592679e7','','',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzLCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODc4Mzc4OTYsIm5iZiI6MTU4NzgzNDI4Nn0.qayu_u7mEYjTpHPxhgFJtSdGGFHI9rxkwR_RZx_T51E','','2020-04-26 00:59:25','127.0.0.1',1,'2020-04-26 00:59:25','2020-04-26 00:59:25');
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+

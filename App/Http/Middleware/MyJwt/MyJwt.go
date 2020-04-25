@@ -51,7 +51,7 @@ func (j *Jwt_Sign) CreateToken(claims CustomClaims) (string, error) {
 	return token_partA.SignedString(j.SigningKey)
 }
 
-// 解析Tokne
+// 解析Token
 func (j *Jwt_Sign) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
@@ -78,19 +78,11 @@ func (j *Jwt_Sign) ParseToken(tokenString string) (*CustomClaims, error) {
 
 // 更新token
 func (j *Jwt_Sign) RefreshToken(tokenString string, extraAddSeconds int64) (string, error) {
-	jwt.TimeFunc = func() time.Time {
-		return time.Unix(0, 0)
-	}
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return j.SigningKey, nil
-	})
-	if err != nil {
+
+	if CustomClaims, err := j.ParseToken(tokenString); err == nil {
+		CustomClaims.ExpiresAt = time.Now().Unix() + extraAddSeconds
+		return j.CreateToken(*CustomClaims)
+	} else {
 		return "", err
 	}
-	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
-		jwt.TimeFunc = time.Now
-		claims.StandardClaims.ExpiresAt = time.Now().Unix() + extraAddSeconds
-		return j.CreateToken(*claims)
-	}
-	return "", TokenInvalid
 }

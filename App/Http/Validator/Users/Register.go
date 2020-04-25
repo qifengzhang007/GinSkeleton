@@ -24,8 +24,8 @@ import (
 
 type Register struct {
 	Base
-	Phone string `form:"phone" json:"phone"  binding:"required,len=11"`   //  验证规则：必填，长度必须=11
-	Pass  string `form:"pass" json:"pass" binding:"required,min=3,max=6"` //必填，密码长度范围：【3,6】闭区间
+	Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
+	Pass  string `form:"pass" json:"pass" binding:"required,min=3,max=20"` //必填，密码长度范围：【3,6】闭区间
 	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
 

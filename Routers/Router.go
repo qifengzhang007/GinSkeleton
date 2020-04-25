@@ -38,6 +38,7 @@ func InitRouter() *gin.Engine {
 		{
 			v_noAuth.POST("register", ValidatorFactory.Create(Consts.Validator_Prefix+"UsersRegister"))
 			v_noAuth.POST("login", ValidatorFactory.Create(Consts.Validator_Prefix+"UsersLogin"))
+			v_noAuth.POST("refreshtoken", ValidatorFactory.Create(Consts.Validator_Prefix+"RefreshToken"))
 		}
 
 		// 需要中间件验证的路由

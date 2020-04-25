@@ -25,7 +25,8 @@ func (u *Users) Register(context *gin.Context) {
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	user_ip := context.ClientIP()
 	//phone := context.GetString(Consts.Validator_Prefix + "phone")
-	if Model.CreateUserFactory().Register(name, pass, user_ip) {
+
+	if Curd.CreateUserCurdFactory().Register(name, pass, user_ip) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Register_Fail_Code, Consts.Curd_Register_Fail_Msg, "")
@@ -58,6 +59,21 @@ func (u *Users) Login(context *gin.Context) {
 		}
 	}
 	Response.ReturnJson(context, http.StatusOK, Consts.Curd_Login_Fail_Code, Consts.Curd_Login_Fail_Msg, "")
+
+}
+
+// 刷新用户token
+func (u *Users) RefreshToken(context *gin.Context) {
+
+	old_token := context.GetString(Consts.Validator_Prefix + "token")
+	if new_token, ok := Curd.CreateUserCurdFactory().RefreshToken(old_token); ok {
+		res := gin.H{
+			"token": new_token,
+		}
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, res)
+	} else {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_RefreshToken_Fail_Code, Consts.Curd_RefreshToken_Fail_Msg, "")
+	}
 
 }
 
@@ -102,12 +118,12 @@ func (u *Users) Update(context *gin.Context) {
 	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
-		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Updat_Fail_Code, Consts.Curd_Updat_Fail_Msg, "")
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Updat_Fail_Code, Consts.Curd_Update_Fail_Msg, "")
 	}
 
 }
 
-//6.用户删除记录
+//6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
 	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
 	if Model.CreateUserFactory().Destroy(userid) {

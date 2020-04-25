@@ -1,6 +1,6 @@
 ### 这是什么?  
 >   1.这是一个基于go语言gin框架的web项目骨架，其目的主要在于将web项目主线逻辑梳理清晰，最基础的东西封装完善，开发者更多关注属于自己的的业务即可。  
->   2.开发者拉取本项目骨架，在此基础上就可以快速开发自己的项目。  
+>   2.本项目骨架封装了以`tb_users`表为核心的全部功能（主要包括用户相关的接口参数验证器、注册、登录获取token、刷新token、CURD以及token鉴权等），开发者拉取本项目骨架，在此基础上就可以快速开发自己的项目。  
 ####    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.  
@@ -17,6 +17,7 @@
 >GET    /                         
 >POST   /Admin/users/register     
 >POST   /Admin/users/login        
+>POST   /Admin/users/refreshtoken        
 >GET    /Admin/users/index        
 >POST   /Admin/users/create       
 >POST   /Admin/users/edit         
@@ -24,7 +25,11 @@
 >POST   /Admin/upload/file         
 
 
-#### 版本 
+#### 版本
+V 1.0.09   2020-04-25  
+>   1.增加用户`token`刷新接口，精简刷新逻辑代码。  
+>   2.完善用户密码加密存储方式，同步更新`DataBase/db_demo.sql`文件。       
+ 
 V 1.0.08   2020-04-24 
 >   1.增加SnowFlake算法，用于全局生成唯一ID，便于业务使用。  
 >   2.封装MD5函数，方便快速调用。      

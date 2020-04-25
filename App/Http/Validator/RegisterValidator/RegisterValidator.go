@@ -19,6 +19,9 @@ func RegisterValidator() {
 	v_container.Set(key, &Users.Register{})
 	key = Consts.Validator_Prefix + "UsersLogin"
 	v_container.Set(key, &Users.Login{})
+	key = Consts.Validator_Prefix + "RefreshToken"
+	v_container.Set(key, &Users.RefreshToken{})
+
 	// Users基本操作（CURD）
 	key = Consts.Validator_Prefix + "UsersShow"
 	v_container.Set(key, &Users.Show{})

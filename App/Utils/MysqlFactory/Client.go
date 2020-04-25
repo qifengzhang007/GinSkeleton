@@ -4,7 +4,7 @@ import (
 	"GinSkeleton/App/Core/Event"
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
-	"GinSkeleton/App/Utils/Helper"
+	"GinSkeleton/App/Utils/Config"
 	"database/sql"
 	"log"
 	"time"
@@ -12,7 +12,7 @@ import (
 
 // 初始化数据库驱动
 func Init_sql_driver() *sql.DB {
-	configFac := Helper.CreateYamlFactory()
+	configFac := Config.CreateYamlFactory()
 	DbType := configFac.GetString("DbType")
 	Host := configFac.GetString("Mysql.Host")
 	Port := configFac.GetString("Mysql.Port")
@@ -40,7 +40,7 @@ func Init_sql_driver() *sql.DB {
 
 // 从连接池获取一个连接
 func GetOneEffectivePing() *sql.DB {
-	configFac := Helper.CreateYamlFactory()
+	configFac := Config.CreateYamlFactory()
 	max_retry_times := configFac.GetInt("Mysql.PingFailRetryTimes")
 	// ping 失败允许重试
 	v_db_driver := Init_sql_driver()

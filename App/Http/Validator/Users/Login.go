@@ -11,7 +11,7 @@ import (
 
 type Login struct {
 	Base
-	Pass string `form:"pass" json:"pass" binding:"required,min=6"` //  密码为 必填，长度>=6
+	Pass string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //  密码为 必填，长度>=6
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
