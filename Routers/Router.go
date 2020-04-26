@@ -47,7 +47,7 @@ func InitRouter() *gin.Engine {
 			// 用户组路由
 			v_users := V_Backend.Group("users/")
 			{
-				// 查询
+				// 查询 ，这里的验证器直接从容器获取，是因为程序启动时，将验证器注册在了容器，具体代码位置：App\Http\Validator\Users\xxx
 				v_users.GET("index", ValidatorFactory.Create(Consts.Validator_Prefix+"UsersShow"))
 				// 新增
 				v_users.POST("create", ValidatorFactory.Create(Consts.Validator_Prefix+"UsersStore"))
