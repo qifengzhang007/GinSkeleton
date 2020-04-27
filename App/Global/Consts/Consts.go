@@ -47,4 +47,8 @@ const (
 	Files_Upload_MoreThan_Max_Size_Msg  string = "长传文件超过系统设定的最大值"
 	Files_Upload_MimeType_Fail_Code     int    = -400252
 	Files_Upload_MimeType_Fail_Msg      string = "文件mime类型不允许"
+
+	//websocket
+	Ws_Open_Fail_Code int    = -400300
+	Ws_Open_Fail_Msg  string = "websocket open阶段失败"
 )

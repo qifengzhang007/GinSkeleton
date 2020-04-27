@@ -5,6 +5,7 @@ import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Http/Validator/UploadFiles"
 	"GinSkeleton/App/Http/Validator/Users"
+	"GinSkeleton/App/Http/Validator/Websocket"
 )
 
 // 各个业务模块验证器必须进行注册（初始化），程序启动时会自动加载到容器
@@ -35,4 +36,7 @@ func RegisterValidator() {
 	// 文件上传
 	key = Consts.Validator_Prefix + "UploadFiles"
 	v_container.Set(key, &UploadFiles.UpFiels{})
+	// 文件上传
+	key = Consts.Validator_Prefix + "WebsocketConnect"
+	v_container.Set(key, &Websocket.Connect{})
 }

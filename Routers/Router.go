@@ -30,9 +30,12 @@ func InitRouter() *gin.Engine {
 	router.StaticFS("/dir", http.Dir("./Public"))    // 将Public目录内的文件列举展示
 	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
 
-	//  创建一个路由组
+	//  创建一个后端接口路由组
 	V_Backend := router.Group("/Admin/")
 	{
+		// 创建一个websocket,如果ws需要账号密码登录才能使用，就写在需要鉴权的分组，这里暂定是开放式的，不需要严格鉴权，我们简单验证一下token值
+		router.GET("ws", ValidatorFactory.Create(Consts.Validator_Prefix+"WebsocketConnect"))
+
 		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")
 		{
