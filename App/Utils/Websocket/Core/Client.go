@@ -95,9 +95,9 @@ func (c *Client) Heartbeat(callback_close func()) {
 		select {
 		case <-ticker.C:
 			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteWait * time.Second))
-			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte("Server->Ping->Client")); err != nil {
+			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(Variable.Websocket_Server_Ping_Msg)); err != nil {
 				c.HeartbeatFailTimes++
-				if c.HeartbeatFailTimes > Config.CreateYamlFactory().GetInt(Variable.Websocket_Server_Ping_Msg) {
+				if c.HeartbeatFailTimes > Config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
 					return
 				}
 			} else {

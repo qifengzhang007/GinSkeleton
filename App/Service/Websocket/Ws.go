@@ -32,7 +32,7 @@ func (w *Ws) OnMessage(context *gin.Context) {
 		w.WsClient.Conn.WriteMessage(websocket.TextMessage, append([]byte("hello，服务器已经收到你的消息=>"), []byte(received_data)...)) // 回复客户端已经收到消息
 
 	}, w.OnError, w.OnClose)
-	go w.WsClient.Heartbeat(w.OnClose)
+	go w.WsClient.Heartbeat(w.OnClose) // 为每一个连接开启一个自动化的隐式心跳检测包
 }
 
 // OnError 客户端与服务端在消息交互过程中发生错误回调函数
