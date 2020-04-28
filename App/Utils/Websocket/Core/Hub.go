@@ -24,6 +24,7 @@ func (h *Hub) Run() {
 			h.Clients[client] = true
 		case client := <-h.UnRegister:
 			if _, ok := h.Clients[client]; ok {
+				client.Conn.Close()
 				delete(h.Clients, client)
 			}
 		}

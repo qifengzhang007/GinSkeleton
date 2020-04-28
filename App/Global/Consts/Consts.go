@@ -53,5 +53,5 @@ const (
 	Ws_Server_Not_Start_Code int    = -400300
 	Ws_Server_Not_Start_Msg  string = "websocket 服务没有开启，请在配置文件开启，相关路径：Config/config.yaml"
 	Ws_Open_Fail_Code        int    = -400301
-	Ws_Open_Fail_Msg         string = "websocket open阶段失败"
+	Ws_Open_Fail_Msg         string = "websocket open阶段初始化基本参数失败"
 )

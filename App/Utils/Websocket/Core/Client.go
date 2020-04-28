@@ -4,7 +4,6 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"log"
@@ -42,7 +41,6 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		if ws_hub, ok := Variable.Websocket_Hub.(*Hub); ok {
 			c.Hub = ws_hub
 		}
-
 		c.Conn = ws_conn
 		c.Send = make(chan []byte, Config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
 		c.PingPeriod = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
@@ -64,7 +62,6 @@ func (c *Client) ReadPump(callback_on_message func(messageType int, p []byte), c
 	}()
 
 	// OnMessage事件
-	c.Conn.SetReadDeadline(time.Now().Add(c.PongWait))                                   // 设置最大读取时间
 	c.Conn.SetReadLimit(Config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 	for {
 		messageType, byte_message, err := c.Conn.ReadMessage()
@@ -72,45 +69,40 @@ func (c *Client) ReadPump(callback_on_message func(messageType int, p []byte), c
 			callback_on_message(messageType, byte_message)
 		} else {
 			callback_on_error(err)
-			//c.HeartbeatFailTimes++
 			break
-			// 关闭客户端以心跳检测为准，并不是发生一次错误就立刻关闭
-			if c.HeartbeatFailTimes > Config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
-				break
-			}
 		}
 	}
 }
 
-// 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包
-func (c *Client) Heartbeat() {
+// 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包,浏览器收到ping标准格式，自动将消息原路返回给服务器
+func (c *Client) Heartbeat(callback_close func()) {
 
-	//2.浏览器收到服务器的ping格式消息，会自动原路返回
+	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	c.Conn.SetPongHandler(func(pong string) error {
-		c.Conn.SetReadDeadline(time.Now().Add(c.PongWait))
-		fmt.Println("浏览器自动响应服务器发出去的ping格式消息：", pong)
+		c.Conn.SetReadDeadline(time.Now().Add((c.PingPeriod + 3) * time.Second)) // 这个参数必须>c.PingPeriod,否则很容易奔溃
+		//fmt.Println("浏览器收到ping标准格式，自动将消息原路返回给服务器：", pong)  // 接受到的消息叫做pong，实际上就是服务器发送出去的ping数据包
 		return nil
 	})
 
 	//  1. 设置一个时钟，周期性的向client远端发送心跳数据包
-	ticker := time.NewTicker(c.PingPeriod)
+	ticker := time.NewTicker(c.PingPeriod * time.Second)
 	defer func() {
-		ticker.Stop()
+		ticker.Stop()    // 停止该client的心跳检测
+		callback_close() // 注销 client
 	}()
 
 	for {
 		select {
 		case <-ticker.C:
-			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteWait))
+			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteWait * time.Second))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte("Server->Ping->Client")); err != nil {
-				// 这里可以计算累积出现错误的次数，超过某个值，就关闭连接
 				c.HeartbeatFailTimes++
 				if c.HeartbeatFailTimes > Config.CreateYamlFactory().GetInt(Variable.Websocket_Server_Ping_Msg) {
 					return
 				}
 			} else {
 				if c.HeartbeatFailTimes > 0 {
-					c.HeartbeatFailTimes++
+					c.HeartbeatFailTimes--
 				}
 			}
 		}

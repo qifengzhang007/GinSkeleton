@@ -11,7 +11,6 @@ import (
 )
 
 type Connect struct {
-	//Authorization string `header:"Authorization" binding:"required,min=10"`
 	Token string `form:"token" binding:"required,min=10"`
 }
 
@@ -26,7 +25,6 @@ func (h *Connect) CheckParams(context *gin.Context) {
 		return
 	}
 	//2.基本的验证规则没有通过
-	//if err := context.ShouldBindHeader(h); err != nil {
 	if err := context.ShouldBind(h); err != nil {
 		errs := gin.H{
 			"tips": "请在get参数中提交token信息",
@@ -37,9 +35,9 @@ func (h *Connect) CheckParams(context *gin.Context) {
 		return
 	}
 
-	if serv_ws, ok := (&controller_ws.Ws{}).OnOpen(context); ok == false {
+	if service_ws, ok := (&controller_ws.Ws{}).OnOpen(context); ok == false {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Ws_Open_Fail_Code, Consts.Ws_Open_Fail_Msg, "")
 	} else {
-		(&controller_ws.Ws{}).OnMessage(serv_ws, context)
+		(&controller_ws.Ws{}).OnMessage(service_ws, context)
 	}
 }

@@ -12,35 +12,30 @@ type Ws struct {
 	WsClient *Core.Client
 }
 
-func (w *Ws) OnOpen(context *gin.Context) bool {
+// onOpen 基本不需要做什么
+func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 	if client, ok := (&Core.Client{}).OnOpen(context); ok {
 		w.WsClient = client
-		return true
+		return w, true
 	} else {
-		return false
+		return nil, false
 	}
 }
 
+// OnMessage 处理业务消息
 func (w *Ws) OnMessage(context *gin.Context) {
-
-	go w.WsClient.ReadPump(func(messageType int, p []byte) {
+	go w.WsClient.ReadPump(func(messageType int, received_data []byte) {
 		//参数说明
-		//messageType 接收到的消息类型
-		//p 接收到的消息，[]byte 格式
+		//messageType 消息类型，1=文本
+		//received_data 服务器接收到客户端（例如js客户端）发来的的数据，[]byte 格式
 
-		w.WsClient.Send <- p // 服务器收到的原始消息,首先放入管道，起到一个缓冲作用
-		w.WsClient.Conn.WriteMessage(websocket.TextMessage, append([]byte("hello，服务器已经收到你的消息===>"), []byte(p)...))
-		n := len(w.WsClient.Send)
-		// 防止管道存在堆积的消息，用for取出消息，逐条发送给远端，
-		for i := 0; i < n; i++ {
-			//向远端发送消息
-			w.WsClient.Conn.WriteMessage(websocket.TextMessage, append([]byte("hello，服务器已经收到你的消息===>"), <-w.WsClient.Send...))
-		}
-		//		close(w.WsClient.Send)
+		w.WsClient.Conn.WriteMessage(websocket.TextMessage, append([]byte("hello，服务器已经收到你的消息=>"), []byte(received_data)...)) // 回复客户端已经收到消息
 
 	}, w.OnError, w.OnClose)
+	go w.WsClient.Heartbeat(w.OnClose)
 }
 
+// OnError 客户端与服务端在消息交互过程中发生错误回调函数
 func (w *Ws) OnError(err error) {
 
 	//err 接收消息期间发生的错误（一般来说，远端掉线、断开、卡死等会触发此错误）
@@ -50,10 +45,9 @@ func (w *Ws) OnError(err error) {
 	}
 }
 
+// OnClose 客户端关闭回调（主要有：下线、断开、卡死等无法正常通讯的状况）
 func (w *Ws) OnClose() {
-	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub注销一个下线的ws连接
-	w.WsClient.Conn.Close()
-
+	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub管道投递一条注销消息，有hub中心负责关闭连接、删除在线数据
 }
 
 //获取在线的全部客户端
