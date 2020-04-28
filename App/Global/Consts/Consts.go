@@ -1,5 +1,6 @@
 package Consts
 
+// 这里定义的常量，一般是具有错误代码+错误说明组成，一般用于接口返回
 const (
 	// 表单验证器前缀
 	Validator_Prefix                string = "Form_Validator_"
@@ -49,6 +50,8 @@ const (
 	Files_Upload_MimeType_Fail_Msg      string = "文件mime类型不允许"
 
 	//websocket
-	Ws_Open_Fail_Code int    = -400300
-	Ws_Open_Fail_Msg  string = "websocket open阶段失败"
+	Ws_Server_Not_Start_Code int    = -400300
+	Ws_Server_Not_Start_Msg  string = "websocket 服务没有开启，请在配置文件开启，相关路径：Config/config.yaml"
+	Ws_Open_Fail_Code        int    = -400301
+	Ws_Open_Fail_Msg         string = "websocket open阶段失败"
 )

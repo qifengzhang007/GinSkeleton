@@ -34,7 +34,7 @@ func InitRouter() *gin.Engine {
 	V_Backend := router.Group("/Admin/")
 	{
 		// 创建一个websocket,如果ws需要账号密码登录才能使用，就写在需要鉴权的分组，这里暂定是开放式的，不需要严格鉴权，我们简单验证一下token值
-		router.GET("ws", ValidatorFactory.Create(Consts.Validator_Prefix+"WebsocketConnect"))
+		V_Backend.GET("ws", ValidatorFactory.Create(Consts.Validator_Prefix+"WebsocketConnect"))
 
 		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")

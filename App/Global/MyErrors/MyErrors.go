@@ -1,7 +1,9 @@
 package MyErrors
 
+// 这里定义的常量，一般只有错误说明，无错误代码，常用语记录日志使用
 const (
 	//系统部分
+	Errors_Config_Init_Fail         string = "初始化配置文件发生错误"
 	Errors_FuncEvent_Already_Exists string = "注册函数类事件失败，键名已经被注册"
 	Errors_FuncEvent_NotRegister    string = "没有找到键名对应的函数"
 	Errors_FuncEvent_NotCall        string = "注册的函数无法正确执行"
@@ -19,7 +21,9 @@ const (
 	//token部分
 	Errors_Token_Invalid string = "无效的token"
 	Errors_Token_Expired string = "过期的token"
-	//
+	//snowflake
 	Errors_Snowflake_Init_Fail  string = "初始化 snowflakeFctory 过程发生错误"
 	Errors_Snowflake_GetId_Fail string = "获取snowflake唯一ID过程发生错误"
+	// websocket
+	Errors_Websocket_OnOpen_Fail string = "websocket onopen 发生阶段错误"
 )

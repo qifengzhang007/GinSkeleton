@@ -36,7 +36,8 @@ func RegisterValidator() {
 	// 文件上传
 	key = Consts.Validator_Prefix + "UploadFiles"
 	v_container.Set(key, &UploadFiles.UpFiels{})
-	// 文件上传
+
+	// Websocket 连接验证器
 	key = Consts.Validator_Prefix + "WebsocketConnect"
 	v_container.Set(key, &Websocket.Connect{})
 }

@@ -1,6 +1,7 @@
 package Config
 
 import (
+	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"github.com/spf13/viper"
 	"log"
@@ -18,7 +19,7 @@ func CreateYamlFactory() *ConfigYml {
 	yaml_config.SetConfigType("yaml")
 
 	if err := yaml_config.ReadInConfig(); err != nil {
-		log.Fatal("初始化配置文件发生错误: %s\n", err)
+		log.Fatal(MyErrors.Errors_Config_Init_Fail + err.Error())
 	}
 
 	return &ConfigYml{
@@ -70,7 +71,7 @@ func (c *ConfigYml) GetDuration(keyname string) time.Duration {
 	return c.viper.GetDuration(keyname)
 }
 
-// GetDuration
+// GetStringSlice
 func (c *ConfigYml) GetStringSlice(keyname string) []string {
 	return c.viper.GetStringSlice(keyname)
 }
