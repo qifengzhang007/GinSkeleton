@@ -7,6 +7,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+/**
+websocket模块相关事件执行顺序：
+1.onOpen
+2.OnMessage
+3.OnError
+4.OnClose
+*/
+
 type Ws struct {
 	WsClient *Core.Client
 }
@@ -23,12 +31,13 @@ func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 
 // OnMessage 处理业务消息
 func (w *Ws) OnMessage(context *gin.Context) {
-	go w.WsClient.ReadPump(func(messageType int, received_data []byte) {
+	go w.WsClient.ReadPump(func(message_type int, received_data []byte) {
 		//参数说明
-		//messageType 消息类型，1=文本
+		//message_type 消息类型，1=文本
 		//received_data 服务器接收到客户端（例如js客户端）发来的的数据，[]byte 格式
 
-		w.WsClient.Conn.WriteMessage(websocket.TextMessage, append([]byte("hello，服务器已经收到你的消息=>"), []byte(received_data)...)) // 回复客户端已经收到消息
+		v_temp_msg := "服务器已经收到了你的消息==>" + string(received_data)
+		w.WsClient.Conn.WriteMessage(message_type, []byte(v_temp_msg)) // 回复客户端已经收到消息
 
 	}, w.OnError, w.OnClose)
 	go w.WsClient.Heartbeat(w.OnClose) // 为每一个连接开启一个自动化的隐式心跳检测包
@@ -37,11 +46,10 @@ func (w *Ws) OnMessage(context *gin.Context) {
 // OnError 客户端与服务端在消息交互过程中发生错误回调函数
 func (w *Ws) OnError(err error) {
 
-	//err 接收消息期间发生的错误（一般来说，远端掉线、断开、卡死等会触发此错误）
-	fmt.Printf("ws连接消息轮训期间发生错误: %v", err.Error())
+	fmt.Printf("远端掉线、卡死、刷新浏览器等会触发该错误: %v\n", err.Error())
 }
 
-// OnClose 客户端关闭回调（主要有：下线、断开、卡死等无法正常通讯的状况）
+// OnClose 客户端关闭回调，发生onError回调以后会继续回调该函数
 func (w *Ws) OnClose() {
 
 	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub管道投递一条注销消息，有hub中心负责关闭连接、删除在线数据

@@ -54,7 +54,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 }
 
 // 主要功能主要是实时接收消息
-func (c *Client) ReadPump(callback_on_message func(messageType int, p []byte), callback_on_error func(err error), callback_on_close func()) {
+func (c *Client) ReadPump(callback_on_message func(message_type int, received_data []byte), callback_on_error func(err error), callback_on_close func()) {
 
 	// 回调 onclose 事件
 	defer func() {
@@ -64,10 +64,11 @@ func (c *Client) ReadPump(callback_on_message func(messageType int, p []byte), c
 	// OnMessage事件
 	c.Conn.SetReadLimit(Config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 	for {
-		messageType, byte_message, err := c.Conn.ReadMessage()
+		mt, b_received_data, err := c.Conn.ReadMessage()
 		if err == nil {
-			callback_on_message(messageType, byte_message)
+			callback_on_message(mt, b_received_data)
 		} else {
+			// OnError事件
 			callback_on_error(err)
 			break
 		}

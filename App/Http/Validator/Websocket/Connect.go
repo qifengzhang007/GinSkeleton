@@ -35,6 +35,6 @@ func (h *Connect) CheckParams(context *gin.Context) {
 	if service_ws, ok := (&controller_ws.Ws{}).OnOpen(context); ok == false {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Ws_Open_Fail_Code, Consts.Ws_Open_Fail_Msg, "")
 	} else {
-		(&controller_ws.Ws{}).OnMessage(service_ws, context)
+		(&controller_ws.Ws{}).OnMessage(service_ws, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
 	}
 }
