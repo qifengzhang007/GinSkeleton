@@ -2,10 +2,10 @@ package Model
 
 import (
 	"GinSkeleton/App/Global/MyErrors"
-	"GinSkeleton/App/Utils/MysqlFactory"
-	"GinSkeleton/App/Utils/SqlServerFactory"
+	"GinSkeleton/App/Utils/SqlFactory"
 	"database/sql"
 	"log"
+	"strings"
 )
 
 var mysql_driver *sql.DB
@@ -13,16 +13,16 @@ var sqlserverl_driver *sql.DB
 
 // 创建一个数据库基类工厂
 func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
-
+	sql_type = strings.ToLower(strings.Replace(sql_type, " ", "", -1))
 	switch sql_type {
 	case "mysql":
 		if mysql_driver == nil {
-			mysql_driver = MysqlFactory.Init_sql_driver()
+			mysql_driver = SqlFactory.Init_sql_driver(sql_type)
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
 		if err := mysql_driver.Ping(); err != nil {
 			// 重试
-			mysql_driver = MysqlFactory.GetOneEffectivePing()
+			mysql_driver = SqlFactory.GetOneEffectivePing(sql_type)
 			// 如果重试成功
 			if err := mysql_driver.Ping(); err == nil {
 				res = &BaseModel{db_driver: mysql_driver}
@@ -30,14 +30,14 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 		} else {
 			res = &BaseModel{db_driver: mysql_driver}
 		}
-	case "mssql":
+	case "sqlserver", "mssql":
 		if sqlserverl_driver == nil {
-			sqlserverl_driver = SqlServerFactory.Init_sql_driver()
+			sqlserverl_driver = SqlFactory.Init_sql_driver(sql_type)
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
 		if err := sqlserverl_driver.Ping(); err != nil {
 			// 重试
-			sqlserverl_driver = MysqlFactory.GetOneEffectivePing()
+			sqlserverl_driver = SqlFactory.GetOneEffectivePing(sql_type)
 			// 如果重试成功
 			if err := sqlserverl_driver.Ping(); err == nil {
 				res = &BaseModel{db_driver: sqlserverl_driver}
@@ -48,6 +48,7 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 	default:
 		log.Panic(MyErrors.Errors_Db_Driver_NotExists)
 	}
+
 	return res
 }
 

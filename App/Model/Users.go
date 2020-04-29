@@ -1,15 +1,20 @@
 package Model
 
 import (
+	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/MD5Cryt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
 )
 
 // 创建userfactory
-func CreateUserFactory() *usersModel {
-
-	dbDriver := CreateBaseSqlFactory("mysql")
+// 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
+func CreateUserFactory(sql_type string) *usersModel {
+	if len(sql_type) == 0 {
+		sql_type = Config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+	}
+	dbDriver := CreateBaseSqlFactory(sql_type)
 	if dbDriver != nil {
 		return &usersModel{
 			BaseModel: dbDriver,

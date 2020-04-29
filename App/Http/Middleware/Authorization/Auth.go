@@ -4,11 +4,9 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-
-	//"GinSkeleton/Vendors/github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 )
 
 type HeaderParams struct {

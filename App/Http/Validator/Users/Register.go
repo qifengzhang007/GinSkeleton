@@ -49,7 +49,6 @@ func (r *Register) CheckParams(context *gin.Context) {
 	} else {
 		// 验证完成，调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
 		(&Admin.Users{}).Register(extraAddBindDataContext)
-		//(&Admin.Users{}).Shows(extraAddBindDataContext)  暂时屏蔽测试sqlserver造成的控制器切换
 	}
 
 }

@@ -52,7 +52,7 @@ func (u *userToken) RefreshToken(token string) (res bool) {
 		//如果token已经过期，那么执行更新
 		if new_token, error := u.userJwt.RefreshToken(token, Consts.JwtToken_Refresh_ExpireAt); error == nil {
 			//cutomClaims.ID=userid
-			if Model.CreateUserFactory().RefreshToken(cutomClaims.UserId, new_token) {
+			if Model.CreateUserFactory("").RefreshToken(cutomClaims.UserId, new_token) {
 				res = true
 			}
 		}
@@ -88,7 +88,7 @@ func (u *userToken) isNotExpired(token string) (*MyJwt.CustomClaims, int) {
 func (u *userToken) IsEffective(token string) bool {
 	cutomClaims, code := u.isNotExpired(token)
 	if Consts.JwtToken_OK == code {
-		if user_item := Model.CreateUserFactory().ShowOneItem(cutomClaims.UserId); user_item != nil {
+		if user_item := Model.CreateUserFactory("").ShowOneItem(cutomClaims.UserId); user_item != nil {
 			if user_item.Token == token {
 				return true
 			}

@@ -2,12 +2,10 @@ package Admin
 
 import (
 	"GinSkeleton/App/Global/Consts"
+	"GinSkeleton/App/Model"
 	"GinSkeleton/App/Service/Users/Curd"
 	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
-	//"encoding/json"
-	//V_Users "GinSkeleton/App/Http/Validattor/Users"
-	"GinSkeleton/App/Model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -39,12 +37,12 @@ func (u *Users) Login(context *gin.Context) {
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
 
-	v_user_model := Model.CreateUserFactory().Login(name, pass)
+	v_user_model := Model.CreateUserFactory("").Login(name, pass)
 	if v_user_model != nil {
 		user_token_factory := userstoken.CreateUserFactory()
 		if usertoken, err := user_token_factory.GenerateToken(v_user_model.Id, v_user_model.Username, v_user_model.Phone, Consts.JwtToken_Created_ExpireAt); err == nil {
 			//同步更新数据库 tb_users 表 token 字段
-			if Model.CreateUserFactory().RefreshToken(v_user_model.Id, usertoken) {
+			if Model.CreateUserFactory("").RefreshToken(v_user_model.Id, usertoken) {
 				v_data := gin.H{
 					"userid":     v_user_model.Id,
 					"name":       name,
@@ -83,7 +81,7 @@ func (u *Users) Show(context *gin.Context) {
 	page := context.GetFloat64(Consts.Validator_Prefix + "page")
 	limits := context.GetFloat64(Consts.Validator_Prefix + "limits")
 	limit_start := (page - 1) * limits
-	showlist := Model.CreateUserFactory().Show(name, limit_start, limits)
+	showlist := Model.CreateUserFactory("").Show(name, limit_start, limits)
 	if showlist != nil {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, showlist)
 	} else {
@@ -126,22 +124,9 @@ func (u *Users) Update(context *gin.Context) {
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
 	userid := context.GetFloat64(Consts.Validator_Prefix + "id")
-	if Model.CreateUserFactory().Destroy(userid) {
+	if Model.CreateUserFactory("").Destroy(userid) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Delete_Fail_Code, Consts.Curd_Delete_Fail_Msg, "")
 	}
-}
-
-//7 测试sqlserver
-func (u *Users) Shows(context *gin.Context) {
-	//name := context.GetString(Consts.Validator_Prefix + "name")
-
-	showlist := Model.CreateUserTestFactory().Show("")
-	if showlist != nil {
-		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, showlist)
-	} else {
-		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Select_Fail_Code, Consts.Curd_Select_Fail_Msg, "")
-	}
-
 }
