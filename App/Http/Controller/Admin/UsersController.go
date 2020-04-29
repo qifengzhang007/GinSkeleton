@@ -132,3 +132,16 @@ func (u *Users) Destroy(context *gin.Context) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Delete_Fail_Code, Consts.Curd_Delete_Fail_Msg, "")
 	}
 }
+
+//7 测试sqlserver
+func (u *Users) Shows(context *gin.Context) {
+	//name := context.GetString(Consts.Validator_Prefix + "name")
+
+	showlist := Model.CreateUserTestFactory().Show("")
+	if showlist != nil {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, showlist)
+	} else {
+		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Select_Fail_Code, Consts.Curd_Select_Fail_Msg, "")
+	}
+
+}

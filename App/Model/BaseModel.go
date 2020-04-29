@@ -3,30 +3,47 @@ package Model
 import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Utils/MysqlFactory"
+	"GinSkeleton/App/Utils/SqlServerFactory"
 	"database/sql"
 	"log"
 )
 
-var sql_driver *sql.DB
+var mysql_driver *sql.DB
+var sqlserverl_driver *sql.DB
 
 // 创建一个数据库基类工厂
-func CreateBaseSqlFactory(sql_mode string) (res *BaseModel) {
+func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 
-	switch sql_mode {
+	switch sql_type {
 	case "mysql":
-		if sql_driver == nil {
-			sql_driver = MysqlFactory.Init_sql_driver()
+		if mysql_driver == nil {
+			mysql_driver = MysqlFactory.Init_sql_driver()
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
-		if err := sql_driver.Ping(); err != nil {
+		if err := mysql_driver.Ping(); err != nil {
 			// 重试
-			sql_driver = MysqlFactory.GetOneEffectivePing()
+			mysql_driver = MysqlFactory.GetOneEffectivePing()
 			// 如果重试成功
-			if err := sql_driver.Ping(); err == nil {
-				res = &BaseModel{db_driver: sql_driver}
+			if err := mysql_driver.Ping(); err == nil {
+				res = &BaseModel{db_driver: mysql_driver}
 			}
 		} else {
-			res = &BaseModel{db_driver: sql_driver}
+			res = &BaseModel{db_driver: mysql_driver}
+		}
+	case "mssql":
+		if sqlserverl_driver == nil {
+			sqlserverl_driver = SqlServerFactory.Init_sql_driver()
+		}
+		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
+		if err := sqlserverl_driver.Ping(); err != nil {
+			// 重试
+			sqlserverl_driver = MysqlFactory.GetOneEffectivePing()
+			// 如果重试成功
+			if err := sqlserverl_driver.Ping(); err == nil {
+				res = &BaseModel{db_driver: sqlserverl_driver}
+			}
+		} else {
+			res = &BaseModel{db_driver: sqlserverl_driver}
 		}
 	default:
 		log.Panic(MyErrors.Errors_Db_Driver_NotExists)

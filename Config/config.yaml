@@ -15,6 +15,18 @@ Mysql:
   SetConnMaxLifetime: 60
   PingFailRetryTimes: 3
 
+SqlServer:
+  Host: "127.0.0.1"
+  DataBase: "db_goskeleton"
+  Port: 1433
+  Prefix: "tb_"
+  User: "sa"
+  Pass: "secret2017"
+  SetMaxIdleConns: 10
+  SetMaxOpenConns: 128
+  SetConnMaxLifetime: 60
+  PingFailRetryTimes: 3
+
 Redis:
   Host: "127.0.0.1"
   Port: 6379

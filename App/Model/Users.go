@@ -23,11 +23,11 @@ type usersModel struct {
 	*BaseModel
 	Id       int64  `json:"id"`
 	Username string `json:"username"`
-	Pass     string `json:"pass"`
+	Pass     string `json:"-"`
 	Phone    string `json:"phone"`
 	RealName string `json:"realname"`
 	Status   int    `json:"status"`
-	Token    string
+	Token    string `json:"-"`
 }
 
 // 用户注册（写一个最简单的使用账号、密码注册即可）
