@@ -15,6 +15,7 @@
 
 ####    本项目测试用例路由  
 >GET    /                         
+>GET   /Admin/ws         
 >POST   /Admin/users/register     
 >POST   /Admin/users/login        
 >POST   /Admin/users/refreshtoken        
