@@ -1,6 +1,6 @@
 APP_DEBUG: true
 
-UseDbType: "mysql"                  #备选项：mysql、sqlserver、
+UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、
 
 Mysql:
   Host: "127.0.0.1"
