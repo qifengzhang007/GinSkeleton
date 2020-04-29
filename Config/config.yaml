@@ -25,7 +25,7 @@ Redis:
   IndexDb: 1
 
 Websocket:                            #该服务与Http具有相同的ip、端口，因此不需要额外设置端口
-  Start: 1                            #默认启动该服务（1=启动；0=不启动）
+  Start: 0                            #默认启动该服务（1=启动；0=不启动）
   WriteReadBufferSize: 20480          # 读写缓冲区分配字节，大概能存储 6800 多一点的文字
   MaxMessageSize: 65535               # 从消息管道读取消息的最大字节
   PingPeriod: 30                      #心跳包频率，单位：秒
