@@ -17,7 +17,7 @@ type Client struct {
 	Send               chan []byte     // 一个ws连接存储自己的消息管道
 	PingPeriod         time.Duration
 	PongWait           time.Duration
-	WriteWait          time.Duration
+	ReadDeadline       time.Duration
 	HeartbeatFailTimes int
 }
 
@@ -45,7 +45,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		c.Send = make(chan []byte, Config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
 		c.PingPeriod = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
 		c.PongWait = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod") * 10 / 9
-		c.WriteWait = Config.CreateYamlFactory().GetDuration("Websocket.WriteWait")
+		c.ReadDeadline = Config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
 		c.Hub.Register <- c
 		ws_conn.WriteMessage(websocket.TextMessage, []byte(Variable.Websocket_Handshake_Success))
 		return c, true
@@ -60,7 +60,6 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 	defer func() {
 		callback_on_close()
 	}()
-
 	// OnMessage事件
 	c.Conn.SetReadLimit(Config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 	for {
@@ -72,6 +71,9 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 			callback_on_error(err)
 			break
 		}
+		if c.ReadDeadline > 0 {
+			c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline * time.Second))
+		}
 	}
 }
 
@@ -80,7 +82,6 @@ func (c *Client) Heartbeat(callback_close func()) {
 
 	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	c.Conn.SetPongHandler(func(pong string) error {
-		c.Conn.SetReadDeadline(time.Now().Add((c.PingPeriod + 3) * time.Second)) // 这个参数必须>c.PingPeriod,否则很容易奔溃
 		//fmt.Println("浏览器收到ping标准格式，自动将消息原路返回给服务器：", pong)  // 接受到的消息叫做pong，实际上就是服务器发送出去的ping数据包
 		return nil
 	})
@@ -95,7 +96,6 @@ func (c *Client) Heartbeat(callback_close func()) {
 	for {
 		select {
 		case <-ticker.C:
-			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteWait * time.Second))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(Variable.Websocket_Server_Ping_Msg)); err != nil {
 				c.HeartbeatFailTimes++
 				if c.HeartbeatFailTimes > Config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {

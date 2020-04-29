@@ -25,7 +25,7 @@ func (h *Connect) CheckParams(context *gin.Context) {
 	//2.基本的验证规则没有通过
 	if err := context.ShouldBind(h); err != nil {
 		errs := gin.H{
-			"tips": "请在get参数中提交token信息",
+			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:2020?token=asasasaasasasssddsdsd",
 			"err":  err.Error(),
 		}
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Validator_ParamsCheck_Fail_Code, Consts.Validator_ParamsCheck_Fail_Msg, errs)

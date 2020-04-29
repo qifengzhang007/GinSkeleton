@@ -64,8 +64,7 @@ func (w *Ws) GetOnlineClients() {
 // 向全部在线客户端广播消息
 func (w *Ws) BroadcastMsg(send_msg string) {
 
-	//获取每一个在线的客户端，向远端发送消息
 	for online_client, _ := range w.WsClient.Hub.Clients {
-		online_client.Conn.WriteMessage(websocket.TextMessage, []byte(send_msg))
+		online_client.Conn.WriteMessage(websocket.TextMessage, []byte(send_msg)) //获取每一个在线的客户端，向远端发送消息
 	}
 }
