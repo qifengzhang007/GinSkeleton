@@ -23,13 +23,17 @@
 >POST   /Admin/users/create       
 >POST   /Admin/users/edit         
 >POST   /Admin/users/delete       
->POST   /Admin/upload/file         
+>POST   /Admin/upload/file        
 
+
+####    框架使用文档  
+[进入文档](./Document.md)  
 
 #### 版本
 V 1.0.11   2020-04-30   
 >   1.`SqlServer`、`Mysql`驱动初始化代码相似度比较高，因此进行了优化合并。   
 >   2.`SqlServer`、`Mysql`操作基类进一步完善，规范日志记录。  
+>   3. 增加项目骨架使用文档。    
 
 V 1.0.10   2020-04-29   
 >   1.`websocket`功能开发完成,特色如下：  
