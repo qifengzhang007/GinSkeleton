@@ -46,10 +46,10 @@ func (u *usersModel) Register(username string, pass string, user_ip string) bool
 
 // 用户登录,
 func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
-	sql := "select id, pass,phone  from tb_users where  username=?  limit 1"
+	sql := "select id, username,pass,phone  from tb_users where  username=?  limit 1"
 	rows := u.QuerySql(sql, p_name)
 	for rows.Next() {
-		rows.Scan(&u.Id, &u.Pass, &u.Phone)
+		rows.Scan(&u.Id, &u.Username, &u.Pass, &u.Phone)
 		rows.Close()
 		break
 	}
