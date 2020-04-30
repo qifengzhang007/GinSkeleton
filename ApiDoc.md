@@ -72,9 +72,11 @@ limits|int|必填|20
 
 ####    5.token刷新 ，请将旧token防止在header头参数直接提交更新         
 >    <font color=#FF4500>*post*，/Admin/users/refreshtoken    
+
 参数字段|类型|选项|默认值
 ---|---|---|---
 Authorization|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU  
+
 > 返回示例：
 ```json
 {
