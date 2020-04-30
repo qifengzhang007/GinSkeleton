@@ -13,6 +13,9 @@ const (
 	Errors_Db_Driver_NotExists  string = "数据库驱动不存在"
 	Errors_Db_SqlDriverInitFail string = "数据库驱动初始化失败"
 	Errors_Db_GetConnFail       string = "从数据库连接池获取一个连接失败，超过最大连接次数."
+	Errors_Db_Prepare_RunFail   string = "sql语句预处理（prepare）失败"
+	Errors_Db_Query_RunFail     string = "查询类sql语句执行失败"
+	Errors_Db_Execute_RunFail   string = "执行类sql语句执行失败"
 	//redis部分
 	Errors_Redis_InitConnFail string = "初始化redis连接池失败"
 	Errors_Redis_AuhtFail     string = "Redis Auht鉴权失败，密码错误"

@@ -9,7 +9,7 @@ import (
 )
 
 var mysql_driver *sql.DB
-var sqlserverl_driver *sql.DB
+var sqlserver_driver *sql.DB
 
 // 创建一个数据库基类工厂
 func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
@@ -31,19 +31,19 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 			res = &BaseModel{db_driver: mysql_driver}
 		}
 	case "sqlserver", "mssql":
-		if sqlserverl_driver == nil {
-			sqlserverl_driver = SqlFactory.Init_sql_driver(sql_type)
+		if sqlserver_driver == nil {
+			sqlserver_driver = SqlFactory.Init_sql_driver(sql_type)
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
-		if err := sqlserverl_driver.Ping(); err != nil {
+		if err := sqlserver_driver.Ping(); err != nil {
 			// 重试
-			sqlserverl_driver = SqlFactory.GetOneEffectivePing(sql_type)
+			sqlserver_driver = SqlFactory.GetOneEffectivePing(sql_type)
 			// 如果重试成功
-			if err := sqlserverl_driver.Ping(); err == nil {
-				res = &BaseModel{db_driver: sqlserverl_driver}
+			if err := sqlserver_driver.Ping(); err == nil {
+				res = &BaseModel{db_driver: sqlserver_driver}
 			}
 		} else {
-			res = &BaseModel{db_driver: sqlserverl_driver}
+			res = &BaseModel{db_driver: sqlserver_driver}
 		}
 	default:
 		log.Panic(MyErrors.Errors_Db_Driver_NotExists)
@@ -64,10 +64,10 @@ func (b *BaseModel) ExecuteSql(sql string, args ...interface{}) int64 {
 			if affectNum, err := res.RowsAffected(); err == nil {
 				return affectNum
 			} else {
-				log.Panic("执行类sql失败:", err)
+				log.Panic(MyErrors.Errors_Db_Execute_RunFail, err.Error())
 			}
 		} else {
-			log.Panic("(预处理)执行类sql失败:", err)
+			log.Panic(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
 		}
 	}
 	return -1
@@ -80,7 +80,11 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 		// 可变参数的二次传递，需要在后面添加三个点 ...  ，这里和php刚好相反
 		if Rows, err := stm.Query(args...); err == nil {
 			return Rows
+		} else {
+			log.Panic(MyErrors.Errors_Db_Query_RunFail, err.Error())
 		}
+	} else {
+		log.Panic(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
 	}
 	return nil
 
