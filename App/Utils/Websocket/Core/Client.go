@@ -44,7 +44,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		c.Conn = ws_conn
 		c.Send = make(chan []byte, Config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
 		c.PingPeriod = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
-		c.PongWait = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod") * 10 / 9
+		c.PongWait = Config.CreateYamlFactory().GetDuration("Websocket.PingPeriod") + 3 //  官方文档中注明，pongwait 必须> ping 时间
 		c.ReadDeadline = Config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
 		c.Hub.Register <- c
 		ws_conn.WriteMessage(websocket.TextMessage, []byte(Variable.Websocket_Handshake_Success))
