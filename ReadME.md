@@ -13,7 +13,12 @@
 >   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
 ![avatar](http://139.196.101.31:2080/concurrent.png)  
 
+
+####    框架使用文档  
+[进入项目骨架介绍文档](./Document.md)  
+
 ####    本项目测试用例路由  
+[进入Api接口测试用例文档](./ApiDoc.md)   
 >GET    /                         
 >GET   /Admin/ws         
 >POST   /Admin/users/register     
@@ -23,11 +28,7 @@
 >POST   /Admin/users/create       
 >POST   /Admin/users/edit         
 >POST   /Admin/users/delete       
->POST   /Admin/upload/file        
-
-
-####    框架使用文档  
-[进入文档](./Document.md)  
+>POST   /Admin/upload/file     
 
 #### 版本
 V 1.0.11   2020-04-30   
