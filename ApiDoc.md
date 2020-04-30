@@ -145,7 +145,6 @@ files|string|必填|(注意表单键名为files，如果需要修改成别的键
 </div>
 
 <script>
-document.cookie="username=zhangsancookie2020";  
     var wsServer_ip = 'ws://127.0.0.1:2020/Admin/ws?token=sdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd';
     var websocket = new WebSocket(wsServer_ip);
     websocket.onopen = function (evt) {
