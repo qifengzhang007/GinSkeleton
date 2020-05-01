@@ -13,7 +13,7 @@ websocket 想要了解更多具体细节请参见以下文档
 type Ws struct {
 }
 
-// OnOpne 主要解决握手+协议升级
+// OnOpen 主要解决握手+协议升级
 func (w *Ws) OnOpen(context *gin.Context) (*service_ws.Ws, bool) {
 	return (&service_ws.Ws{}).OnOpen(context)
 }

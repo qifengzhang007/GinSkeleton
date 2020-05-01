@@ -23,6 +23,7 @@ type Ws struct {
 func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 	if client, ok := (&Core.Client{}).OnOpen(context); ok {
 		w.WsClient = client
+		go w.WsClient.Heartbeat(w.OnClose) // 一旦握手+协议升级成功，就为每一个连接开启一个自动化的隐式心跳检测包
 		return w, true
 	} else {
 		return nil, false
@@ -40,7 +41,6 @@ func (w *Ws) OnMessage(context *gin.Context) {
 		w.WsClient.Conn.WriteMessage(message_type, []byte(v_temp_msg)) // 回复客户端已经收到消息
 
 	}, w.OnError, w.OnClose)
-	go w.WsClient.Heartbeat(w.OnClose) // 为每一个连接开启一个自动化的隐式心跳检测包
 }
 
 // OnError 客户端与服务端在消息交互过程中发生错误回调函数
