@@ -26,8 +26,8 @@ func init() {
 	if Config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化一份
 		Variable.Websocket_Hub = Core.CreateHubFactory()
-		if WF, ok := Variable.Websocket_Hub.(*Core.Hub); ok {
-			go WF.Run()
+		if WH, ok := Variable.Websocket_Hub.(*Core.Hub); ok {
+			go WH.Run()
 		}
 	}
 
