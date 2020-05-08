@@ -1,4 +1,4 @@
-package Admin
+package Web
 
 import (
 	"GinSkeleton/App/Global/Consts"
@@ -17,7 +17,7 @@ type Users struct {
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
 
-	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型
+	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名都是小写
 	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")

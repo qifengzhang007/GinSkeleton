@@ -3,7 +3,7 @@ package UploadFiles
 import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/Variable"
-	"GinSkeleton/App/Http/Controller/Admin"
+	"GinSkeleton/App/Http/Controller/Web"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/Files"
 	"GinSkeleton/App/Utils/Response"
@@ -48,6 +48,6 @@ func (u *UpFiels) CheckParams(context *gin.Context) {
 	if !is_pass {
 		Response.ReturnJson(context, http.StatusBadRequest, Consts.Files_Upload_MimeType_Fail_Code, Consts.Files_Upload_MimeType_Fail_Msg, "")
 	} else {
-		(&Admin.Upload{}).Start(context)
+		(&Web.Upload{}).Start(context)
 	}
 }

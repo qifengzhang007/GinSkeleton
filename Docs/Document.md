@@ -5,10 +5,12 @@
 >       2.2 websocket：https://github.com/gorilla/websocket    
 >       2.3 表单参数验证器：https://github.com/go-playground/validator    
 >       2.4 JWT相关资料：https://blog.csdn.net/codeSquare/article/details/99288718    
+>       2.5 golang标准项目布局（中文翻译版）：https://studygolang.com/articles/26941?fr=sidebar    
+>       2.6 golang标准项目布局（原版本）：https://github.com/golang-standards/project-layout     
 >   3.本文档侧重介绍本项目骨架的主线逻辑以及相关核心模块，不对gin框架的具体语法做介绍。    
 
-####    1.框架启动 ，加载顺序：main.go—>Router—> InitPackage.go  
->   1.代码位置：BootStrap/InitPackage.go，主要功能：项目初始化所需要的变量、配置等都在此模块完成。    
+####    1.框架启动 ，加载顺序：Cmd/(Web|Api)/main.go—>Router—> Init.go  
+>   1.代码位置：BootStrap/Init.go，主要功能：项目初始化所需要的变量、配置等都在此模块完成。    
 ```go  
 	// 1.初始化程序根目录
 	if path, err := os.Getwd(); err == nil {
@@ -32,8 +34,16 @@
 ```
 
 ####    2.一个Request到Response的生命周期    
+#####   2.1.介绍路由之前首先介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：App\Http\Validator\(Web|Api)\xxx业务模块  
+```code
+    //1.首先编写参数验证器逻辑，例如：用户注册模块
+    // 相见参见：App\Http\Validator\Web\Users\Register.go
 
-#####   2.1.路由 ，位置：Routers\Router.go   
+    //2.将以上编写好的表单参数验证器在注册文件添加记录，便于程序启动时加载到容器，供路由从容器调用
+    // 相见参见：App\Http\Validator\Common\RegisterValidator\RegisterValidator.go
+
+```   
+#####   2.2.路由 ，位置：Routers\Web.go   
 ```go  
 	//  创建一个后端接口路由组
 	V_Backend := router.Group("/Admin/")
@@ -64,7 +74,7 @@
      2.不需要鉴权，直接切换到表单参数验证器模块，验证参数的合法性。  
      3.需要鉴权，首先切入中间件，中间件完成验证，再将请求切换到表单参数验证器模块，验证参数的合法性。  
 
-#####   2.2 中间件，位置：App\Http\Middleware\Authorization
+#####   2.3 中间件，位置：App\Http\Middleware\Authorization
 ```go  
     // 选取一段代码说明
     type HeaderParams struct {
@@ -87,7 +97,7 @@
 
 ```
  
-#####   2.3 表单参数验证器，位置：App\Http\Validator\（XXX业务模块）。
+#####   2.4 表单参数验证器，位置：App\Http\Validator\(Web|Api)\（XXX业务模块）。
 >开发完成一个表单参数验证器，必须在注册文件（App\Http\Validator\RegisterValidator\RegisterValidator.go）增加记录，待程序启动时统一自动注册到容器。    
 ```go  
 type Register struct {
@@ -115,7 +125,7 @@ func (r *Register) CheckParams(context *gin.Context) {
 
 ``` 
 
-#####   2.4 控制器，位置：App\Http\Controller\（XXX业务模块）  
+#####   2.5 控制器，位置：App\Http\Controller\(Web|Api)\（XXX业务模块）  
 > 尽量让控制器成为一个调度器的角色，而不是在这里处理业务
 ```go  
 type Users struct {
@@ -141,7 +151,7 @@ func (u *Users) Register(context *gin.Context) {
 }
 ```
 
-######   2.4.1 Model业务层，位置：App\Model\（XXX业务模块）
+######   2.5.1 Model业务层，位置：App\Model\（XXX业务模块）
 > 控制器调度Model业务模块  
 ```go  
 type usersModel struct {
@@ -166,7 +176,7 @@ func (u *usersModel) Register(username string, pass string, user_ip string) bool
 
 ```  
 
-######   2.4.2 Service业务层，位置：App\Service\（XXX业务模块）
+######   2.5.2 Service业务层，位置：App\Service\（XXX业务模块）
 > 控制器调度Service业务模块  
 ```go 
 
@@ -180,7 +190,7 @@ func (u *UsersCurd) Register(name string, pass string, user_ip string) bool {
 
 ```
 
-#####   2.5 Response响应，位置：App\Utils\Response\ReturnJson.go
+#####   2.6 Response响应，位置：App\Utils\Response\ReturnJson.go
 >这里我们只封装了json格式数据返回，如果需要 xml 、html、text等，请按照gin语法自行追加函数即可。
 ```go  
 
@@ -200,7 +210,7 @@ func ReturnJson(Context *gin.Context, http_code int, data_code int, msg string, 
 
 ```  
 
-####    3.信号监听独立协程，位置：App\Core\Destruct\Destroy.go
+####    3.信号监听独立协程，位置：App\Core\Destroy\Destroy.go
 >该协程会在框架启动时被启动，用于监听程序可能收到的退出信号  
 ```go  
 func init() {
@@ -227,10 +237,10 @@ func init() {
 >   2.该模块也遵守整个请求（request——response）的生命周期。    
 >   3.控制器位置：App\Http\Controller\Websocket\Ws.go  
 >   4.事件监听、处理位置：App\Service\Websocket\Ws.go    
-
+>   5.关于隐式自动维护心跳抓包图      
+>![业务主线图](http://139.196.101.31:2080/pingpong.png)  
 ####    5.yaml配置中心 
 >   1.位置：Config\config.yaml，通过注释即可阅读各项功能。     
 
 ####    6.日志记录 
 >   1.位置：Storage\logs\gin.log.      
->

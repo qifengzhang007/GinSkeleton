@@ -2,7 +2,7 @@ package Users
 
 import (
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Http/Controller/Admin"
+	"GinSkeleton/App/Http/Controller/Web"
 	"GinSkeleton/App/Utils/Response"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -29,7 +29,7 @@ func (r *RefreshToken) CheckParams(context *gin.Context) {
 	token := strings.Split(r.Authorization, " ")
 	if len(token) == 2 {
 		context.Set(Consts.Validator_Prefix+"token", token[1])
-		(&Admin.Users{}).RefreshToken(context)
+		(&Web.Users{}).RefreshToken(context)
 	} else {
 		errs := gin.H{
 			"tips": "Token不合法，token请放置在header头部分，按照按=>键提交，例如：Authorization：Bearer 你的实际token....",

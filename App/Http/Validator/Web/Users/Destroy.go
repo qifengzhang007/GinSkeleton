@@ -2,7 +2,7 @@ package Users
 
 import (
 	"GinSkeleton/App/Global/Consts"
-	"GinSkeleton/App/Http/Controller/Admin"
+	"GinSkeleton/App/Http/Controller/Web"
 	"GinSkeleton/App/Http/Validator/Core/DaTaTransfer"
 	"GinSkeleton/App/Utils/Response"
 	"github.com/gin-gonic/gin"
@@ -33,6 +33,6 @@ func (d *Destroy) CheckParams(context *gin.Context) {
 		return
 	} else {
 		// 验证完成，调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
-		(&Admin.Users{}).Destroy(extraAddBindDataContext)
+		(&Web.Users{}).Destroy(extraAddBindDataContext)
 	}
 }

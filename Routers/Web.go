@@ -12,7 +12,9 @@ import (
 	"os"
 )
 
-func InitRouter() *gin.Engine {
+// 该路由主要设置 后台管理系统等后端应用路由
+
+func InitWebRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
 	f, _ := os.Create(Variable.BASE_PATH + Variable.Log_Save_Path)
@@ -22,7 +24,7 @@ func InitRouter() *gin.Engine {
 	router.Use(Cors.Next()) //允许跨域，如果nginx已经开启跨域，请注释该行
 
 	router.GET("/", func(context *gin.Context) {
-		context.String(http.StatusOK, "HelloWorld")
+		context.String(http.StatusOK, "HelloWorld,这是后端模块")
 	})
 
 	//处理静态资源（不建议gin框架处理静态资源，参见 Public/readme.md 说明 ）

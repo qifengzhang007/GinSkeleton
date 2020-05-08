@@ -1,4 +1,4 @@
-package Destruct
+package Destroy
 
 import (
 	"GinSkeleton/App/Core/Event"

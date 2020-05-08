@@ -1,4 +1,4 @@
-package Admin
+package Web
 
 import (
 	"GinSkeleton/App/Global/Variable"

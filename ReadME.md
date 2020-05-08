@@ -7,18 +7,18 @@
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。  
 >   4.双击`main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
 >   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` `go build`即可。  
->![avatar](http://139.196.101.31:2080/GinSkeleton.jpg)  
+>![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ####    压力测试  
 >   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
-![avatar](http://139.196.101.31:2080/concurrent.png)  
+![压力测试图](http://139.196.101.31:2080/concurrent.png)  
 
 
 ####    框架使用文档  
-[进入项目骨架介绍文档](./Document.md)  
+[进入项目骨架介绍文档](Docs/Document.md)  
 
 ####    本项目测试用例路由  
-[进入Api接口测试用例文档](./ApiDoc.md)   
+[进入Api接口测试用例文档](Docs/ApiDoc.md)   
 >GET    /                         
 >GET   /Admin/ws         
 >POST   /Admin/users/register     
@@ -31,10 +31,15 @@
 >POST   /Admin/upload/file     
 
 #### 版本
-V 1.0.12   2020-05-06(5月份开发计划预告)   
+V 1.0.xx   2020-05-06(5月份开发计划预告)   
 >   1.增加CURL客户端，封装完善好用的http请求模块系列功能。  
 >   2.增加消息队列，RabbitMq。  
 >   3.关键、核心代码编写更多的单元测试。   
+
+V 1.0.12   2020-05-08  
+>   1.根据大家反馈，按照`golang` 项目标准布局梳理项目组织结构，相比原来结构稍显复杂，但是当项目业务较大时，这种布局会更加灵活。  
+>   2.入口文件位置调整：Cmd/Web/Main.go,建议用于后台管理类站点使用；Cmd/Api/Main.go,建议用于门户网站类站点使用；  
+>   3.相关文档随着项目结构调整同步更新。  
 
 V 1.0.11   2020-04-30   
 >   1.`SqlServer`、`Mysql`驱动初始化代码相似度比较高，因此进行了优化合并。   
