@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-// 该路由主要设置门户类网站等前端路由
+// 该路由主要设置门户类网站等前台路由
 
 func InitApiRouter() *gin.Engine {
 
