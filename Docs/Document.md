@@ -37,10 +37,10 @@
 #####   2.1.介绍路由之前首先介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：App\Http\Validator\(Web|Api)\xxx业务模块  
 ```code
     //1.首先编写参数验证器逻辑，例如：用户注册模块
-    // 相见参见：App\Http\Validator\Web\Users\Register.go
+    // 详情参见：App\Http\Validator\Web\Users\Register.go
 
     //2.将以上编写好的表单参数验证器在注册文件添加记录，便于程序启动时加载到容器，供路由从容器调用
-    // 相见参见：App\Http\Validator\Common\RegisterValidator\RegisterValidator.go
+    // 详情参见：App\Http\Validator\Common\RegisterValidator\RegisterValidator.go
 
 ```   
 #####   2.2.路由 ，位置：Routers\Web.go   
