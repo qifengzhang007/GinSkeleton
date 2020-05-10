@@ -7,7 +7,6 @@ import (
 	"GinSkeleton/App/Http/Validator/Common/RegisterValidator"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/Websocket/Core"
-	_ "GinSkeleton/Test" //  用于测试代码
 	"log"
 	"os"
 )
