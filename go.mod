@@ -8,6 +8,6 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/websocket v1.4.2
-	github.com/qifengzhang007/goz v1.0.1-0.20200511160553-86a16f574bcc
+	github.com/qifengzhang007/goz v1.0.1-0.20200512145630-08354cf4e0b9
 	github.com/spf13/viper v1.6.3
 )
