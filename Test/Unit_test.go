@@ -10,9 +10,9 @@ import (
 
 func ExampleHttpClientTest() {
 	cli := HttpClient.CreateClient()
-	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
+	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh6013601"); err == nil {
 		centent, _ := resp.GetContents()
 		fmt.Printf("%v", centent)
 	}
-	//Output: var hq_str_sh60100620="";
+	//Output: var hq_str_sh6013601="";
 }
