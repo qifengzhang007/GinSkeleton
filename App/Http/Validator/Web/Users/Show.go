@@ -16,9 +16,9 @@ type Show struct {
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
-func (s *Show) CheckParams(context *gin.Context) {
+func (s Show) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
-	if err := context.ShouldBind(s); err != nil {
+	if err := context.ShouldBind(&s); err != nil {
 		errs := gin.H{
 			"tips": "UserShow参数校验失败，参数不符合规定，name（不能为空）、page的值(>0)、limits的值（>0)",
 			"err":  err.Error(),

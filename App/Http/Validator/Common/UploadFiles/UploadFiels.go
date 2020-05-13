@@ -16,7 +16,7 @@ type UpFiels struct {
 }
 
 // 文件上传公共模块表单参数验证器
-func (u *UpFiels) CheckParams(context *gin.Context) {
+func (u UpFiels) CheckParams(context *gin.Context) {
 	tmp_file, error := context.FormFile(Variable.UploadFileField) //  file 是一个文件结构体（文件对象）
 	var is_pass bool
 	//获取文件发生错误，可能上传了空文件等

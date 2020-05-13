@@ -29,9 +29,9 @@ type Register struct {
 	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
 
-func (r *Register) CheckParams(context *gin.Context) {
+func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
-	if err := context.ShouldBind(r); err != nil {
+	if err := context.ShouldBind(&r); err != nil {
 		errs := gin.H{
 			"tips": "UserRegister参数校验失败，参数不符合规定，name长度(>=1)、pass长度(3,6)、Phone（=11位），不允许注册",
 			"err":  err.Error(),

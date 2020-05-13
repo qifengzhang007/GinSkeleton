@@ -16,9 +16,9 @@ type News struct {
 	Limit    float64 `form:"limit" json:"limit"  binding:"required,min=1"`       //  验证规则：必填，最小值为1（float类型，min=1代表最小值为1）
 }
 
-func (r *News) CheckParams(context *gin.Context) {
+func (n News) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
-	if err := context.ShouldBind(r); err != nil {
+	if err := context.ShouldBind(&n); err != nil {
 		errs := gin.H{
 			"tips": "HomeNews参数校验失败，参数不符合规定，limit(长度>=1)、page>=1、limit>=1,请按照规则自己检查",
 			"err":  err.Error(),
@@ -28,7 +28,7 @@ func (r *News) CheckParams(context *gin.Context) {
 	}
 
 	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
-	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.Validator_Prefix, context)
+	extraAddBindDataContext := DaTaTransfer.DataAddContext(n, Consts.Validator_Prefix, context)
 	if extraAddBindDataContext == nil {
 		Response.ReturnJson(context, http.StatusInternalServerError, Consts.Server_Occurred_Error_Code, Consts.Server_Occurred_Error_Msg+",HomeNews表单验证器json化失败", "")
 	} else {

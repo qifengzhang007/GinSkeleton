@@ -16,10 +16,10 @@ type Login struct {
 
 // 验证器语法，参见 Register.go文件，有详细说明
 
-func (l *Login) CheckParams(context *gin.Context) {
+func (l Login) CheckParams(context *gin.Context) {
 
 	//1.基本的验证规则没有通过
-	if err := context.ShouldBind(l); err != nil {
+	if err := context.ShouldBind(&l); err != nil {
 		errs := gin.H{
 			"tips": "UserRegister参数校验失败，参数不符合规定，name、pass、Phone 长度有问题，不允许注册",
 			"err":  err.Error(),
