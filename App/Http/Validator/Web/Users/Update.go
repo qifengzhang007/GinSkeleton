@@ -20,9 +20,9 @@ type Update struct {
 
 // 验证器语法，参见 Register.go文件，有详细说明
 
-func (u *Update) CheckParams(context *gin.Context) {
+func (u Update) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
-	if err := context.ShouldBind(u); err != nil {
+	if err := context.ShouldBind(&u); err != nil {
 		errs := gin.H{
 			"tips": "UserUpdate，参数校验失败，请检查id(>0),name(>=1)、pass(>=6)、real_name(>=2)、phone长度(=11)",
 			"err":  err.Error(),

@@ -20,9 +20,9 @@ type Store struct {
 
 // 验证器语法，参见 Register.go文件，有详细说明
 
-func (s *Store) CheckParams(context *gin.Context) {
+func (s Store) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
-	if err := context.ShouldBind(s); err != nil {
+	if err := context.ShouldBind(&s); err != nil {
 		errs := gin.H{
 			"tips": "UserStore参数校验失败，参数校验失败，请检查name(>=1)、pass(>=6)、real_name(>=2)、phone(=11)",
 			"err":  err.Error(),

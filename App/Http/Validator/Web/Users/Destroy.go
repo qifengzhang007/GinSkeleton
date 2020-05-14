@@ -15,9 +15,9 @@ type Destroy struct {
 
 // 验证器语法，参见 Register.go文件，有详细说明
 
-func (d *Destroy) CheckParams(context *gin.Context) {
+func (d Destroy) CheckParams(context *gin.Context) {
 
-	if err := context.ShouldBind(d); err != nil {
+	if err := context.ShouldBind(&d); err != nil {
 		errs := gin.H{
 			"tips": "UserDestroy参数校验失败，参数校验失败，请检查id(>=1)",
 			"err":  err.Error(),

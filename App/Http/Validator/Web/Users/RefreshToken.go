@@ -15,10 +15,10 @@ type RefreshToken struct {
 
 // 验证器语法，参见 Register.go文件，有详细说明
 
-func (r *RefreshToken) CheckParams(context *gin.Context) {
+func (r RefreshToken) CheckParams(context *gin.Context) {
 
 	//1.基本的验证规则没有通过
-	if err := context.ShouldBindHeader(r); err != nil {
+	if err := context.ShouldBindHeader(&r); err != nil {
 		errs := gin.H{
 			"tips": "Token参数校验失败，参数不符合规定，token 长度>=20",
 			"err":  err.Error(),
