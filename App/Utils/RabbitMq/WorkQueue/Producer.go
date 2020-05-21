@@ -1,4 +1,4 @@
-package HelloWorld
+package WorkQueue
 
 import (
 	"GinSkeleton/App/Utils/Config"
