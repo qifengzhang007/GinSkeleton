@@ -54,3 +54,32 @@ FileUploadSetting:
     - "application/zip"               #xlsx、docx、zip
     - "application/x-gzip"            #tar.gz
     - "text/plain; charset=utf-8"     #txt log json等文本文件
+
+RabbitMq:
+  HelloWorld:
+    Addr: "amqp://admin:admin9527@139.196.101.31:5672"    #消息服务器地址、账号、密码
+    QueueName: "helloword_queue"
+    Durable: false                                        #消息是否持久化
+    ConsumerChanNumber: 2                                 #消费者数量（允许一个消费者使用几个连接通道消费、处理消息）
+  WorkQueue:
+    Addr: "amqp://admin:admin9527@139.196.101.31:5672"    #消息服务器地址、账号、密码
+    QueueName: "work_queue"
+    ConsumerChanNumber: 2                                 #消费者数量（允许一个消费者使用几个连接通道消费、处理消息）
+  PublishSubscribe:
+    Addr: "amqp://admin:admin9527@139.196.101.31:5672"    #消息服务器地址、账号、密码
+    ExchangeTyte: "fanout"
+    ExchangeName: "fanout_exchange"
+    QueueName: ""
+    ConsumerChanNumber: 2                                 #消费者数量（允许一个消费者使用几个连接通道消费、处理消息）
+  Routing:
+    Addr: "amqp://admin:admin9527@139.196.101.31:5672"    #消息服务器地址、账号、密码
+    ExchangeTyte: "direct"
+    ExchangeName: "direct_exchange"
+    QueueName: ""
+    ConsumerChanNumber: 2                                 #消费者数量（允许一个消费者使用几个连接通道消费、处理消息）
+  Topics:
+    Addr: "amqp://admin:admin9527@139.196.101.31:5672"    #消息服务器地址、账号、密码
+    ExchangeTyte: "topic"
+    ExchangeName: "topic_exchange"
+    QueueName: ""
+    ConsumerChanNumber: 2                                 #消费者数量（允许一个消费者使用几个连接通道消费、处理消息）

@@ -10,5 +10,6 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/qifengzhang007/goz v1.0.1-0.20200513075640-74263e474b69
 	github.com/spf13/viper v1.6.3
+	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
 )
