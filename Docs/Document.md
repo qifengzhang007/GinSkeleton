@@ -5,8 +5,8 @@
 >       2.2 websocket：https://github.com/gorilla/websocket    
 >       2.3 表单参数验证器：https://github.com/go-playground/validator    
 >       2.4 JWT相关资料：https://blog.csdn.net/codeSquare/article/details/99288718    
->       2.5 golang标准项目布局（中文翻译版）：https://studygolang.com/articles/26941?fr=sidebar    
->       2.6 golang标准项目布局（原版本）：https://github.com/golang-standards/project-layout     
+>       2.5 golang项目标准布局（中文翻译版）：https://studygolang.com/articles/26941?fr=sidebar    
+>       2.6 golang项目标准布局（原版）：https://github.com/golang-standards/project-layout     
 >       2.7 HttpClient包相关资料：https://github.com/qifengzhang007/goz    
 >   3.本文档侧重介绍本项目骨架的主线逻辑以及相关核心模块，不对gin框架的具体语法做介绍。    
 
