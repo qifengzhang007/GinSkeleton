@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// 生产者为一次性调用模式，单元测试通过
+// HelloWorld 模式
 func ExampleRabbitMqHelloWorldProducer() {
 
 	Variable.BASE_PATH = "F:\\2020_project\\go\\GinSkeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
@@ -45,7 +45,7 @@ func ExampleRabbitMqHelloWorldConsumer() {
 	//Output: abcdefg
 }
 
-// 生产者为一次性调用模式，单元测试通过
+// WorkQueue 模式
 func ExampleRabbitMqWorkQueueProducer() {
 
 	Variable.BASE_PATH = "F:\\2020_project\\go\\GinSkeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
