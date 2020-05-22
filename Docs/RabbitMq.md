@@ -80,7 +80,7 @@
 		})
 	}()
 ```  
-##### 2.2 调用生产者进行消息投递  
+##### 2.2 生产者投递消息  
 ```go  
 
 	producer := WorkQueue.CreateProducer()
@@ -97,8 +97,43 @@
 
 #### 3.场景三，发布/订阅(publish/subsribe)模式     
 >    扇形（fanout）、广播（broadcast）等场景使用。   
+
+##### 3.1 消费者使用阻塞模式接收、处理消息，该模式默认多个消费者都会接收到相同的消息      
 ```go  
-//  正在开发中...
+    // 启动第一个消费者
+    go func() {
+        PublishSubscribe.CreateConsumer().Received(func(received_data string) {
+    
+            fmt.Printf("A回调函数处理消息：--->%s", received_data)
+        })
+    }()
+
+    // 启动第二个消费者
+	go func() {
+		PublishSubscribe.CreateConsumer().Received(func(received_data string) {
+
+			fmt.Printf("B回调函数处理消息：--->%s", received_data)
+		})
+	}()
+```  
+
+##### 3.2 生产者投递消息  
+```go  
+	producer := PublishSubscribe.CreateProducer()
+	var res bool
+	for i := 0; i < 10; i++ {
+		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", (i + 1))
+		res = producer.Send(str)
+		time.Sleep(time.Second * 2)
+	}
+
+	producer.Close() // 消息投递结束，必须关闭连接
+    // 简单判断一下最后一次消息发送结果
+	if res {
+		fmt.Printf("消息发送OK")
+	} else {
+		fmt.Printf("消息发送 失败")
+	}
 
 ```  
 

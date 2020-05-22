@@ -2,7 +2,6 @@ package WorkQueue
 
 import (
 	"GinSkeleton/App/Utils/Config"
-	"fmt"
 	"github.com/streadway/amqp"
 	"log"
 )
@@ -47,7 +46,6 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 
 	for i := 1; i <= c.chanNumber; i++ {
 		go func(chanNo int) {
-			fmt.Println("协程ID", chanNo)
 
 			ch, err := c.connect.Channel()
 			c.occurError = errorDeal(err)
@@ -83,7 +81,7 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 			for msg := range msgs {
 				// 通过回调处理消息
 				deal_msg_call_fn(string(msg.Body))
-				msg.Ack(false) //  false 表示值确认本 chan 的消息
+				msg.Ack(false) //  false 表示只确认本通道（chan）的消息
 			}
 
 		}(i)

@@ -3,6 +3,7 @@ package Test
 import (
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/RabbitMq/HelloWorld"
+	"GinSkeleton/App/Utils/RabbitMq/PublishSubscribe"
 	"GinSkeleton/App/Utils/RabbitMq/WorkQueue"
 	"fmt"
 	"time"
@@ -64,5 +65,40 @@ func ExampleRabbitMqWorkQueueProducer() {
 	} else {
 		fmt.Printf("消息发送 失败")
 	}
+	//Output: 消息发送OK
+}
+
+// 发布、订阅模式
+func ExampleRabbitMqPublishSubscribeProducer() {
+
+	Variable.BASE_PATH = "E:\\GO\\TestProject\\GinSkeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+
+	producer := PublishSubscribe.CreateProducer()
+	var res bool
+	for i := 0; i < 10; i++ {
+		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", (i + 1))
+		res = producer.Send(str)
+		time.Sleep(time.Second * 2)
+	}
+
+	producer.Close() // 消息投递结束，必须关闭连接
+
+	if res {
+		fmt.Printf("消息发送OK")
+	} else {
+		fmt.Printf("消息发送 失败")
+	}
+	//Output: 消息发送OK
+}
+
+func ExampleRabbitMqPublishSubscribeConsumer() {
+
+	Variable.BASE_PATH = "E:\\GO\\TestProject\\GinSkeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+
+	PublishSubscribe.CreateConsumer().Received(func(received_data string) {
+
+		fmt.Printf("回调函数处理消息：--->%s", received_data)
+	})
+
 	//Output: 消息发送OK
 }
