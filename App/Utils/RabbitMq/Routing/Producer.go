@@ -1,4 +1,4 @@
-package PublishSubscribe
+package Routing
 
 import (
 	"GinSkeleton/App/Utils/Config"
@@ -10,11 +10,11 @@ import (
 func CreateProducer() *producer {
 	// 获取配置信息
 	configFac := Config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
-	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
+	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Routing.Addr"))
+	exchange_type := configFac.GetString("RabbitMq.Routing.ExchangeType")
+	exchange_name := configFac.GetString("RabbitMq.Routing.ExchangeName")
+	queue_name := configFac.GetString("RabbitMq.Routing.QueueName")
+	dura := configFac.GetBool("RabbitMq.Routing.Durable")
 
 	if err != nil {
 		log.Panic(err.Error())
@@ -30,7 +30,7 @@ func CreateProducer() *producer {
 	}
 }
 
-//  定义一个消息队列结构体：PublishSubscribe 模型
+//  定义一个消息队列结构体：Routing 模型
 type producer struct {
 	connect      *amqp.Connection
 	exchangeTyte string
@@ -40,7 +40,7 @@ type producer struct {
 	occurError   error
 }
 
-func (p *producer) Send(data string) bool {
+func (p *producer) Send(route_key string, data string) bool {
 
 	// 获取一个频道
 	ch, err := p.connect.Channel()
@@ -51,8 +51,8 @@ func (p *producer) Send(data string) bool {
 	err = ch.ExchangeDeclare(
 		p.exchangeName, //交换器名称
 		p.exchangeTyte, //fanout模式(扇形模式) 。解决 发布、订阅场景相关的问题
-		p.durable,      //durable
-		!p.durable,     //autodelete
+		p.durable,      //消息是否持久化
+		!p.durable,     //交换器是否自动删除
 		false,
 		false,
 		nil,
@@ -62,7 +62,7 @@ func (p *producer) Send(data string) bool {
 	// 投递消息
 	err = ch.Publish(
 		p.exchangeName, // 交换机名称
-		p.queueName,    // fanout 模式默认为空，表示所有订阅的消费者会接受到相同的消息
+		route_key,      // direct 模式默认为空即可
 		false,
 		false,
 		amqp.Publishing{

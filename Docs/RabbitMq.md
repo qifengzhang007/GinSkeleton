@@ -1,7 +1,9 @@
-### 消息队列（RabbitMq）使用介绍   
+### 消息队列（RabbitMq）概要    
 >   1.本文档主要按照本人的理解介绍RabbitMq的功能、如何使用。  
 >   2.关于RabbitMq的各种使用场景以及与其他同类产品的横向、纵向对比请自行百度。   
 >   3.消息队列看起来貌似非常复杂，感觉很麻烦，其实通过本项目骨架封装之后，使用非常简单。               
+>   4.消息队列的两个核心角色：生产者(通常是一次性投递消息)，消费者(需要一直处于阻塞状态监听、接受、处理消息)。                  
+>   5.关于消费者如何启动问题：（a）开发好消费者代码，在程序启动处使用一个协程启动（b）后续本项目骨架会引入cli包，最终做到支持独立启动。                    
 
 ### RabbitMq常用的几种模式    
     
@@ -38,7 +40,8 @@
 >   1 严格地说，该模式和消息队列没有什么关系，通常是微服务场景才会使用远程过程调用（RPC），本功能建议自行学习或者选择专业的微服务框架使用，解决实际问题，本文档不做介绍。    
 >   ![场景图](http://139.196.101.31:2080/images/rpc.png)  
 
-### RabbitMq各种场景模型的用法  
+### RabbitMq快速使用指南   
+> 安装：建议使用docker 快速安装使用即可，安装步骤请自行搜索。  
 > 文档抽取核心进行介绍，相关的示例demo参见：`Test/RabbitMq_test.go` 中的单元测试部分代码  
 ####  1.场景一，HelloWorld模式使用：      
 > 相关配置参见：Config/config.yaml, RabbitMq HelloWorld 部分    
@@ -97,7 +100,6 @@
 
 #### 3.场景三，发布/订阅(publish/subsribe)模式     
 >    扇形（fanout）、广播（broadcast）等场景使用。   
-
 ##### 3.1 消费者使用阻塞模式接收、处理消息，该模式默认多个消费者都会接收到相同的消息      
 ```go  
     // 启动第一个消费者
@@ -136,11 +138,102 @@
 	}
 
 ```  
-
-#### 4.场景四，routing、topics 模式       
->    路由键绑定队列使用的场景，通俗地说就是消费者（consumer）根据路由前缀、路由关键词匹配队列，从队列接收对应的消息。  
->   topic模式使用比routing模式更灵活，功能全量包含，因此介绍topic使用     
+#### 4.场景四，routing(路由键)严格匹配模式  
+>生产者发送消息时指定route_key，消费者通过设置参数，绑定对应的交换机、路由键就可以精确地获取消息。  
+##### 4.1 消费者设置交换机、绑定路由键到交换机，进入阻塞状态等待接收、处理消息  
 ```go  
-//  正在开发中...
+    // 启动第一个消费者，假设专门处理偶数（绑定一个标识键 key_even）
+    go func() {
+        Routing.CreateConsumer().Received("key_even",func(received_data string) {
+    
+            fmt.Printf("A回调函数处理消息【偶数】消息：--->%s\n", received_data)
+        })
+    
+    }()
+
+    // 启动第二个消费者，假设专门处理奇数（绑定一个标识键 key_odd）
+    go func() {
+    
+        Routing.CreateConsumer().Received("key_odd",func(received_data string) {
+    
+            fmt.Printf("B回调函数处理消息【奇数】消息：--->%s\n", received_data)
+        })
+    }()
+``` 
+##### 4.2 生产者将消息投递至已经绑定好路由键的各种交换机  
+```go  
+	producer := Routing.CreateProducer()
+	var res bool
+	var key string
+	for i := 1; i <= 10; i++ {
+
+		//  将 偶数 和  奇数 分发到不同的key，消费者端也启动两个客户端，通过匹配route_key精确地处理消息  
+		if i%2 == 0 {
+			key = "key_even" //  偶数键
+		} else {
+			key = "key_odd" //  奇数键
+		}
+		str_data := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i,key)
+		res = producer.Send(key, str_data)
+	}
+
+	producer.Close() // 消息投递结束，必须关闭连接
+    //  简单判断一下最后一次是否成功
+	if res {
+		fmt.Printf("消息发送OK")
+	} else {
+		fmt.Printf("消息发送 失败")
+	}
+```   
+
+
+#### 5.场景五，topics 模式，相比 routing 模式，它的匹配规则支持使用模糊模式         
+>   `topics`模式使用比`routing`模式更灵活，两者功能一致。该模式完全可以代理`routing`模式   
+>   注意：生产者设置键的规则必须是：关键词A.关键词B.关键词C等，即关键词之间必须使用.（点）隔开，消费者端只需要将.（点）左边或右边的关键词使用#代替即可。 
+##### 5.1 消费者设置交换机、绑定路由键（模糊规则）到交换机，进入阻塞状态等待接收、处理消息   
+```go  
+    // 启动第一个消费者，假设专门处理偶数（绑定一个标识键 #.even）
+    go func() {
+        //#.even 可以匹配到 key.even、abcd.even等
+        Topics.CreateConsumer().Received("#.even",func(received_data string) {
+    
+            fmt.Printf("A回调函数处理消息【偶数】消息：--->%s\n", received_data)
+        })
+    
+    }()
+    // 启动第一个消费者，假设专门处理奇数（绑定一个标识键 #.odd）
+    go func() {
+         //#.odd 可以匹配到 key.odd、abcd.odd
+        Topics.CreateConsumer().Received("#.odd",func(received_data string) {
+    
+            fmt.Printf("B回调函数处理消息【奇数】消息：--->%s\n", received_data)
+        })
+    }()
 
 ```   
+##### 5.2 生产者将消息投递至已经绑定好路由键的各种交换机   
+```go  
+	producer := Topics.CreateProducer()
+	var res bool
+	var key string
+	for i := 1; i <= 10; i++ {
+
+		//  将 偶数 和  奇数 分发到不同的key，消费者端，启动两个也各自处理偶数和奇数
+		if i%2 == 0 {
+			key = "key.even" //  偶数键
+		} else {
+			key = "key.odd" //  奇数键
+		}
+		str_data := fmt.Sprintf("%d_Topics_%s,生产者端消息", i,key)
+		res = producer.Send(key, str_data)
+	}
+
+	producer.Close() // 消息投递结束，必须关闭连接
+
+    //  简单判断一下最后一次是否成功
+	if res {
+		fmt.Printf("消息发送OK")
+	} else {
+		fmt.Printf("消息发送 失败")
+	}
+	//Output: 消息发送OK

@@ -10,7 +10,7 @@ func CreateConsumer() *consumer {
 	// 获取配置信息
 	configFac := Config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeTyte")
+	exchange_type := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
 	exchange_name := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
 	queue_name := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
 	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
