@@ -10,7 +10,7 @@
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.  
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。  
 >   4.双击`Cmd/(Web|Api)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
->   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` 进入目录：`Cmd/(Web|Api)/`,`go build`即可交叉编译出Web或者Api对应的二进制文件。    
+>   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` 进入目录：`go build Cmd/(Web|Api)/main.go``即可交叉编译出Web或者Api对应的二进制文件。    
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ####    压力测试  
