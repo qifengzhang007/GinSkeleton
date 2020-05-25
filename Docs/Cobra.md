@@ -6,11 +6,11 @@
 >   2.业务代码目录：`Cli/cmd/`             
 >           
 ### Cobra 快速使用指南   
-> 快速创建模板：
-> 1.复制业务代码目录的`Cli/cmd/demo`，修改成自己业务逻辑。  
-> 2.进入Cli目录：`Cobra  add  业务模块名`，也可以快速创建。   
+> 快速创建模板： 
+> 1.复制`Cli/cmd/demo.go`，基于此模板自行修改。  
+> 2.进入`Cli`目录,执行命令 `cobra  add  业务模块名`，也可以快速创建出模板文件。   
 
-####  demo介绍       
+####  demo.go 代码介绍       
 
 ```go  
 package cmd
@@ -75,6 +75,6 @@ func start(SearchEngines, SearchType, KeyWords string) {
 go run  Cmd/Cli/main.go  sousuo     -E  baidu  -T img  -K  关键词2020
 
 // 结果
-您输入的搜索引擎：baidu， 搜索类型：img, 关键词：关键词2020
+您输入的搜索引擎: baidu， 搜索类型: img, 关键词：关键词2020  
 ```     
  
