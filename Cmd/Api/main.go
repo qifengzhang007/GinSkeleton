@@ -5,7 +5,7 @@ import (
 	"GinSkeleton/Routers"
 )
 
-// 这里可以存放后端路由（例如后台管理系统）
+// 这里可以存放门户类网站入口
 func main() {
 	routers := Routers.InitApiRouter()
 	routers.Run(":2019")
