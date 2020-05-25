@@ -38,7 +38,7 @@ var SouSuoCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(SouSuoCmd)
 	SouSuoCmd.Flags().StringVarP(&SearchEngines, "Engines", "E", "baidu", "-E 或者 --Engines 选择搜索引擎，例如：baidu、sogou")
-	SouSuoCmd.Flags().StringVarP(&SearchType, "Type", "T", "img", "-T 或者 --Type 选择搜索的内容类型，默认为：图片，备选项：baidu、sogou")
+	SouSuoCmd.Flags().StringVarP(&SearchType, "Type", "T", "img", "-T 或者 --Type 选择搜索的内容类型，例如：图片类")
 	SouSuoCmd.Flags().StringVarP(&KeyWords, "KeyWords", "K", "关键词", "-K 或者 --KeyWords 搜索的关键词")
 	//SouSuoCmd.Flags().BoolP(1,2,3,5)  //接收bool类型参数
 	//SouSuoCmd.Flags().Int64P()  //接收int型
