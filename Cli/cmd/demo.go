@@ -15,7 +15,7 @@ var (
 )
 
 // 定义命令
-var SouSuoCmd = &cobra.Command{
+var demo = &cobra.Command{
 	Use:     "sousuo",
 	Aliases: []string{"sou", "ss", "s"}, // 定义别名
 	Short:   "这是一个demo，以搜索内容进行演示业务逻辑...",
@@ -25,7 +25,7 @@ var SouSuoCmd = &cobra.Command{
 				3.执行 go  run  Cmd/Cli/main.go sousuo 无参数执行
 				4.执行 go  run  Cmd/Cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
 	`,
-	//Args:    cobra.ExactArgs(1),
+	//Args:    cobra.ExactArgs(2),  //  限制非flag参数的个数必须等于 2 ,超过2个会报错
 	Run: func(cmd *cobra.Command, args []string) {
 		//args  参数表示无 flag 标记的参数，说个参数默认会作为一个数组存储。不建议这样使用
 		// 建议所有的参数都通过标记设置，具有明确的含义再使用
@@ -36,12 +36,12 @@ var SouSuoCmd = &cobra.Command{
 
 // 注册命令、初始化参数
 func init() {
-	rootCmd.AddCommand(SouSuoCmd)
-	SouSuoCmd.Flags().StringVarP(&SearchEngines, "Engines", "E", "baidu", "-E 或者 --Engines 选择搜索引擎，例如：baidu、sogou")
-	SouSuoCmd.Flags().StringVarP(&SearchType, "Type", "T", "img", "-T 或者 --Type 选择搜索的内容类型，例如：图片类")
-	SouSuoCmd.Flags().StringVarP(&KeyWords, "KeyWords", "K", "关键词", "-K 或者 --KeyWords 搜索的关键词")
-	//SouSuoCmd.Flags().BoolP(1,2,3,5)  //接收bool类型参数
-	//SouSuoCmd.Flags().Int64P()  //接收int型
+	rootCmd.AddCommand(demo)
+	demo.Flags().StringVarP(&SearchEngines, "Engines", "E", "baidu", "-E 或者 --Engines 选择搜索引擎，例如：baidu、sogou")
+	demo.Flags().StringVarP(&SearchType, "Type", "T", "img", "-T 或者 --Type 选择搜索的内容类型，例如：图片类")
+	demo.Flags().StringVarP(&KeyWords, "KeyWords", "K", "关键词", "-K 或者 --KeyWords 搜索的关键词")
+	//demo.Flags().BoolP(1,2,3,5)  //接收bool类型参数
+	//demo.Flags().Int64P()  //接收int型
 }
 
 //开始执行
