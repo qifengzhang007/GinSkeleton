@@ -40,6 +40,9 @@
 ####    Cli命令模式包（Cobra）使用文档  
 [Cobra文档](Docs/Cobra.md)  
 
+####    HttpClient 使用文档  
+[HttpClient客户端](https://github.com/qifengzhang007/goz) 
+
 #### 版本
 V 1.0.xx   2020-05-25(5月份开发计划预告)   
 >   1.关键、核心代码编写更多的单元测试。   
@@ -57,7 +60,7 @@ V 1.0.14   2020-05-13
 >   1.修复bug：表单参数验证器在一次请求之后没有及时释放上次请求相关的属性值。  
 
 V 1.0.13   2020-05-12  
->   1.增加HttpClient客户端(`github.com/qifengzhang007/goz`)，基于goz改造，感谢goz（idoubi/goz.git）原作者提供了大量的基础代码，相比原版特色如下：  
+>   1.增加 [HttpClient客户端](https://github.com/qifengzhang007/goz) ，基于goz改造，感谢goz（idoubi/goz.git）原作者提供了大量的基础代码，相比原版特色如下：  
 >   1.1 增加了文件下载功能，支持超大文件下载。  
 >   1.2 `GetBody()`返回值由原版本中的`string`格式数据调整为`io.ReaderCloser` ,将专门负责处理流式数据，因此代码逻辑处理完毕，必须使用`io.ReaderCloser` 接口提供的`Close()`函数手动关闭。     
 >   1.3 原版本的`GetBody()`被现有版本`GetContents()`代替，由于是文本数据,一次性返回，程序会自动关闭相关io资源。   
