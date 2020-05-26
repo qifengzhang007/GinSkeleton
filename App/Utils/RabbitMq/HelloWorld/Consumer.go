@@ -2,7 +2,6 @@ package HelloWorld
 
 import (
 	"GinSkeleton/App/Utils/Config"
-	"fmt"
 	"github.com/streadway/amqp"
 	"log"
 )
@@ -89,7 +88,7 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 func (c *consumer) OccurError(deal_error_fn func(err_msg string)) {
 	var v_error chan *amqp.Error
 	e := c.connect.NotifyClose(v_error)
-	fmt.Println("捕获错误....")
+
 	deal_error_fn((<-e).Error())
 
 }
