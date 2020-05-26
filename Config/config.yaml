@@ -57,30 +57,30 @@ FileUploadSetting:
 
 RabbitMq:
   HelloWorld:
-    Addr: "amqp://账号:密码@ip:5672"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码
     QueueName: "helloword_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
   WorkQueue:
-    Addr: "amqp://账号:密码@ip:5672"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码
     QueueName: "work_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
   PublishSubscribe:
-    Addr: "amqp://账号:密码@ip:5672"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码
     ExchangeType: "fanout"
     ExchangeName: "fanout_exchange"
     Durable: false                                        #消息是否持久化
     QueueName: ""                                         #队列名称，为空 表示所有订阅的消费者（consumer）都可以接受到同样的消息，如果设置名称，会导致只有最后一个启动的消费者能接受到消息。
     ConsumerChanNumber: 1                                 #消费者通道数量（发布、订阅模式消费者使用一个通道，避免多个通道重复收到数据）
   Routing:
-    Addr: "amqp://账号:密码@ip:5672"                       #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672"                       #消息服务器地址、账号、密码
     ExchangeType: "direct"
     ExchangeName: "direct_exchange"
     Durable: false                                        #消息是否持久化
     QueueName: ""
   Topics:
-    Addr: "amqp://账号:密码@ip:5672"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码
     ExchangeType: "topic"
     ExchangeName: "topic_exchange"
     Durable: false                                        #消息是否持久化

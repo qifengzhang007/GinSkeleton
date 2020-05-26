@@ -47,8 +47,6 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 
 	for i := 1; i <= c.chanNumber; i++ {
 		go func(chanNo int) {
-			fmt.Println("协程ID", chanNo)
-
 			ch, err := c.connect.Channel()
 			c.occurError = errorDeal(err)
 			defer ch.Close()
@@ -73,6 +71,7 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 				false,  // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 				nil,
 			)
+			c.occurError = errorDeal(err)
 
 			for msg := range msgs {
 				// 通过回调处理消息
@@ -83,5 +82,14 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 	}
 
 	<-blocking
+
+}
+
+//监听错误（连接过程中发生的错误以及非正常关闭出现的错误）
+func (c *consumer) OccurError(deal_error_fn func(err_msg string)) {
+	var v_error chan *amqp.Error
+	e := c.connect.NotifyClose(v_error)
+	fmt.Println("捕获错误....")
+	deal_error_fn((<-e).Error())
 
 }

@@ -93,6 +93,7 @@ func (c *consumer) Received(route_key string, deal_msg_call_fn func(received_dat
 			false,        // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 			nil,
 		)
+		c.occurError = errorDeal(err)
 
 		for msg := range msgs {
 			// 通过回调处理消息
