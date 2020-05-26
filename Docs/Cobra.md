@@ -1,13 +1,13 @@
 ### Cobra 概要    
->   1.`Cobra`非常强大、好用的`Cli`模式包，主要创建非http接口服务。    
->   2.`Cobra`的全方位功能、细节介绍请自行百度搜索，这里主要介绍如何在本项目骨架中快速使用`Cobra`，编写程序。                    
+>   1.`Cobra`是一款非常强大、好用的`Cli`模式包，主要创建非http接口服务。    
+>   2.`Cobra`的全方位功能、细节介绍请自行百度搜索，这里主要介绍如何在本项目骨架中快速使用`Cobra`编写程序。                    
 ### 关于 cobra入口、业务目录  
->   1.入口：`Cmd/Cli/Main.go`,主要用于编译                   
->   2.业务代码目录：`Cli/cmd/`             
+>   1.入口：`Cmd/Cli/Main.go`,主要用于编译。                   
+>   2.业务代码目录：`Cli/cmd/`。             
 >           
 ### Cobra 快速使用指南   
 > 快速创建模板：  
-> 1.复制`Cli/cmd/demo.go`，基于此模板自行修改。   
+> 1.复制`Cli/cmd/demo.go`基于此模板自行修改。   
 > 2.进入`Cli`目录,执行命令 `cobra  add  业务模块名`，也可以快速创建出模板文件。   
 
 ####  demo.go 代码介绍       
@@ -66,14 +66,6 @@ func start(SearchEngines, SearchType, KeyWords string) {
 
 }
 
-
-// 开始执行
-func start(SearchEngines, SearchType, KeyWords string) {
-
-	fmt.Printf("您输入的搜索引擎：%s， 搜索类型：%s, 关键词：%s\n", SearchEngines, SearchType, KeyWords)
-
-}
-
 ``` 
 
 ####  运行以上代码  
@@ -95,31 +87,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// subCmd represents the rule command
+// 定义子命令
 var subCmd = &cobra.Command{
 	Use:   "subCmd",
 	Short: "subCmd 命令简要介绍",
-	Long: `命令使用详细介绍`,
-	Args:    cobra.ExactArgs(1),  //  限制非flag参数的个数 = 1 ,超过1个会报错
+	Long:  `命令使用详细介绍`,
+	Args:  cobra.ExactArgs(1), //  限制非flag参数的个数 = 1 ,超过1个会报错
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("测试子命令被嵌套调用"+args[0])
+		fmt.Println("测试子命令被嵌套调用：" + args[0])
 	},
 }
 
+//注册子命令
 func init() {
-    // 注意这里：命令注册的时候注册在demo，这样就能通过demo命令参数 subCmd 参数调用
 	demo.AddCommand(subCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// subCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// subCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// 子命令仍然可以定义 flag 参数，相关语法参见 demo.go 文件
 }
+
 
 ```  
 
