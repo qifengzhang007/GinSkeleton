@@ -2,8 +2,10 @@ package HelloWorld
 
 import (
 	"GinSkeleton/App/Utils/Config"
+	"fmt"
 	"github.com/streadway/amqp"
 	"log"
+	"time"
 )
 
 func CreateConsumer() *consumer {
@@ -24,6 +26,7 @@ func CreateConsumer() *consumer {
 		queueName:  queue_name,
 		durable:    dura,
 		chanNumber: chan_number,
+		conn_err:   conn.NotifyClose(make(chan *amqp.Error, 1)),
 	}
 }
 
@@ -34,6 +37,7 @@ type consumer struct {
 	durable    bool
 	chanNumber int
 	occurError error
+	conn_err   chan *amqp.Error
 }
 
 // 接收、处理消息
@@ -84,11 +88,19 @@ func (c *consumer) Received(deal_msg_call_fn func(received_data string)) {
 
 }
 
-//监听错误（连接过程中发生的错误以及非正常关闭出现的错误）
-func (c *consumer) OccurError(deal_error_fn func(err_msg string)) {
-	var v_error chan *amqp.Error
-	e := c.connect.NotifyClose(v_error)
+//监听连接错误，自动获取新的连接地址
+func (c *consumer) OccurConnError(conn *consumer) {
 
-	deal_error_fn((<-e).Error())
+	select {
+	case err := <-c.conn_err:
+		fmt.Println("发生了连接级别的错误：" + err.Error())
+		// 自动重连机制，需要继续完善
+		time.Sleep(time.Second * 10)
+		conn = CreateConsumer()
+		conn.Received(func(received_data string) {
+
+			fmt.Printf("自动注册回调函数处理消息：--->%s\n", received_data)
+		})
+	}
 
 }
