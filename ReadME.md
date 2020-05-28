@@ -41,7 +41,10 @@
 [Cobra文档](Docs/Cobra.md)  
 
 ####    HttpClient 使用文档  
-[HttpClient客户端](https://github.com/qifengzhang007/goz) 
+[HttpClient客户端](https://gitee.com/daitougege/goz) 
+
+####    Websocket 使用文档  
+[Websocket](App/Service/Websocket/Ws.go) 
 
 #### 版本
 V 1.0.xx   2020-05-25(5月份开发计划预告)   
@@ -51,7 +54,7 @@ V 1.0.xx   2020-05-25(5月份开发计划预告)
 V 1.0.17   2020-05-28    
 >   1.[RabbitMQ](Docs/RabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
 >   2.增强了消费者端断线自动重连逻辑，增强程序自身的稳定性，增加错误回调函数。    
->   3.针对消息队列编写了全量的单元测试`Test/RabbitMq_test.md`.        
+>   3.针对消息队列编写了全量的单元测试 [rabbitmq全量单元测试](Test/RabbitMq_test.md).        
 
 V 1.0.16   2020-05-25  
 >   1.Cli命令模式包（Cobra）集成完成，可以创建非常强大的非http接口类服务。          
