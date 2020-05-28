@@ -61,14 +61,14 @@ RabbitMq:
     QueueName: "helloword_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
-    OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
+    OffLineReconnectIntervalSec: 5                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   WorkQueue:
     Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码
     QueueName: "work_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
-    OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
+    OffLineReconnectIntervalSec: 5                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   PublishSubscribe:
     Addr: "amqp://账号:密码@ip地址:5672"                        #消息服务器地址、账号、密码

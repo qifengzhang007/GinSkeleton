@@ -7,23 +7,24 @@ import (
 )
 
 // 创建一个生产者
-func CreateProducer() *producer {
+func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := Config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.HelloWorld.Addr"))
-	queue_name := configFac.GetString("RabbitMq.HelloWorld.QueueName")
-	dura := configFac.GetBool("RabbitMq.HelloWorld.Durable")
+	config_fac := Config.CreateYamlFactory()
+	conn, err := amqp.Dial(config_fac.GetString("RabbitMq.WorkQueue.Addr"))
+	queue_name := config_fac.GetString("RabbitMq.WorkQueue.QueueName")
+	dura := config_fac.GetBool("RabbitMq.WorkQueue.Durable")
 
 	if err != nil {
 		log.Panic(err.Error())
-		return nil
+		return nil, err
 	}
 
-	return &producer{
+	v_producer := &producer{
 		connect:   conn,
 		queueName: queue_name,
 		durable:   dura,
 	}
+	return v_producer, nil
 }
 
 //  定义一个消息队列结构体：helloworld 模型

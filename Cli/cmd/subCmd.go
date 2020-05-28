@@ -1,12 +1,8 @@
 package cmd
 
 import (
-	"GinSkeleton/App/Global/MyErrors"
-	"GinSkeleton/App/Utils/RabbitMq/HelloWorld"
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/streadway/amqp"
-	"log"
 )
 
 // 定义子命令
@@ -19,18 +15,6 @@ var subCmd = &cobra.Command{
 
 		fmt.Printf("%s\n", args[0])
 
-		consumer, _ := HelloWorld.CreateConsumer()
-
-		go consumer.OffLineReconnectionListener(func(error_args *amqp.Error) {
-			log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + error_args.Error())
-		})
-
-		consumer.Received(func(received_data string) {
-
-			fmt.Printf("回调函数处理消息：--->%s\n", received_data)
-		})
-
-		fmt.Println("finish")
 	},
 }
 

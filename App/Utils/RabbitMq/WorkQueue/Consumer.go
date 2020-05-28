@@ -42,9 +42,10 @@ type consumer struct {
 	chanNumber                  int
 	occurError                  error
 	connErr                     chan *amqp.Error
-	callbackForReceived         func(received_data string) //  断线重新连接刷新回调函数使用
+	callbackForReceived         func(received_data string) //   断线重连，结构体内部使用
 	offLineReconnectIntervalSec time.Duration
 	retryTimes                  int
+	callbackOffLine             func(err *amqp.Error) //   断线重连，结构体内部使用
 }
 
 // 接收、处理消息
@@ -105,24 +106,31 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 
 }
 
-//消费者端，掉线重连监听器
-func (c *consumer) OffLineReconnectionListener(callback_offline_err func(error_args *amqp.Error)) {
-
-	select {
-	case err := <-c.connErr:
-		for i := 1; i <= c.retryTimes; i++ {
-			// 消费者端断线重连
-			time.Sleep(c.offLineReconnectIntervalSec * time.Second)
-			v_conn, err := CreateConsumer()
-			if err != nil {
-				continue
-			} else {
-				c.connErr = v_conn.connect.NotifyClose(make(chan *amqp.Error, 1))
-				v_conn.Received(c.callbackForReceived)
-				break
+//消费者端，掉线重连失败后的错误回调
+func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error)) {
+	c.callbackOffLine = callback_offline_err
+	go func() {
+		select {
+		case err := <-c.connErr:
+			var i int = 1
+			for i = 1; i <= c.retryTimes; i++ {
+				// 自动重连机制
+				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
+				v_conn, err := CreateConsumer()
+				if err != nil {
+					continue
+				} else {
+					go func() {
+						c.connErr = v_conn.connect.NotifyClose(make(chan *amqp.Error, 1))
+						go v_conn.OnConnectionError(c.callbackOffLine)
+						v_conn.Received(c.callbackForReceived)
+					}()
+					break
+				}
+			}
+			if i > c.retryTimes {
+				callback_offline_err(err)
 			}
 		}
-		callback_offline_err(err)
-	}
-
+	}()
 }

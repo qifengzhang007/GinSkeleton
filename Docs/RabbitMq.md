@@ -47,179 +47,106 @@
 >   ![场景图](http://139.196.101.31:2080/images/rpc.png)  
 
 ### RabbitMq快速使用指南   
-> 安装：建议使用docker 快速安装使用即可，安装步骤请自行搜索。  
-> 文档抽取核心进行介绍，相关的示例demo参见：`Test/RabbitMq_test.go` 中的单元测试部分代码  
-####  1.场景一，HelloWorld模式使用：      
-> 相关配置参见：Config/config.yaml, RabbitMq HelloWorld 部分    
+> 1.建议使用docker 快速安装使用即可，安装步骤请自行搜索。  
+> 2.详细使用指南参见单元测试demo代码：`Test/RabbitMq_test.go` ，这里有最完整的单元测试demo以及使用详情。  
+> 3.六种场景模型我们封装了统一的使用规范。    
+ 
+####  1.HelloWorld、WorkQueue、PublishSubscribe 场景模型使用：      
+> 相关配置参见：Config/config.yaml, RabbitMq  部分    
 ##### 1.1 启动一个消费者，通过回调函数在阻塞模式进行消息处理   
 ```go  
-	HelloWorld.CreateConsumer().Received(func(received_data string) {
-        // received_data  为生产者发送给消费者的消息
-		fmt.Printf("回调函数处理消息：--->%s", received_data)
+consumer, err := HelloWorld.CreateConsumer()
+	if err != nil {
+		fmt.Printf("HelloWorld单元测试未通过。%s\n", err.Error())
+		os.Exit(1)
+	}
+
+    // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
+    // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
+	consumer.OnConnectionError(func(err *amqp.Error) {
+		log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+	})
+
+    // 进入阻塞状态，处理消息
+	consumer.Received(func(received_data string) {
+		fmt.Printf("HelloWorld回调函数处理消息：--->%s\n", received_data)
 	})
 ```  
 ##### 1.2 调用生产者投递一个或者多个消息，投递通常都是一次性的。     
 ```go  
-	hello_producer := HelloWorld.CreateProducer()
-    //生产者投递10条消息
+    // 这里创建场景模型的时候通过不同的模型名称创建即可，主要有：HelloWorld、WorkQueue、PublishSubscribe
+	hello_producer, _ := HelloWorld.CreateProducer()
+	var res bool
 	for i := 0; i < 10; i++ {
-		msg := fmt.Sprintf("%d_producer开始投递消息测试", (i + 1))
-		hello_producer.Send(msg)
+		str := fmt.Sprintf("%d_HelloWorld开始发送消息测试", (i + 1))
+		res = hello_producer.Send(str)
+		//time.Sleep(time.Second * 1)
 	}
-    // 消息投递结束，必须关闭连接
-	hello_producer.Close() 
+
+	hello_producer.Close() // 消息投递结束，必须关闭连接
+    // 简单判断一下最后一次发送结果
+	if res {
+		fmt.Printf("消息发送OK")
+	} else {
+		fmt.Printf("消息发送 失败")
+	}
+	
 ```  
 
-####  2.场景二，WorkQueue 模式使用：      
-> `WorkQueue`与`HelloWorld` 模式相似，从功能层面上说，使用`WorkQueue`模式完全可以代替`helloworld`模式。  
+####  2.Routing、Topics 场景模型使用：            
+>    `routing`模式属于路由键的严格匹配模式。     
+>   `topics`模式比`routing`模式更灵活，两者使用、功能几乎完全一致。该模式完全可以代理`routing`模式，因此这里仅介绍 `topics`模式。     
+>   注意：生产者设置键的规则必须是：关键词A.关键词B.关键词C等，即关键词之间必须使用.（点）隔开，消费者端只需要将.（点）左边或右边的关键词使用#代替即可。 
+  
 ##### 2.1 启动多个消费者，处于阻塞模式进行消息接受、处理，两个消费者端，只要有一个处理了消息，那么另外一个则不会收到同样的消息。  
 ```go  
     // 启动第一个消费者
-	go func() {
-		WorkQueue.CreateConsumer().Received(func(received_data string) {
-
-			fmt.Printf("消费者A:回调函数处理消息：--->%s\n", received_data)
-		})
-	}()
-    // 启动第二个消费者
-	go func() {
-		WorkQueue.CreateConsumer().Received(func(received_data string) {
-
-			fmt.Printf("消费者B:回调函数处理消息：--->%s\n", received_data)
-		})
-	}()
-```  
-##### 2.2 生产者投递消息  
-```go  
-
-	producer := WorkQueue.CreateProducer()
-	var res bool
-	for i := 0; i < 10; i++ {
-		str := fmt.Sprintf("%d_workqueue开始发送消息测试", (i + 1))
-		res = producer.Send(str)
-		fmt.println(res)  // 消息发送结果，成功返回 true ，失败返回 false
-	}
-
-	producer.Close() // 消息投递结束，必须关闭连接
-
-```  
-
-#### 3.场景三，发布/订阅(publish/subsribe)模式     
->    扇形（fanout）、广播（broadcast）等场景使用。   
-##### 3.1 消费者使用阻塞模式接收、处理消息，该模式默认多个消费者都会接收到相同的消息      
-```go  
-    // 启动第一个消费者
-    go func() {
-        PublishSubscribe.CreateConsumer().Received(func(received_data string) {
+    go func(){
+        consumer, err := Topics.CreateConsumer()
     
-            fmt.Printf("A回调函数处理消息：--->%s", received_data)
+        if err != nil {
+            t.Errorf("Routing单元测试未通过。%s\n", err.Error())
+            os.Exit(1)
+        }
+
+    // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
+    // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
+        consumer.OnConnectionError(func(err *amqp.Error) {
+            log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+        })
+
+        // 通过route_key 模糊匹配队列路由键的消息来处理
+        consumer.Received("#.even", func(received_data string) {
+            fmt.Printf("模糊匹配偶数键：--->%s\n", received_data)
         })
     }()
 
-    // 启动第二个消费者
-	go func() {
-		PublishSubscribe.CreateConsumer().Received(func(received_data string) {
+        // 启动第二个消费者
+        consumer, err := Topics.CreateConsumer()
+    
+        if err != nil {
+            t.Errorf("Routing单元测试未通过。%s\n", err.Error())
+            os.Exit(1)
+        }
+    
+        consumer.OnConnectionError(func(err *amqp.Error) {
+        // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
+        // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
+            log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+        })
 
-			fmt.Printf("B回调函数处理消息：--->%s", received_data)
-		})
-	}()
+        // 通过route_key 模糊匹配队列路由键的消息来处理
+        consumer.Received("#.odd", func(received_data string) {
+    
+            fmt.Printf("模糊匹配奇数键：--->%s\n", received_data)
+        })
+
 ```  
 
-##### 3.2 生产者投递消息  
+##### 2.2 调用生产者投递一个或者多个消息 
 ```go  
-	producer := PublishSubscribe.CreateProducer()
-	var res bool
-	for i := 0; i < 10; i++ {
-		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", (i + 1))
-		res = producer.Send(str)
-		time.Sleep(time.Second * 2)
-	}
 
-	producer.Close() // 消息投递结束，必须关闭连接
-    // 简单判断一下最后一次消息发送结果
-	if res {
-		fmt.Printf("消息发送OK")
-	} else {
-		fmt.Printf("消息发送 失败")
-	}
-
-```  
-#### 4.场景四，routing(路由键)严格匹配模式  
->生产者发送消息时指定route_key，消费者通过设置参数，绑定对应的交换机、路由键就可以精确地获取消息。  
-##### 4.1 消费者设置交换机、绑定路由键到交换机，进入阻塞状态等待接收、处理消息  
-```go  
-    // 启动第一个消费者，假设专门处理偶数（绑定一个标识键 key_even）
-    go func() {
-        Routing.CreateConsumer().Received("key_even",func(received_data string) {
-    
-            fmt.Printf("A回调函数处理消息【偶数】消息：--->%s\n", received_data)
-        })
-    
-    }()
-
-    // 启动第二个消费者，假设专门处理奇数（绑定一个标识键 key_odd）
-    go func() {
-    
-        Routing.CreateConsumer().Received("key_odd",func(received_data string) {
-    
-            fmt.Printf("B回调函数处理消息【奇数】消息：--->%s\n", received_data)
-        })
-    }()
-``` 
-##### 4.2 生产者将消息投递至已经绑定好路由键的各种交换机  
-```go  
-	producer := Routing.CreateProducer()
-	var res bool
-	var key string
-	for i := 1; i <= 10; i++ {
-
-		//  将 偶数 和  奇数 分发到不同的key，消费者端也启动两个客户端，通过匹配route_key精确地处理消息  
-		if i%2 == 0 {
-			key = "key_even" //  偶数键
-		} else {
-			key = "key_odd" //  奇数键
-		}
-		str_data := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i,key)
-		res = producer.Send(key, str_data)
-	}
-
-	producer.Close() // 消息投递结束，必须关闭连接
-    //  简单判断一下最后一次是否成功
-	if res {
-		fmt.Printf("消息发送OK")
-	} else {
-		fmt.Printf("消息发送 失败")
-	}
-```   
-
-
-#### 5.场景五，topics 模式，相比 routing 模式，它的匹配规则支持使用模糊模式         
->   `topics`模式使用比`routing`模式更灵活，两者功能一致。该模式完全可以代理`routing`模式   
->   注意：生产者设置键的规则必须是：关键词A.关键词B.关键词C等，即关键词之间必须使用.（点）隔开，消费者端只需要将.（点）左边或右边的关键词使用#代替即可。 
-##### 5.1 消费者设置交换机、绑定路由键（模糊规则）到交换机，进入阻塞状态等待接收、处理消息   
-```go  
-    // 启动第一个消费者，假设专门处理偶数（绑定一个标识键 #.even）
-    go func() {
-        //#.even 可以匹配到 key.even、abcd.even等
-        Topics.CreateConsumer().Received("#.even",func(received_data string) {
-    
-            fmt.Printf("A回调函数处理消息【偶数】消息：--->%s\n", received_data)
-        })
-    
-    }()
-    // 启动第一个消费者，假设专门处理奇数（绑定一个标识键 #.odd）
-    go func() {
-         //#.odd 可以匹配到 key.odd、abcd.odd
-        Topics.CreateConsumer().Received("#.odd",func(received_data string) {
-    
-            fmt.Printf("B回调函数处理消息【奇数】消息：--->%s\n", received_data)
-        })
-    }()
-
-```   
-##### 5.2 生产者将消息投递至已经绑定好路由键的各种交换机   
-```go  
-	producer := Topics.CreateProducer()
+	producer, _ := Topics.CreateProducer()
 	var res bool
 	var key string
 	for i := 1; i <= 10; i++ {
@@ -230,16 +157,19 @@
 		} else {
 			key = "key.odd" //  奇数键
 		}
-		str_data := fmt.Sprintf("%d_Topics_%s,生产者端消息", i,key)
+		str_data := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i, key)
 		res = producer.Send(key, str_data)
+		//time.Sleep(time.Second * 1)
 	}
 
 	producer.Close() // 消息投递结束，必须关闭连接
 
-    //  简单判断一下最后一次是否成功
+    // 简单判断一下最后一次发送结果
 	if res {
 		fmt.Printf("消息发送OK")
 	} else {
 		fmt.Printf("消息发送 失败")
 	}
 	//Output: 消息发送OK
+
+```  

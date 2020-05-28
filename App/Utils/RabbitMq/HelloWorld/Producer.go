@@ -7,7 +7,7 @@ import (
 )
 
 // 创建一个生产者
-func CreateProducer() *producer {
+func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	configFac := Config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.HelloWorld.Addr"))
@@ -15,15 +15,15 @@ func CreateProducer() *producer {
 	dura := configFac.GetBool("RabbitMq.HelloWorld.Durable")
 
 	if err != nil {
-		log.Panic(err.Error())
-		return nil
+		return nil, err
 	}
 
-	return &producer{
+	v_producer := &producer{
 		connect:   conn,
 		queueName: queue_name,
 		durable:   dura,
 	}
+	return v_producer, nil
 }
 
 //  定义一个消息队列结构体：helloworld 模型
