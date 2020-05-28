@@ -29,4 +29,6 @@ const (
 	Errors_Snowflake_GetId_Fail string = "获取snowflake唯一ID过程发生错误"
 	// websocket
 	Errors_Websocket_OnOpen_Fail string = "websocket onopen 发生阶段错误"
+	// rabbitMq
+	Errors_RabbitMq_Reconnect_Fail string = "RabbitMq消费者端掉线后重连失败，超过尝试最大次数"
 )

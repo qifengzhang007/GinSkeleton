@@ -3,10 +3,10 @@ package Topics
 import (
 	"GinSkeleton/App/Utils/Config"
 	"github.com/streadway/amqp"
-	"log"
+	"time"
 )
 
-func CreateConsumer() *consumer {
+func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
 	configFac := Config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Topics.Addr"))
@@ -14,36 +14,50 @@ func CreateConsumer() *consumer {
 	exchange_name := configFac.GetString("RabbitMq.Topics.ExchangeName")
 	queue_name := configFac.GetString("RabbitMq.Topics.QueueName")
 	dura := configFac.GetBool("RabbitMq.Topics.Durable")
+	reconnect_interval_sec := configFac.GetDuration("RabbitMq.Topics.OffLineReconnectIntervalSec")
+	retry_times := configFac.GetInt("RabbitMq.Topics.RetryCount")
 
 	if err != nil {
-		log.Panic(err.Error())
-		return nil
+		//log.Panic(err.Error())
+		return nil, err
 	}
 
-	return &consumer{
-		connect:      conn,
-		exchangeType: exchange_type,
-		exchangeName: exchange_name,
-		queueName:    queue_name,
-		durable:      dura,
+	v_consumer := &consumer{
+		connect:                     conn,
+		exchangeType:                exchange_type,
+		exchangeName:                exchange_name,
+		queueName:                   queue_name,
+		durable:                     dura,
+		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
+		offLineReconnectIntervalSec: reconnect_interval_sec,
+		retryTimes:                  retry_times,
 	}
+	return v_consumer, nil
 }
 
 //  定义一个消息队列结构体：Topics 模型
 type consumer struct {
-	connect      *amqp.Connection
-	exchangeType string
-	exchangeName string
-	queueName    string
-	durable      bool
-	occurError   error
+	connect                     *amqp.Connection
+	exchangeType                string
+	exchangeName                string
+	queueName                   string
+	durable                     bool
+	occurError                  error // 记录初始化过程中的错误
+	connErr                     chan *amqp.Error
+	routeKey                    string                     //  断线重新连接刷新回调函数使用
+	callbackForReceived         func(received_data string) //  断线重新连接刷新回调函数使用
+	offLineReconnectIntervalSec time.Duration
+	retryTimes                  int
 }
 
 // 接收、处理消息
-func (c *consumer) Received(route_key string, deal_msg_call_fn func(received_data string)) {
+func (c *consumer) Received(route_key string, callback_fun_deal_smg func(received_data string)) {
 	defer func() {
 		c.connect.Close()
 	}()
+	// 将回调函数地址赋值给结构体变量，用于掉线重连使用
+	c.routeKey = route_key
+	c.callbackForReceived = callback_fun_deal_smg
 
 	blocking := make(chan bool)
 
@@ -97,11 +111,32 @@ func (c *consumer) Received(route_key string, deal_msg_call_fn func(received_dat
 
 		for msg := range msgs {
 			// 通过回调处理消息
-			deal_msg_call_fn(string(msg.Body))
+			callback_fun_deal_smg(string(msg.Body))
 		}
 
 	}(route_key)
 
 	<-blocking
+
+}
+
+//消费者端，掉线重连监听器
+func (c *consumer) OffLineReconnectionListener(callback_offline_err func(error_args *amqp.Error)) {
+
+	select {
+	case err := <-c.connErr:
+		for i := 1; i <= c.retryTimes; i++ {
+			// 自动重连机制，需要继续完善
+			time.Sleep(c.offLineReconnectIntervalSec * time.Second)
+			v_conn, err := CreateConsumer()
+			if err != nil {
+				continue
+			} else {
+				v_conn.Received(c.routeKey, c.callbackForReceived)
+				break
+			}
+		}
+		callback_offline_err(err)
+	}
 
 }
