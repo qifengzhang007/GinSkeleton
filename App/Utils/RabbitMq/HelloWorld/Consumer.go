@@ -2,7 +2,6 @@ package HelloWorld
 
 import (
 	"GinSkeleton/App/Utils/Config"
-	"fmt"
 	"github.com/streadway/amqp"
 	"time"
 )
@@ -105,7 +104,6 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 		case err := <-c.connErr:
 			var i int = 1
 			for i = 1; i <= c.retryTimes; i++ {
-				fmt.Println("开始重连", i)
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
 				v_conn, err := CreateConsumer()
@@ -117,7 +115,6 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 						go v_conn.OnConnectionError(c.callbackOffLine)
 						v_conn.Received(c.callbackForReceived)
 					}()
-					fmt.Println("重连OK")
 					break
 				}
 			}
