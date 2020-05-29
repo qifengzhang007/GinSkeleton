@@ -14,7 +14,7 @@ type Home struct {
 func (u *Home) News(context *gin.Context) {
 
 	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型
-	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
+	// 当然也可以通过gin框架的上下文原原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	newstype := context.GetString(Consts.Validator_Prefix + "newstype")
 	page := context.GetFloat64(Consts.Validator_Prefix + "page")
 	limit := context.GetFloat64(Consts.Validator_Prefix + "limit")
