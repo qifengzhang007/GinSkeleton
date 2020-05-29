@@ -40,12 +40,30 @@ var demo = &cobra.Command{
 				3.执行 go  run  Cmd/Cli/main.go sousuo 无参数执行
 				4.执行 go  run  Cmd/Cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
 	`,
-	//Args:    cobra.ExactArgs(2),  //  限制非flag参数的个数必须等于 2 ,超过2个会报错
+	//Args:    cobra.ExactArgs(2),  //  限制非flag参数（也叫作位置参数）的个数必须等于 2 ,否则会报错
+	// Run命令以及子命令的前置函数
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		//如果只想作为子命令的回调，可以通过相关参数做判断，仅在子命令执行
+		fmt.Printf("Run函数子命令的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n",args[0], SearchEngines, SearchType, KeyWords)
+	},
+	// Run命令的前置函数
+	PreRun: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("Run函数的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n",args[0], SearchEngines, SearchType, KeyWords)
+	},
+
 	Run: func(cmd *cobra.Command, args []string) {
-		//args  参数表示无 flag 标记的参数，说个参数默认会作为一个数组存储。不建议这样使用
-		// 建议所有的参数都通过标记设置，具有明确的含义再使用
+		//args  参数表示非flag（也叫作位置参数），该参数默认会作为一个数组存储。
 		//fmt.Println(args)
 		start(SearchEngines, SearchType, KeyWords)
+	},
+	// Run命令的后置函数
+	PostRun: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("Run函数的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n",args[0], SearchEngines, SearchType, KeyWords)
+	},
+	// Run命令以及子命令的后置函数
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		//如果只想作为子命令的回调，可以通过相关参数做判断，仅在子命令执行
+		fmt.Printf("Run函数子命令的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n",args[0], SearchEngines, SearchType, KeyWords)
 	},
 }
 
@@ -66,15 +84,22 @@ func start(SearchEngines, SearchType, KeyWords string) {
 
 }
 
+
 ``` 
 
 ####  运行以上代码  
 ```go 
 
-go run  Cmd/Cli/main.go  sousuo     -E  baidu  -T img  -K  关键词2020
+go  run  Cmd/Cli/main.go  sousuo  测试demo   -E  百度  -T 图片  -K 关键词
 
 // 结果
-您输入的搜索引擎: baidu， 搜索类型: img, 关键词：关键词2020  
+
+Run函数子命令的前置方法，位置参数：测试demo ，flag参数：百度, 图片, 关键词
+Run函数的前置方法，位置参数：测试demo ，flag参数：百度, 图片, 关键词
+您输入的搜索引擎：百度， 搜索类型：图片, 关键词：关键词
+Run函数的后置方法，位置参数：测试demo ，flag参数：百度, 图片, 关键词
+Run函数子命令的后置方法，位置参数：测试demo ，flag参数：百度, 图片, 关键词
+
 ```     
 
 ####  子命令的定义与使用  
@@ -114,7 +139,9 @@ func init() {
 go  run   Cmd/Cli/main.go sousuo  subCmd  子命令参数
 
 // 结果
-测试子命令被嵌套调用：子命令参数
+Run函数子命令的前置方法，位置参数：子命令参数 ，flag参数：baidu, img, 关键词
+子命令参数
+Run函数子命令的后置方法，位置参数：子命令参数 ，flag参数：baidu, img, 关键词
  
 ```     
  
