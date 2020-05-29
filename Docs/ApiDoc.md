@@ -1,16 +1,17 @@
 ### 测试用例接口   
 >   1.文档主要提供本项目骨架已经集成的Api接口使用说明。            
+>   2.相关测试全部基于`postman`工具进行。              
 
 ### 门户网站类
 >   1.ip、端口使用本项目默认配置，即：`http://127.0.0.1:2019`，门户类接口通用  
 ####    1.首页新闻   
 >    <font color=#FF4500>*get*，/api/v1/home/news  
 
-参数字段|类型|选项|默认值
----|---|---|---
-newstype|string|必填|potal
-pass|string|必填|1
-limit|string|必填|20
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+newstype|form-data|string|必填|potal
+pass|form-data|string|必填|1
+limit|form-data|string|必填|20
 > 返回示例：
 ```json
 {
@@ -36,11 +37,11 @@ limit|string|必填|20
 ####    1.用户注册   
 >    <font color=#FF4500>*post*，/Admin/users/register   
 
-参数字段|类型|选项|默认值
----|---|---|---
-name|string|必填|admin123
-pass|string|必填|123456abc
-phone|string|必填|1360177xxxx
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+name|form-data|string|必填|admin123
+pass|form-data|string|必填|123456abc
+phone|form-data|string|必填|1360177xxxx
 > 返回示例：
 ```json
 {
@@ -53,11 +54,11 @@ phone|string|必填|1360177xxxx
 ####    2.用户登录     
 >    <font color=#FF4500>*post*，/Admin/users/login   
 
-参数字段|类型|选项|默认值
----|---|---|---
-name|string|必填|admin123
-pass|string|必填|123456abc
-phone|string|非必填|1360177xxxx
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+name|form-data|string|必填|admin123
+pass|form-data|string|必填|123456abc
+phone|form-data|string|非必填|1360177xxxx
 > 返回示例：
 ```json
 {
@@ -78,12 +79,12 @@ phone|string|非必填|1360177xxxx
 >    <font color=#FF4500>*get*，/Admin/users/index   ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值  
 >   CURD相关的其他接口格式与本接口基本一致，例如：/Admin/users/create、/Admin/users/edit、/Admin/users/delete，只不过表单参数不一致。    
 
-参数字段|类型|选项|默认值
----|---|---|---
-Authorization|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
-name|string|必填|a
-page|int|必填|1
-limits|int|必填|20
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
+name|form-data|string|必填|a
+page|form-data|int|必填|1
+limits|form-data|int|必填|20
 
 > 返回示例：
 ```json
@@ -104,9 +105,9 @@ limits|int|必填|20
 ####    5.token刷新 ，请将旧token防止在header头参数直接提交更新         
 >    <font color=#FF4500>*post*，/Admin/users/refreshtoken    
 
-参数字段|类型|选项|默认值
----|---|---|---
-Authorization|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU  
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU  
 
 > 返回示例：
 ```json
@@ -122,10 +123,10 @@ Authorization|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vy
 ####    6.文件上传        
 >    <font color=#FF4500>*post*，/Admin/upload/file    
 
-参数字段|类型|选项|默认值
----|---|---|---
-Authorization|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
-files|string|必填|(注意表单键名为files，如果需要修改成别的键名，参见：App\Global\Variable\Variable.go ，UploadFileField=files)
+参数字段|参数属性|类型|选项|默认值
+---|---|---|---|---
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
+files|form-data|string|必填|(注意表单键名为files，如果需要修改成别的键名，参见：App\Global\Variable\Variable.go ，UploadFileField=files)
 > 返回示例：
 ```json
 {
