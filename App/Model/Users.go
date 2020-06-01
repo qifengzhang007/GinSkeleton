@@ -73,7 +73,7 @@ func (u *usersModel) OauthLoginToken(userId int64, token string, expries_at int6
 
 //用户刷新token
 func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newtoken, clientIp string) bool {
-	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?  WHERE   fr_user_id=? AND token=?"
+	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW()  WHERE   fr_user_id=? AND token=?"
 	if u.ExecuteSql(sql, newtoken, expries_at, clientIp, userId, oldToken) > 0 {
 		return true
 	}
