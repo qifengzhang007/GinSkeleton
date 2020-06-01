@@ -18,6 +18,7 @@ const (
 	JwtToken_OK               int    = 200100  //token有效
 	JwtToken_Invalid          int    = -400100 //无效的token
 	JwtToken_Expired          int    = -400101 //过期的token
+	JwtToken_Online_Users     int    = 10      // 设置一个账号最大允许几个用户同时在线，默认为10
 
 	//snowfalake错误
 	SnowFlake_Machine_Id      int16  = 1024

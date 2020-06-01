@@ -1,6 +1,7 @@
 package Model
 
 import (
+	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/MD5Cryt"
 	_ "github.com/go-sql-driver/mysql"
@@ -60,11 +61,51 @@ func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
 	return nil
 }
 
-//	刷新用户token字段值，一般是token过期之后，重新更新
-func (u *usersModel) RefreshToken(userId int64, token string) bool {
-	sql := "update  tb_users  set  token=? where   id=?"
-	if u.ExecuteSql(sql, token, userId) > 0 {
+//记录用户登陆（login）生成的token，每次登陆记录一次token
+func (u *usersModel) OauthLoginToken(userId int64, token string, expries_at int64, client_ip string) bool {
+	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
+		"SELECT  ?,'login',? ,FROM_UNIXTIME(?),? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
+	if u.ExecuteSql(sql, userId, token, expries_at, client_ip, userId, token) > 0 {
 		return true
+	}
+	return false
+}
+
+//用户刷新token
+func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newtoken, clientIp string) bool {
+	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?  WHERE   fr_user_id=? AND token=?"
+	if u.ExecuteSql(sql, newtoken, expries_at, clientIp, userId, oldToken) > 0 {
+		return true
+	}
+	return false
+}
+
+//当用户更改密码后，所有的token都失效，必须重新登录
+func (u *usersModel) OauthResetToken(userId int64, clientIp string) bool {
+	sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
+	if u.ExecuteSql(sql, clientIp, userId) > 0 {
+		return true
+	}
+	return false
+}
+
+// 判断用户token是否在数据库存在+状态OK
+func (u *usersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
+	sql := "SELECT   token  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  updated_at  DESC  LIMIT ?"
+	rows := u.QuerySql(sql, userId, Consts.JwtToken_Online_Users)
+	if rows != nil {
+		for rows.Next() {
+			var temp_token string
+			err := rows.Scan(&temp_token)
+			if err == nil {
+				if temp_token == token {
+					rows.Close()
+					return true
+				}
+			}
+		}
+		//  凡是查询类记得释放记录集
+		rows.Close()
 	}
 	return false
 }

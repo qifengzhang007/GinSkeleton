@@ -2,7 +2,7 @@ package Authorization
 
 import (
 	"GinSkeleton/App/Global/MyErrors"
-	"GinSkeleton/App/Service/Users/Token"
+	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,7 +24,7 @@ func CheckAuth() gin.HandlerFunc {
 		if len(V_HeaderParams.Authorization) >= 20 {
 			token := strings.Split(V_HeaderParams.Authorization, " ")
 			if len(token) == 2 && len(token[1]) >= 20 {
-				token_is_effective := Token.CreateUserFactory().IsEffective(token[1])
+				token_is_effective := userstoken.CreateUserFactory().IsEffective(token[1])
 				if token_is_effective {
 					context.Next()
 				} else {

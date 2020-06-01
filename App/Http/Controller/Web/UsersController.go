@@ -41,8 +41,7 @@ func (u *Users) Login(context *gin.Context) {
 	if v_user_model != nil {
 		user_token_factory := userstoken.CreateUserFactory()
 		if usertoken, err := user_token_factory.GenerateToken(v_user_model.Id, v_user_model.Username, v_user_model.Phone, Consts.JwtToken_Created_ExpireAt); err == nil {
-			//同步更新数据库 tb_users 表 token 字段
-			if Model.CreateUserFactory("").RefreshToken(v_user_model.Id, usertoken) {
+			if user_token_factory.RecordLoginToken(usertoken, context.ClientIP()) {
 				v_data := gin.H{
 					"userid":     v_user_model.Id,
 					"name":       name,
@@ -64,7 +63,7 @@ func (u *Users) Login(context *gin.Context) {
 func (u *Users) RefreshToken(context *gin.Context) {
 
 	old_token := context.GetString(Consts.Validator_Prefix + "token")
-	if new_token, ok := Curd.CreateUserCurdFactory().RefreshToken(old_token); ok {
+	if new_token, ok := userstoken.CreateUserFactory().RefreshToken(old_token, context.ClientIP()); ok {
 		res := gin.H{
 			"token": new_token,
 		}

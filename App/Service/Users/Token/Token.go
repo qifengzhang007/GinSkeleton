@@ -39,31 +39,42 @@ func (u *userToken) GenerateToken(userid int64, username string, phone string, e
 	return u.userJwt.CreateToken(custome_claims)
 }
 
+// 用户login成功，记录用户token
+func (u *userToken) RecordLoginToken(userToken, clientIp string) bool {
+	if custome_claims, err := u.userJwt.ParseToken(userToken); err == nil {
+		user_id := custome_claims.UserId
+		expires_at := custome_claims.ExpiresAt
+		return Model.CreateUserFactory("").OauthLoginToken(user_id, userToken, expires_at, clientIp)
+	} else {
+		return false
+	}
+}
+
 // 刷新token的有效期（默认+3600秒，参见常量配置项）
-func (u *userToken) RefreshToken(token string) (res bool) {
+func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string, res bool) {
 
 	// 解析用户token的数据信息
-	cutomClaims, code := u.isNotExpired(token)
+	_, code := u.isNotExpired(old_token)
 	switch code {
-	case Consts.JwtToken_OK:
-		// token本身有效，直接犯规true，无需更新
-		res = true
-	case Consts.JwtToken_Expired:
+	case Consts.JwtToken_OK, Consts.JwtToken_Expired:
 		//如果token已经过期，那么执行更新
-		if new_token, error := u.userJwt.RefreshToken(token, Consts.JwtToken_Refresh_ExpireAt); error == nil {
-			//cutomClaims.ID=userid
-			if Model.CreateUserFactory("").RefreshToken(cutomClaims.UserId, new_token) {
-				res = true
+		if new_token, err := u.userJwt.RefreshToken(old_token, Consts.JwtToken_Refresh_ExpireAt); err == nil {
+			if custome_claims, err := u.userJwt.ParseToken(new_token); err == nil {
+				user_id := custome_claims.UserId
+				expires_at := custome_claims.ExpiresAt
+				if Model.CreateUserFactory("").OauthRefreshToken(user_id, expires_at, old_token, new_token, client_ip) {
+					return new_token, true
+				}
 			}
 		}
 	case Consts.JwtToken_Invalid:
 		log.Panic(MyErrors.Errors_Token_Invalid)
 	}
 
-	return res
+	return "", false
 }
 
-// 销毁token
+// 销毁token，基本用不到，因为一个网站的用户退出都是直接关闭浏览器窗口，极少有户会点击“注销、退出”等按钮，销毁token其实无多大意义
 func (u *userToken) DestroyToken() {
 
 }
@@ -88,10 +99,9 @@ func (u *userToken) isNotExpired(token string) (*MyJwt.CustomClaims, int) {
 func (u *userToken) IsEffective(token string) bool {
 	cutomClaims, code := u.isNotExpired(token)
 	if Consts.JwtToken_OK == code {
-		if user_item := Model.CreateUserFactory("").ShowOneItem(cutomClaims.UserId); user_item != nil {
-			if user_item.Token == token {
-				return true
-			}
+		//if user_item := Model.CreateUserFactory("").ShowOneItem(cutomClaims.UserId); user_item != nil {
+		if Model.CreateUserFactory("").OauthCheckTokenIsOk(cutomClaims.UserId, token) {
+			return true
 		}
 	}
 	return false
