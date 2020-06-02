@@ -60,20 +60,23 @@ func (j *Jwt_Sign) ParseToken(tokenString string) (*CustomClaims, error) {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
 				return nil, TokenMalformed
-			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				// Token is expired
-				return nil, TokenExpired
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
 				return nil, TokenNotValidYet
+			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				// 如果 TokenExpired ,只是过期（格式都正确），我们认为他是有效的，接下可以允许刷新操作
+				token.Valid = true
+				goto label_here
 			} else {
 				return nil, TokenInvalid
 			}
 		}
 	}
+label_here:
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
+	} else {
+		return nil, TokenInvalid
 	}
-	return nil, TokenInvalid
 }
 
 // 更新token

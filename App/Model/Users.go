@@ -4,6 +4,7 @@ import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/MD5Cryt"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
@@ -73,7 +74,8 @@ func (u *usersModel) OauthLoginToken(userId int64, token string, expries_at int6
 
 //用户刷新token
 func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newtoken, clientIp string) bool {
-	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW()  WHERE   fr_user_id=? AND token=?"
+	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=FROM_UNIXTIME(?),client_ip=?,updated_at=NOW()  WHERE   fr_user_id=? AND token=?"
+	fmt.Println(sql, newtoken, expries_at, clientIp, userId, oldToken)
 	if u.ExecuteSql(sql, newtoken, expries_at, clientIp, userId, oldToken) > 0 {
 		return true
 	}
@@ -81,12 +83,17 @@ func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newto
 }
 
 //当用户更改密码后，所有的token都失效，必须重新登录
-func (u *usersModel) OauthResetToken(userId int64, clientIp string) bool {
-	sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
-	if u.ExecuteSql(sql, clientIp, userId) > 0 {
+func (u *usersModel) OauthResetToken(userId float64, newPass, clientIp string) bool {
+	//如果用户新旧密码一致，直接返回true，不需要处理
+	if u.ShowOneItem(userId).Pass == newPass {
 		return true
+	} else {
+		sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
+		if u.ExecuteSql(sql, clientIp, userId) > 0 {
+			return true
+		}
+		return false
 	}
-	return false
 }
 
 // 判断用户token是否在数据库存在+状态OK
@@ -120,8 +127,7 @@ func (u *usersModel) SetTokenInvalid(userId int) bool {
 }
 
 //根据用户ID查询一条信息
-func (u *usersModel) ShowOneItem(userId int64) *usersModel {
-
+func (u *usersModel) ShowOneItem(userId float64) *usersModel {
 	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`, `token`  FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
 	rows := u.QuerySql(sql, userId)
 	if rows != nil {
@@ -169,10 +175,12 @@ func (u *usersModel) Store(username string, pass string, real_name string, phone
 }
 
 //更新
-func (u *usersModel) Update(id float64, username string, pass string, real_name string, phone string, remark string) bool {
+func (u *usersModel) Update(id float64, username string, pass string, real_name string, phone string, remark string, client_ip string) bool {
 	sql := "update tb_users set username=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
 	if u.ExecuteSql(sql, username, pass, real_name, phone, remark, id) > 0 {
-		return true
+		if u.OauthResetToken(id, pass, client_ip) {
+			return true
+		}
 	}
 	return false
 }

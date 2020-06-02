@@ -7,10 +7,10 @@
 
 ####    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
->   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.  
->   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。  
->   4.双击`Cmd/(Web|Api)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
->   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` 进入目录：`go build Cmd/(Web|Api)/main.go``即可交叉编译出Web或者Api对应的二进制文件。    
+>   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
+>   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
+>   4.双击`Cmd/(Web|Api|Cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
+>   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` 进入根目录（Ginskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go``即可交叉编译出Web或者Api对应的二进制文件。    
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ####    压力测试  
@@ -47,9 +47,15 @@
 [Websocket](App/Service/Websocket/Ws.go) 
 
 #### 版本
-V 1.0.xx   2020-05-25(5月份开发计划预告)   
->   1.关键、核心代码编写更多的单元测试。   
->   2.jwt增强，控制一个账号、密码同时在线的数量（即控制一个用户能同时拥有几有效的token）。         
+V 1.0.xx   2020-06（开发计划预告）  
+>   1.编写更多的单元测试。   
+>   2.增加Aop面向切面编程功能。     
+>   3.在新项目的应用中，将基础功能扩充，修复可能的bug。       
+
+V 1.0.18   2020-06-03   
+>   1.jwt增强，控制一个账号、密码同时在线的数量（即控制一个用户能同时拥有几有效的token），以便支持一个账号多人登录。    
+>   2.详细配置参见 `App\Global\Consts\Consts.go`,`JWT`部分。         
+>   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录、刷新token、用户更改密码。     
 
 V 1.0.17   2020-05-28    
 >   1.[RabbitMQ文档](Docs/RabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     

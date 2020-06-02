@@ -112,7 +112,9 @@ func (u *Users) Update(context *gin.Context) {
 	real_name := context.GetString(Consts.Validator_Prefix + "real_name")
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
 	remark := context.GetString(Consts.Validator_Prefix + "remark")
-	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark) {
+	user_ip := context.ClientIP()
+
+	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark, user_ip) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Updat_Fail_Code, Consts.Curd_Update_Fail_Msg, "")

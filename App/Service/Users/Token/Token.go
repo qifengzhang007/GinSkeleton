@@ -90,9 +90,10 @@ func (u *userToken) isNotExpired(token string) (*MyJwt.CustomClaims, int) {
 			// 过期的token
 			return custome_claims, Consts.JwtToken_Expired
 		}
+	} else {
+		// 无效的token
+		return nil, Consts.JwtToken_Invalid
 	}
-	// 无效的token
-	return nil, Consts.JwtToken_Invalid
 }
 
 // 判断token是否有效（未过期+数据库用户信息正常）
