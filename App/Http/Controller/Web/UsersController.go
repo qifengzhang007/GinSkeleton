@@ -6,6 +6,7 @@ import (
 	"GinSkeleton/App/Service/Users/Curd"
 	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -36,7 +37,7 @@ func (u *Users) Login(context *gin.Context) {
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
-
+	fmt.Printf("%#+v\n", u)
 	v_user_model := Model.CreateUserFactory("").Login(name, pass)
 	if v_user_model != nil {
 		user_token_factory := userstoken.CreateUserFactory()
@@ -113,7 +114,8 @@ func (u *Users) Update(context *gin.Context) {
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
 	remark := context.GetString(Consts.Validator_Prefix + "remark")
 	user_ip := context.ClientIP()
-
+	//注意：这里没有实现权限控制逻辑，例如：超级管理管理员可以更新全部用户数据，普通用户只能修改自己的数据。目前只是验证了token有效、合法之后就可以进行后续操作
+	// 实际使用请根据真是业务实现权限控制逻辑、再进行数据库操作
 	if Curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark, user_ip) {
 		Response.ReturnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
 	} else {

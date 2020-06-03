@@ -66,7 +66,9 @@ func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
 func (u *usersModel) OauthLoginToken(userId int64, token string, expries_at int64, client_ip string) bool {
 	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
 		"SELECT  ?,'login',? ,FROM_UNIXTIME(?),? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
-	if u.ExecuteSql(sql, userId, token, expries_at, client_ip, userId, token) > 0 {
+	//注意：token的精确度为秒，如果在一秒之内，一个账号多次调用接口生成的token其实是相同的，这样写入数据库，第二次的影响行数为0，知己实际上操作仍然是有效的。
+	//所以这里的判断影响行数>=0 都是正确的，只有 -1 才是执行失败、错误
+	if u.ExecuteSql(sql, userId, token, expries_at, client_ip, userId, token) >= 0 {
 		return true
 	}
 	return false
@@ -85,15 +87,25 @@ func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newto
 //当用户更改密码后，所有的token都失效，必须重新登录
 func (u *usersModel) OauthResetToken(userId float64, newPass, clientIp string) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
-	if u.ShowOneItem(userId).Pass == newPass {
+	if u.ShowOneItem(userId) != nil && u.ShowOneItem(userId).Pass == newPass {
 		return true
-	} else {
+	} else if u.ShowOneItem(userId) != nil {
 		sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
 		if u.ExecuteSql(sql, clientIp, userId) > 0 {
 			return true
 		}
-		return false
 	}
+	return false
+}
+
+//当tb_users 删除数据，相关的token同步删除
+func (u *usersModel) OauthDestroyToken(userId float64) bool {
+	//如果用户新旧密码一致，直接返回true，不需要处理
+	sql := "DELETE FROM  tb_oauth_access_tokens WHERE  fr_user_id=?  "
+	if u.ExecuteSql(sql, userId) > 0 {
+		return true
+	}
+	return false
 }
 
 // 判断用户token是否在数据库存在+状态OK
@@ -189,7 +201,9 @@ func (u *usersModel) Update(id float64, username string, pass string, real_name 
 func (u *usersModel) Destroy(id float64) bool {
 	sql := "delete from tb_users  WHERE status=1 AND id=?"
 	if u.ExecuteSql(sql, id) > 0 {
-		return true
+		if u.OauthDestroyToken(id) {
+			return true
+		}
 	}
 	return false
 }
