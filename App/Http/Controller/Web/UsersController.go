@@ -6,7 +6,6 @@ import (
 	"GinSkeleton/App/Service/Users/Curd"
 	userstoken "GinSkeleton/App/Service/Users/Token"
 	"GinSkeleton/App/Utils/Response"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -37,7 +36,7 @@ func (u *Users) Login(context *gin.Context) {
 	name := context.GetString(Consts.Validator_Prefix + "name")
 	pass := context.GetString(Consts.Validator_Prefix + "pass")
 	phone := context.GetString(Consts.Validator_Prefix + "phone")
-	fmt.Printf("%#+v\n", u)
+
 	v_user_model := Model.CreateUserFactory("").Login(name, pass)
 	if v_user_model != nil {
 		user_token_factory := userstoken.CreateUserFactory()
