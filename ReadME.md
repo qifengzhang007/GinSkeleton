@@ -41,7 +41,7 @@
 [Cobra文档](Docs/Cobra.md)  
 
 ####    HttpClient 使用文档  
-[HttpClient客户端](https://gitee.com/daitougege/goz) 
+[HttpClient客户端](https://gitee.com/daitougege/goCurl) 
 
 ####    Websocket 使用文档  
 [Websocket](App/Service/Websocket/Ws.go) 
