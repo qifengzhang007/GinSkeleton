@@ -1,11 +1,11 @@
 package HttpClient
 
 import (
-	"github.com/qifengzhang007/goz"
+	"github.com/qifengzhang007/goCurl"
 )
 
 //  httpClient 文档地址： https://github.com/qifengzhang007/goz
 
-func CreateClient(options ...goz.Options) *goz.Request {
-	return goz.NewClient(options...)
+func CreateClient(options ...goCurl.Options) *goCurl.Request {
+	return goCurl.NewClient(options...)
 }

@@ -57,6 +57,7 @@ V 1.0.18   2020-06-03
 >   2.详细配置参见 `App\Global\Consts\Consts.go`,`JWT`部分。         
 >   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录生成token、刷新`token`、用户更改密码，重置相关的`token`失效。     
 >   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库必须及时更新此表。     
+>   5.`httpClient`包的引用变更，主要为了解决和原库命名冲突。     
 
 V 1.0.17   2020-05-28    
 >   1.[RabbitMQ文档](Docs/RabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
