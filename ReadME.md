@@ -55,8 +55,8 @@ V 1.0.xx   2020-06（开发计划预告）
 V 1.0.18   2020-06-03   
 >   1.`jwt`增强，控制一个账号、密码同时能拥有有效的token数量，以便支持一个账号多人登录。    
 >   2.详细配置参见 `App\Global\Consts\Consts.go`,`JWT`部分。         
->   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录、刷新token、用户更改密码。     
->   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`必须及时更新到数据库。     
+>   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录生成token、刷新`token`、用户更改密码，重置相关的`token`失效。     
+>   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库必须及时更新此表。     
 
 V 1.0.17   2020-05-28    
 >   1.[RabbitMQ文档](Docs/RabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
