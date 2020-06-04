@@ -9,7 +9,7 @@ import (
 //函数级别单元测试格式：
 //Example函数名称
 
-func TestHttpClientTest(t *testing.T) {
+func TestHttpClient(t *testing.T) {
 	cli := HttpClient.CreateClient()
 	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
 		centent, _ := resp.GetContents()
