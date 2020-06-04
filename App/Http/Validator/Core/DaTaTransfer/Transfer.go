@@ -15,8 +15,8 @@ context  gin上下文
 */
 func DataAddContext(validatorInterface Interface.ValidatorInterface, extra_add_data_prefix string, context *gin.Context) *gin.Context {
 	var temp_json interface{}
-	if v_bytes, error := json.Marshal(validatorInterface); error == nil {
-		if error2 := json.Unmarshal(v_bytes, &temp_json); error2 == nil {
+	if v_bytes, err1 := json.Marshal(validatorInterface); err1 == nil {
+		if err2 := json.Unmarshal(v_bytes, &temp_json); err2 == nil {
 			if value, ok := temp_json.(map[string]interface{}); ok {
 				for k, v := range value {
 					context.Set(extra_add_data_prefix+k, v)
