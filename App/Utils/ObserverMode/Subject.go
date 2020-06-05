@@ -25,12 +25,15 @@ func (s *Subject) Detach(observer ObserverInterface) {
 
 //通知所有观察者
 func (s *Subject) Notify() {
+	var l_temp *list.List = list.New()
 	for ob := s.Observers.Front(); ob != nil; ob = ob.Next() {
+		l_temp.PushBack(ob.Value)
 		ob.Value.(ObserverInterface).Update(s)
 	}
+	s.Observers = l_temp
 }
 
-func (s *Subject) Dispatch(args ...interface{}) {
+func (s *Subject) BroadCast(args ...interface{}) {
 	s.params = args
 	s.Notify()
 }
