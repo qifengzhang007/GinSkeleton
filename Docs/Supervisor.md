@@ -60,7 +60,7 @@ password=user_pass
 supervisord -c /etc/supervisord.d/supervisord.conf
 ```
 
-## 使用 supervisorctl 命令管理项目
+####  使用 supervisorctl 命令管理项目
 >   1.浏览器打开 `ip:9001` 地址，输入账号、密码对应用程序进行可视化管理。  
 ```bash
 # 启动 Goskeleton 应用
