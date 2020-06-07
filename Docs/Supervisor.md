@@ -13,16 +13,12 @@ yum install -y supervisor    //  【ubutu】apt-get  install  supervisor
 
 ####  创建一个配置文件  
 ```bash
-cp   /etc/supervisord.conf     /etc/etc/supervisord.d/supervisord.conf
+cp   /etc/supervisord.conf     /etc/supervisord.d/supervisord.conf
 
 #编辑刚才新复制的配置文件
-vim /etc/etc/supervisord.d/supervisord.conf 
+vim /etc/supervisord.d/supervisord.conf 
 
-```
-
-#### 在[include]节点前添加以下内容，保存
-
-```ini  
+# 在[include]节点前添加以下内容，保存
 
 [program:GinSkeleton]
 # 设置命令在指定的目录内执行
@@ -43,6 +39,8 @@ stderr_logfile=/home/wwwroot/GoProject2020/Storage/logs/err.log
 
 ```
 
+
+
 ####  配置 `Supervisor` 可视化管理界面 
 >   1.编辑配置文件 /etc/supervisord.d/supervisord.conf ,将以下注释打开即可。  
 ```ini  
@@ -61,7 +59,7 @@ supervisord -c /etc/supervisord.d/supervisord.conf
 ```
 
 ####  使用 supervisorctl 命令管理项目
->   1.浏览器打开 `ip:9001` 地址，输入账号、密码对应用程序进行可视化管理。  
+>   此时你也可以通过浏览器打开 `ip:9001` 地址，输入账号、密码对应用程序进行可视化管理。  
 ```bash
 # 启动 Goskeleton 应用
 supervisorctl start Goskeleton
