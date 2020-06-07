@@ -19,3 +19,6 @@ func TestHttpClient(t *testing.T) {
 		fmt.Printf("%s\n", centent)
 	}
 }
+
+//更详细的使用文档 https://gitee.com/daitougege/goCurl
+// 更多单元测试 https://gitee.com/daitougege/goCurl/tree/master/examples
