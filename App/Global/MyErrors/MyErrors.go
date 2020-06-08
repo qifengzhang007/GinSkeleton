@@ -3,6 +3,9 @@ package MyErrors
 // 这里定义的常量，一般只有错误说明，无错误代码，常用语记录日志使用
 const (
 	//系统部分
+	Errors_Config_Yaml_NotExists    string = "config.yaml 配置文件不存在"
+	Errors_Public_NotExists         string = "Public 目录不存在"
+	Errors_StorageLogs_NotExists    string = "StorageLogs 目录不存在"
 	Errors_Config_Init_Fail         string = "初始化配置文件发生错误"
 	Errors_FuncEvent_Already_Exists string = "注册函数类事件失败，键名已经被注册"
 	Errors_FuncEvent_NotRegister    string = "没有找到键名对应的函数"
