@@ -10,7 +10,7 @@ import (
 
 type DestroyAfter struct{}
 
-func (d DestroyAfter) After(context *gin.Context) {
+func (d *DestroyAfter) After(context *gin.Context) {
 	// 后置函数可以使用异步执行
 	go func() {
 		userId := context.GetFloat64(Consts.Validator_Prefix + "id")

@@ -11,7 +11,7 @@ import (
 type DestroyBefore struct{}
 
 // 前置函数必须具有返回值，这样才能控制流程是否继续向下执行
-func (d DestroyBefore) Before(context *gin.Context) bool {
+func (d *DestroyBefore) Before(context *gin.Context) bool {
 	userId := context.GetFloat64(Consts.Validator_Prefix + "id")
 	fmt.Printf("模拟 Users 删除操作， Before 回调,用户ID：%.f\n", userId)
 	if userId > 10 {
