@@ -36,14 +36,16 @@ func (d Destroy) CheckParams(context *gin.Context) {
 		(&Web.Users{}).Destroy(extraAddBindDataContext)
 
 		// 以下代码为模拟 前置、后置函数的回调代码
-		//func(before_callback_fn func(context *gin.Context) bool, after_callback_fn func(context *gin.Context)) {
-		//	if before_callback_fn(extraAddBindDataContext) {
-		//		defer after_callback_fn(extraAddBindDataContext)
-		//		(&Web.Users{}).Destroy(extraAddBindDataContext)
-		//	} else {
-		//		// 这里编写前置函数验证不通过的相关返回提示逻辑...
-		//
-		//	}
-		//}((&Users.DestroyBefore{}).Before, (&Users.DestroyAfter{}).After)
+		/*
+			func(before_callback_fn func(context *gin.Context) bool, after_callback_fn func(context *gin.Context)) {
+				if before_callback_fn(extraAddBindDataContext) {
+					defer after_callback_fn(extraAddBindDataContext)
+					(&Web.Users{}).Destroy(extraAddBindDataContext)
+				} else {
+					// 这里编写前置函数验证不通过的相关返回提示逻辑...
+
+				}
+			}((&Users.DestroyBefore{}).Before, (&Users.DestroyAfter{}).After)
+		*/
 	}
 }
