@@ -10,7 +10,9 @@
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
 >   4.双击`Cmd/(Web|Api|Cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
->   5.`windwos`开发环境编译`linux`环境项目：goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` `set GOOS=linux` `set CGO_ENABLED=0` 进入根目录（Ginskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go``即可交叉编译出Web或者Api对应的二进制文件。    
+>   5.`windwos`开发环境编译`linux`环境项目：  
+>   5.1 goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
+>   5.2 进入根目录（Ginskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go` 可交叉编译出（Web|Api|Cli）对应的二进制文件。     
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ####    压力测试  
@@ -73,7 +75,7 @@ V 1.0.18   2020-06-03
 >   1.`jwt`增强，控制一个账号、密码同时能拥有有效的token数量，以便支持一个账号多人登录。    
 >   2.详细配置参见 `App\Global\Consts\Consts.go`,`JWT`部分。         
 >   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录生成token、刷新`token`、用户更改密码，重置相关的`token`使之失效，用户删除数据，同步删除相关的token表数据。     
->   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库必须及时更新此表。       
+>   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库**必须**及时更新此表。       
 >   5.**特别提醒**：`httpClient`包的引用地址发生变更，主要为了解决和原库命名冲突,如果下载的项目骨架报错，请更新代码重新运行。     
 
 V 1.0.17   2020-05-28    
