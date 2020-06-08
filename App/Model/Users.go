@@ -102,7 +102,8 @@ func (u *usersModel) OauthResetToken(userId float64, newPass, clientIp string) b
 func (u *usersModel) OauthDestroyToken(userId float64) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	sql := "DELETE FROM  tb_oauth_access_tokens WHERE  fr_user_id=?  "
-	if u.ExecuteSql(sql, userId) > 0 {
+	//判断>=0, 有些没有登录过的用户没有相关token，此语句执行影响行数为0，但是仍然是执行成功
+	if u.ExecuteSql(sql, userId) >= 0 {
 		return true
 	}
 	return false
