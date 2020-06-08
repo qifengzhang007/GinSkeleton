@@ -1,5 +1,5 @@
 ### Aop 面向切面编程，目前只支持控制器函数，优雅地模拟其他语言的动态代理方案。       
-> 备注：真正的`Aop` 动态代理，在 `golang` 实现起来非常麻烦，尽管github有相关实现的包,有一部分明确说明仅用于生产环境之外的测试环境，还有一部分使用非常复杂,因此本项目骨架没有引入第三方包。  
+> 备注：真正的`Aop` 动态代理，在 `golang` 实现起来非常麻烦，尽管github有相关实现的包(https://github.com/bouk/monkey),此包明确说明仅用于生产环境之外的测试环境，还有一部分使用非常复杂,因此本项目骨架没有引入第三方包。  
 > 需求场景：
 > 1.例如：用户删除数据，需要前置和后置回调函数，但是又不想污染控制器核心代码,此时可以考虑使用Aop思想实现。   
 
@@ -21,7 +21,7 @@ func (u *Users) Destroy(context *gin.Context) {
 ```
 
 ####  使用 Aop 思想实现前置和后置回调需求      
->   1.编写删除数据之前（Before）的回调示例代码，相关文件路径：GinSkeleton\App\Aop\Users\DestroyBefore.go  
+>   1.编写删除数据之前（Before）的回调函数，[示例代码](../App/Aop/Users/DestroyBefore.go)  
 
 ```bash
 package Users
@@ -48,7 +48,7 @@ func (d *DestroyBefore) Before(context *gin.Context) bool {
 }
 
 ```
->   2.编写删除数据之后（After）的回调示例代码，相关文件路径：GinSkeleton\App\Aop\Users\DestroyAfter.go  
+>   2.编写删除数据之后（After）的回调,[示例代码](../App/Aop/Users/DestroyAfter.go)  
 
 ```bash
 
