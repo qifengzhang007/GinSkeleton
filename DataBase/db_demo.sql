@@ -30,6 +30,8 @@ INSERT  INTO `tb_users`(`id`,`username`,`pass`,`real_name`,`phone`,`status`,`tok
 (2,'hello','188bda0c10088d7c2e6d7c00592679e7','','',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzLCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODc4Mzc4OTYsIm5iZiI6MTU4NzgzNDI4Nn0.qayu_u7mEYjTpHPxhgFJtSdGGFHI9rxkwR_RZx_T51E','','2020-04-26 00:59:25','127.0.0.1',1,'2020-04-26 00:59:25','2020-04-26 00:59:25');
 
 /* oauth 表，主要控制一个用户可以同时拥有几个有效的token*/
+DROP TABLE IF EXISTS `tb_oauth_access_tokens`;
+
 CREATE TABLE `tb_oauth_access_tokens` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fr_user_id` int(11) DEFAULT 0 COMMENT '外键:tb_users表id',
