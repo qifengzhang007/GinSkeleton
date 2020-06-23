@@ -8,8 +8,8 @@
 >### golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/i5ZMMdyfzuh  
 >   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径，复制在以下目录解压即可：  
->   3.![操作图](http://139.196.101.31:2080/golang.org.png)   
->   4.![操作图](http://139.196.101.31:2080/golang.org2.png)   
+>   ![操作图](http://139.196.101.31:2080/golang.org.png)   
+>   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
 
 ####    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
