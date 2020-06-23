@@ -4,10 +4,10 @@
 
 ### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。 
->
+
 >### golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/i5ZMMdyfzuh  
->   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径，复制在以下目录解压即可：  
+>   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录），复制在以下目录解压即可：  
 >   ![操作图](http://139.196.101.31:2080/golang.org.png)   
 >   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
 
