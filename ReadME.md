@@ -69,7 +69,7 @@ V 1.0.xx   2020-06（开发计划预告）
 >   1.基于以上项目发现bug，进一步优化，本项目计划开发周期截止7月底。                 
 
 V 1.0.21   2020-06-23   
->   1.[HttpClient客户端](https://gitee.com/daitougege/goCurl)版本更新，增强采集网站编码为 utf-8、gbk、gb18030等不同规则时自动转换功能。  
+>   1.[HttpClient客户端](https://gitee.com/daitougege/goCurl)包版本更新，采集不同编码类型的简体中文网站时，更加友好。  
 
 V 1.0.20   2020-06-08   
 >   1.增加 [Aop](Docs/Aop.md) 面向切面编程功能，简洁高效地实现控制器相关函数的`Before` 和 `After`  回调。   
