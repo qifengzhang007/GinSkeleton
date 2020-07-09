@@ -10,8 +10,8 @@ import (
 //  普通的key  value
 func TestRedisKeyValue(t *testing.T) {
 	// 因为单元测试是直接启动函数、执行
-	// 所以单元测试临时设置 BASE_PATH 项目根目录，主要是定位配置文件，
-	Variable.BASE_PATH = "E:\\GO\\GoSkeletonPractical"
+	// 所以单元测试临时设置 BASE_PATH 项目根目录，主要是定位配置文件，请根据自己的项目实际路径设置
+	Variable.BASE_PATH = "E:\\GO\\GoSkeleton"
 
 	redis_client := RedisFactory.GetOneRedisClient()
 
@@ -20,7 +20,6 @@ func TestRedisKeyValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	} else {
-		//
 		fmt.Println(res)
 	}
 	//  get 命令，分为两步：1.执行get命令 2.将结果转为需要的格式
@@ -35,7 +34,7 @@ func TestRedisKeyValue(t *testing.T) {
 func TestRedisHashKey(t *testing.T) {
 	// 因为单元测试是直接启动函数、执行
 	// 所以单元测试临时设置项目根目录BASE_PATH，主要是定位配置文件，
-	Variable.BASE_PATH = "E:\\GO\\GoSkeletonPractical" // 单元测试临时设置项目跟目录
+	Variable.BASE_PATH = "E:\\GO\\GoSkeleton" // 单元测试临时设置项目跟目录
 
 	redis_client := RedisFactory.GetOneRedisClient()
 
@@ -44,7 +43,6 @@ func TestRedisHashKey(t *testing.T) {
 	if err != nil {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	} else {
-		//
 		fmt.Println(res)
 	}
 	//  hash键  get 命令，分为两步：1.执行get命令 2.将结果转为需要的格式
