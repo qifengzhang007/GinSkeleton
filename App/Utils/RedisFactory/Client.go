@@ -28,8 +28,8 @@ func createRedisClientPool() *redis.Pool {
 					conn.Close()
 					log.Fatal(MyErrors.Errors_Redis_AuhtFail, err)
 				}
-				conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			}
+			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			return conn, err
 		},
 	}
