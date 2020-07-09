@@ -19,6 +19,6 @@ func Create(key string) func(context *gin.Context) {
 			return value.CheckParams
 		}
 	}
-	log.Panicln(MyErrors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + key)
+	log.Println(MyErrors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + key)
 	return nil
 }

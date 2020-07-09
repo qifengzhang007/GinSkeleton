@@ -79,7 +79,7 @@ func (p *producer) Close() {
 // 定义一个错误处理函数
 func errorDeal(err error) error {
 	if err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
 	}
 	return err
 }

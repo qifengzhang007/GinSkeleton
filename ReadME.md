@@ -57,6 +57,9 @@
 ####    Aop 使用文档  
 [Aop切面编程](Docs/Aop.md) 
 
+####    Redis 使用文档  
+[Redis使用示例](Test/Redis_test.go) 
+
 ####    Nginx 部署文档  
 [Nginx部署详情](Docs/Nginx.md) 
 
@@ -67,9 +70,10 @@
 V 1.0.xx   2020-06（开发计划预告）  
 >   1.开发基于`GoSkeleton`的实践项目，后台数据高达4500W+，验证本项目骨架的各项功能指标。             
 >   1.基于以上项目发现bug，进一步优化，本项目计划开发周期截止7月底。    
->             
+           
 V 1.0.22   2020-07-09   
 >   1.[redis](Test/Redis_test.go)增加单元测试示例，并修复配置文件一处bug。    
+>   2.调整程序异常log打印方式，由 log.Panic 调整为 log.Println , 代码出错尽量不退出程序。      
 
 V 1.0.21   2020-06-23   
 >   1.[HttpClient客户端](https://gitee.com/daitougege/goCurl)包版本更新，采集不同编码类型的简体中文网站时，更加友好。  

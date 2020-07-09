@@ -46,7 +46,7 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 			res = &BaseModel{db_driver: sqlserver_driver}
 		}
 	default:
-		log.Panic(MyErrors.Errors_Db_Driver_NotExists)
+		log.Println(MyErrors.Errors_Db_Driver_NotExists)
 	}
 
 	return res
@@ -64,10 +64,10 @@ func (b *BaseModel) ExecuteSql(sql string, args ...interface{}) int64 {
 			if affectNum, err := res.RowsAffected(); err == nil {
 				return affectNum
 			} else {
-				log.Panic(MyErrors.Errors_Db_Execute_RunFail, err.Error())
+				log.Println(MyErrors.Errors_Db_Execute_RunFail, err.Error())
 			}
 		} else {
-			log.Panic(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
+			log.Println(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
 		}
 	}
 	return -1
@@ -81,10 +81,10 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 		if Rows, err := stm.Query(args...); err == nil {
 			return Rows
 		} else {
-			log.Panic(MyErrors.Errors_Db_Query_RunFail, err.Error())
+			log.Println(MyErrors.Errors_Db_Query_RunFail, err.Error())
 		}
 	} else {
-		log.Panic(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
+		log.Println(MyErrors.Errors_Db_Prepare_RunFail, err.Error())
 	}
 	return nil
 

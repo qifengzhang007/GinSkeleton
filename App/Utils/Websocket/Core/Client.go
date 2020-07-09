@@ -35,7 +35,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 
 	// 2.将http协议升级到websocket协议.初始化一个有效的websocket长连接客户端
 	if ws_conn, err := upgrader.Upgrade(context.Writer, context.Request, nil); err != nil {
-		log.Panic(MyErrors.Errors_Websocket_OnOpen_Fail, err.Error())
+		log.Println(MyErrors.Errors_Websocket_OnOpen_Fail, err.Error())
 		return nil, false
 	} else {
 		if ws_hub, ok := Variable.Websocket_Hub.(*Hub); ok {
