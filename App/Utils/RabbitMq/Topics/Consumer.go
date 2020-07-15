@@ -18,7 +18,7 @@ func CreateConsumer() (*consumer, error) {
 	retry_times := configFac.GetInt("RabbitMq.Topics.RetryCount")
 
 	if err != nil {
-		//log.Panic(err.Error())
+		//log.Println(err.Error())
 		return nil, err
 	}
 

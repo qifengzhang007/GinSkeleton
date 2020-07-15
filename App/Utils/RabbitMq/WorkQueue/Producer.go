@@ -15,7 +15,7 @@ func CreateProducer() (*producer, error) {
 	dura := config_fac.GetBool("RabbitMq.WorkQueue.Durable")
 
 	if err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
 		return nil, err
 	}
 
@@ -80,7 +80,7 @@ func (p *producer) Close() {
 // 定义一个错误处理函数
 func errorDeal(err error) error {
 	if err != nil {
-		log.Panic(err.Error())
+		log.Println(err.Error())
 	}
 	return err
 }

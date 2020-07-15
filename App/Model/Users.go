@@ -168,7 +168,7 @@ func (u *usersModel) Show(username string, limit_start float64, limit_items floa
 			if err == nil {
 				v_temp = append(v_temp, *u)
 			} else {
-				log.Panic("sql查询错误", err)
+				log.Println("sql查询错误", err)
 			}
 		}
 		//  凡是查询类记得释放记录集

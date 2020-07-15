@@ -22,14 +22,14 @@ func GetFilesMimeByFileName(filepath string) string {
 
 	f, err := os.Open(filepath)
 	if err != nil {
-		log.Panic("打开文件失败 ", err)
+		log.Println("打开文件失败 ", err)
 	}
 	defer f.Close()
 
 	// 只需要前 32 个字节就可以了
 	buffer := make([]byte, 32)
 	if _, err := f.Read(buffer); err != nil {
-		log.Panic("读取文件32字节失败 ", err)
+		log.Println("读取文件32字节失败 ", err)
 		return ""
 	}
 
@@ -41,7 +41,7 @@ func GetFilesMimeByFp(fp multipart.File) string {
 
 	buffer := make([]byte, 32)
 	if _, err := fp.Read(buffer); err != nil {
-		log.Panic("读取文件32字节失败 ", err)
+		log.Println("读取文件32字节失败 ", err)
 		return ""
 	}
 

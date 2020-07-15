@@ -23,7 +23,8 @@ vim /etc/supervisord.d/supervisord.conf
 [program:GinSkeleton]
 # 设置命令在指定的目录内执行
 directory=/home/wwwroot/GoProject2020/GinSkeleton/
-command= main  
+#例如，我们编译完以后的go程序名为：main 
+command= /bin/bash -c   ./main  
 user=root
 # supervisor 启动时自动该应用
 autostart=true
@@ -69,7 +70,7 @@ supervisorctl restart Goskeleton
 supervisorctl stop Goskeleton  
 # 查看所有被管理项目运行状态
 supervisorctl status
-# 重新加载配置文件
+# 重新加载配置文件,一般是增加了新的项目节点，执行此命令即可使新项目运行起来而不影响老项目  
 supervisorctl update
 # 重新启动所有程序
 supervisorctl reload

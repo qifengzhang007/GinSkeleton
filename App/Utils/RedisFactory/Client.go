@@ -22,14 +22,14 @@ func createRedisClientPool() *redis.Pool {
 			if err != nil {
 				log.Fatal(MyErrors.Errors_Redis_InitConnFail, err)
 			}
-			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
-			pass := configFac.GetString("Redis.Pass") //通过配置项设置redis密码
-			if len(pass) >= 1 {
-				if _, err := conn.Do("AUTH", pass); err != nil {
+			auth := configFac.GetString("Redis.Auth") //通过配置项设置redis密码
+			if len(auth) >= 1 {
+				if _, err := conn.Do("AUTH", auth); err != nil {
 					conn.Close()
 					log.Fatal(MyErrors.Errors_Redis_AuhtFail, err)
 				}
 			}
+			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			return conn, err
 		},
 	}

@@ -1,8 +1,8 @@
 package Test
 
 import (
-	"GinSkeleton/App/Utils/HttpClient"
 	"fmt"
+	"github.com/qifengzhang007/goCurl"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ import (
 //Example函数名称
 
 func TestHttpClient(t *testing.T) {
-	cli := HttpClient.CreateClient()
+	cli := goCurl.NewClient()
 	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
 		centent, _ := resp.GetContents()
 		if len(centent) < 30 {
