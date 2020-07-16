@@ -72,7 +72,7 @@ func (t *Test) QueryRowData() *Test {
 	return nil
 }
 
-// 超多数据批量插入的真确写法
+// 超多数据批量插入的正确姿势
 func (t *Test) InsertDataMultiple() bool {
 	sql := "INSERT  INTO  tb_test(`name`,`sex`,`age`,`addr`,`remark`) VALUES(?,?,?,?,?)"
 	//1.首先独立预处理sql语句，无参数
