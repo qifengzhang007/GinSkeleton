@@ -61,7 +61,7 @@
 [Redis使用示例](Test/Redis_test.go) 
 
 ####    Sql 使用文档  
- [sql操作示例](App\Model\Test.go) 
+ [sql操作示例](App/Model/Test.go) 
 
 ####    Nginx 部署文档  
 [Nginx部署详情](Docs/Nginx.md) 
@@ -76,7 +76,7 @@ V 1.0.xx   2020-06（开发计划预告）
 
 V 1.0.23   2020-07-16   
 >   1.`SQL` 场景继续增强，将预编译命令独立，主要解决大批量sql重复执行，导致预编译sql太多，mysql拒绝继续执行命令的错误。      
->   2.封装了事务操作，补充相关的 [sql单元测试](Test\Sql_test.go) 和 [sql示例文档](App\Model\Test.go)       
+>   2.封装了事务操作，补充相关的 [sql单元测试](Test/Sql_test.go) 和 [sql示例文档](App/Model/Test.go)       
            
 V 1.0.22   2020-07-09   
 >   1.[Redis](Test/Redis_test.go)增加单元测试示例，并修复配置文件一处bug。    
