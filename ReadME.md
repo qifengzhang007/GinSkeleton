@@ -61,7 +61,7 @@
 [Redis使用示例](Test/Redis_test.go) 
 
 ####    Sql 使用文档  
- [sql操作示例](App/Model/Test.go) 
+ [sql操作示例](Docs/SqlStament.md) 
 
 ####    Nginx 部署文档  
 [Nginx部署详情](Docs/Nginx.md) 

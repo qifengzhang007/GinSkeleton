@@ -93,11 +93,12 @@ func (t *Test) InsertDataMultiple() bool {
 func (t *Test) InsertDataMultipleErrorMethod() bool {
 	sql := "INSERT  INTO  tb_test(`name`,`sex`,`age`,`addr`,`remark`) VALUES(?,?,?,?,?)"
 	var age int8 = 18
-	// 一次性插入1 万条数据
+	// 一次性插入 2万 条数据
 	for i := 1; i <= 20000; i++ {
 		sex := i % 2
-		//2.批量数据插入，如果 预处理 语句不独立的话，同时有多个连接执行此语句会造数据库存在大量的预处理sql不及时释放，堆积超过系统默认的上限，报错，程序终止执行
-		// 报错信息：系统预处理sql数量超过 max_prepared_stmt_count（默认16382）设置的值
+		//2.批量数据插入，如果 预处理 语句不独立调用，ExecuteSql 命令每一次都会进行预编译、执行，导致数据库预编译的sql超过系统默认值
+		// 系统预处理sql数量超过 max_prepared_stmt_count（默认16382）设置的值
+		// 报错信息： Error 1461: Can't create more than max_prepared_stmt_count statements (current value: 16382)
 		if t.ExecuteSql(sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i)) == -1 {
 			log.Panic("sql执行失败，sql:", sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i))
 		}
