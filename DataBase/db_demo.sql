@@ -46,5 +46,20 @@ CREATE TABLE `tb_oauth_access_tokens` (
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `oauth_access_tokens_user_id_index` (`fr_user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+
+/* tb_test sql命令测试专用，无关任务业务*/
+DROP TABLE IF EXISTS `tb_test`;
+CREATE TABLE `tb_test` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(60) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `sex` tinyint(4) DEFAULT NULL,
+  `age` smallint(5) unsigned DEFAULT NULL,
+  `addr` varchar(300) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `remark` varchar(300) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
 

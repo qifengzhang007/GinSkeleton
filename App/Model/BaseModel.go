@@ -55,7 +55,6 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 // 定义一个数据库操作的基本结构体
 type BaseModel struct {
 	db_driver *sql.DB
-	db_Tx     *sql.Tx
 	stm       *sql.Stmt
 }
 
@@ -91,6 +90,14 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 	return nil
 
 }
+func (b *BaseModel) QueryRow(sql string, args ...interface{}) *sql.Row {
+	if stm, err := b.db_driver.Prepare(sql); err == nil {
+		return stm.QueryRow(args...)
+	} else {
+		log.Println(MyErrors.Errors_Db_QueryRow_RunFail, err.Error())
+		return nil
+	}
+}
 
 //  预处理，主要针对有sql语句需要批量循环执行的场景，就必须独立预编译
 func (b *BaseModel) PrepareSql(sql string) bool {
@@ -104,7 +111,7 @@ func (b *BaseModel) PrepareSql(sql string) bool {
 }
 
 // 适合预一次性预编译sql之后，批量操作sql，避免mysql产生大量的预编译sql无法释放
-func (b *BaseModel) ExecSqlForMultiple(args ...interface{}) int64 {
+func (b *BaseModel) ExecuteSqlForMultiple(args ...interface{}) int64 {
 	if res, err := b.stm.Exec(args...); err == nil {
 		if affectNum, err := res.RowsAffected(); err == nil {
 			return affectNum
@@ -127,34 +134,12 @@ func (b *BaseModel) QuerySqlForMultiple(args ...interface{}) *sql.Rows {
 	return nil
 }
 
-// 开启事物
-func (b *BaseModel) BeginTransAction() bool {
-	if val, err := b.db_driver.Begin(); err == nil {
-		b.db_Tx = val
-		return true
+// 开启事物一个事务（Tx）,返回 *sql.Tx， 提交 调用  Commit ， 回滚调用 Rollback
+func (b *BaseModel) BeginTx() *sql.Tx {
+	if tx, err := b.db_driver.Begin(); err == nil {
+		return tx
 	} else {
 		log.Println(MyErrors.Errors_Db_Transaction_Begin_Fail + err.Error())
 	}
-	return false
-
-}
-
-// 提交事物
-func (b *BaseModel) Commit() bool {
-	if err := b.db_Tx.Commit(); err == nil {
-		return true
-	} else {
-		log.Println(MyErrors.Errors_Db_Transaction_Commit_Fail + err.Error())
-	}
-	return false
-}
-
-// 回滚事物
-func (b *BaseModel) Rollback() bool {
-	if err := b.db_Tx.Rollback(); err == nil {
-		return true
-	} else {
-		log.Println(MyErrors.Errors_Db_Transaction_Rollback_Fail + err.Error())
-	}
-	return false
+	return nil
 }
