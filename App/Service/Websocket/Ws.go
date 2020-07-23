@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"time"
 )
 
 /**
@@ -65,6 +66,8 @@ func (w *Ws) GetOnlineClients() {
 func (w *Ws) BroadcastMsg(send_msg string) {
 
 	for online_client, _ := range w.WsClient.Hub.Clients {
-		online_client.Conn.WriteMessage(websocket.TextMessage, []byte(send_msg)) //获取每一个在线的客户端，向远端发送消息
+
+		online_client.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline * time.Second)) // 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
+		online_client.Conn.WriteMessage(websocket.TextMessage, []byte(send_msg))                    //获取每一个在线的客户端，向远端发送消息
 	}
 }

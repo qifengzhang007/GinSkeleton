@@ -35,7 +35,10 @@ const (
 	Errors_Snowflake_Init_Fail  string = "初始化 snowflakeFctory 过程发生错误"
 	Errors_Snowflake_GetId_Fail string = "获取snowflake唯一ID过程发生错误"
 	// websocket
-	Errors_Websocket_OnOpen_Fail string = "websocket onopen 发生阶段错误"
+	Errors_Websocket_OnOpen_Fail          string = "websocket onopen 发生阶段错误"
+	Errors_Websocket_ReadMessage_Fail     string = "websocket ReadPump(实时读取消息)协程出错"
+	Errors_Websocket_BeatHeart_Fail       string = "websocket BeatHeart心跳协程出错"
+	Errors_Websocket_BeatHeartTicker_Fail string = "websocket BeatHeart Ticker 心跳定时器发送心跳包出错"
 	// rabbitMq
 	Errors_RabbitMq_Reconnect_Fail string = "RabbitMq消费者端掉线后重连失败，超过尝试最大次数"
 )
