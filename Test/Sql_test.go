@@ -88,3 +88,9 @@ func TestSqlInsertMultipleError(t *testing.T) {
 		t.Errorf("批量插入数据，单元测试失败！")
 	}
 }
+
+// 测试sql注入
+func TestSqlInject(t *testing.T) {
+	Variable.BASE_PATH = "E:\\GO\\TestProject\\GinSkeleton"
+	Model.CreateTestFactory("").QueryInject()
+}
