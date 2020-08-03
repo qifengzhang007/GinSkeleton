@@ -20,7 +20,7 @@ vim /etc/supervisord.d/supervisord.conf
 
 # 在[include]节点前添加以下内容，保存
 
-[program:GinSkeleton]
+[program:GoSkeleton]
 # 设置命令在指定的目录内执行
 directory=/home/wwwroot/GoProject2020/GinSkeleton/
 #例如，我们编译完以后的go程序名为：main 
@@ -64,9 +64,9 @@ supervisord -c /etc/supervisord.d/supervisord.conf
 ```bash
 # 启动 Goskeleton 应用
 supervisorctl start Goskeleton
-# 重启 hyperf 应用
+# 重启 GoSkeleton 应用
 supervisorctl restart Goskeleton
-# 停止 hyperf 应用
+# 停止 GoSkeleton 应用
 supervisorctl stop Goskeleton  
 # 查看所有被管理项目运行状态
 supervisorctl status
