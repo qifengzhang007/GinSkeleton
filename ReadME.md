@@ -70,6 +70,9 @@
 ####    Supervisor 服务端进程守护  
 [Supervisor部署详情](Docs/Supervisor.md) 
 
+####    项目上线后，监控状态  
+[项目运维解决方案](Docs/Deploy.md) 
+
 #### 版本
 V 1.0.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
