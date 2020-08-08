@@ -70,8 +70,11 @@
 ####    Supervisor 服务端进程守护  
 [Supervisor部署详情](Docs/Supervisor.md) 
 
-####    项目上线后，运行状态管理  
-[项目运维解决方案之linux](Docs/DeployLinux.md) 
+####    线上项目运维方案  
+>   [linux服务器篇](Docs/DeployLinux.md) 
+>   Mysql篇，正在编写...  
+>   Nginx篇，即将编写...  
+>   GO程序篇，即将编写...  
 
 #### 版本
 V 1.0.xx   2020-08（开发计划预告）  
