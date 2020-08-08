@@ -54,7 +54,7 @@ ifconfig ，例如我的服务器内网ip： 172.19.130.185 ，后续命令请�
 
 #  启动 node-exporter 
 #注意替换ip为自己的ip 
-docker run --name  node_exporter  -d -p 172.19.130.185:9100:9100   -v "/proc:/host/proc:ro"   -v "/sys:/host/sys:ro"   -v "/:/rootfs:ro"  --net="host" prom/node-exporter
+docker run --name  node_exporter  -d -p 172.19.130.185:9100:9100  -e TZ=Asia/Shanghai -v "/proc:/host/proc:ro"   -v "/sys:/host/sys:ro"   -v "/:/rootfs:ro"  --net="host" prom/node-exporter
 
 # 将将配置文件放置在以下目录，备docker映射使用。没有目录自行创建
 /opt/prometheus/prometheus.yml   #  #配置文件参考：https://wwa.lanzous.com/iCFFofevdgj
@@ -76,8 +76,8 @@ scrape_configs:
 docker container  run  --name prometheus  -d -p    172.19.130.185:9090:9090  -e TZ=Asia/Shanghai  -v  /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  prom/prometheus
 
 # grafana 的启动 
-# 创建数据存储映射目录，分配权限
-mkdir  -p /opt/grafana-storage  &&  chmod   755 -R  /opt/grafana-storage
+# 创建数据存储映射目录，主要用于存储grafana产生的数据，必须具备写权限
+mkdir  -p /opt/grafana-storage  &&  chmod   777 -R  /opt/grafana-storage
 #注意替换ip为自己的ip 
 docker container  run  --name=grafana -d   -p 172.19.130.185:3000:3000   -e TZ=Asia/Shanghai -v /opt/grafana-storage:/var/lib/grafana grafana/grafana
 ```
