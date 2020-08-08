@@ -73,13 +73,13 @@ scrape_configs:
           instance: "GoSkeleton"  #标记一下目标服务器的作用，请自行设置
 
 #启动promethus
-docker container  run  --name prometheus  -d -p    172.19.130.185:9090:9090    -v  /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  prom/prometheus
+docker container  run  --name prometheus  -d -p    172.19.130.185:9090:9090  -e TZ=Asia/Shanghai  -v  /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  prom/prometheus
 
 # grafana 的启动 
 # 创建数据存储映射目录，分配权限
-mkdir  -p /opt/Grafana-storage  &&  chmod   755 -R  /opt/Grafana-storage
+mkdir  -p /opt/grafana-storage  &&  chmod   755 -R  /opt/grafana-storage
 #注意替换ip为自己的ip 
-docker container  run  --name=grafana -d   -p 172.19.130.185:3000:3000    -v /opt/Grafana-storage:/var/lib/Grafana grafana/grafana
+docker container  run  --name=grafana -d   -p 172.19.130.185:3000:3000   -e TZ=Asia/Shanghai -v /opt/grafana-storage:/var/lib/grafana grafana/grafana
 ```
 
 #### 防火墙允许 9090 、 3000端口  ，示例 
