@@ -57,7 +57,7 @@ ifconfig ，例如我的服务器内网ip： 172.19.130.185 ，后续命令请�
 docker run --name  node_exporter  -d -p 172.19.130.185:9100:9100   -v "/proc:/host/proc:ro"   -v "/sys:/host/sys:ro"   -v "/:/rootfs:ro"  --net="host" prom/node-exporter
 
 # 将将配置文件放置在以下目录，备docker映射使用。没有目录自行创建
-/opt/prometheus/prometheus.yml   #  #配置文件参考：https://wwa.lanzous.com/i2Bwwfehu5g
+/opt/prometheus/prometheus.yml   #  #配置文件参考：https://wwa.lanzous.com/iCFFofevdgj
 #核心配置部分
 scrape_configs:
   #The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
