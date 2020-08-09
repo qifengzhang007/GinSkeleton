@@ -71,10 +71,11 @@
 [Supervisor部署详情](Docs/Supervisor.md) 
 
 ####    项目上线后，运维方案    
->   [linux服务器篇](Docs/DeployLinux.md)   
->   [mysql运维篇](Docs/DeployMysql.md)    
->   Nginx篇，即将编写...  
->   GO程序篇，即将编写...  
+>   1.[linux服务器篇](Docs/DeployLinux.md)   
+>   2.[mysql运维篇](Docs/DeployMysql.md)    
+>   3.[redis运维篇](Docs/DeployRedis.md)   
+>   4.nginx篇，即将编写...  
+>   5.go程序篇，即将编写...  
 
 #### 版本
 V 1.0.xx   2020-08（开发计划预告）  
