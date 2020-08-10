@@ -17,8 +17,12 @@
 # 其次 grafana 官方寻找 mysql 监控模板，注意模板说明，是否依赖于my2数据库，如果依赖my2数据库，就必须先导入my2.sql数据库。  
 https://grafana.com/grafana/dashboards  // grafana 搜索模板地址，找到模板复制 id 号
 
-#最后， 在 grafana 后台找到 import 导入模板，数据源选择 mysql 即可。
+#最后， 在 grafana 后台找到 import 导入模板ID：7991（https://grafana.com/grafana/dashboards/7991） ，数据源选择 mysql 即可。
 
-#备注：有些mysql监控模板，是基于my2的，也就是说，首先你需要初始化一个my2数据库，才能正确显示模板
+#备注：本次mysql监控模板，是基于my2的，也就是说，首先你需要初始化一个my2数据库，才能正确显示模板
 https://github.com/meob/my2Collector    # 从github找到my2.sql，复制里面的代码，粘贴到mysql管理端，直接使用root账号执行即可，或者使用官方推荐的sql导入方式同样可以初始化一个my2数据库。 
 ```
+
+#### mysql 最终监控效果图  
+![mysql监控效果图](http://139.196.101.31:2080/images/mysql.png) 
+
