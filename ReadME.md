@@ -72,9 +72,9 @@
 
 ####    项目上线后，运维方案    
 >   1.[linux服务器篇](Docs/DeployLinux.md)   
->   2.[mysql运维篇](Docs/DeployMysql.md)    
->   3.[redis运维篇](Docs/DeployRedis.md)   
->   4.nginx篇，即将编写...  
+>   2.[mysql篇](Docs/DeployMysql.md)    
+>   3.[redis篇](Docs/DeployRedis.md)   
+>   4.[nginx篇](Docs/DeployNginx.md)   
 >   5.go程序篇，即将编写...  
 
 #### 版本
