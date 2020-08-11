@@ -70,7 +70,7 @@
 ####    Supervisor 服务端进程守护  
 [Supervisor部署详情](Docs/Supervisor.md) 
 
-####    项目上线后，运维方案    
+####    项目上线后，运维方案(基于docker)    
 >   1.[linux服务器篇](Docs/DeployLinux.md)   
 >   2.[mysql篇](Docs/DeployMysql.md)    
 >   3.[redis篇](Docs/DeployRedis.md)   
