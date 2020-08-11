@@ -24,8 +24,10 @@ docker run -d --name redis_exporter -p 172.19.130.185:9121:9121 -e TZ=Asia/Shang
 #step4 重启docker启动的 prometheus 服务
 docker  restart prometheus  #prometheus 如果你全程是根据我们的部署文档进行部署的，那么你的premetheus服务就是名就是 prometheus ，否则自己替换成自己的服务名称即可。  
 
-#step5 通过以上配置，你应该很清晰地看到，docker 容器（redis-expoter）是通过redis://x.x.x.x:6379  连接真实redis服务器，在这个过程中，协议主要是 tcp， 穿越了防火墙。
-# 设置防火墙允许6379
+#step5 防火墙端口设置
+>  A容器通过宿主机映射端口访问B容器，那么宿主机的映射端口就必须在防火墙打开，否则容器无法互通。
+>  本次需要在防火墙允许 6379 、9121 端口
+# 以设置防火墙允许6379为例，9121 仿照设置即可。
 firewall-cmd --zone=public --add-port=6379/tcp --permanent
 firewall-cmd --complete-reload
 

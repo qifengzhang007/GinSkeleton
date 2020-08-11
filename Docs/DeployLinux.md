@@ -79,7 +79,8 @@ mkdir  -p /opt/grafana-storage  &&  chmod   777 -R  /opt/grafana-storage
 docker container  run  --name=grafana -d   -p 172.19.130.185:3000:3000   -e TZ=Asia/Shanghai -v /opt/grafana-storage:/var/lib/grafana grafana/grafana
 ```
 
-#### 防火墙允许 9090 、 3000端口  ，示例 
+#### 防火墙允许 9090 、 3000端口 、 9100端口，示例 
+> A容器通过宿主机映射端口访问B容器，那么宿主机的映射端口就必须在防火墙打开，否则容器无法互通。
 ```code  
 # 以添加 9090 端口为例，3000 端口重复以下代码接口
 firewall-cmd --zone=public --add-port=9090/tcp --permanent

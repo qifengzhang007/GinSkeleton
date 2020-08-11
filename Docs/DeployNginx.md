@@ -1,5 +1,5 @@
 ###    运维方案之Nginx  
-> 1.我们已经介绍完毕了 `Linux` 运维、`Mysql` 运维、`Redis` 运维，监控某个程序运行的状态整流程大家都很熟练了，接下来继续介绍 `Nginx` 监控方案。  
+> 1.我们已经介绍完毕了 `Linux` 运维、`Mysql` 运维、`Redis` 运维，监控某个程序运行的状态整体流程大家都很熟练了，接下来继续介绍 `Nginx` 监控方案。  
     
   
 ####    前言    
@@ -36,6 +36,7 @@ docker run -p   172.19.130.185:9913:9913    -d  --name  nginx-vts-exporter  -ti 
           instance: "Nginx_001"
 
 # step7， nginx-vts-expoter  采集 docker 容器中启动的 nginx:9506 端口数据，需要穿越防火墙
+# 以设置9506端口为例，9913端口仿照设置即可。
 firewall-cmd --zone=public --add-port=9506/tcp --permanent
 firewall-cmd --complete-reload
  
