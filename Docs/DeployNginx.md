@@ -14,10 +14,10 @@
 > 2.nginx部分使用我本人进行编排的dockerfile生成、并且已经配置好了nginx运行状态数据输出地址。  
 ```code  
 # step1，拉取 nginx_vts 镜像，该 nginx 版本已经集成了 https://codeload.github.com/vozlt/nginx-module-vts/tar.gz/v0.1.18,并且对容器进行了配置，直接在ip：80/status提供状态数据。
-docker pull zhangqifeng/nginx_vts  
+docker pull zhangqifeng/nginx_vts:v1.18  
 
 # step2， 启动nginx_vts 镜像，镜像中nginx 的配置、日志目录：/usr/local/nginx/   数据卷映射暂时忽略，您可以通过 -v 自行映射
-docker  run nginx_vts  -d   -p 172.19.130.185:9506:80  -e TZ=Asia/Shanghai  --name zhangqifeng/nginx_vts
+docker container  run  --name    nginx_vts  -d -p    172.19.130.185:9506:80  -e TZ=Asia/Shanghai   zhangqifeng/nginx_vts:v1.18
 
 # step3， 此时你可以验证该nginx是否正常运行，只要有数据就是启动ok
 访问地址  http://172.19.130.185:9506/status 、http://139.196.101.31:9506/status/format/json
