@@ -2,7 +2,7 @@
 > 1.本篇继续介绍 `redis` 监控方案。  
     
 ####    正式开始部署redis运维监控  
-> 1.`redis` 监控的原理主要是通过 `redis_exporter` 连接 `redis://x.x.x.x:6379` 获取redis底层运行状态数据，在 `grafana` 展示。    
+> 1.`redis` 监控的原理主要是通过 `redis_exporter` 连接 `redis://x.x.x.x:6379` 获取redis底层运行状态数据，prometheus 通过redies-expoter 数据收集器抓取数据，存储在自带的TSDB数据库，最终供 `grafana` 展示。    
 > 2.特别提醒：在操作之前，检查 `redis.conf` 配置文件，bind 必须绑定在一个内网ip，不要绑定在 `127.0.0.1` 上面，否则通过docker是无法连接redis数据库服务器的。     
 ```code  
 #step 1
