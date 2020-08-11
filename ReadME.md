@@ -75,7 +75,7 @@
 >   2.[mysql篇](Docs/DeployMysql.md)    
 >   3.[redis篇](Docs/DeployRedis.md)   
 >   4.[nginx篇](Docs/DeployNginx.md)   
->   5.go程序篇，即将编写...  
+>   5.[Go篇](Docs/DeployGo.md)   
 
 #### 版本
 V 1.0.xx   2020-08（开发计划预告）  
