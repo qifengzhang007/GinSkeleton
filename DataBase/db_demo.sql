@@ -29,7 +29,7 @@ INSERT  INTO `tb_users`(`id`,`username`,`pass`,`real_name`,`phone`,`status`,`tok
 (1,'admin','87d9bb400c0634691f0e3baaf1e2fd0d','','',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjExLCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODc4NDAxMDYsIm5iZiI6MTU4NzgzMDQwMn0._mZcHdzzmsYYXPxuoVyXzw7U_9Rku7fCmkoWJ9EEdaQ','','2020-04-25 23:51:28','127.0.0.1',1,'2020-04-25 23:51:28','2020-04-25 23:51:28'),
 (2,'hello','188bda0c10088d7c2e6d7c00592679e7','','',1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjEzLCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODc4Mzc4OTYsIm5iZiI6MTU4NzgzNDI4Nn0.qayu_u7mEYjTpHPxhgFJtSdGGFHI9rxkwR_RZx_T51E','','2020-04-26 00:59:25','127.0.0.1',1,'2020-04-26 00:59:25','2020-04-26 00:59:25');
 
-/* oauth 表，主要控制一个用户可以同时拥有几个有效的token*/
+/* oauth 表，主要控制一个用户可以同时拥有几个有效的token，通俗地说就是允许一个账号同时有几个人登录，超过将会导致最前面的人的token失效，而退出登录*/
 DROP TABLE IF EXISTS `tb_oauth_access_tokens`;
 
 CREATE TABLE `tb_oauth_access_tokens` (
