@@ -5,15 +5,16 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"database/sql"
 	"fmt"
-	"log"
 	"time"
 )
 
+var logger = ZapFactory.CreateZapFactory()
+
 // 初始化数据库驱动
 func Init_sql_driver(sql_type string) *sql.DB {
-
 	configFac := Config.CreateYamlFactory()
 
 	if sql_type == "mysql" {
@@ -31,7 +32,7 @@ func Init_sql_driver(sql_type string) *sql.DB {
 		//db, err := sql.Open("mysql", string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local&charset="+Charset)
 		db, err := sql.Open("mysql", SqlConnString)
 		if err != nil {
-			log.Fatal(MyErrors.Errors_Db_SqlDriverInitFail)
+			logger.Fatal(MyErrors.Errors_Db_SqlDriverInitFail)
 		}
 		db.SetMaxIdleConns(SetMaxIdleConns)
 		db.SetMaxOpenConns(SetMaxOpenConns)
@@ -55,7 +56,7 @@ func Init_sql_driver(sql_type string) *sql.DB {
 		SqlConnString := fmt.Sprintf("server=%s;port%d;database=%s;user id=%s;password=%s", Host, Port, DataBase, User, Pass)
 		db, err := sql.Open("mssql", SqlConnString)
 		if err != nil {
-			log.Fatal(MyErrors.Errors_Db_SqlDriverInitFail + err.Error())
+			logger.Fatal(MyErrors.Errors_Db_SqlDriverInitFail + err.Error())
 		}
 		db.SetMaxIdleConns(SetMaxIdleConns)
 		db.SetMaxOpenConns(SetMaxOpenConns)
@@ -83,7 +84,7 @@ func GetOneEffectivePing(sql_type string) *sql.DB {
 			v_db_driver = Init_sql_driver(sql_type)
 			time.Sleep(time.Second * 1)
 			if i == max_retry_times {
-				log.Fatal("Mysql：" + MyErrors.Errors_Db_GetConnFail)
+				logger.Fatal("Mysql：" + MyErrors.Errors_Db_GetConnFail)
 			}
 		} else {
 			break

@@ -18,7 +18,6 @@ func CreateConsumer() (*consumer, error) {
 	retry_times := configFac.GetInt("RabbitMq.Routing.RetryCount")
 
 	if err != nil {
-		//log.Println(err.Error())
 		return nil, err
 	}
 

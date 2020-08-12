@@ -2,8 +2,8 @@ package PublishSubscribe
 
 import (
 	"GinSkeleton/App/Utils/Config"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"github.com/streadway/amqp"
-	"log"
 )
 
 // 创建一个生产者
@@ -17,7 +17,7 @@ func CreateProducer() (*producer, error) {
 	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
 
 	if err != nil {
-		log.Println(err.Error())
+		ZapFactory.CreateZapFactory().Error(err.Error())
 		return nil, err
 	}
 
@@ -86,7 +86,7 @@ func (p *producer) Close() {
 // 定义一个错误处理函数
 func errorDeal(err error) error {
 	if err != nil {
-		log.Println(err.Error())
+		ZapFactory.CreateZapFactory().Error(err.Error())
 	}
 	return err
 }

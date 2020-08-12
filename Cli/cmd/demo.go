@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +13,9 @@ var (
 	// 关键词
 	KeyWords string
 )
+
+// 2020-08-12  测试一下 相同包，但是文件你不同，是否可以调用到其他文件的全局变量
+var logger = ZapFactory.CreateZapFactory().Sugar()
 
 // 定义命令
 var demo = &cobra.Command{
@@ -29,11 +32,12 @@ var demo = &cobra.Command{
 	// Run命令以及子命令的前置函数
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		//如果只想作为子命令的回调，可以通过相关参数做判断，仅在子命令执行
-		fmt.Printf("Run函数子命令的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
+		logger.Infof("Run函数子命令的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
 	},
 	// Run命令的前置函数
 	PreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Run函数的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
+		logger.Infof("Run函数的前置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
+
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
@@ -43,12 +47,12 @@ var demo = &cobra.Command{
 	},
 	// Run命令的后置函数
 	PostRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Run函数的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
+		logger.Infof("Run函数的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
 	},
 	// Run命令以及子命令的后置函数
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
 		//如果只想作为子命令的回调，可以通过相关参数做判断，仅在子命令执行
-		fmt.Printf("Run函数子命令的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
+		logger.Infof("Run函数子命令的后置方法，位置参数：%v ，flag参数：%s, %s, %s \n", args[0], SearchEngines, SearchType, KeyWords)
 	},
 }
 
@@ -65,6 +69,6 @@ func init() {
 //开始执行
 func start(SearchEngines, SearchType, KeyWords string) {
 
-	fmt.Printf("您输入的搜索引擎：%s， 搜索类型：%s, 关键词：%s\n", SearchEngines, SearchType, KeyWords)
+	logger.Infof("您输入的搜索引擎：%s， 搜索类型：%s, 关键词：%s\n", SearchEngines, SearchType, KeyWords)
 
 }

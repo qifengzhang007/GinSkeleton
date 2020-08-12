@@ -1,4 +1,4 @@
-APP_DEBUG: true
+APP_DEBUG: true   # 设置程序所处的模式，debug=true 调试模式，日志优先显示在控制台， debug=false 非调试模式，将写入日志文件
 
 UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、
 
@@ -35,6 +35,14 @@ Redis:
   MaxActive: 1000
   IdleTimeout: 60
   IndexDb: 1
+Logs:
+  FileName: "goskeleton.log"    #设置GoSkeleton项目骨架运行时日志文件名，相关路径：Storage/logs/ , 注意，该名称不要设置为 gin ,避免和 gin 框架的日志掺杂一起，造成混乱。
+  TextFormat: "console"         #记录日志的格式，参数选项：console、json ， console 表示一般的文本格式
+  TimePrecision: "millisecond"  #记录日志时，相关的时间精度，该参数选项：second  、 millisecond ， 分别表示 秒 和 毫秒 ,默认为毫秒级别
+  MaxSize: 1                    #每个日志的最大尺寸(以MB为单位）， 超过该值，系统将会自动进行切割
+  MaxBackups: 7                 #保留旧日志最大个数
+  MaxAge: 15                    #保留旧日志最大天数
+  Compress: false               #日志备份时，是否进行压缩
 
 Websocket:                            #该服务与Http具有相同的ip、端口，因此不需要额外设置端口
   Start: 0                            #默认不启动该服务（1=启动；0=不启动）

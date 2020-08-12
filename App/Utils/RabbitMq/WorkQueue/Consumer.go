@@ -3,7 +3,6 @@ package WorkQueue
 import (
 	"GinSkeleton/App/Utils/Config"
 	"github.com/streadway/amqp"
-	"log"
 	"time"
 )
 
@@ -18,7 +17,6 @@ func CreateConsumer() (*consumer, error) {
 	retry_times := configFac.GetInt("RabbitMq.WorkQueue.RetryCount")
 
 	if err != nil {
-		log.Println(err.Error())
 		return nil, err
 	}
 

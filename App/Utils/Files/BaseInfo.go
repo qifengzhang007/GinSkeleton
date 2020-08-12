@@ -1,11 +1,13 @@
 package Files
 
 import (
-	"log"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"mime/multipart"
 	"net/http"
 	"os"
 )
+
+var logger = ZapFactory.CreateZapFactory()
 
 // 返回值说明：
 //	7z、exe、doc 类型会返回 application/octet-stream  未知的文件类型
@@ -19,17 +21,16 @@ import (
 
 // 通过文件名获取文件mime信息
 func GetFilesMimeByFileName(filepath string) string {
-
 	f, err := os.Open(filepath)
 	if err != nil {
-		log.Println("打开文件失败 ", err)
+		logger.Error("打开文件失败，详情： " + err.Error())
 	}
 	defer f.Close()
 
 	// 只需要前 32 个字节就可以了
 	buffer := make([]byte, 32)
 	if _, err := f.Read(buffer); err != nil {
-		log.Println("读取文件32字节失败 ", err)
+		logger.Error("读取文件32字节失败，详情： " + err.Error())
 		return ""
 	}
 
@@ -41,7 +42,7 @@ func GetFilesMimeByFp(fp multipart.File) string {
 
 	buffer := make([]byte, 32)
 	if _, err := fp.Read(buffer); err != nil {
-		log.Println("读取文件32字节失败 ", err)
+		logger.Error("读取文件32字节失败，详情： " + err.Error())
 		return ""
 	}
 

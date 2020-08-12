@@ -1,6 +1,6 @@
 package MyErrors
 
-// 这里定义的常量，一般只有错误说明，无错误代码，常用语记录日志使用
+// 这里定义的常量，一般只有错误说明，无错误代码，常用于记录日志使用
 const (
 	//系统部分
 	Errors_Config_Yaml_NotExists    string = "config.yaml 配置文件不存在"
@@ -36,6 +36,7 @@ const (
 	Errors_Snowflake_GetId_Fail string = "获取snowflake唯一ID过程发生错误"
 	// websocket
 	Errors_Websocket_OnOpen_Fail          string = "websocket onopen 发生阶段错误"
+	Errors_Websocket_Upgrade_Fail         string = "websocket Upgrade 协议升级, 发生错误"
 	Errors_Websocket_ReadMessage_Fail     string = "websocket ReadPump(实时读取消息)协程出错"
 	Errors_Websocket_BeatHeart_Fail       string = "websocket BeatHeart心跳协程出错"
 	Errors_Websocket_BeatHeartTicker_Fail string = "websocket BeatHeart Ticker 心跳定时器发送心跳包出错"
