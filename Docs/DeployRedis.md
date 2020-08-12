@@ -37,4 +37,4 @@ firewall-cmd --complete-reload
 ```
 
 ####    最终效果图  
-[点击查看](https://grafana.com/api/dashboards/763/images/502/image) 
+![redis最终效果](http://139.196.101.31:2080/images/redis.png)   
