@@ -49,8 +49,8 @@
 ####    Cli命令模式包（Cobra）使用文档  
 [Cobra文档](Docs/Cobra.md)  
 
-####    HttpClient 使用文档  
-[HttpClient客户端](https://gitee.com/daitougege/goCurl) 
+####    GoCurl(HttpClient) 使用文档  
+[GoCurl](https://gitee.com/daitougege/goCurl) 
 
 ####    Websocket 使用文档  
 [Websocket](App/Service/Websocket/Ws.go) 
@@ -64,6 +64,9 @@
 ####    Sql 使用文档  
  [sql操作示例](Docs/SqlStament.md) 
 
+####    Zap日志 使用文档  
+ [Zap日志](Docs/ZapLog.md) 
+ 
 ####    Nginx 部署文档  
 [Nginx部署详情](Docs/Nginx.md) 
 
@@ -83,6 +86,9 @@ V 1.0.xx   2020-08（开发计划预告）
 >   2.编写完善的项目上线后期运维解决方案，主要监控 linux、mysql、nginx、go程序的运行状态。     
 >   3.集成专业的日志包，将项目日志按照标准级别进行分类管理。       
 >   4.根据其他使用者反馈，将增加 gorm 包.         
+
+V 1.0.27  2020-08-13  
+>   1.集成高性能日志包 zap , [使用文档](Docs/ZapLog.md)   
 
 V 1.0.26  2020-08-11  
 >   1.增加项目上线后，运维监控方案文档,终于,本项目从开发到上线运维形成了闭环。  

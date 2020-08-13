@@ -30,6 +30,7 @@ func TestRedisKeyValue(t *testing.T) {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
 	ZapFactory.CreateZapFactory().Info("get key2020 ", zap.String("key2020", res))
+
 }
 
 //  hash 键、值
