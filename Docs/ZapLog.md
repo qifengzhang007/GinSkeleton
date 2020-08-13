@@ -5,7 +5,8 @@
 
     
 ###  前沿  
->   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，使用默认配置即可。
+>   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，使用默认配置即可.  
+>   2.本文档列举几种最常用的用法, 想要深度学习请参考相关的 github 地址.  
 
 ###  标准日志函数
 >   参数一：文本型   
@@ -38,13 +39,15 @@
 ```     
     
 ####    用法2 , 语法糖模式  .   
->   1.比第一种用法性能稍低，只不过基于第一种用法，相关的函数全部增加了格式化参数功能   
+>   1.比第一种用法性能稍低，只不过基于第一种用法，相关的函数全部增加了格式化参数功能    
 ```code
+ # 第一种的函数后面全部添加了一个 w ,相关的函数功能和第一种一模一样  
+ Variable.ZapLog.Sugar().Infow("基本的运行提示类信息",zap.String("name","root"))
 
- Variable.ZapLog.Sugar().Info("基本的运行提示类信息")
+# 格式化参数，第一种用法中的函数后面添加了一个 f 
  Variable.ZapLog.Sugar().Infof("参数 userId %d\n",2020)
 
- Variable.ZapLog.Sugar().Error("程序发生错误",zap.Error(error))
+ Variable.ZapLog.Sugar().Errorw("程序发生错误",zap.Error(error))
  Variable.ZapLog.Sugar().Errorf("参数非法，程序出错，userId %d\n",2020)
 
  Warn  、 Panic 、Fatal用法类似

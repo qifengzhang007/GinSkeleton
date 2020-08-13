@@ -1,10 +1,12 @@
 package Websocket
 
 import (
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Websocket/Core"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -46,8 +48,8 @@ func (w *Ws) OnMessage(context *gin.Context) {
 
 // OnError 客户端与服务端在消息交互过程中发生错误回调函数
 func (w *Ws) OnError(err error) {
-
-	fmt.Printf("远端掉线、卡死、刷新浏览器等会触发该错误: %v\n", err.Error())
+	Variable.ZapLog.Error("远端掉线、卡死、刷新浏览器等会触发该错误:", zap.Error(err))
+	//fmt.Printf("远端掉线、卡死、刷新浏览器等会触发该错误: %v\n", err.Error())
 }
 
 // OnClose 客户端关闭回调，发生onError回调以后会继续回调该函数

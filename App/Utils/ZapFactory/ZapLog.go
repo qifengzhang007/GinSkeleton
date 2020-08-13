@@ -19,7 +19,7 @@ func CreateZapFactory() *zap.Logger {
 
 	// 判断程序当前所处的模式，调试模式直接返回一个便捷的zap日志管理器地址，所有的日志打印到控制台即可
 	if v_debug == true {
-		if logger, err := zap.NewProduction(); err == nil {
+		if logger, err := zap.NewDevelopment(); err == nil {
 			return logger
 		} else {
 			log.Fatal("创建zap日志包失败，详情：" + err.Error())
