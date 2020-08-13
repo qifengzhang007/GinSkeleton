@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func CreateZapFactory() *zap.Logger {
+func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	//创建一个配置器工厂
 	configFact := Config.CreateYamlFactory()
 
@@ -19,7 +19,7 @@ func CreateZapFactory() *zap.Logger {
 
 	// 判断程序当前所处的模式，调试模式直接返回一个便捷的zap日志管理器地址，所有的日志打印到控制台即可
 	if v_debug == true {
-		if logger, err := zap.NewDevelopment(); err == nil {
+		if logger, err := zap.NewDevelopment(zap.Hooks(entry)); err == nil {
 			return logger
 		} else {
 			log.Fatal("创建zap日志包失败，详情：" + err.Error())
@@ -70,5 +70,5 @@ func CreateZapFactory() *zap.Logger {
 	//参数二：写入器
 	//参数三：参数级别，debug级别支持后续调用的所有函数写日志，如果是 fatal 高级别，则级别>=fatal 才可以写日志
 	zap_core := zapcore.NewCore(v_encoder, writer, zap.InfoLevel)
-	return zap.New(zap_core, zap.AddCaller())
+	return zap.New(zap_core, zap.AddCaller(), zap.Hooks(entry))
 }

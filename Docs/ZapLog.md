@@ -5,10 +5,10 @@
 
     
 ###  前沿  
->   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，使用默认配置即可.  
+>   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，程序默认处于 debug 模式，日志输出在console面板，编译时记得切换模式。    
 >   2.本文档列举几种最常用的用法, 想要深度学习请参考相关的 github 地址.  
 
-###  标准日志函数
+###  日志处理, 标准函数
 >   参数一：文本型   
 >   参数二：可变参数，可传递0个或者多个 Field 类型参数，Field 类型传递规则参见下文     
 ```code 
@@ -53,3 +53,28 @@
  Warn  、 Panic 、Fatal用法类似
 
 ```     
+
+####   日志钩子  
+>   1.除了本项目骨架记录日志之外，您还可以对日志进行二次加工处理，例如：推送到 elasticsearch 、 阿里云日志中心等。  
+>   2.日志钩子函数处理位置 > App/Service/SysLogHook/ZapLogHooks.go
+>   3.BootStrap/Init.go 中你可以修改钩子函数的位置,相关代码: Variable.ZapLog = ZapFactory.CreateZapFactory(SysLogHook.ZapLogHandler)  
+```code 
+func ZapLogHandler(entry zapcore.Entry) error {
+
+	// 参数 entry 介绍
+	// entry  参数就是单条日志结构体，主要包括字段如下：
+	//Level      日志等级
+	//Time       当前时间
+	//LoggerName  日志名称
+	//Message    日志内容
+	//Caller     各个文件调用路径
+	//Stack      代码调用栈
+
+
+	//fmt.Println(" GoSkeleton  hook ....你可以在这里继续处理系统日志....")
+	//fmt.Printf("%#+v\n",entry)
+
+	return nil
+}
+
+```

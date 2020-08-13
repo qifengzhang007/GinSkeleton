@@ -4,7 +4,6 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
@@ -69,7 +68,9 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 	defer func() {
 		err := recover()
 		if err != nil {
-			fmt.Printf(MyErrors.Errors_Websocket_ReadMessage_Fail+"，%#+v\n", err)
+			if real_err, is_ok := err.(error); is_ok {
+				Variable.ZapLog.Error(MyErrors.Errors_Websocket_ReadMessage_Fail, zap.Error(real_err))
+			}
 		}
 		callback_on_close()
 	}()
