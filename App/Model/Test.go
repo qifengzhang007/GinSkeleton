@@ -1,8 +1,10 @@
 package Model
 
 import (
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
 	"fmt"
+	"go.uber.org/zap"
 	"log"
 	"strconv"
 )
@@ -67,7 +69,7 @@ func (t *Test) QueryRowData() *Test {
 	if err == nil {
 		return t
 	} else {
-		log.Println("单行查询出错", err.Error())
+		Variable.ZapLog.Error("单行查询出错", zap.Error(err))
 	}
 	return nil
 }

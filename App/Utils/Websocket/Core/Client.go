@@ -4,7 +4,6 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
-	"GinSkeleton/App/Utils/ZapFactory"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -23,8 +22,6 @@ type Client struct {
 	HeartbeatFailTimes int
 }
 
-var logger = ZapFactory.CreateZapFactory()
-
 // 处理握手+协议升级
 func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 	// 1.升级连接,从http--->websocket
@@ -32,7 +29,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				logger.Error(MyErrors.Errors_Websocket_OnOpen_Fail, zap.Error(val))
+				Variable.ZapLog.Error(MyErrors.Errors_Websocket_OnOpen_Fail, zap.Error(val))
 			}
 		}
 	}()
@@ -46,7 +43,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 
 	// 2.将http协议升级到websocket协议.初始化一个有效的websocket长连接客户端
 	if ws_conn, err := upgrader.Upgrade(context.Writer, context.Request, nil); err != nil {
-		logger.Error(MyErrors.Errors_Websocket_Upgrade_Fail + err.Error())
+		Variable.ZapLog.Error(MyErrors.Errors_Websocket_Upgrade_Fail + err.Error())
 		return nil, false
 	} else {
 		if ws_hub, ok := Variable.Websocket_Hub.(*Hub); ok {
@@ -99,7 +96,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				logger.Error(MyErrors.Errors_Websocket_BeatHeart_Fail, zap.Error(val))
+				Variable.ZapLog.Error(MyErrors.Errors_Websocket_BeatHeart_Fail, zap.Error(val))
 			}
 		}
 		ticker.Stop()    // 停止该client的心跳检测
@@ -130,7 +127,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 				}
 			} else {
 				if err != nil {
-					logger.Error(MyErrors.Errors_Websocket_BeatHeartTicker_Fail + err.Error())
+					Variable.ZapLog.Error(MyErrors.Errors_Websocket_BeatHeartTicker_Fail + err.Error())
 				}
 				if c.HeartbeatFailTimes > 0 {
 					c.HeartbeatFailTimes--

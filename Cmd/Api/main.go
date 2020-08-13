@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GinSkeleton/App/Utils/Config"
 	_ "GinSkeleton/BootStrap"
 	"GinSkeleton/Routers"
 )
@@ -8,5 +9,5 @@ import (
 // 这里可以存放门户类网站入口
 func main() {
 	routers := Routers.InitApiRouter()
-	routers.Run(":2019")
+	routers.Run(Config.CreateYamlFactory().GetString("HttpServer.Api.Port"))
 }

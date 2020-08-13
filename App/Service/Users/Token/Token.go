@@ -3,10 +3,10 @@ package Token
 import (
 	"GinSkeleton/App/Global/Consts"
 	"GinSkeleton/App/Global/MyErrors"
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Middleware/MyJwt"
 	"GinSkeleton/App/Model"
 	"github.com/dgrijalva/jwt-go"
-	"log"
 	"time"
 )
 
@@ -68,7 +68,7 @@ func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string,
 			}
 		}
 	case Consts.JwtToken_Invalid:
-		log.Println(MyErrors.Errors_Token_Invalid)
+		Variable.ZapLog.Error(MyErrors.Errors_Token_Invalid)
 	}
 
 	return "", false

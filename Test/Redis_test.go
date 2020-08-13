@@ -3,7 +3,9 @@ package Test
 import (
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/RedisFactory"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"fmt"
+	"go.uber.org/zap"
 	"testing"
 )
 
@@ -11,7 +13,7 @@ import (
 func TestRedisKeyValue(t *testing.T) {
 	// 因为单元测试是直接启动函数、执行
 	// 所以单元测试临时设置 BASE_PATH 项目根目录，主要是定位配置文件，请根据自己的项目实际路径设置
-	Variable.BASE_PATH = "E:\\GO\\GoSkeleton"
+	Variable.BASE_PATH = "E:/GO/TestProject/GinSkeleton"
 
 	redis_client := RedisFactory.GetOneRedisClient()
 
@@ -20,14 +22,14 @@ func TestRedisKeyValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	} else {
-		fmt.Println(res)
+		ZapFactory.CreateZapFactory().Info("Info 日志", zap.String("key2020", res))
 	}
 	//  get 命令，分为两步：1.执行get命令 2.将结果转为需要的格式
 	res, err = redis_client.String(redis_client.Execute("get", "key2020"))
 	if len(res) == 0 {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
-	fmt.Println(res)
+	ZapFactory.CreateZapFactory().Info("get key2020 ", zap.String("key2020", res))
 }
 
 //  hash 键、值

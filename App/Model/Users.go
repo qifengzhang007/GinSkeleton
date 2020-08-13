@@ -2,10 +2,12 @@ package Model
 
 import (
 	"GinSkeleton/App/Global/Consts"
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/MD5Cryt"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"go.uber.org/zap"
 	"log"
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
 )
@@ -168,7 +170,7 @@ func (u *usersModel) Show(username string, limit_start float64, limit_items floa
 			if err == nil {
 				v_temp = append(v_temp, *u)
 			} else {
-				log.Println("sql查询错误", err)
+				Variable.ZapLog.Error("sql查询错误", zap.Error(err))
 			}
 		}
 		//  凡是查询类记得释放记录集

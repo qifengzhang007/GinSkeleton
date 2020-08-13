@@ -1,8 +1,8 @@
 package Routing
 
 import (
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
-	"GinSkeleton/App/Utils/ZapFactory"
 	"github.com/streadway/amqp"
 )
 
@@ -17,7 +17,7 @@ func CreateProducer() (*producer, error) {
 	dura := configFac.GetBool("RabbitMq.Routing.Durable")
 
 	if err != nil {
-		ZapFactory.CreateZapFactory().Error(err.Error())
+		Variable.ZapLog.Error(err.Error())
 		return nil, err
 	}
 
@@ -86,7 +86,7 @@ func (p *producer) Close() {
 // 定义一个错误处理函数
 func errorDeal(err error) error {
 	if err != nil {
-		ZapFactory.CreateZapFactory().Error(err.Error())
+		Variable.ZapLog.Error(err.Error())
 	}
 	return err
 }

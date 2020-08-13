@@ -2,7 +2,7 @@ package Event
 
 import (
 	"GinSkeleton/App/Global/MyErrors"
-	"log"
+	"GinSkeleton/App/Global/Variable"
 	"strings"
 	"sync"
 )
@@ -44,11 +44,11 @@ func (e *EventManage) Call(key string, args ...interface{}) {
 		if fn, ok := value_interface.(func(args ...interface{})); ok {
 			fn(args...)
 		} else {
-			log.Println(MyErrors.Errors_FuncEvent_NotCall + ", 键名：" + key + ", 相关函数无法调用")
+			Variable.ZapLog.Error(MyErrors.Errors_FuncEvent_NotCall + ", 键名：" + key + ", 相关函数无法调用")
 		}
 
 	} else {
-		log.Println(MyErrors.Errors_FuncEvent_NotRegister + ", 键名：" + key)
+		Variable.ZapLog.Error(MyErrors.Errors_FuncEvent_NotRegister + ", 键名：" + key)
 	}
 }
 

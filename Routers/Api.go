@@ -5,6 +5,7 @@ import (
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Middleware/Cors"
 	ValidatorFactory "GinSkeleton/App/Http/Validator/Core/Factory"
+	"GinSkeleton/App/Utils/Config"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
@@ -16,11 +17,15 @@ import (
 func InitApiRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
-	f, _ := os.Create(Variable.BASE_PATH + Variable.Log_Save_Path)
+	f, _ := os.Create(Variable.BASE_PATH + Config.CreateYamlFactory().GetString("Logs.GinLogName"))
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	router := gin.Default()
-	router.Use(Cors.Next()) //允许跨域，如果nginx已经开启跨域，请注释该行
+
+	//根据配置进行设置跨域
+	if Config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
+		router.Use(Cors.Next())
+	}
 
 	router.GET("/", func(context *gin.Context) {
 		context.String(http.StatusOK, "Api 模块接口 hello word！")

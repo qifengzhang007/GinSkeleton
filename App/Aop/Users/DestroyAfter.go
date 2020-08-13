@@ -2,7 +2,7 @@ package Users
 
 import (
 	"GinSkeleton/App/Global/Consts"
-	"fmt"
+	"GinSkeleton/App/Global/Variable"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +14,6 @@ func (d *DestroyAfter) After(context *gin.Context) {
 	// 后置函数可以使用异步执行
 	go func() {
 		userId := context.GetFloat64(Consts.Validator_Prefix + "id")
-		fmt.Printf("模拟 Users 删除操作， After 回调,用户ID：%.f\n", userId)
+		Variable.ZapLog.Sugar().Infof("模拟 Users 删除操作， After 回调,用户ID：%.f\n", userId)
 	}()
 }

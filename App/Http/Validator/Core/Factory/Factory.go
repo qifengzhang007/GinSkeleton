@@ -3,9 +3,9 @@ package Factory
 import (
 	"GinSkeleton/App/Core/Container"
 	"GinSkeleton/App/Global/MyErrors"
+	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Http/Validator/Core/Interface"
 	"github.com/gin-gonic/gin"
-	"log"
 	"reflect"
 )
 
@@ -19,6 +19,6 @@ func Create(key string) func(context *gin.Context) {
 			return value.CheckParams
 		}
 	}
-	log.Println(MyErrors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + key)
+	Variable.ZapLog.Error(MyErrors.Errors_Valiadator_Not_Exists + ", 验证器模块：" + key)
 	return nil
 }

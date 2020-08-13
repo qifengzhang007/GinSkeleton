@@ -5,12 +5,9 @@ import (
 	"GinSkeleton/App/Global/MyErrors"
 	"GinSkeleton/App/Global/Variable"
 	"GinSkeleton/App/Utils/Config"
-	"GinSkeleton/App/Utils/ZapFactory"
 	"github.com/gomodule/redigo/redis"
 	"time"
 )
-
-var logger = ZapFactory.CreateZapFactory()
 
 func createRedisClientPool() *redis.Pool {
 
@@ -23,13 +20,13 @@ func createRedisClientPool() *redis.Pool {
 			//此处对应redis ip及端口号
 			conn, err := redis.Dial("tcp", configFac.GetString("Redis.Host")+":"+configFac.GetString("Redis.Port"))
 			if err != nil {
-				logger.Error(MyErrors.Errors_Redis_InitConnFail + err.Error())
+				Variable.ZapLog.Error(MyErrors.Errors_Redis_InitConnFail + err.Error())
 			}
 			auth := configFac.GetString("Redis.Auth") //通过配置项设置redis密码
 			if len(auth) >= 1 {
 				if _, err := conn.Do("AUTH", auth); err != nil {
 					conn.Close()
-					logger.Error(MyErrors.Errors_Redis_AuhtFail + err.Error())
+					Variable.ZapLog.Error(MyErrors.Errors_Redis_AuhtFail + err.Error())
 				}
 			}
 			conn.Do("select", configFac.GetInt("Redis.IndexDb"))

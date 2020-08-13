@@ -7,6 +7,7 @@ import (
 	"GinSkeleton/App/Http/Validator/Common/RegisterValidator"
 	"GinSkeleton/App/Utils/Config"
 	"GinSkeleton/App/Utils/Websocket/Core"
+	"GinSkeleton/App/Utils/ZapFactory"
 	"log"
 	"os"
 )
@@ -40,7 +41,10 @@ func init() {
 	//2.初始化表单参数验证器，注册在容器
 	RegisterValidator.RegisterValidator()
 
-	// 3.websocket Hub中心启动
+	// 3.初始化全局日志句柄
+	Variable.ZapLog = ZapFactory.CreateZapFactory()
+
+	// 4.websocket Hub中心启动
 	if Config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化一份
 		Variable.Websocket_Hub = Core.CreateHubFactory()
@@ -48,5 +52,4 @@ func init() {
 			go WH.Run()
 		}
 	}
-
 }

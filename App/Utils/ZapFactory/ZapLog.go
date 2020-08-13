@@ -56,7 +56,7 @@ func CreateZapFactory() *zap.Logger {
 	}
 
 	//写入器
-	fileName := Variable.BASE_PATH + "/Storage/logs/" + configFact.GetString("Logs.FileName")
+	fileName := Variable.BASE_PATH + configFact.GetString("Logs.GoSkeletonLogName")
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   fileName,                             //日志文件的位置
 		MaxSize:    configFact.GetInt("Logs.MaxSize"),    //在进行切割之前，日志文件的最大大小（以MB为单位）
@@ -69,6 +69,6 @@ func CreateZapFactory() *zap.Logger {
 	//参数一：编码器
 	//参数二：写入器
 	//参数三：参数级别，debug级别支持后续调用的所有函数写日志，如果是 fatal 高级别，则级别>=fatal 才可以写日志
-	zap_core := zapcore.NewCore(v_encoder, writer, zap.DebugLevel)
+	zap_core := zapcore.NewCore(v_encoder, writer, zap.InfoLevel)
 	return zap.New(zap_core, zap.AddCaller())
 }
