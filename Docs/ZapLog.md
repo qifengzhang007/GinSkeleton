@@ -1,10 +1,10 @@
 ###    日志功能, 基于 zap + lumberjack 实现    
 > 1.特点：高性能、极速，功能：实现日志的标准管理、日志文件的自动分隔备份.      
 > 2.该日志在项目骨架启动时我们封装了全局变量(Variable.ZapLog)，直接调用即可，底层按照官方标准封装，使用者调用后不需要关闭日志，也不需要担心全局变量写日志存在并发冲突问题，底层会自动加锁后再写。  
-> 3.github地址：https://github.com/uber-go/zap 、 https://github.com/natefinch/lumberjack  
+> 3.相关包 github 地址：https://github.com/uber-go/zap 、 https://github.com/natefinch/lumberjack  
 
     
-###  前沿  
+###  前言  
 >   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，程序默认处于 debug 模式，日志输出在console面板，编译时记得切换模式。    
 >   2.本文档列举几种最常用的用法, 想要深度学习请参考相关的 github 地址.  
 
