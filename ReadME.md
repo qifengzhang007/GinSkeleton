@@ -209,3 +209,6 @@ V 1.0.01   2020-04-15
 V 1.0.00   2020-04-14 
 >   1.基于gin框架的web项目骨架.  
 >   2.开发单体应用基本的功能模块全部已经封装完毕.  
+
+### 感谢 jetbrains 为本项目提供的 goland 激活码  
+![https://www.jetbrains.com/](http://139.196.101.31:2080/images/jetbrains.jpg)
