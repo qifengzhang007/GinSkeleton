@@ -1,18 +1,18 @@
-### 这是什么?   
+## 这是什么?   
 >   1.这是一个基于go语言gin框架的web项目骨架，其目的主要在于将web项目主线逻辑梳理清晰，最基础的东西封装完善，开发者更多关注属于自己的的业务即可。  
 >   2.本项目骨架封装了以`tb_users`表为核心的全部功能（主要包括用户相关的接口参数验证器、注册、登录获取token、刷新token、CURD以及token鉴权等），开发者拉取本项目骨架，在此基础上就可以快速开发自己的项目。  
->   3.[在线演示系统](http://139.196.101.31:9508)   
+>   3.[在线演示系统](http://139.196.101.31:9506)   
 
-### 问题反馈  
+## 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。 
 
->### golang.org官方依赖可能无法下载手动解决方案  
+## golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/i5ZMMdyfzuh  
 >   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录），复制在以下目录解压即可：  
 >   ![操作图](http://139.196.101.31:2080/golang.org.png)   
 >   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
 
-####    开箱即用
+##    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
@@ -22,15 +22,15 @@
 >   5.2 进入根目录（Ginskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go` 可交叉编译出（Web|Api|Cli）对应的二进制文件。     
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
-####    压力测试  
+##    压力测试  
 >   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
 ![压力测试图](http://139.196.101.31:2080/concurrent.png)  
 
 
-####    框架使用文档  
+##    框架使用文档  
 [进入项目骨架介绍文档](Docs/Document.md)  
 
-####    本项目测试用例路由  
+##    本项目测试用例路由  
 [进入Api接口测试用例文档](Docs/ApiDoc.md)   
 >GET    /                         
 >GET   /Admin/ws         
@@ -43,44 +43,30 @@
 >POST   /Admin/users/delete       
 >POST   /Admin/upload/file     
 
-####    消息队列（RabbitMq）使用文档  
-[RabbitMq文档](Docs/RabbitMq.md)  
+##    开发常用模块   
+序号|功能模块 | 文档地址  
+---|---|---
+1 | 消息队列（RabbitMq）| [RabbitMq文档](Docs/RabbitMq.md)   
+2 | Cli命令| [Cobra文档](Docs/Cobra.md) 
+3 | GoCurl、HttpClient|[GoCurl](https://gitee.com/daitougege/goCurl) 
+4|Websocket| [Websocket](App/Service/Websocket/Ws.go)  
+5|Aop切面编程| [Aop切面编程](Docs/Aop.md) 
+6|Redis| [Redis使用示例](Test/Redis_test.go) 
+7|Sql语句| [sql操作示例](Docs/SqlStament.md) 
+8|Zap日志|  [Zap日志](Docs/ZapLog.md) 
+9| Nginx代理|[Nginx配置详情](Docs/Nginx.md) 
+10|Supervisor| [Supervisor进程守护](Docs/Supervisor.md) 
 
-####    Cli命令模式包（Cobra）使用文档  
-[Cobra文档](Docs/Cobra.md)  
+##    项目上线后，运维方案(基于docker)    
+序号|运维模块 | 文档地址  
+---|---|---
+1 | linux服务器| [详情](Docs/DeployLinux.md)   
+2 | Mysql| [详情](Docs/DeployMysql.md)  
+3 | Redis| [详情](Docs/DeployRedis.md)    
+4 | Nginx| [详情](Docs/DeployNginx.md)   
+5 | GO应用程序| [详情](Docs/DeployGo.md)  
 
-####    GoCurl(HttpClient) 使用文档  
-[GoCurl](https://gitee.com/daitougege/goCurl) 
-
-####    Websocket 使用文档  
-[Websocket](App/Service/Websocket/Ws.go) 
-
-####    Aop 使用文档  
-[Aop切面编程](Docs/Aop.md) 
-
-####    Redis 使用文档  
-[Redis使用示例](Test/Redis_test.go) 
-
-####    Sql 使用文档  
- [sql操作示例](Docs/SqlStament.md) 
-
-####    Zap日志 使用文档  
- [Zap日志](Docs/ZapLog.md) 
- 
-####    Nginx 部署文档  
-[Nginx部署详情](Docs/Nginx.md) 
-
-####    Supervisor 服务端进程守护  
-[Supervisor部署详情](Docs/Supervisor.md) 
-
-####    项目上线后，运维方案(基于docker)    
->   1.[linux服务器篇](Docs/DeployLinux.md)   
->   2.[mysql篇](Docs/DeployMysql.md)    
->   3.[redis篇](Docs/DeployRedis.md)   
->   4.[nginx篇](Docs/DeployNginx.md)   
->   5.[Go篇](Docs/DeployGo.md)   
-
-#### 版本
+## 版本
 V 1.0.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.编写完善的项目上线后期运维解决方案，主要监控 linux、mysql、nginx、go程序的运行状态。     
@@ -88,7 +74,7 @@ V 1.0.xx   2020-08（开发计划预告）
 >   4.根据其他使用者反馈，将增加 gorm 包.         
 
 V 1.0.27  2020-08-13  
->   1.集成高性能日志包 zap , [使用文档](Docs/ZapLog.md)   
+>   1.集成高性能日志包 zap , [文档详情](Docs/ZapLog.md)    
 
 V 1.0.26  2020-08-11  
 >   1.增加项目上线后，运维监控方案文档,终于,本项目从开发到上线运维形成了闭环。  
