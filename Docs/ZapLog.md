@@ -19,7 +19,7 @@
 >   6. Fatal(参数一, 参数二) , 致命错误，会导致程序进程退出。 
 ```
 
-### Field 字段最常用传递方式  
+### 标准函数的参数二 Field 类型，最常用传递方式  
 >  1.Int    类型 ： zap.Int("userID",2019,"Age",2020)  , 同类的还有  int16  、 int32等   
 >  2.String 类型 ： zap.String("userID","2019","userName","姓名")    
 >  3.Error  类型 ： zap.Error(v_err) ， err 为 error(错误类型)，例如使用  v_err:= error.New("模拟一个错误")     
