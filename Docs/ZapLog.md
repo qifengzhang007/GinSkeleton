@@ -71,10 +71,11 @@ func ZapLogHandler(entry zapcore.Entry) error {
 	//Caller     各个文件调用路径
 	//Stack      代码调用栈
 
-
-	//fmt.Println(" GoSkeleton  hook ....你可以在这里继续处理系统日志....")
-	//fmt.Printf("%#+v\n",entry)
-
+	//这里启动一个协程，hook丝毫不会影响程序性能，
+	go func(param_entry zapcore.Entry) {
+		fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
+		fmt.Printf("%#+v\n", param_entry)
+	}(entry)
 	return nil
 }
 
