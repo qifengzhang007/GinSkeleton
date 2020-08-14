@@ -15,12 +15,12 @@
 ##    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
->   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
+>   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`dataBase/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
 >   4.双击`Cmd/(Web|Api|Cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
 >   5.`windwos`开发环境编译`linux`环境项目：  
 >   5.1 goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
->   5.2 进入根目录（Ginskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go` 可交叉编译出（Web|Api|Cli）对应的二进制文件。     
->![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
+>   5.2 进入根目录（goskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go` 可交叉编译出（Web|Api|Cli）对应的二进制文件。     
+>![业务主线图](http://139.196.101.31:2080/goskeleton.jpg)  
 
 ##    压力测试  
 >   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
@@ -28,10 +28,10 @@
 
 
 ##    框架使用文档  
-[进入项目骨架介绍文档](Docs/Document.md)  
+[进入项目骨架介绍文档](docs/document.md)  
 
 ##    本项目测试用例路由  
-[进入Api接口测试用例文档](Docs/ApiDoc.md)   
+[进入Api接口测试用例文档](docs/apiDoc.md)   
 >GET    /                         
 >GET   /Admin/ws         
 >POST   /Admin/users/register     
@@ -46,25 +46,25 @@
 ##    开发常用模块   
 序号|功能模块 | 文档地址  
 ---|---|---
-1 | 消息队列（RabbitMq）| [RabbitMq文档](Docs/RabbitMq.md)   
-2 | Cli命令| [Cobra文档](Docs/Cobra.md) 
-3 | GoCurl、HttpClient|[GoCurl](https://gitee.com/daitougege/goCurl) 
-4|Websocket| [Websocket](App/Service/Websocket/Ws.go)  
-5|Aop切面编程| [Aop切面编程](Docs/Aop.md) 
-6|Redis| [Redis使用示例](Test/Redis_test.go) 
-7|Sql语句| [sql操作示例](Docs/SqlStament.md) 
-8|Zap日志|  [Zap日志](Docs/ZapLog.md) 
-9| Nginx代理|[Nginx配置详情](Docs/Nginx.md) 
-10|Supervisor| [Supervisor进程守护](Docs/Supervisor.md) 
+1 | 消息队列（RabbitMq）| [RabbitMq文档](docs/rabbitMq.md)   
+2 | Cli命令| [Cobra文档](docs/cobra.md) 
+3 | GoCurl、httpClient|[GoCurl](https://gitee.com/daitougege/goCurl) 
+4|Websocket| [Websocket](app/service/websocket/ws.go)  
+5|Aop切面编程| [Aop切面编程](docs/aop.md) 
+6|Redis| [Redis使用示例](test/redis_test.go) 
+7|Sql语句| [sql操作示例](docs/sqlStament.md) 
+8|Zap日志|  [Zap日志](docs/zapLog.md) 
+9| Nginx代理|[Nginx配置详情](docs/nginx.md) 
+10|Supervisor| [Supervisor进程守护](docs/supervisor.md) 
 
 ##    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
-1 | linux服务器| [详情](Docs/DeployLinux.md)   
-2 | Mysql| [详情](Docs/DeployMysql.md)  
-3 | Redis| [详情](Docs/DeployRedis.md)    
-4 | Nginx| [详情](Docs/DeployNginx.md)   
-5 | GO应用程序| [详情](Docs/DeployGo.md)  
+1 | linux服务器| [详情](docs/deployLinux.md)   
+2 | Mysql| [详情](docs/deployMysql.md)  
+3 | Redis| [详情](docs/deployRedis.md)    
+4 | Nginx| [详情](docs/deployNginx.md)   
+5 | GO应用程序| [详情](docs/deployGo.md)  
 
 ## 版本
 V 1.1.xx   2020-08（开发计划预告）  
@@ -74,7 +74,7 @@ V 1.1.xx   2020-08（开发计划预告）
 >   4.根据其他使用者反馈，将增加 gorm 包.         
 
 V 1.1.00  2020-08-13  
->   1.集成高性能日志包 zap , [文档详情](Docs/ZapLog.md)    
+>   1.集成高性能日志包 zap , [文档详情](docs/zapLog.md)    
 >   2.Config/config.yaml 配置文件有关程序默认端口、运行模式都做了修改，请注意查看相关配置项。    
 
 V 1.0.26  2020-08-11  
@@ -88,49 +88,49 @@ V 1.0.24   2020-07-23
 
 V 1.0.23   2020-07-16   
 >   1.`SQL` 场景继续增强，将预编译命令独立，主要解决大批量sql重复执行，导致预编译sql太多，mysql拒绝继续执行命令的错误。      
->   2.封装了事务操作，补充相关的 [sql单元测试](Test/Sql_test.go) 和 [sql示例文档](App/Model/Test.go)       
+>   2.封装了事务操作，补充相关的 [sql单元测试](test/sql_test.go) 和 [sql示例文档](app/models/test.go)       
            
 V 1.0.22   2020-07-09   
->   1.[Redis](Test/Redis_test.go)增加单元测试示例，并修复配置文件一处bug。    
+>   1.[Redis](test/redis_test.go)增加单元测试示例，并修复配置文件一处bug。    
 >   2.调整程序异常log打印方式，由 log.Panic 调整为 log.Println , 代码出错尽量不退出程序。      
 
 V 1.0.21   2020-06-23   
->   1.[HttpClient客户端](https://gitee.com/daitougege/goCurl)包版本更新，采集不同编码类型的简体中文网站时，更加友好。  
+>   1.[httpClient客户端](https://gitee.com/daitougege/goCurl)包版本更新，采集不同编码类型的简体中文网站时，更加友好。  
 
 V 1.0.20   2020-06-08   
->   1.增加 [Aop](Docs/Aop.md) 面向切面编程功能，简洁高效地实现控制器相关函数的`Before` 和 `After`  回调。   
+>   1.增加 [Aop](docs/aop.md) 面向切面编程功能，简洁高效地实现控制器相关函数的`Before` 和 `After`  回调。   
 >   2.本项目骨架实现 `Aop` 通过匿名函数+巧妙的回调模拟实现，非常轻巧。     
 >   3.增加项目骨架启动时，检查程序依赖的必须目录、文件，主要有：Config/config.yaml、Public、Storage/logs/      
 
 V 1.0.19   2020-06-05   
->   1.增加函数级别的`发布、订阅`功能 [查看详情](Test/ObserverMode_test.go) ，该模式主要将与主业务有弱关联关系的一组子业务进行了简单解耦。备注：如果只是一个子业务需要异步，没有必要用这种方法。      
+>   1.增加函数级别的`发布、订阅`功能 [查看详情](test/observerMode_test.go) ，该模式主要将与主业务有弱关联关系的一组子业务进行了简单解耦。备注：如果只是一个子业务需要异步，没有必要用这种方法。      
 >   2.增加 `nginx` 与 `supervisor` 部署相关的文档。  
 
 V 1.0.18   2020-06-03   
 >   1.`jwt`增强，控制一个账号、密码同时能拥有有效的token数量，以便支持一个账号多人登录。    
->   2.详细配置参见 `App\Global\Consts\Consts.go`,`JWT`部分。         
+>   2.详细配置参见 `app\global\consts\consts.go`,`JWT`部分。         
 >   3.`token`部分与`tb_users`逻辑交互代码更新，主要有登录生成token、刷新`token`、用户更改密码，重置相关的`token`使之失效，用户删除数据，同步删除相关的token表数据。     
->   4.`DataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库**必须**及时更新此表。       
+>   4.`dataBase\db_demo.sql`同步更新，增加`tb_oauth_access_tokens`表，数据库**必须**及时更新此表。       
 >   5.**特别提醒**：`httpClient`包的引用地址发生变更，主要为了解决和原库命名冲突,如果下载的项目骨架报错，请更新代码重新运行。     
 
 V 1.0.17   2020-05-28    
->   1.[RabbitMQ文档](Docs/RabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
+>   1.[RabbitMQ文档](docs/rabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
 >   2.增强了消费者端断线自动重连逻辑，增强程序自身的稳定性，增加错误回调函数。    
 >   3.针对消息队列编写了全量的单元测试 [rabbitmq全量单元测试](Test/RabbitMq_test.go)        
 
 V 1.0.16   2020-05-25  
 >   1.Cli命令模式包（Cobra）集成完成，可以创建非常强大的非http接口类服务。          
->   2.[详情参见Cobra文档](Docs/Cobra.md)  
+>   2.[详情参见Cobra文档](docs/cobra.md)  
 
 V 1.0.15   2020-05-23  
 >   1.消息队列RabbitMq开发完成，为了更好的使用RabbitMq我们编写了非常详细的使用指南，可以快速上手使用消息队列。       
->   2.[详情参见RabbitMQ文档](Docs/RabbitMq.md)  
+>   2.[详情参见RabbitMQ文档](docs/rabbitMq.md)  
 
 V 1.0.14   2020-05-13  
 >   1.修复bug：表单参数验证器在一次请求之后没有及时释放上次请求相关的属性值。  
 
 V 1.0.13   2020-05-12  
->   1.增加 [HttpClient客户端](https://gitee.com/daitougege/goCurl) ，基于goz改造，感谢goz（github.com/idoubi/goz.git）原作者提供了大量的基础代码，相比原版特色如下：  
+>   1.增加 [httpClient客户端](https://gitee.com/daitougege/goCurl) ，基于goz改造，感谢goz（github.com/idoubi/goz.git）原作者提供了大量的基础代码，相比原版特色如下：  
 >   1.1 增加了文件下载功能，支持超大文件下载。  
 >   1.2 `GetBody()`返回值由原版本中的`string`格式数据调整为`io.ReaderCloser` ,将专门负责处理流式数据，因此代码逻辑处理完毕，必须使用`io.ReaderCloser` 接口提供的`Close()`函数手动关闭。     
 >   1.3 原版本的`GetBody()`被现有版本`GetContents()`代替，由于是文本数据,一次性返回，程序会自动关闭相关io资源。   
@@ -158,7 +158,7 @@ V 1.0.10   2020-04-29
 
 V 1.0.09   2020-04-25  
 >   1.增加用户`token`刷新接口，精简刷新逻辑代码。  
->   2.完善用户密码加密存储方式，同步更新`DataBase/db_demo.sql`文件。       
+>   2.完善用户密码加密存储方式，同步更新`dataBase/db_demo.sql`文件。       
  
 V 1.0.08   2020-04-24 
 >   1.增加SnowFlake算法，用于全局生成唯一ID，便于业务使用。  
@@ -169,7 +169,7 @@ V 1.0.07   2020-04-23
 >   1.自定义错误常量包名调整：Errors——>MyErrors，避免和系统错误包名称混淆。  
 >   2.文件上传公共模块示例代码完善。    
 >   3.路由增加静态资源处理以及相关说明。      
->   4.验证器示例代码进一步简洁清晰化、同时增加了最常用的注释说明（参见：App\Http\Validator\Users\Register.go）。      
+>   4.验证器示例代码进一步简洁清晰化、同时增加了最常用的注释说明（参见：app\http\validator\users\register.go）。      
 
 V 1.0.06   2020-04-22 
 >   1.完善文件上传公共模块，增加文件上传最大值限制，允许的文件`mimetype`类型设置。  

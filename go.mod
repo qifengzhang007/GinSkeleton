@@ -1,4 +1,4 @@
-module GinSkeleton
+module goskeleton
 
 go 1.14
 
