@@ -1,7 +1,6 @@
 package SysLogHook
 
 import (
-	"fmt"
 	"go.uber.org/zap/zapcore"
 )
 
@@ -21,8 +20,8 @@ func ZapLogHandler(entry zapcore.Entry) error {
 
 	//这里启动一个协程，hook丝毫不会影响程序性能，
 	go func(param_entry zapcore.Entry) {
-		fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
-		fmt.Printf("%#+v\n", param_entry)
+		//fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
+		//fmt.Printf("%#+v\n", param_entry)
 	}(entry)
 	return nil
 }
