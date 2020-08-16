@@ -7,7 +7,7 @@ import (
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/config"
-	"goskeleton/app/utils/md5Encrypt"
+	"goskeleton/app/utils/md5_encrypt"
 	"log"
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
 )
@@ -58,7 +58,7 @@ func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
 		break
 	}
 	// 账号密码验证成功
-	if len(u.Pass) > 0 && (u.Pass == md5Encrypt.Base64Md5(p_pass)) {
+	if len(u.Pass) > 0 && (u.Pass == md5_encrypt.Base64Md5(p_pass)) {
 		return u
 	}
 	return nil

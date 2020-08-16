@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"goskeleton/app/global/myErrors"
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"log"
 	"time"
@@ -19,7 +19,7 @@ func CreateYamlFactory() *ConfigYml {
 	yaml_config.SetConfigType("yaml")
 
 	if err := yaml_config.ReadInConfig(); err != nil {
-		log.Fatal(myErrors.Errors_Config_Init_Fail + err.Error())
+		log.Fatal(my_errors.Errors_Config_Init_Fail + err.Error())
 	}
 
 	return &ConfigYml{

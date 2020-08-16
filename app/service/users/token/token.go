@@ -3,9 +3,9 @@ package token
 import (
 	"github.com/dgrijalva/jwt-go"
 	"goskeleton/app/global/consts"
-	"goskeleton/app/global/myErrors"
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/http/middleware/myJwt"
+	"goskeleton/app/http/middleware/my_jwt"
 	"goskeleton/app/models"
 	"time"
 )
@@ -14,19 +14,19 @@ import (
 
 func CreateUserFactory() *userToken {
 	return &userToken{
-		userJwt: myJwt.CreateMyJWT(consts.JwtToken_SignKey),
+		userJwt: my_jwt.CreateMyJWT(consts.JwtToken_SignKey),
 	}
 }
 
 type userToken struct {
-	userJwt *myJwt.Jwt_Sign
+	userJwt *my_jwt.Jwt_Sign
 }
 
 //生成token
 func (u *userToken) GenerateToken(userid int64, username string, phone string, expire_at int64) (tokens string, err error) {
 
 	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
-	custome_claims := myJwt.CustomClaims{
+	custome_claims := my_jwt.CustomClaims{
 		UserId: userid,
 		Name:   username,
 		Phone:  phone,
@@ -68,7 +68,7 @@ func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string,
 			}
 		}
 	case consts.JwtToken_Invalid:
-		variable.Zap_Log.Error(myErrors.Errors_Token_Invalid)
+		variable.Zap_Log.Error(my_errors.Errors_Token_Invalid)
 	}
 
 	return "", false
@@ -80,7 +80,7 @@ func (u *userToken) DestroyToken() {
 }
 
 // 判断token是否未过期
-func (u *userToken) isNotExpired(token string) (*myJwt.CustomClaims, int) {
+func (u *userToken) isNotExpired(token string) (*my_jwt.CustomClaims, int) {
 	if custome_claims, err := u.userJwt.ParseToken(token); err == nil {
 
 		if time.Now().Unix()-custome_claims.ExpiresAt < 0 {

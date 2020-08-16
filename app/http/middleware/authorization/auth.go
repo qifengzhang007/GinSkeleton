@@ -2,7 +2,7 @@ package authorization
 
 import (
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/myErrors"
+	"goskeleton/app/global/my_errors"
 	userstoken "goskeleton/app/service/users/token"
 	"goskeleton/app/utils/response"
 	"net/http"
@@ -28,13 +28,13 @@ func CheckAuth() gin.HandlerFunc {
 				if token_is_effective {
 					context.Next()
 				} else {
-					response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, myErrors.Errors_NoAuthorization, "")
+					response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.Errors_NoAuthorization, "")
 					//暂停执行
 					context.Abort()
 				}
 			}
 		} else {
-			response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, myErrors.Errors_NoAuthorization, "")
+			response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.Errors_NoAuthorization, "")
 			//暂停执行
 			context.Abort()
 		}

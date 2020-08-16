@@ -3,13 +3,13 @@ package test
 import (
 	"fmt"
 	"github.com/streadway/amqp"
-	"goskeleton/app/global/myErrors"
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/rabbitMq/helloWorld"
-	"goskeleton/app/utils/rabbitMq/publishSubscribe"
 	"goskeleton/app/utils/rabbitMq/routing"
 	"goskeleton/app/utils/rabbitMq/topics"
-	"goskeleton/app/utils/rabbitMq/workQueue"
+	"goskeleton/app/utils/rabbitmq/hello_world"
+	"goskeleton/app/utils/rabbitmq/publish_subscribe"
+	"goskeleton/app/utils/rabbitmq/work_queue"
 	"log"
 	"os"
 	"testing"
@@ -20,7 +20,7 @@ func ExampleRabbitMqHelloWorldProducer() {
 
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
-	hello_producer, _ := helloWorld.CreateProducer()
+	hello_producer, _ := hello_world.CreateProducer()
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_HelloWorld开始发送消息测试", (i + 1))
@@ -45,14 +45,14 @@ func TestMqHelloWorldConsumer(t *testing.T) {
 	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BASE_PATH
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
 
-	consumer, err := helloWorld.CreateConsumer()
+	consumer, err := hello_world.CreateConsumer()
 	if err != nil {
 		t.Errorf("HelloWorld单元测试未通过。%s\n", err.Error())
 		os.Exit(1)
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(myErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -66,7 +66,7 @@ func ExampleRabbitMqWorkQueueProducer() {
 
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
-	producer, _ := workQueue.CreateProducer()
+	producer, _ := work_queue.CreateProducer()
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_WorkQueue开始发送消息测试", (i + 1))
@@ -91,14 +91,14 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BASE_PATH
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
 
-	consumer, err := workQueue.CreateConsumer()
+	consumer, err := work_queue.CreateConsumer()
 	if err != nil {
 		t.Errorf("WorkQueue单元测试未通过。%s\n", err.Error())
 		os.Exit(1)
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(myErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -112,7 +112,7 @@ func ExampleRabbitMqPublishSubscribeProducer() {
 
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
-	producer, _ := publishSubscribe.CreateProducer()
+	producer, _ := publish_subscribe.CreateProducer()
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", (i + 1))
@@ -135,14 +135,14 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 
 	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
-	consumer, err := publishSubscribe.CreateConsumer()
+	consumer, err := publish_subscribe.CreateConsumer()
 	if err != nil {
 		t.Errorf("PublishSubscribe单元测试未通过。%s\n", err.Error())
 		os.Exit(1)
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(myErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -194,7 +194,7 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(myErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
 	})
 	// 通过route_key 匹配指定队列的消息来处理
 	consumer.Received("key_even", func(received_data string) {
@@ -246,7 +246,7 @@ func TestRabbitMqTopicsConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(myErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
 	})
 	// 通过route_key 模糊匹配队列路由键的消息来处理
 	consumer.Received("#.even", func(received_data string) {

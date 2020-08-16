@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"goskeleton/app/global/myErrors"
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/config"
 	"net/http"
@@ -28,7 +28,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				variable.Zap_Log.Error(myErrors.Errors_Websocket_OnOpen_Fail, zap.Error(val))
+				variable.Zap_Log.Error(my_errors.Errors_Websocket_OnOpen_Fail, zap.Error(val))
 			}
 		}
 	}()
@@ -42,7 +42,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 
 	// 2.将http协议升级到websocket协议.初始化一个有效的websocket长连接客户端
 	if ws_conn, err := upgrader.Upgrade(context.Writer, context.Request, nil); err != nil {
-		variable.Zap_Log.Error(myErrors.Errors_Websocket_Upgrade_Fail + err.Error())
+		variable.Zap_Log.Error(my_errors.Errors_Websocket_Upgrade_Fail + err.Error())
 		return nil, false
 	} else {
 		if ws_hub, ok := variable.Websocket_Hub.(*Hub); ok {
@@ -69,7 +69,7 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 		err := recover()
 		if err != nil {
 			if real_err, is_ok := err.(error); is_ok {
-				variable.Zap_Log.Error(myErrors.Errors_Websocket_ReadMessage_Fail, zap.Error(real_err))
+				variable.Zap_Log.Error(my_errors.Errors_Websocket_ReadMessage_Fail, zap.Error(real_err))
 			}
 		}
 		callback_on_close()
@@ -97,7 +97,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				variable.Zap_Log.Error(myErrors.Errors_Websocket_BeatHeart_Fail, zap.Error(val))
+				variable.Zap_Log.Error(my_errors.Errors_Websocket_BeatHeart_Fail, zap.Error(val))
 			}
 		}
 		ticker.Stop()    // 停止该client的心跳检测
@@ -128,7 +128,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 				}
 			} else {
 				if err != nil {
-					variable.Zap_Log.Error(myErrors.Errors_Websocket_BeatHeartTicker_Fail + err.Error())
+					variable.Zap_Log.Error(my_errors.Errors_Websocket_BeatHeartTicker_Fail + err.Error())
 				}
 				if c.HeartbeatFailTimes > 0 {
 					c.HeartbeatFailTimes--

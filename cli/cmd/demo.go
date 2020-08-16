@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"goskeleton/app/utils/zapFactory"
+	"goskeleton/app/global/variable"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 )
 
 // 2020-08-12  测试一下 相同包，但是文件你不同，是否可以调用到其他文件的全局变量
-var logger = zapFactory.CreateZapFactory().Sugar()
+var logger = variable.Zap_Log.Sugar()
 
 // 定义命令
 var demo = &cobra.Command{

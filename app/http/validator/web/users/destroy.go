@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/http/controller/web"
-	"goskeleton/app/http/validator/core/dataTransfer"
+	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
 	"net/http"
 )
@@ -27,7 +27,7 @@ func (d Destroy) CheckParams(context *gin.Context) {
 	}
 
 	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
-	extraAddBindDataContext := dataTransfer.DataAddContext(d, consts.Validator_Prefix, context)
+	extraAddBindDataContext := data_transfer.DataAddContext(d, consts.Validator_Prefix, context)
 	if extraAddBindDataContext == nil {
 		response.ReturnJson(context, http.StatusInternalServerError, consts.Server_Occurred_Error_Code, consts.Server_Occurred_Error_Msg+",UserShow表单参数验证器json化失败..", "")
 		return

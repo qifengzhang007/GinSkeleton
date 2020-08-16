@@ -3,13 +3,12 @@ package main
 import (
 	"goskeleton/Cli/cmd"
 	"goskeleton/app/global/variable"
-	"os"
+	_ "goskeleton/bootstrap"
 )
 
 // 开发非http接口类服务入口
 func main() {
-	if path, err := os.Getwd(); err == nil {
-		variable.BASE_PATH = path
-	}
+	//  设置运行模式为  cli(console)
+	variable.Is_Cli_Mode = 1
 	cmd.Execute()
 }
