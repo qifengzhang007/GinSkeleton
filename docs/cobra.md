@@ -2,7 +2,7 @@
 >   1.`cobra`是一款非常强大、好用的`Cli`模式包，主要创建非http接口服务。    
 >   2.`cobra`的全方位功能、细节介绍请自行百度搜索，这里主要介绍如何在本项目骨架中快速使用`cobra`编写程序。                    
 ### 关于 cobra入口、业务目录  
->   1.入口：`Cmd/Cli/Main.go`,主要用于编译。                   
+>   1.入口：`cmd/cli/Main.go`,主要用于编译。                   
 >   2.业务代码目录：`Cli/cmd/`。             
 >           
 ### cobra 快速使用指南   
@@ -36,9 +36,9 @@ var demo = &cobra.Command{
 	Short:   "这是一个demo，以搜索内容进行演示业务逻辑...",
 	Long: `调用方法：
 				1.进入项目根目录（Ginkeleton）。 
-				2.执行 go  run  Cmd/Cli/main.go sousuo -h  可以查看使用指南
-				3.执行 go  run  Cmd/Cli/main.go sousuo 无参数执行
-				4.执行 go  run  Cmd/Cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
+				2.执行 go  run  cmd/cli/main.go sousuo -h  可以查看使用指南
+				3.执行 go  run  cmd/cli/main.go sousuo 无参数执行
+				4.执行 go  run  cmd/cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
 	`,
 	//Args:    cobra.ExactArgs(2),  //  限制非flag参数（也叫作位置参数）的个数必须等于 2 ,否则会报错
 	// Run命令以及子命令的前置函数
@@ -90,7 +90,7 @@ func start(SearchEngines, SearchType, KeyWords string) {
 ####  运行以上代码  
 ```go 
 
-go  run  Cmd/Cli/main.go  sousuo  测试demo   -E  百度  -T 图片  -K 关键词
+go  run  cmd/cli/main.go  sousuo  测试demo   -E  百度  -T 图片  -K 关键词
 
 // 结果
 
@@ -136,7 +136,7 @@ func init() {
 ####  运行以上代码  
 ```go 
 
-go  run   Cmd/Cli/main.go sousuo  subCmd  子命令参数
+go  run   cmd/cli/main.go sousuo  subCmd  子命令参数
 
 // 结果
 Run函数子命令的前置方法，位置参数：子命令参数 ，flag参数：baidu, img, 关键词

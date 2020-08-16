@@ -24,9 +24,9 @@ var demo = &cobra.Command{
 	Short:   "这是一个demo，以搜索内容进行演示业务逻辑...",
 	Long: `调用方法：
 				1.进入项目根目录（Ginkeleton）。 
-				2.执行 go  run  Cmd/Cli/main.go sousuo -h  可以查看使用指南
-				3.执行 go  run  Cmd/Cli/main.go sousuo 无参数执行
-				4.执行 go  run  Cmd/Cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
+				2.执行 go  run  cmd/cli/main.go sousuo -h  可以查看使用指南
+				3.执行 go  run  cmd/cli/main.go sousuo 无参数执行
+				4.执行 go  run  cmd/cli/main.go  sousuo -K 关键词  -E  baidu -T img 带参数执行
 	`,
 	//Args:    cobra.ExactArgs(2),  //  限制非flag参数（也叫作位置参数）的个数必须等于 2 ,否则会报错
 	// Run命令以及子命令的前置函数

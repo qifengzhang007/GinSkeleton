@@ -1,9 +1,9 @@
 package main
 
 import (
-	"goskeleton/Cli/cmd"
 	"goskeleton/app/global/variable"
 	_ "goskeleton/bootstrap"
+	"goskeleton/cli/cmd"
 )
 
 // 开发非http接口类服务入口

@@ -4,7 +4,7 @@ import (
 	"goskeleton/app/core/container"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/http/validator/api/home"
-	"goskeleton/app/http/validator/common/uploadFiles"
+	"goskeleton/app/http/validator/common/upload_files"
 	"goskeleton/app/http/validator/common/websocket"
 	"goskeleton/app/http/validator/web/users"
 )
