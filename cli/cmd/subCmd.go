@@ -12,9 +12,7 @@ var subCmd = &cobra.Command{
 	Long:  `命令使用详细介绍`,
 	Args:  cobra.ExactArgs(1), //  限制非flag参数的个数 = 1 ,超过1个会报错
 	Run: func(cmd *cobra.Command, args []string) {
-
 		fmt.Printf("%s\n", args[0])
-
 	},
 }
 

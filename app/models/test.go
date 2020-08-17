@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/utils/yml_config"
 
 	"log"
 	"strconv"

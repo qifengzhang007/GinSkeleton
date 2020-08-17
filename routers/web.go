@@ -7,7 +7,7 @@ import (
 	"goskeleton/app/http/middleware/authorization"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
-
+	"goskeleton/app/utils/yml_config"
 	"io"
 	"net/http"
 	"os"

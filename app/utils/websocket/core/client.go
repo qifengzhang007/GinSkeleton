@@ -50,14 +50,14 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		}
 		c.Conn = wsConn
 		c.Send = make(chan []byte, yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
-		c.PingPeriod = yml_config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
-		c.ReadDeadline = yml_config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
-		c.WriteDeadline = yml_config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
+		c.PingPeriod = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
+		c.ReadDeadline = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
+		c.WriteDeadline = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
 		if err := c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second)); err != nil {
-			variable.ZapLog.Error("设置消息截止时间出错", zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		if err := c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess)); err != nil {
-			variable.ZapLog.Error("消息发送出错", zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteMgsFail, zap.Error(err))
 		}
 		c.Conn.SetReadLimit(yml_config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c
@@ -84,7 +84,7 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 		mt, bReceivedData, err := c.Conn.ReadMessage()
 		if err == nil {
 			if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second)); err != nil {
-				variable.ZapLog.Error("设置消息截止时间出错", zap.Error(err))
+				variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 			}
 			callbackOnMessage(mt, bReceivedData)
 		} else {
@@ -98,7 +98,7 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 // 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包,浏览器收到ping标准格式，自动将消息原路返回给服务器
 func (c *Client) Heartbeat(callbackClose func()) {
 	//  1. 设置一个时钟，周期性的向client远端发送心跳数据包
-	ticker := time.NewTicker(c.PingPeriod * time.Second)
+	ticker := time.NewTicker(c.PingPeriod)
 	defer func() {
 		err := recover()
 		if err != nil {
@@ -111,13 +111,13 @@ func (c *Client) Heartbeat(callbackClose func()) {
 	}()
 	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	if c.ReadDeadline == 0 {
-		c.Conn.SetReadDeadline(time.Time{})
+		_ = c.Conn.SetReadDeadline(time.Time{})
 	}
 	c.Conn.SetPongHandler(func(receivedPong string) error {
-		if c.ReadDeadline > 0 {
-			c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline * time.Second))
+		if c.ReadDeadline > time.Nanosecond {
+			_ = c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline))
 		} else {
-			c.Conn.SetReadDeadline(time.Time{})
+			_ = c.Conn.SetReadDeadline(time.Time{})
 		}
 		//fmt.Println("浏览器收到ping标准格式，自动将消息原路返回给服务器：", received_pong)  // 接受到的消息叫做pong，实际上就是服务器发送出去的ping数据包
 		return nil
@@ -126,16 +126,14 @@ func (c *Client) Heartbeat(callbackClose func()) {
 	for {
 		select {
 		case <-ticker.C:
-			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second))
+			_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
 				c.HeartbeatFailTimes++
 				if c.HeartbeatFailTimes > yml_config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
+					variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))
 					return
 				}
 			} else {
-				if err != nil {
-					variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartTickerFail + err.Error())
-				}
 				if c.HeartbeatFailTimes > 0 {
 					c.HeartbeatFailTimes--
 				}

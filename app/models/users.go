@@ -6,8 +6,8 @@ import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
-
 	"goskeleton/app/utils/md5_encrypt"
+	"goskeleton/app/utils/yml_config"
 	"log"
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
 )

@@ -35,11 +35,14 @@ const (
 	//snowflake
 	ErrorsSnowflakeGetIdFail string = "获取snowflake唯一ID过程发生错误"
 	// websocket
-	ErrorsWebsocketOnOpenFail          string = "websocket onopen 发生阶段错误"
-	ErrorsWebsocketUpgradeFail         string = "websocket Upgrade 协议升级, 发生错误"
-	ErrorsWebsocketReadMessageFail     string = "websocket ReadPump(实时读取消息)协程出错"
-	ErrorsWebsocketBeatHeartFail       string = "websocket BeatHeart心跳协程出错"
-	ErrorsWebsocketBeatHeartTickerFail string = "websocket BeatHeart Ticker 心跳定时器发送心跳包出错"
+	ErrorsWebsocketOnOpenFail                 string = "websocket onopen 发生阶段错误"
+	ErrorsWebsocketUpgradeFail                string = "websocket Upgrade 协议升级, 发生错误"
+	ErrorsWebsocketReadMessageFail            string = "websocket ReadPump(实时读取消息)协程出错"
+	ErrorsWebsocketBeatHeartFail              string = "websocket BeatHeart心跳协程出错"
+	ErrorsWebsocketBeatHeartsMoreThanMaxTimes string = "websocket BeatHeart 失败次数超过最大值"
+	ErrorsWebsocketSetWriteDeadlineFail       string = "websocket  设置消息写入截止时间出错"
+	ErrorsWebsocketSetWriteMgsFail            string = "websocket  Write msg 失败"
+
 	// rabbitMq
 	ErrorsRabbitMqReconnectFail string = "RabbitMq消费者端掉线后重连失败，超过尝试最大次数"
 )

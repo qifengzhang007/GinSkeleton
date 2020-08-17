@@ -64,7 +64,7 @@ func (r *RedisClient) Execute(cmd string, args ...interface{}) (interface{}, err
 }
 
 // 释放连接池
-func (r *RedisClient) RelaseOneRedisClientPool() {
+func (r *RedisClient) ReleaseOneRedisClientPool() {
 	r.client.Close()
 }
 

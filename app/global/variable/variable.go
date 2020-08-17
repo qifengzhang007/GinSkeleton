@@ -10,8 +10,6 @@ import (
 )
 
 var (
-	// 系统预设全库变量
-	IsCliMode          = 0          //  是否以 cli 模式运行程序
 	BasePath           string       // 定义项目的根目录
 	EventDestroyPrefix = "Destroy_" //  程序退出时需要销毁的事件前缀
 	//上传文件保存路径

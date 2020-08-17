@@ -35,5 +35,5 @@ func (s *snowflake) GetId() (int64, error) {
 		s.index = 0
 		s.lastTimestamp = curTimestamp
 	}
-	return int64((0x1ffffffffff&s.lastTimestamp)<<22) + int64(0xff<<10) + int64(0xfff&s.index), nil
+	return (0x1ffffffffff&s.lastTimestamp)<<22 + int64(0xff<<10) + int64(0xfff&s.index), nil
 }

@@ -27,7 +27,7 @@ func TestRedisKeyValue(t *testing.T) {
 	}
 	variable.ZapLog.Info("get key2020 ", zap.String("key2020", res))
 	//操作完毕记得释放连接
-	redisClient.RelaseOneRedisClientPool()
+	redisClient.ReleaseOneRedisClientPool()
 
 }
 

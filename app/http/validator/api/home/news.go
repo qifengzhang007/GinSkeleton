@@ -11,7 +11,7 @@ import (
 
 // 门户类前端接口模拟一个获取新闻的参数验证器
 type News struct {
-	NewsType string  `form:"newstype" json:"newstype"  binding:"required,min=1"` //  验证规则：必填，最小长度为1
+	NewsType string  `form:"newsType" json:"newsType"  binding:"required,min=1"` //  验证规则：必填，最小长度为1
 	Page     float64 `form:"page" json:"page"  binding:"required,min=1"`         //  验证规则：必填，最小值为1（float类型，min=1代表最小值为1）
 	Limit    float64 `form:"limit" json:"limit"  binding:"required,min=1"`       //  验证规则：必填，最小值为1（float类型，min=1代表最小值为1）
 }
