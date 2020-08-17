@@ -31,47 +31,47 @@ type ymlConfig struct {
 	viper *viper.Viper
 }
 
-// get 一个原始值
-func (c *ymlConfig) Get(keyname string) interface{} {
-	return c.viper.Get(keyname)
+// Get 一个原始值
+func (c *ymlConfig) Get(keyName string) interface{} {
+	return c.viper.Get(keyName)
 }
 
-// getstring
-func (c *ymlConfig) GetString(keyname string) string {
-	return c.viper.GetString(keyname)
+// GetString
+func (c *ymlConfig) GetString(keyName string) string {
+	return c.viper.GetString(keyName)
 }
 
-// getbool
-func (c *ymlConfig) GetBool(keyname string) bool {
-	return c.viper.GetBool(keyname)
+// GetBool
+func (c *ymlConfig) GetBool(keyName string) bool {
+	return c.viper.GetBool(keyName)
 }
 
-// getint
-func (c *ymlConfig) GetInt(keyname string) int {
-	return c.viper.GetInt(keyname)
+// GetInt
+func (c *ymlConfig) GetInt(keyName string) int {
+	return c.viper.GetInt(keyName)
 }
 
-// getint32
-func (c *ymlConfig) GetInt32(keyname string) int32 {
-	return c.viper.GetInt32(keyname)
+// GetInt32
+func (c *ymlConfig) GetInt32(keyName string) int32 {
+	return c.viper.GetInt32(keyName)
 }
 
-// getint64
-func (c *ymlConfig) GetInt64(keyname string) int64 {
-	return c.viper.GetInt64(keyname)
+// GetInt64
+func (c *ymlConfig) GetInt64(keyName string) int64 {
+	return c.viper.GetInt64(keyName)
 }
 
 // float64
-func (c *ymlConfig) GetFloat64(keyname string) float64 {
-	return c.viper.GetFloat64(keyname)
+func (c *ymlConfig) GetFloat64(keyName string) float64 {
+	return c.viper.GetFloat64(keyName)
 }
 
 // GetDuration
-func (c *ymlConfig) GetDuration(keyname string) time.Duration {
-	return c.viper.GetDuration(keyname)
+func (c *ymlConfig) GetDuration(keyName string) time.Duration {
+	return c.viper.GetDuration(keyName)
 }
 
 // GetStringSlice
-func (c *ymlConfig) GetStringSlice(keyname string) []string {
-	return c.viper.GetStringSlice(keyname)
+func (c *ymlConfig) GetStringSlice(keyName string) []string {
+	return c.viper.GetStringSlice(keyName)
 }
