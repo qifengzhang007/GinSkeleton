@@ -11,7 +11,7 @@ import (
 )
 
 // 初始化数据库驱动
-func Init_sql_driver(sqlType string) *sql.DB {
+func InitSqlDriver(sqlType string) *sql.DB {
 	configFac := config.CreateYamlFactory()
 	if sqlType == "mysql" {
 
@@ -36,7 +36,7 @@ func Init_sql_driver(sqlType string) *sql.DB {
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
 		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Mysql_DB", func(args ...interface{}) {
-			db.Close()
+			_ = db.Close()
 		})
 		return db
 
@@ -49,10 +49,11 @@ func Init_sql_driver(sqlType string) *sql.DB {
 		SetMaxIdleConns := configFac.GetInt("SqlServer.SetMaxIdleConns")
 		SetMaxOpenConns := configFac.GetInt("SqlServer.SetMaxOpenConns")
 		SetConnMaxLifetime := configFac.GetDuration("SqlServer.SetConnMaxLifetime")
-		SqlConnString := fmt.Sprintf("server=%s;port%d;database=%s;user id=%s;password=%s", Host, Port, DataBase, User, Pass)
+		SqlConnString := fmt.Sprintf("server=%s;port=%s;database=%s;user id=%s;password=%s", Host, Port, DataBase, User, Pass)
 		db, err := sql.Open("mssql", SqlConnString)
 		if err != nil {
-			variable.ZapLog.Fatal(my_errors.ErrorsDbSqlDriverInitFail + err.Error())
+			variable.ZapLog.Error(my_errors.ErrorsDbSqlDriverInitFail + err.Error())
+			return nil
 		}
 		db.SetMaxIdleConns(SetMaxIdleConns)
 		db.SetMaxOpenConns(SetMaxOpenConns)
@@ -60,7 +61,7 @@ func Init_sql_driver(sqlType string) *sql.DB {
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
 		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Sqlserver_DB", func(args ...interface{}) {
-			db.Close()
+			_ = db.Close()
 		})
 		return db
 
@@ -74,10 +75,10 @@ func GetOneEffectivePing(sqlType string) *sql.DB {
 	configFac := config.CreateYamlFactory()
 	maxRetryTimes := configFac.GetInt("SqlServer.PingFailRetryTimes")
 	// ping 失败允许重试
-	v_db_driver := Init_sql_driver(sqlType)
+	dbDriver := InitSqlDriver(sqlType)
 	for i := 1; i <= maxRetryTimes; i++ {
-		if err := v_db_driver.Ping(); err != nil { //  获取一个连接失败，进行重试
-			v_db_driver = Init_sql_driver(sqlType)
+		if err := dbDriver.Ping(); err != nil { //  获取一个连接失败，进行重试
+			dbDriver = InitSqlDriver(sqlType)
 			time.Sleep(time.Second * 1)
 			if i == maxRetryTimes {
 				variable.ZapLog.Fatal("Mysql：" + my_errors.ErrorsDbGetConnFail)
@@ -86,5 +87,5 @@ func GetOneEffectivePing(sqlType string) *sql.DB {
 			break
 		}
 	}
-	return v_db_driver
+	return dbDriver
 }

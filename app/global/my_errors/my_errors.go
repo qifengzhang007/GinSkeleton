@@ -25,14 +25,13 @@ const (
 
 	//redis部分
 	ErrorsRedisInitConnFail string = "初始化redis连接池失败"
-	ErrorsRedisAuhtFail     string = "Redis Auht鉴权失败，密码错误"
+	ErrorsRedisAuthFail     string = "Redis Auth 鉴权失败，密码错误"
 	// 验证器错误
-	ErrorsValiadatorNotExists string = "不存在的验证器"
+	ErrorsValidatorNotExists string = "不存在的验证器"
 	//token部分
 	ErrorsTokenInvalid string = "无效的token"
-	ErrorsTokenExpired string = "过期的token"
+	//ErrorsTokenExpired string = "过期的token"
 	//snowflake
-	ErrorsSnowflakeInitFail  string = "初始化 snowflakeFctory 过程发生错误"
 	ErrorsSnowflakeGetIdFail string = "获取snowflake唯一ID过程发生错误"
 	// websocket
 	ErrorsWebsocketOnOpenFail          string = "websocket onopen 发生阶段错误"

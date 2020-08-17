@@ -21,14 +21,14 @@ func CreateProducer() (*producer, error) {
 		return nil, err
 	}
 
-	v_producer := &producer{
+	producer := &producer{
 		connect:      conn,
 		exchangeTyte: exchangeType,
 		exchangeName: exchangeName,
 		queueName:    queueName,
 		durable:      dura,
 	}
-	return v_producer, nil
+	return producer, nil
 }
 
 //  定义一个消息队列结构体：PublishSubscribe 模型

@@ -26,7 +26,7 @@ func createRedisClientPool() *redis.Pool {
 			if len(auth) >= 1 {
 				if _, err := conn.Do("AUTH", auth); err != nil {
 					conn.Close()
-					variable.ZapLog.Error(my_errors.ErrorsRedisAuhtFail + err.Error())
+					variable.ZapLog.Error(my_errors.ErrorsRedisAuthFail + err.Error())
 				}
 			}
 			conn.Do("select", configFac.GetInt("Redis.IndexDb"))

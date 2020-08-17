@@ -35,13 +35,13 @@ func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 
 // OnMessage 处理业务消息
 func (w *Ws) OnMessage(context *gin.Context) {
-	go w.WsClient.ReadPump(func(message_type int, received_data []byte) {
+	go w.WsClient.ReadPump(func(messageType int, receivedData []byte) {
 		//参数说明
-		//message_type 消息类型，1=文本
-		//received_data 服务器接收到客户端（例如js客户端）发来的的数据，[]byte 格式
+		//messageType 消息类型，1=文本
+		//receivedData 服务器接收到客户端（例如js客户端）发来的的数据，[]byte 格式
 
-		v_temp_msg := "服务器已经收到了你的消息==>" + string(received_data)
-		w.WsClient.Conn.WriteMessage(message_type, []byte(v_temp_msg)) // 回复客户端已经收到消息
+		tempMsg := "服务器已经收到了你的消息==>" + string(receivedData)
+		w.WsClient.Conn.WriteMessage(messageType, []byte(tempMsg)) // 回复客户端已经收到消息
 
 	}, w.OnError, w.OnClose)
 }

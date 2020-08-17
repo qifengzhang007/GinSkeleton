@@ -43,11 +43,11 @@ func (e *containers) Get(key string) interface{} {
 }
 
 // 按照键的前缀模糊删除容器中注册的内容
-func (e *containers) FuzzyDelete(key_pre string) {
+func (e *containers) FuzzyDelete(keyPre string) {
 
 	smap.Range(func(key, value interface{}) bool {
 		if keyname, ok := key.(string); ok {
-			if strings.HasPrefix(keyname, key_pre) {
+			if strings.HasPrefix(keyname, keyPre) {
 				smap.Delete(keyname)
 			}
 		}

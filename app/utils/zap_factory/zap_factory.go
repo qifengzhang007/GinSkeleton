@@ -15,10 +15,10 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	configFact := config.CreateYamlFactory()
 
 	// 获取程序所处的模式：  开发调试 、 生产
-	vDebug := configFact.GetBool("APP_DEBUG")
+	appDebug := configFact.GetBool("APP_DEBUG")
 
 	// 判断程序当前所处的模式，调试模式直接返回一个便捷的zap日志管理器地址，所有的日志打印到控制台即可
-	if vDebug == true {
+	if appDebug == true {
 		if logger, err := zap.NewDevelopment(zap.Hooks(entry)); err == nil {
 			return logger
 		} else {
@@ -30,29 +30,29 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 
 	timePrecision := configFact.GetString("Logs.TimePrecision")
-	var v_record_time_format string
+	var recordTimeFormat string
 	switch timePrecision {
 	case "second":
-		v_record_time_format = "2006-01-02 15:04:05"
+		recordTimeFormat = "2006-01-02 15:04:05"
 	case "millisecond":
-		v_record_time_format = "2006-01-02 15:04:05.000"
+		recordTimeFormat = "2006-01-02 15:04:05.000"
 	default:
-		v_record_time_format = "2006-01-02 15:04:05"
+		recordTimeFormat = "2006-01-02 15:04:05"
 
 	}
 	encoderConfig.EncodeTime = func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-		enc.AppendString(t.Format(v_record_time_format))
+		enc.AppendString(t.Format(recordTimeFormat))
 	}
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 
-	var v_encoder zapcore.Encoder
+	var encoder zapcore.Encoder
 	switch configFact.GetString("Logs.TextFormat") {
 	case "console":
-		v_encoder = zapcore.NewConsoleEncoder(encoderConfig) // 普通模式
+		encoder = zapcore.NewConsoleEncoder(encoderConfig) // 普通模式
 	case "json":
-		v_encoder = zapcore.NewJSONEncoder(encoderConfig) // json格式
+		encoder = zapcore.NewJSONEncoder(encoderConfig) // json格式
 	default:
-		v_encoder = zapcore.NewConsoleEncoder(encoderConfig) // 普通模式
+		encoder = zapcore.NewConsoleEncoder(encoderConfig) // 普通模式
 	}
 
 	//写入器
@@ -69,6 +69,6 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	//参数一：编码器
 	//参数二：写入器
 	//参数三：参数级别，debug级别支持后续调用的所有函数写日志，如果是 fatal 高级别，则级别>=fatal 才可以写日志
-	zapCore := zapcore.NewCore(v_encoder, writer, zap.InfoLevel)
+	zapCore := zapcore.NewCore(encoder, writer, zap.InfoLevel)
 	return zap.New(zapCore, zap.AddCaller(), zap.Hooks(entry))
 }

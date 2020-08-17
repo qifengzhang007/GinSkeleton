@@ -18,9 +18,9 @@ func CreateCacheFactory() *CacheModel {
 
 // 1.是否已有缓存数据，根据键判断
 func (c *CacheModel) KeyExists(key string) bool {
-	v_bool, err := c.cache.Bool(c.cache.Execute("exists", key))
+	tmpBool, err := c.cache.Bool(c.cache.Execute("exists", key))
 	if err == nil {
-		return v_bool
+		return tmpBool
 	}
 	return false
 }

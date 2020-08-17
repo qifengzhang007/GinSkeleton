@@ -18,7 +18,7 @@ func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
 	switch sqlType {
 	case "mysql":
 		if mysqlDriver == nil {
-			mysqlDriver = sql_factory.Init_sql_driver(sqlType)
+			mysqlDriver = sql_factory.InitSqlDriver(sqlType)
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
 		if err := mysqlDriver.Ping(); err != nil {
@@ -33,7 +33,7 @@ func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
 		}
 	case "sqlserver", "mssql":
 		if sqlserverDriver == nil {
-			sqlserverDriver = sql_factory.Init_sql_driver(sqlType)
+			sqlserverDriver = sql_factory.InitSqlDriver(sqlType)
 		}
 		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
 		if err := sqlserverDriver.Ping(); err != nil {
@@ -102,8 +102,8 @@ func (b *BaseModel) QueryRow(sql string, args ...interface{}) *sql.Row {
 
 //  预处理，主要针对有sql语句需要批量循环执行的场景，就必须独立预编译
 func (b *BaseModel) PrepareSql(sql string) bool {
-	if v_stm, err := b.dbDriver.Prepare(sql); err == nil {
-		b.stm = v_stm
+	if stm, err := b.dbDriver.Prepare(sql); err == nil {
+		b.stm = stm
 		return true
 	} else {
 		variable.ZapLog.Error(my_errors.ErrorsDbPrepareRunFail, zap.Error(err))

@@ -4,16 +4,21 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /                         --> goskeleton/routers.InitApiRouter.func1 (4 handlers)
+[GIN-debug] GET    /                         --> goskeleton/routers.InitWebRouter.func1 (4 handlers)
 [GIN-debug] GET    /public/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] HEAD   /public/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
+[GIN-debug] GET    /dir/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
+[GIN-debug] HEAD   /dir/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] GET    /abcd                     --> github.com/gin-gonic/gin.(*RouterGroup).StaticFile.func1 (4 handlers)
-[GIN-debug] HEAD   /abcd                     --> github.com/gin-gonic/gin.(*RouterGroup).StaticFile.func1 (4 handlers)
-[GIN-debug] GET    /api/v1/home/news         --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (4 handlers)
-[GIN-debug] Listening and serving HTTP on :20191
-[GIN] 2020/08/17 - 01:07:29 | 200 |            0s |       127.0.0.1 | GET      "/"
-[GIN] 2020/08/17 - 01:07:56 | 400 |      1.0001ms |       127.0.0.1 | GET      "/api/v1/home/news"
-[GIN] 2020/08/17 - 01:08:32 | 400 |            0s |       127.0.0.1 | GET      "/api/v1/home/news"
-[GIN] 2020/08/17 - 01:08:49 | 400 |            0s |       127.0.0.1 | GET      "/api/v1/home/news"
-[GIN] 2020/08/17 - 01:09:08 | 200 |            0s |       127.0.0.1 | GET      "/api/v1/home/news"
-[GIN] 2020/08/17 - 01:09:10 | 200 |      1.0001ms |       127.0.0.1 | GET      "/api/v1/home/news"
+[GIN-debug] HEAD   /abcd                     --> g[GIN] 2020/08/17 - 14:01:44 | 200 |            0s |       127.0.0.1 | GET      "/"
+T    /Admin/ws                 --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/register     --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/login        --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] POST   /Admin/users/refreshtoken --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (4 handlers)
+[GIN-debug] GET    /Admin/users/index        --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (5 handlers)
+[GIN-debug] POST   /Admin/users/create       --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (5 handlers)
+[GIN-debug] POST   /Admin/users/edit         --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (5 handlers)
+[GIN-debug] POST   /Admin/users/delete       --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (5 handlers)
+[GIN-debug] POST   /Admin/upload/files       --> goskeleton/app/http/validator/core/interf.ValidatorInterface.CheckParams-fm (5 handlers)
+[GIN-debug] Listening and serving HTTP on :20201
+[GIN] 2020/08/17 - 14:01:48 | 200 |            0s |       127.0.0.1 | GET      "/"
