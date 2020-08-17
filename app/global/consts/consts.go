@@ -20,16 +20,16 @@ const (
 	JwtTokenExpired         int    = -400101 //过期的token
 	JwtTokenOnlineUsers     int    = 10      // 设置一个账号最大允许几个用户同时在线，默认为10
 
-	//snowfalake错误
-	SnowFlakeMachineId        int16  = 1024
-	SnowFlake_Machine_Illegal string = "SnowFlake数据越界，大于65535"
+	//snowflake错误
+	SnowFlakeMachineId      int16  = 1024
+	SnowFlakeMachineIllegal string = "SnowFlake数据越界，大于65535"
 
 	// CURD 常用业务状态码
 	CurdStatusOkCode         int    = 200
 	CurdStatusOkMsg          string = "Success"
 	CurdCreatFailCode        int    = -400200
 	CurdCreatFailMsg         string = "新增失败"
-	CurdUpdatFailCode        int    = -400201
+	CurdUpdateFailCode       int    = -400201
 	CurdUpdateFailMsg        string = "更新失败"
 	CurdDeleteFailCode       int    = -400202
 	CurdDeleteFailMsg        string = "删除失败"

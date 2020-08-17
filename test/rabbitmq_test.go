@@ -20,15 +20,15 @@ func ExampleRabbitMqHelloWorldProducer() {
 
 	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
-	hello_producer, _ := hello_world.CreateProducer()
+	helloProducer, _ := hello_world.CreateProducer()
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_HelloWorld开始发送消息测试", (i + 1))
-		res = hello_producer.Send(str)
+		res = helloProducer.Send(str)
 		//time.Sleep(time.Second * 1)
 	}
 
-	hello_producer.Close() // 消息投递结束，必须关闭连接
+	helloProducer.Close() // 消息投递结束，必须关闭连接
 
 	if res {
 		fmt.Printf("消息发送OK")

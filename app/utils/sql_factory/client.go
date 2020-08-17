@@ -3,7 +3,7 @@ package sql_factory
 import (
 	"database/sql"
 	"fmt"
-	"goskeleton/app/core/event"
+	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/config"
@@ -35,7 +35,7 @@ func InitSqlDriver(sqlType string) *sql.DB {
 		db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Mysql_DB", func(args ...interface{}) {
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Mysql_DB", func(args ...interface{}) {
 			_ = db.Close()
 		})
 		return db
@@ -60,7 +60,7 @@ func InitSqlDriver(sqlType string) *sql.DB {
 		db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Sqlserver_DB", func(args ...interface{}) {
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Sqlserver_DB", func(args ...interface{}) {
 			_ = db.Close()
 		})
 		return db

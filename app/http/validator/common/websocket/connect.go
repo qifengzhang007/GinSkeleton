@@ -25,16 +25,16 @@ func (c Connect) CheckParams(context *gin.Context) {
 	//2.基本的验证规则没有通过
 	if err := context.ShouldBind(&c); err != nil {
 		errs := gin.H{
-			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:2020?token=asasasaasasasssddsdsd",
+			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:2020?token=this is a series token...",
 			"err":  err.Error(),
 		}
 		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
 		return
 	}
 
-	if service_ws, ok := (&controllerWs.Ws{}).OnOpen(context); ok == false {
+	if serviceWs, ok := (&controllerWs.Ws{}).OnOpen(context); ok == false {
 		response.ReturnJson(context, http.StatusBadRequest, consts.WsOpenFailCode, consts.WsOpenFailMsg, "")
 	} else {
-		(&controllerWs.Ws{}).OnMessage(service_ws, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
+		(&controllerWs.Ws{}).OnMessage(serviceWs, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
 	}
 }

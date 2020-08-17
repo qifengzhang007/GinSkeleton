@@ -29,7 +29,7 @@ func (s *snowflake) GetId() (int64, error) {
 		s.index++
 		if s.index > 0xfff {
 			s.index = 0xfff
-			return -1, errors.New(consts.SnowFlake_Machine_Illegal)
+			return -1, errors.New(consts.SnowFlakeMachineIllegal)
 		}
 	} else {
 		s.index = 0

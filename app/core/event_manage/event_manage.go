@@ -1,4 +1,4 @@
-package event
+package event_manage
 
 import (
 	"goskeleton/app/global/my_errors"
@@ -11,29 +11,29 @@ import (
 var sMap sync.Map
 
 // 创建一个事件管理工厂
-func CreateEventManageFactory() *EventManage {
+func CreateEventManageFactory() *eventManage {
 
-	return &EventManage{}
+	return &eventManage{}
 }
 
 // 定义一个事件管理结构体
-type EventManage struct {
+type eventManage struct {
 }
 
 //  1.注册事件
-func (e *EventManage) Set(key string, keyFunc func(args ...interface{})) bool {
+func (e *eventManage) Set(key string, keyFunc func(args ...interface{})) bool {
 	//判断key下是否已有事件
 	if _, exists := e.Get(key); exists == false {
 		sMap.Store(key, keyFunc)
 		return true
 	} else {
-		variable.ZapLog.Info(my_errors.ErrorsFuncEventAlreadyExists)
+		variable.ZapLog.Info(my_errors.ErrorsFuncEventAlreadyExists + " , 相关键名：" + key)
 	}
 	return false
 }
 
 // 2.获取事件
-func (e *EventManage) Get(key string) (interface{}, bool) {
+func (e *eventManage) Get(key string) (interface{}, bool) {
 	if value, exists := sMap.Load(key); exists {
 		return value, exists
 	}
@@ -41,7 +41,7 @@ func (e *EventManage) Get(key string) (interface{}, bool) {
 }
 
 //  3.执行事件
-func (e *EventManage) Call(key string, args ...interface{}) {
+func (e *eventManage) Call(key string, args ...interface{}) {
 	if valueInterface, exists := e.Get(key); exists {
 		if fn, ok := valueInterface.(func(args ...interface{})); ok {
 			fn(args...)
@@ -55,12 +55,12 @@ func (e *EventManage) Call(key string, args ...interface{}) {
 }
 
 //  4.删除事件
-func (e *EventManage) Delete(key string) {
+func (e *eventManage) Delete(key string) {
 	sMap.Delete(key)
 }
 
 //  5.根据键的前缀，模糊调用. 使用请谨慎.
-func (e *EventManage) FuzzyCall(keyPre string) {
+func (e *eventManage) FuzzyCall(keyPre string) {
 
 	sMap.Range(func(key, value interface{}) bool {
 		if keyName, ok := key.(string); ok {

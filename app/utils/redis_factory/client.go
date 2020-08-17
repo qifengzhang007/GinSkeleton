@@ -2,13 +2,18 @@ package redis_factory
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"goskeleton/app/core/event"
+	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/config"
 	"time"
 )
 
+var redisPool *redis.Pool
+
+func init() {
+	redisPool = createRedisClientPool()
+}
 func createRedisClientPool() *redis.Pool {
 
 	configFac := config.CreateYamlFactory()
@@ -34,7 +39,7 @@ func createRedisClientPool() *redis.Pool {
 		},
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
-	event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
+	event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
 		redisPool.Close()
 	})
 	return redisPool
@@ -42,9 +47,10 @@ func createRedisClientPool() *redis.Pool {
 
 //  从连接池获取一个redis连接
 func GetOneRedisClient() *RedisClient {
-	poolConn := createRedisClientPool()
-	//defer clientConn.Close()
-	return &RedisClient{poolConn.Get()}
+	if redisPool == nil {
+		redisPool = createRedisClientPool()
+	}
+	return &RedisClient{redisPool.Get()}
 }
 
 // 定义一个redis客户端结构体

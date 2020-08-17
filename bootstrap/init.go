@@ -30,12 +30,14 @@ func checkRequiredFolders() {
 }
 
 func init() {
-	// 1.初始化程序根目录
-	if path, err := os.Getwd(); err == nil {
-		variable.BasePath = path
-	} else {
-		log.Fatal(my_errors.ErrorsBasePath)
-	}
+	//// 1.初始化程序根目录
+	//if path, err := os.Getwd(); err == nil {
+	//	fmt.Println("默认路径：",path)
+	//	// 路径进行处理，兼容单元测试程序程序启动时的奇怪路径
+	//	variable.BasePath = strings.Replace(strings.Replace(path,`\test`,"",1),`/test`,"",1)
+	//} else {
+	//	log.Fatal(my_errors.ErrorsBasePath)
+	//}
 
 	checkRequiredFolders()
 	// 2.初始化全局日志句柄，并载入日志钩子处理函数
@@ -50,8 +52,8 @@ func init() {
 		if config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
 			// websocket 管理中心hub全局初始化一份
 			variable.WebsocketHub = core.CreateHubFactory()
-			if WH, ok := variable.WebsocketHub.(*core.Hub); ok {
-				go WH.Run()
+			if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
+				go Wh.Run()
 			}
 		}
 	}

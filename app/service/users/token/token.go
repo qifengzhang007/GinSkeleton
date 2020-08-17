@@ -19,7 +19,7 @@ func CreateUserFactory() *userToken {
 }
 
 type userToken struct {
-	userJwt *my_jwt.Jwt_Sign
+	userJwt *my_jwt.JwtSign
 }
 
 //生成token

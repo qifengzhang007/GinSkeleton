@@ -12,7 +12,7 @@ import (
 func CreateYamlFactory() *ConfigYml {
 
 	yamlConfig := viper.New()
-	yamlConfig.AddConfigPath(variable.BasePath + "/Config")
+	yamlConfig.AddConfigPath(variable.BasePath + "/config")
 	// 需要读取的文件名
 	yamlConfig.SetConfigName("config")
 	//设置配置文件类型

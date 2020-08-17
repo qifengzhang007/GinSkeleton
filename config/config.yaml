@@ -37,7 +37,7 @@ SqlServer:
 Redis:
   Host: "127.0.0.1"
   Port: 6379
-  Auth: ""
+  Auth: "Secret2017~"
   MaxIdle: 10
   MaxActive: 1000
   IdleTimeout: 60

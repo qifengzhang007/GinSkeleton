@@ -17,12 +17,11 @@ type Users struct {
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
 
-	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名都是小写
+	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、GetInt64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名都是小写
 	// 当然也可以通过gin框架的上下文原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	name := context.GetString(consts.ValidatorPrefix + "name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
 	userIp := context.ClientIP()
-	//phone := context.GetString(Consts.ValidatorPrefix + "phone")
 
 	if curd.CreateUserCurdFactory().Register(name, pass, userIp) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
@@ -39,15 +38,15 @@ func (u *Users) Login(context *gin.Context) {
 
 	userModel := models.CreateUserFactory("").Login(name, pass)
 	if userModel != nil {
-		user_token_factory := userstoken.CreateUserFactory()
-		if usertoken, err := user_token_factory.GenerateToken(userModel.Id, userModel.Username, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
-			if user_token_factory.RecordLoginToken(usertoken, context.ClientIP()) {
+		userTokenFactory := userstoken.CreateUserFactory()
+		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.Username, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
+			if userTokenFactory.RecordLoginToken(userToken, context.ClientIP()) {
 				data := gin.H{
 					"userId":     userModel.Id,
 					"name":       name,
 					"realName":   userModel.RealName,
 					"phone":      phone,
-					"token":      usertoken,
+					"token":      userToken,
 					"updated_at": time.Now().Format("2006-01-02 15:04:05"),
 				}
 				response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, data)
@@ -118,7 +117,7 @@ func (u *Users) Update(context *gin.Context) {
 	if curd.CreateUserCurdFactory().Update(userId, name, pass, realName, phone, remark, userIp) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
-		response.ReturnJson(context, http.StatusOK, consts.CurdUpdatFailCode, consts.CurdUpdateFailMsg, "")
+		response.ReturnJson(context, http.StatusOK, consts.CurdUpdateFailCode, consts.CurdUpdateFailMsg, "")
 	}
 
 }
