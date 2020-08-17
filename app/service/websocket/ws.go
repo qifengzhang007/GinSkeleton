@@ -41,7 +41,10 @@ func (w *Ws) OnMessage(context *gin.Context) {
 		//receivedData 服务器接收到客户端（例如js客户端）发来的的数据，[]byte 格式
 
 		tempMsg := "服务器已经收到了你的消息==>" + string(receivedData)
-		w.WsClient.Conn.WriteMessage(messageType, []byte(tempMsg)) // 回复客户端已经收到消息
+		// 回复客户端已经收到消息;
+		if err := w.WsClient.Conn.WriteMessage(messageType, []byte(tempMsg)); err != nil {
+			variable.ZapLog.Error("消息发送出现错误", zap.Error(err))
+		}
 
 	}, w.OnError, w.OnClose)
 }
@@ -65,11 +68,17 @@ func (w *Ws) GetOnlineClients() {
 }
 
 // 向全部在线客户端广播消息
-func (w *Ws) BroadcastMsg(send_msg string) {
+func (w *Ws) BroadcastMsg(sendMsg string) {
 
-	for online_client, _ := range w.WsClient.Hub.Clients {
+	for onlineClient, _ := range w.WsClient.Hub.Clients {
 
-		online_client.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline * time.Second)) // 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
-		online_client.Conn.WriteMessage(websocket.TextMessage, []byte(send_msg))                    //获取每一个在线的客户端，向远端发送消息
+		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
+		if err := onlineClient.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline * time.Second)); err != nil {
+			variable.ZapLog.Error("设置ws消息截止时间出错", zap.Error(err))
+		}
+		//获取每一个在线的客户端，向远端发送消息
+		if err := onlineClient.Conn.WriteMessage(websocket.TextMessage, []byte(sendMsg)); err != nil {
+			variable.ZapLog.Error("消息发送出现错误", zap.Error(err))
+		}
 	}
 }

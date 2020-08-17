@@ -1,4 +1,4 @@
-package config
+package yml_config
 
 import (
 	"github.com/spf13/viper"
@@ -9,7 +9,7 @@ import (
 )
 
 // 创建一个yaml配置文件工厂
-func CreateYamlFactory() *ConfigYml {
+func CreateYamlFactory() *ymlConfig {
 
 	yamlConfig := viper.New()
 	yamlConfig.AddConfigPath(variable.BasePath + "/config")
@@ -22,56 +22,56 @@ func CreateYamlFactory() *ConfigYml {
 		log.Fatal(my_errors.ErrorsConfigInitFail + err.Error())
 	}
 
-	return &ConfigYml{
+	return &ymlConfig{
 		yamlConfig,
 	}
 }
 
-type ConfigYml struct {
+type ymlConfig struct {
 	viper *viper.Viper
 }
 
 // get 一个原始值
-func (c *ConfigYml) Get(keyname string) interface{} {
+func (c *ymlConfig) Get(keyname string) interface{} {
 	return c.viper.Get(keyname)
 }
 
 // getstring
-func (c *ConfigYml) GetString(keyname string) string {
+func (c *ymlConfig) GetString(keyname string) string {
 	return c.viper.GetString(keyname)
 }
 
 // getbool
-func (c *ConfigYml) GetBool(keyname string) bool {
+func (c *ymlConfig) GetBool(keyname string) bool {
 	return c.viper.GetBool(keyname)
 }
 
 // getint
-func (c *ConfigYml) GetInt(keyname string) int {
+func (c *ymlConfig) GetInt(keyname string) int {
 	return c.viper.GetInt(keyname)
 }
 
 // getint32
-func (c *ConfigYml) GetInt32(keyname string) int32 {
+func (c *ymlConfig) GetInt32(keyname string) int32 {
 	return c.viper.GetInt32(keyname)
 }
 
 // getint64
-func (c *ConfigYml) GetInt64(keyname string) int64 {
+func (c *ymlConfig) GetInt64(keyname string) int64 {
 	return c.viper.GetInt64(keyname)
 }
 
 // float64
-func (c *ConfigYml) GetFloat64(keyname string) float64 {
+func (c *ymlConfig) GetFloat64(keyname string) float64 {
 	return c.viper.GetFloat64(keyname)
 }
 
 // GetDuration
-func (c *ConfigYml) GetDuration(keyname string) time.Duration {
+func (c *ymlConfig) GetDuration(keyname string) time.Duration {
 	return c.viper.GetDuration(keyname)
 }
 
 // GetStringSlice
-func (c *ConfigYml) GetStringSlice(keyname string) []string {
+func (c *ymlConfig) GetStringSlice(keyname string) []string {
 	return c.viper.GetStringSlice(keyname)
 }

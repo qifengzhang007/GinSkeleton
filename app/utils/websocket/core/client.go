@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/config"
+	"goskeleton/app/utils/yml_config"
 	"net/http"
 	"time"
 )
@@ -32,30 +32,34 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 			}
 		}
 	}()
-	var upgrader = websocket.Upgrader{
-		ReadBufferSize:  config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
-		WriteBufferSize: config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
+	var upGrader = websocket.Upgrader{
+		ReadBufferSize:  yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
+		WriteBufferSize: yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
 	}
 
 	// 2.将http协议升级到websocket协议.初始化一个有效的websocket长连接客户端
-	if ws_conn, err := upgrader.Upgrade(context.Writer, context.Request, nil); err != nil {
+	if wsConn, err := upGrader.Upgrade(context.Writer, context.Request, nil); err != nil {
 		variable.ZapLog.Error(my_errors.ErrorsWebsocketUpgradeFail + err.Error())
 		return nil, false
 	} else {
 		if wsHub, ok := variable.WebsocketHub.(*Hub); ok {
 			c.Hub = wsHub
 		}
-		c.Conn = ws_conn
-		c.Send = make(chan []byte, config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
-		c.PingPeriod = (config.CreateYamlFactory().GetDuration("Websocket.PingPeriod"))
-		c.ReadDeadline = config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
-		c.WriteDeadline = config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
-		c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second))
-		c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess))
-		c.Conn.SetReadLimit(config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
+		c.Conn = wsConn
+		c.Send = make(chan []byte, yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
+		c.PingPeriod = yml_config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
+		c.ReadDeadline = yml_config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
+		c.WriteDeadline = yml_config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
+		if err := c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second)); err != nil {
+			variable.ZapLog.Error("设置消息截止时间出错", zap.Error(err))
+		}
+		if err := c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess)); err != nil {
+			variable.ZapLog.Error("消息发送出错", zap.Error(err))
+		}
+		c.Conn.SetReadLimit(yml_config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c
 		return c, true
 	}
@@ -63,34 +67,36 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 }
 
 // 主要功能主要是实时接收消息
-func (c *Client) ReadPump(callback_on_message func(message_type int, received_data []byte), callback_on_error func(err error), callback_on_close func()) {
+func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData []byte), callbackOnError func(err error), callbackOnClose func()) {
 	// 回调 onclose 事件
 	defer func() {
 		err := recover()
 		if err != nil {
-			if realErr, is_ok := err.(error); is_ok {
+			if realErr, isOk := err.(error); isOk {
 				variable.ZapLog.Error(my_errors.ErrorsWebsocketReadMessageFail, zap.Error(realErr))
 			}
 		}
-		callback_on_close()
+		callbackOnClose()
 	}()
 
 	// OnMessage事件
 	for {
 		mt, bReceivedData, err := c.Conn.ReadMessage()
 		if err == nil {
-			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second))
-			callback_on_message(mt, bReceivedData)
+			if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second)); err != nil {
+				variable.ZapLog.Error("设置消息截止时间出错", zap.Error(err))
+			}
+			callbackOnMessage(mt, bReceivedData)
 		} else {
 			// OnError事件
-			callback_on_error(err)
+			callbackOnError(err)
 			break
 		}
 	}
 }
 
 // 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包,浏览器收到ping标准格式，自动将消息原路返回给服务器
-func (c *Client) Heartbeat(callback_close func()) {
+func (c *Client) Heartbeat(callbackClose func()) {
 	//  1. 设置一个时钟，周期性的向client远端发送心跳数据包
 	ticker := time.NewTicker(c.PingPeriod * time.Second)
 	defer func() {
@@ -100,14 +106,14 @@ func (c *Client) Heartbeat(callback_close func()) {
 				variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartFail, zap.Error(val))
 			}
 		}
-		ticker.Stop()    // 停止该client的心跳检测
-		callback_close() // 注销 client
+		ticker.Stop()   // 停止该client的心跳检测
+		callbackClose() // 注销 client
 	}()
 	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	if c.ReadDeadline == 0 {
 		c.Conn.SetReadDeadline(time.Time{})
 	}
-	c.Conn.SetPongHandler(func(received_pong string) error {
+	c.Conn.SetPongHandler(func(receivedPong string) error {
 		if c.ReadDeadline > 0 {
 			c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline * time.Second))
 		} else {
@@ -123,7 +129,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
 				c.HeartbeatFailTimes++
-				if c.HeartbeatFailTimes > config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
+				if c.HeartbeatFailTimes > yml_config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
 					return
 				}
 			} else {

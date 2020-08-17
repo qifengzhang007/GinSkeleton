@@ -6,13 +6,13 @@ import (
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/config"
+	"goskeleton/app/utils/yml_config"
 	"time"
 )
 
 // 初始化数据库驱动
 func InitSqlDriver(sqlType string) *sql.DB {
-	configFac := config.CreateYamlFactory()
+	configFac := yml_config.CreateYamlFactory()
 	if sqlType == "mysql" {
 
 		Host := configFac.GetString("Mysql.Host")
@@ -72,7 +72,7 @@ func InitSqlDriver(sqlType string) *sql.DB {
 
 // 从连接池获取一个连接
 func GetOneEffectivePing(sqlType string) *sql.DB {
-	configFac := config.CreateYamlFactory()
+	configFac := yml_config.CreateYamlFactory()
 	maxRetryTimes := configFac.GetInt("SqlServer.PingFailRetryTimes")
 	// ping 失败允许重试
 	dbDriver := InitSqlDriver(sqlType)

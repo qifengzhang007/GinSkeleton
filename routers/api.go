@@ -6,7 +6,7 @@ import (
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/config"
+
 	"io"
 	"net/http"
 	"os"
@@ -17,13 +17,13 @@ import (
 func InitApiRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
-	f, _ := os.Create(variable.BasePath + config.CreateYamlFactory().GetString("Logs.GinLogName"))
+	f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	router := gin.Default()
 
 	//根据配置进行设置跨域
-	if config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
+	if yml_config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
 		router.Use(cors.Next())
 	}
 

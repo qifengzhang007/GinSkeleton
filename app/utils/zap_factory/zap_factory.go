@@ -5,14 +5,14 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/config"
+	"goskeleton/app/utils/yml_config"
 	"log"
 	"time"
 )
 
 func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	//创建一个配置器工厂
-	configFact := config.CreateYamlFactory()
+	configFact := yml_config.CreateYamlFactory()
 
 	// 获取程序所处的模式：  开发调试 、 生产
 	appDebug := configFact.GetBool("APP_DEBUG")

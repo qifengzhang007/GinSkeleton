@@ -2,13 +2,13 @@ package publish_subscribe
 
 import (
 	"github.com/streadway/amqp"
-	"goskeleton/app/utils/config"
+	"goskeleton/app/utils/yml_config"
 	"time"
 )
 
 func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
-	configFac := config.CreateYamlFactory()
+	configFac := yml_config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
 	exchangeType := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
 	exchangeName := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")

@@ -5,7 +5,7 @@ import (
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/config"
+	"goskeleton/app/utils/yml_config"
 	"time"
 )
 
@@ -16,7 +16,7 @@ func init() {
 }
 func createRedisClientPool() *redis.Pool {
 
-	configFac := config.CreateYamlFactory()
+	configFac := yml_config.CreateYamlFactory()
 	redisPool := &redis.Pool{
 		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
 		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数

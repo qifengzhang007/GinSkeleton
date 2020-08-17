@@ -5,7 +5,7 @@ import (
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/controller/web"
-	"goskeleton/app/utils/config"
+
 	"goskeleton/app/utils/files"
 	"goskeleton/app/utils/response"
 	"net/http"
@@ -25,15 +25,15 @@ func (u UpFiles) CheckParams(context *gin.Context) {
 		return
 	}
 	//超过系统设定的最大值：32M
-	if tmpFile.Size > config.CreateYamlFactory().GetInt64("FileUploadSetting.Size")*1024*1024 {
-		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+",系统允许的最大值（M）："+config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
+	if tmpFile.Size > yml_config.CreateYamlFactory().GetInt64("FileUploadSetting.Size")*1024*1024 {
+		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+",系统允许的最大值（M）："+yml_config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
 		return
 	}
 	//不允许的文件mime类型
 	if fp, err := tmpFile.Open(); err == nil {
 		mimeType := files.GetFilesMimeByFp(fp)
 
-		for _, value := range config.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
+		for _, value := range yml_config.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
 			if strings.ReplaceAll(value, " ", "") == strings.ReplaceAll(mimeType, " ", "") {
 				isPass = true
 				break

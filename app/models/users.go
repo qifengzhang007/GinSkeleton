@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/config"
+
 	"goskeleton/app/utils/md5_encrypt"
 	"log"
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
@@ -16,7 +16,7 @@ import (
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *usersModel {
 	if len(sqlType) == 0 {
-		sqlType = config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
 	}
 	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
