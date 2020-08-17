@@ -45,8 +45,8 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		variable.ZapLog.Error(my_errors.ErrorsWebsocketUpgradeFail + err.Error())
 		return nil, false
 	} else {
-		if ws_hub, ok := variable.WebsocketHub.(*Hub); ok {
-			c.Hub = ws_hub
+		if wsHub, ok := variable.WebsocketHub.(*Hub); ok {
+			c.Hub = wsHub
 		}
 		c.Conn = ws_conn
 		c.Send = make(chan []byte, config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
@@ -68,8 +68,8 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 	defer func() {
 		err := recover()
 		if err != nil {
-			if real_err, is_ok := err.(error); is_ok {
-				variable.ZapLog.Error(my_errors.ErrorsWebsocketReadMessageFail, zap.Error(real_err))
+			if realErr, is_ok := err.(error); is_ok {
+				variable.ZapLog.Error(my_errors.ErrorsWebsocketReadMessageFail, zap.Error(realErr))
 			}
 		}
 		callback_on_close()
@@ -77,10 +77,10 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 
 	// OnMessage事件
 	for {
-		mt, b_received_data, err := c.Conn.ReadMessage()
+		mt, bReceivedData, err := c.Conn.ReadMessage()
 		if err == nil {
 			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second))
-			callback_on_message(mt, b_received_data)
+			callback_on_message(mt, bReceivedData)
 		} else {
 			// OnError事件
 			callback_on_error(err)

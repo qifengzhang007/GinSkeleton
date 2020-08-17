@@ -10,31 +10,31 @@ func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
+	exchangeType := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
+	exchangeName := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
+	queueName := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
 	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
-	chan_number := configFac.GetInt("RabbitMq.PublishSubscribe.ConsumerChanNumber")
-	reconnect_interval_sec := configFac.GetDuration("RabbitMq.PublishSubscribe.OffLineReconnectIntervalSec")
-	retry_times := configFac.GetInt("RabbitMq.PublishSubscribe.RetryCount")
+	chanNumber := configFac.GetInt("RabbitMq.PublishSubscribe.ConsumerChanNumber")
+	reconnectIntervalSec := configFac.GetDuration("RabbitMq.PublishSubscribe.OffLineReconnectIntervalSec")
+	retryTimes := configFac.GetInt("RabbitMq.PublishSubscribe.RetryCount")
 
 	if err != nil {
 		return nil, err
 	}
 
-	v_consumer := &consumer{
+	consumer := &consumer{
 		connect:                     conn,
-		exchangeTyte:                exchange_type,
-		exchangeName:                exchange_name,
-		queueName:                   queue_name,
+		exchangeTyte:                exchangeType,
+		exchangeName:                exchangeName,
+		queueName:                   queueName,
 		durable:                     dura,
-		chanNumber:                  chan_number,
+		chanNumber:                  chanNumber,
 		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
-		offLineReconnectIntervalSec: reconnect_interval_sec,
-		retryTimes:                  retry_times,
+		offLineReconnectIntervalSec: reconnectIntervalSec,
+		retryTimes:                  retryTimes,
 	}
 
-	return v_consumer, nil
+	return consumer, nil
 }
 
 //  定义一个消息队列结构体：PublishSubscribe 模型
@@ -82,7 +82,7 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 				nil,
 			)
 			// 声明队列
-			v_queue, err := ch.QueueDeclare(
+			queue, err := ch.QueueDeclare(
 				c.queueName,
 				c.durable,
 				!c.durable,
@@ -94,7 +94,7 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 
 			//队列绑定
 			err = ch.QueueBind(
-				v_queue.Name,
+				queue.Name,
 				"", //  fanout 模式设置为 空 即可
 				c.exchangeName,
 				false,
@@ -103,12 +103,12 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 			c.occurError = errorDeal(err)
 
 			msgs, err := ch.Consume(
-				v_queue.Name, // 队列名称
-				"",           //  消费者标记，请确保在一个消息频道唯一
-				true,         //是否自动响应确认，这里设置为false，手动确认
-				false,        //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
-				false,        //RabbitMQ不支持noLocal标志。
-				false,        // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
+				queue.Name, // 队列名称
+				"",         //  消费者标记，请确保在一个消息频道唯一
+				true,       //是否自动响应确认，这里设置为false，手动确认
+				false,      //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
+				false,      //RabbitMQ不支持noLocal标志。
+				false,      // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 				nil,
 			)
 			c.occurError = errorDeal(err)
@@ -135,14 +135,14 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 			for i = 1; i <= c.retryTimes; i++ {
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
-				v_conn, err := CreateConsumer()
+				conn, err := CreateConsumer()
 				if err != nil {
 					continue
 				} else {
 					go func() {
-						c.connErr = v_conn.connect.NotifyClose(make(chan *amqp.Error, 1))
-						go v_conn.OnConnectionError(c.callbackOffLine)
-						v_conn.Received(c.callbackForReceived)
+						c.connErr = conn.connect.NotifyClose(make(chan *amqp.Error, 1))
+						go conn.OnConnectionError(c.callbackOffLine)
+						conn.Received(c.callbackForReceived)
 					}()
 					break
 				}

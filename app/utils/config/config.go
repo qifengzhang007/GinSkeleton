@@ -11,19 +11,19 @@ import (
 // 创建一个yaml配置文件工厂
 func CreateYamlFactory() *ConfigYml {
 
-	yaml_config := viper.New()
-	yaml_config.AddConfigPath(variable.BasePath + "/Config")
+	yamlConfig := viper.New()
+	yamlConfig.AddConfigPath(variable.BasePath + "/Config")
 	// 需要读取的文件名
-	yaml_config.SetConfigName("config")
+	yamlConfig.SetConfigName("config")
 	//设置配置文件类型
-	yaml_config.SetConfigType("yaml")
+	yamlConfig.SetConfigType("yaml")
 
-	if err := yaml_config.ReadInConfig(); err != nil {
+	if err := yamlConfig.ReadInConfig(); err != nil {
 		log.Fatal(my_errors.ErrorsConfigInitFail + err.Error())
 	}
 
 	return &ConfigYml{
-		yaml_config,
+		yamlConfig,
 	}
 }
 

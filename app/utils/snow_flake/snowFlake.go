@@ -9,12 +9,12 @@ import (
 // 创建一个snowflake工厂
 func CreateSnowFlakeFactory() *snowflake {
 
-	v_snowflake := &snowflake{
+	snowflake := &snowflake{
 		lastTimestamp: time.Now().UnixNano() / 1e6,
 		machId:        consts.SnowFlakeMachineId,
 		index:         0,
 	}
-	return v_snowflake
+	return snowflake
 }
 
 type snowflake struct {

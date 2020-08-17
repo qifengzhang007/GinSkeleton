@@ -12,7 +12,7 @@ import (
 func createRedisClientPool() *redis.Pool {
 
 	configFac := config.CreateYamlFactory()
-	redis_pool := &redis.Pool{
+	redisPool := &redis.Pool{
 		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
 		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数
 		IdleTimeout: configFac.GetDuration("Redis.IdleTimeout") * time.Second, //最大的空闲连接等待时间，超过此时间后，空闲连接将被关闭
@@ -35,16 +35,16 @@ func createRedisClientPool() *redis.Pool {
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
 	event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
-		redis_pool.Close()
+		redisPool.Close()
 	})
-	return redis_pool
+	return redisPool
 }
 
 //  从连接池获取一个redis连接
 func GetOneRedisClient() *RedisClient {
-	pool_conn := createRedisClientPool()
+	poolConn := createRedisClientPool()
 	//defer clientConn.Close()
-	return &RedisClient{pool_conn.Get()}
+	return &RedisClient{poolConn.Get()}
 }
 
 // 定义一个redis客户端结构体

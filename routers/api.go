@@ -36,12 +36,12 @@ func InitApiRouter() *gin.Engine {
 	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
 
 	//  创建一个门户类接口路由组
-	V_Api := router.Group("/api/v1/")
+	vApi := router.Group("/api/v1/")
 	{
 		// 模拟一个首页路由
-		V_Api := V_Api.Group("home/")
+		vApi := vApi.Group("home/")
 		{
-			V_Api.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
+			vApi.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
 		}
 
 	}

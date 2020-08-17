@@ -11,9 +11,9 @@ func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Topics.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.Topics.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.Topics.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.Topics.QueueName")
+	exchangeType := configFac.GetString("RabbitMq.Topics.ExchangeType")
+	exchangeName := configFac.GetString("RabbitMq.Topics.ExchangeName")
+	queueName := configFac.GetString("RabbitMq.Topics.QueueName")
 	dura := configFac.GetBool("RabbitMq.Topics.Durable")
 
 	if err != nil {
@@ -21,14 +21,14 @@ func CreateProducer() (*producer, error) {
 		return nil, err
 	}
 
-	v_producer := &producer{
+	producer := &producer{
 		connect:      conn,
-		exchangeTyte: exchange_type,
-		exchangeName: exchange_name,
-		queueName:    queue_name,
+		exchangeTyte: exchangeType,
+		exchangeName: exchangeName,
+		queueName:    queueName,
 		durable:      dura,
 	}
-	return v_producer, nil
+	return producer, nil
 }
 
 //  定义一个消息队列结构体：Topics 模型
@@ -41,7 +41,7 @@ type producer struct {
 	occurError   error
 }
 
-func (p *producer) Send(route_key string, data string) bool {
+func (p *producer) Send(routeKey string, data string) bool {
 
 	// 获取一个频道
 	ch, err := p.connect.Channel()
@@ -63,7 +63,7 @@ func (p *producer) Send(route_key string, data string) bool {
 	// 投递消息
 	err = ch.Publish(
 		p.exchangeName, // 交换机名称
-		route_key,      // direct 模式默认为空即可
+		routeKey,       // direct 模式默认为空即可
 		false,
 		false,
 		amqp.Publishing{

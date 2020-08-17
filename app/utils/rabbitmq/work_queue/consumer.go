@@ -10,26 +10,26 @@ func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.WorkQueue.Addr"))
-	queue_name := configFac.GetString("RabbitMq.WorkQueue.QueueName")
+	queueName := configFac.GetString("RabbitMq.WorkQueue.QueueName")
 	dura := configFac.GetBool("RabbitMq.WorkQueue.Durable")
-	chan_number := configFac.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
-	reconnect_interval_sec := configFac.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
-	retry_times := configFac.GetInt("RabbitMq.WorkQueue.RetryCount")
+	chanNumber := configFac.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
+	reconnectIntervalSec := configFac.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
+	retryTimes := configFac.GetInt("RabbitMq.WorkQueue.RetryCount")
 
 	if err != nil {
 		return nil, err
 	}
 
-	v_consumer := &consumer{
+	consumer := &consumer{
 		connect:                     conn,
-		queueName:                   queue_name,
+		queueName:                   queueName,
 		durable:                     dura,
-		chanNumber:                  chan_number,
+		chanNumber:                  chanNumber,
 		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
-		offLineReconnectIntervalSec: reconnect_interval_sec,
-		retryTimes:                  retry_times,
+		offLineReconnectIntervalSec: reconnectIntervalSec,
+		retryTimes:                  retryTimes,
 	}
-	return v_consumer, nil
+	return consumer, nil
 }
 
 //  定义一个消息队列结构体：WorkQueue 模型
@@ -114,14 +114,14 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 			for i = 1; i <= c.retryTimes; i++ {
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
-				v_conn, err := CreateConsumer()
+				conn, err := CreateConsumer()
 				if err != nil {
 					continue
 				} else {
 					go func() {
-						c.connErr = v_conn.connect.NotifyClose(make(chan *amqp.Error, 1))
-						go v_conn.OnConnectionError(c.callbackOffLine)
-						v_conn.Received(c.callbackForReceived)
+						c.connErr = conn.connect.NotifyClose(make(chan *amqp.Error, 1))
+						go conn.OnConnectionError(c.callbackOffLine)
+						conn.Received(c.callbackForReceived)
 					}()
 					break
 				}

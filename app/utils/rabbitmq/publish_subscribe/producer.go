@@ -11,9 +11,9 @@ func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
+	exchangeType := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
+	exchangeName := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
+	queueName := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
 	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
 
 	if err != nil {
@@ -23,9 +23,9 @@ func CreateProducer() (*producer, error) {
 
 	v_producer := &producer{
 		connect:      conn,
-		exchangeTyte: exchange_type,
-		exchangeName: exchange_name,
-		queueName:    queue_name,
+		exchangeTyte: exchangeType,
+		exchangeName: exchangeName,
+		queueName:    queueName,
 		durable:      dura,
 	}
 	return v_producer, nil

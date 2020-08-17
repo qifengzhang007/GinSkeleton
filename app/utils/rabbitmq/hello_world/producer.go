@@ -11,7 +11,7 @@ func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.HelloWorld.Addr"))
-	queue_name := configFac.GetString("RabbitMq.HelloWorld.QueueName")
+	queueName := configFac.GetString("RabbitMq.HelloWorld.QueueName")
 	dura := configFac.GetBool("RabbitMq.HelloWorld.Durable")
 
 	if err != nil {
@@ -19,12 +19,12 @@ func CreateProducer() (*producer, error) {
 		return nil, err
 	}
 
-	v_producer := &producer{
+	producer := &producer{
 		connect:   conn,
-		queueName: queue_name,
+		queueName: queueName,
 		durable:   dura,
 	}
-	return v_producer, nil
+	return producer, nil
 }
 
 //  定义一个消息队列结构体：helloworld 模型

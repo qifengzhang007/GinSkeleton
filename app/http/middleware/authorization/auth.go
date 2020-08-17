@@ -16,13 +16,13 @@ type HeaderParams struct {
 func CheckAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		//  模拟验证token
-		V_HeaderParams := HeaderParams{}
+		headerParams := HeaderParams{}
 
 		//  推荐使用ShouldbindHeader 方式获取头参数
-		context.ShouldBindHeader(&V_HeaderParams)
+		context.ShouldBindHeader(&headerParams)
 
-		if len(V_HeaderParams.Authorization) >= 20 {
-			token := strings.Split(V_HeaderParams.Authorization, " ")
+		if len(headerParams.Authorization) >= 20 {
+			token := strings.Split(headerParams.Authorization, " ")
 			if len(token) == 2 && len(token[1]) >= 20 {
 				token_is_effective := userstoken.CreateUserFactory().IsEffective(token[1])
 				if token_is_effective {

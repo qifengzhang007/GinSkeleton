@@ -15,10 +15,10 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	configFact := config.CreateYamlFactory()
 
 	// 获取程序所处的模式：  开发调试 、 生产
-	v_debug := configFact.GetBool("APP_DEBUG")
+	vDebug := configFact.GetBool("APP_DEBUG")
 
 	// 判断程序当前所处的模式，调试模式直接返回一个便捷的zap日志管理器地址，所有的日志打印到控制台即可
-	if v_debug == true {
+	if vDebug == true {
 		if logger, err := zap.NewDevelopment(zap.Hooks(entry)); err == nil {
 			return logger
 		} else {
@@ -29,9 +29,9 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	// 以下才是 非调试（生产）模式所需要的代码
 	encoderConfig := zap.NewProductionEncoderConfig()
 
-	v_time_precision := configFact.GetString("Logs.TimePrecision")
+	timePrecision := configFact.GetString("Logs.TimePrecision")
 	var v_record_time_format string
-	switch v_time_precision {
+	switch timePrecision {
 	case "second":
 		v_record_time_format = "2006-01-02 15:04:05"
 	case "millisecond":
@@ -69,6 +69,6 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	//参数一：编码器
 	//参数二：写入器
 	//参数三：参数级别，debug级别支持后续调用的所有函数写日志，如果是 fatal 高级别，则级别>=fatal 才可以写日志
-	zap_core := zapcore.NewCore(v_encoder, writer, zap.InfoLevel)
-	return zap.New(zap_core, zap.AddCaller(), zap.Hooks(entry))
+	zapCore := zapcore.NewCore(v_encoder, writer, zap.InfoLevel)
+	return zap.New(zapCore, zap.AddCaller(), zap.Hooks(entry))
 }

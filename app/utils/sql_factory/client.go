@@ -11,9 +11,9 @@ import (
 )
 
 // 初始化数据库驱动
-func Init_sql_driver(sql_type string) *sql.DB {
+func Init_sql_driver(sqlType string) *sql.DB {
 	configFac := config.CreateYamlFactory()
-	if sql_type == "mysql" {
+	if sqlType == "mysql" {
 
 		Host := configFac.GetString("Mysql.Host")
 		Port := configFac.GetString("Mysql.Port")
@@ -40,7 +40,7 @@ func Init_sql_driver(sql_type string) *sql.DB {
 		})
 		return db
 
-	} else if sql_type == "sqlserver" || sql_type == "mssql" {
+	} else if sqlType == "sqlserver" || sqlType == "mssql" {
 		Host := configFac.GetString("SqlServer.Host")
 		Port := configFac.GetString("SqlServer.Port")
 		DataBase := configFac.GetString("SqlServer.DataBase")
@@ -70,16 +70,16 @@ func Init_sql_driver(sql_type string) *sql.DB {
 }
 
 // 从连接池获取一个连接
-func GetOneEffectivePing(sql_type string) *sql.DB {
+func GetOneEffectivePing(sqlType string) *sql.DB {
 	configFac := config.CreateYamlFactory()
-	max_retry_times := configFac.GetInt("SqlServer.PingFailRetryTimes")
+	maxRetryTimes := configFac.GetInt("SqlServer.PingFailRetryTimes")
 	// ping 失败允许重试
-	v_db_driver := Init_sql_driver(sql_type)
-	for i := 1; i <= max_retry_times; i++ {
+	v_db_driver := Init_sql_driver(sqlType)
+	for i := 1; i <= maxRetryTimes; i++ {
 		if err := v_db_driver.Ping(); err != nil { //  获取一个连接失败，进行重试
-			v_db_driver = Init_sql_driver(sql_type)
+			v_db_driver = Init_sql_driver(sqlType)
 			time.Sleep(time.Second * 1)
-			if i == max_retry_times {
+			if i == maxRetryTimes {
 				variable.ZapLog.Fatal("Mysql：" + my_errors.ErrorsDbGetConnFail)
 			}
 		} else {

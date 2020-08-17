@@ -9,10 +9,10 @@ import (
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	config_fac := config.CreateYamlFactory()
-	conn, err := amqp.Dial(config_fac.GetString("RabbitMq.WorkQueue.Addr"))
-	queue_name := config_fac.GetString("RabbitMq.WorkQueue.QueueName")
-	dura := config_fac.GetBool("RabbitMq.WorkQueue.Durable")
+	configFac := config.CreateYamlFactory()
+	conn, err := amqp.Dial(configFac.GetString("RabbitMq.WorkQueue.Addr"))
+	queueName := configFac.GetString("RabbitMq.WorkQueue.QueueName")
+	dura := configFac.GetBool("RabbitMq.WorkQueue.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())
@@ -21,7 +21,7 @@ func CreateProducer() (*producer, error) {
 
 	v_producer := &producer{
 		connect:   conn,
-		queueName: queue_name,
+		queueName: queueName,
 		durable:   dura,
 	}
 	return v_producer, nil

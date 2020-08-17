@@ -11,9 +11,9 @@ func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Routing.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.Routing.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.Routing.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.Routing.QueueName")
+	exchangeType := configFac.GetString("RabbitMq.Routing.ExchangeType")
+	exchangeName := configFac.GetString("RabbitMq.Routing.ExchangeName")
+	queueName := configFac.GetString("RabbitMq.Routing.QueueName")
 	dura := configFac.GetBool("RabbitMq.Routing.Durable")
 
 	if err != nil {
@@ -21,14 +21,14 @@ func CreateProducer() (*producer, error) {
 		return nil, err
 	}
 
-	v_producer := &producer{
+	producer := &producer{
 		connect:      conn,
-		exchangeTyte: exchange_type,
-		exchangeName: exchange_name,
-		queueName:    queue_name,
+		exchangeTyte: exchangeType,
+		exchangeName: exchangeName,
+		queueName:    queueName,
 		durable:      dura,
 	}
-	return v_producer, nil
+	return producer, nil
 }
 
 //  定义一个消息队列结构体：Routing 模型

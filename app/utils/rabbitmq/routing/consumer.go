@@ -10,28 +10,28 @@ func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
 	configFac := config.CreateYamlFactory()
 	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Routing.Addr"))
-	exchange_type := configFac.GetString("RabbitMq.Routing.ExchangeType")
-	exchange_name := configFac.GetString("RabbitMq.Routing.ExchangeName")
-	queue_name := configFac.GetString("RabbitMq.Routing.QueueName")
+	exchangeType := configFac.GetString("RabbitMq.Routing.ExchangeType")
+	exchangeName := configFac.GetString("RabbitMq.Routing.ExchangeName")
+	queueName := configFac.GetString("RabbitMq.Routing.QueueName")
 	dura := configFac.GetBool("RabbitMq.Routing.Durable")
-	reconnect_interval_sec := configFac.GetDuration("RabbitMq.Routing.OffLineReconnectIntervalSec")
-	retry_times := configFac.GetInt("RabbitMq.Routing.RetryCount")
+	reconnectIntervalSec := configFac.GetDuration("RabbitMq.Routing.OffLineReconnectIntervalSec")
+	retryTimes := configFac.GetInt("RabbitMq.Routing.RetryCount")
 
 	if err != nil {
 		return nil, err
 	}
 
-	v_consumer := &consumer{
+	consumer := &consumer{
 		connect:                     conn,
-		exchangeTyte:                exchange_type,
-		exchangeName:                exchange_name,
-		queueName:                   queue_name,
+		exchangeTyte:                exchangeType,
+		exchangeName:                exchangeName,
+		queueName:                   queueName,
 		durable:                     dura,
 		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
-		offLineReconnectIntervalSec: reconnect_interval_sec,
-		retryTimes:                  retry_times,
+		offLineReconnectIntervalSec: reconnectIntervalSec,
+		retryTimes:                  retryTimes,
 	}
-	return v_consumer, nil
+	return consumer, nil
 }
 
 //  定义一个消息队列结构体：Routing 模型
@@ -78,7 +78,7 @@ func (c *consumer) Received(route_key string, callback_fun_deal_smg func(receive
 			nil,
 		)
 		// 声明队列
-		v_queue, err := ch.QueueDeclare(
+		queue, err := ch.QueueDeclare(
 			c.queueName,
 			c.durable,
 			!c.durable,
@@ -90,7 +90,7 @@ func (c *consumer) Received(route_key string, callback_fun_deal_smg func(receive
 
 		//队列绑定
 		err = ch.QueueBind(
-			v_queue.Name,
+			queue.Name,
 			key, //  routing 模式,生产者会将消息投递至交换机的route_key， 消费者匹配不同的key获取消息、处理
 			c.exchangeName,
 			false,
@@ -99,12 +99,12 @@ func (c *consumer) Received(route_key string, callback_fun_deal_smg func(receive
 		c.occurError = errorDeal(err)
 
 		msgs, err := ch.Consume(
-			v_queue.Name, // 队列名称
-			"",           //  消费者标记，请确保在一个消息频道唯一
-			true,         //是否自动响应确认，这里设置为false，手动确认
-			false,        //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
-			false,        //RabbitMQ不支持noLocal标志。
-			false,        // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
+			queue.Name, // 队列名称
+			"",         //  消费者标记，请确保在一个消息频道唯一
+			true,       //是否自动响应确认，这里设置为false，手动确认
+			false,      //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
+			false,      //RabbitMQ不支持noLocal标志。
+			false,      // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 			nil,
 		)
 		c.occurError = errorDeal(err)
@@ -130,14 +130,14 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 			for i = 1; i <= c.retryTimes; i++ {
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
-				v_conn, err := CreateConsumer()
+				conn, err := CreateConsumer()
 				if err != nil {
 					continue
 				} else {
 					go func() {
-						c.connErr = v_conn.connect.NotifyClose(make(chan *amqp.Error, 1))
-						go v_conn.OnConnectionError(c.callbackOffLine)
-						v_conn.Received(c.routeKey, c.callbackForReceived)
+						c.connErr = conn.connect.NotifyClose(make(chan *amqp.Error, 1))
+						go conn.OnConnectionError(c.callbackOffLine)
+						conn.Received(c.routeKey, c.callbackForReceived)
 					}()
 					break
 				}

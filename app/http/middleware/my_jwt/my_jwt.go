@@ -65,13 +65,13 @@ func (j *Jwt_Sign) ParseToken(tokenString string) (*CustomClaims, error) {
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				// 如果 TokenExpired ,只是过期（格式都正确），我们认为他是有效的，接下可以允许刷新操作
 				token.Valid = true
-				goto label_here
+				goto labelHere
 			} else {
 				return nil, TokenInvalid
 			}
 		}
 	}
-label_here:
+labelHere:
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
 	} else {

@@ -14,11 +14,11 @@ import (
 
 // 创建userfactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
-func CreateUserFactory(sql_type string) *usersModel {
-	if len(sql_type) == 0 {
-		sql_type = config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+func CreateUserFactory(sqlType string) *usersModel {
+	if len(sqlType) == 0 {
+		sqlType = config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
 	}
-	dbDriver := CreateBaseSqlFactory(sql_type)
+	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
 		return &usersModel{
 			BaseModel: dbDriver,
@@ -164,18 +164,18 @@ func (u *usersModel) Show(username string, limit_start float64, limit_items floa
 	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   username like ? LIMIT ?,?"
 	rows := u.QuerySql(sql, "%"+username+"%", limit_start, limit_items)
 	if rows != nil {
-		v_temp := make([]usersModel, 0)
+		temp := make([]usersModel, 0)
 		for rows.Next() {
 			err := rows.Scan(&u.Id, &u.Username, &u.RealName, &u.Phone, &u.Status)
 			if err == nil {
-				v_temp = append(v_temp, *u)
+				temp = append(temp, *u)
 			} else {
 				variable.ZapLog.Error("sql查询错误", zap.Error(err))
 			}
 		}
 		//  凡是查询类记得释放记录集
 		rows.Close()
-		return v_temp
+		return temp
 	}
 	return nil
 }

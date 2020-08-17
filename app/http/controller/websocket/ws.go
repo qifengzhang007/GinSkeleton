@@ -2,7 +2,7 @@ package websocket
 
 import (
 	"github.com/gin-gonic/gin"
-	service_ws "goskeleton/app/service/websocket"
+	serviceWs "goskeleton/app/service/websocket"
 )
 
 /**
@@ -14,11 +14,11 @@ type Ws struct {
 }
 
 // OnOpen 主要解决握手+协议升级
-func (w *Ws) OnOpen(context *gin.Context) (*service_ws.Ws, bool) {
-	return (&service_ws.Ws{}).OnOpen(context)
+func (w *Ws) OnOpen(context *gin.Context) (*serviceWs.Ws, bool) {
+	return (&serviceWs.Ws{}).OnOpen(context)
 }
 
 // OnMessage 处理业务消息
-func (w *Ws) OnMessage(service_ws *service_ws.Ws, context *gin.Context) {
-	service_ws.OnMessage(context)
+func (w *Ws) OnMessage(serviceWs *serviceWs.Ws, context *gin.Context) {
+	serviceWs.OnMessage(context)
 }

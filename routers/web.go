@@ -38,38 +38,38 @@ func InitWebRouter() *gin.Engine {
 	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
 
 	//  创建一个后端接口路由组
-	V_Backend := router.Group("/Admin/")
+	backend := router.Group("/Admin/")
 	{
 		// 创建一个websocket,如果ws需要账号密码登录才能使用，就写在需要鉴权的分组，这里暂定是开放式的，不需要严格鉴权，我们简单验证一下token值
-		V_Backend.GET("ws", validatorFactory.Create(consts.ValidatorPrefix+"WebsocketConnect"))
+		backend.GET("ws", validatorFactory.Create(consts.ValidatorPrefix+"WebsocketConnect"))
 
 		//  【不需要】中间件验证的路由  用户注册、登录
-		v_noAuth := V_Backend.Group("users/")
+		noAuth := backend.Group("users/")
 		{
-			v_noAuth.POST("register", validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister"))
-			v_noAuth.POST("login", validatorFactory.Create(consts.ValidatorPrefix+"UsersLogin"))
-			v_noAuth.POST("refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))
+			noAuth.POST("register", validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister"))
+			noAuth.POST("login", validatorFactory.Create(consts.ValidatorPrefix+"UsersLogin"))
+			noAuth.POST("refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))
 		}
 
 		// 需要中间件验证的路由
-		V_Backend.Use(authorization.CheckAuth())
+		backend.Use(authorization.CheckAuth())
 		{
 			// 用户组路由
-			v_users := V_Backend.Group("users/")
+			users := backend.Group("users/")
 			{
 				// 查询 ，这里的验证器直接从容器获取，是因为程序启动时，将验证器注册在了容器，具体代码位置：App\Http\Validator\Web\Users\xxx
-				v_users.GET("index", validatorFactory.Create(consts.ValidatorPrefix+"UsersShow"))
+				users.GET("index", validatorFactory.Create(consts.ValidatorPrefix+"UsersShow"))
 				// 新增
-				v_users.POST("create", validatorFactory.Create(consts.ValidatorPrefix+"UsersStore"))
+				users.POST("create", validatorFactory.Create(consts.ValidatorPrefix+"UsersStore"))
 				// 更新
-				v_users.POST("edit", validatorFactory.Create(consts.ValidatorPrefix+"UsersUpdate"))
+				users.POST("edit", validatorFactory.Create(consts.ValidatorPrefix+"UsersUpdate"))
 				// 删除
-				v_users.POST("delete", validatorFactory.Create(consts.ValidatorPrefix+"UsersDestroy"))
+				users.POST("delete", validatorFactory.Create(consts.ValidatorPrefix+"UsersDestroy"))
 			}
 			//文件上传公共路由
-			v_uploadfiles := V_Backend.Group("upload/")
+			uploadFiles := backend.Group("upload/")
 			{
-				v_uploadfiles.POST("files", validatorFactory.Create(consts.ValidatorPrefix+"UploadFiles"))
+				uploadFiles.POST("files", validatorFactory.Create(consts.ValidatorPrefix+"UploadFiles"))
 			}
 
 		}

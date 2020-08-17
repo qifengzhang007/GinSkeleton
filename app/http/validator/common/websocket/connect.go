@@ -3,7 +3,7 @@ package websocket
 import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
-	controller_ws "goskeleton/app/http/controller/websocket"
+	controllerWs "goskeleton/app/http/controller/websocket"
 	"goskeleton/app/utils/config"
 	"goskeleton/app/utils/response"
 	"net/http"
@@ -32,9 +32,9 @@ func (c Connect) CheckParams(context *gin.Context) {
 		return
 	}
 
-	if service_ws, ok := (&controller_ws.Ws{}).OnOpen(context); ok == false {
+	if service_ws, ok := (&controllerWs.Ws{}).OnOpen(context); ok == false {
 		response.ReturnJson(context, http.StatusBadRequest, consts.WsOpenFailCode, consts.WsOpenFailMsg, "")
 	} else {
-		(&controller_ws.Ws{}).OnMessage(service_ws, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
+		(&controllerWs.Ws{}).OnMessage(service_ws, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
 	}
 }

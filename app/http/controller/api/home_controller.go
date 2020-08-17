@@ -18,14 +18,14 @@ func (u *Home) News(context *gin.Context) {
 	newstype := context.GetString(consts.ValidatorPrefix + "newstype")
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
 	limit := context.GetFloat64(consts.ValidatorPrefix + "limit")
-	user_ip := context.ClientIP()
+	userIp := context.ClientIP()
 
 	// 这里随便模拟一条数据返回
 	faka_data := gin.H{
 		"newstype": newstype,
 		"page":     page,
 		"limit":    limit,
-		"user_ip":  user_ip,
+		"userIp":   userIp,
 		"title":    "门户首页公司新闻标题001",
 		"content":  "门户新闻内容001",
 	}

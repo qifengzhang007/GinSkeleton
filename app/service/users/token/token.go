@@ -26,7 +26,7 @@ type userToken struct {
 func (u *userToken) GenerateToken(userid int64, username string, phone string, expire_at int64) (tokens string, err error) {
 
 	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
-	custome_claims := my_jwt.CustomClaims{
+	customeClaims := my_jwt.CustomClaims{
 		UserId: userid,
 		Name:   username,
 		Phone:  phone,
@@ -36,15 +36,15 @@ func (u *userToken) GenerateToken(userid int64, username string, phone string, e
 			ExpiresAt: int64(time.Now().Unix() + expire_at), // 失效截止时间
 		},
 	}
-	return u.userJwt.CreateToken(custome_claims)
+	return u.userJwt.CreateToken(customeClaims)
 }
 
 // 用户login成功，记录用户token
 func (u *userToken) RecordLoginToken(userToken, clientIp string) bool {
-	if custome_claims, err := u.userJwt.ParseToken(userToken); err == nil {
-		user_id := custome_claims.UserId
-		expires_at := custome_claims.ExpiresAt
-		return models.CreateUserFactory("").OauthLoginToken(user_id, userToken, expires_at, clientIp)
+	if customeClaims, err := u.userJwt.ParseToken(userToken); err == nil {
+		userId := customeClaims.UserId
+		expiresAt := customeClaims.ExpiresAt
+		return models.CreateUserFactory("").OauthLoginToken(userId, userToken, expiresAt, clientIp)
 	} else {
 		return false
 	}
@@ -59,10 +59,10 @@ func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string,
 	case consts.JwtTokenOK, consts.JwtTokenExpired:
 		//如果token已经过期，那么执行更新
 		if new_token, err := u.userJwt.RefreshToken(old_token, consts.JwtTokenRefreshExpireAt); err == nil {
-			if custome_claims, err := u.userJwt.ParseToken(new_token); err == nil {
-				user_id := custome_claims.UserId
-				expires_at := custome_claims.ExpiresAt
-				if models.CreateUserFactory("").OauthRefreshToken(user_id, expires_at, old_token, new_token, client_ip) {
+			if customeClaims, err := u.userJwt.ParseToken(new_token); err == nil {
+				userId := customeClaims.UserId
+				expiresAt := customeClaims.ExpiresAt
+				if models.CreateUserFactory("").OauthRefreshToken(userId, expiresAt, old_token, new_token, client_ip) {
 					return new_token, true
 				}
 			}
@@ -81,14 +81,14 @@ func (u *userToken) DestroyToken() {
 
 // 判断token是否未过期
 func (u *userToken) isNotExpired(token string) (*my_jwt.CustomClaims, int) {
-	if custome_claims, err := u.userJwt.ParseToken(token); err == nil {
+	if customeClaims, err := u.userJwt.ParseToken(token); err == nil {
 
-		if time.Now().Unix()-custome_claims.ExpiresAt < 0 {
+		if time.Now().Unix()-customeClaims.ExpiresAt < 0 {
 			// token有效
-			return custome_claims, consts.JwtTokenOK
+			return customeClaims, consts.JwtTokenOK
 		} else {
 			// 过期的token
-			return custome_claims, consts.JwtTokenExpired
+			return customeClaims, consts.JwtTokenExpired
 		}
 	} else {
 		// 无效的token

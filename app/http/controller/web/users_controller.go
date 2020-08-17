@@ -21,10 +21,10 @@ func (u *Users) Register(context *gin.Context) {
 	// 当然也可以通过gin框架的上下文原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	name := context.GetString(consts.ValidatorPrefix + "name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
-	user_ip := context.ClientIP()
+	userIp := context.ClientIP()
 	//phone := context.GetString(Consts.ValidatorPrefix + "phone")
 
-	if curd.CreateUserCurdFactory().Register(name, pass, user_ip) {
+	if curd.CreateUserCurdFactory().Register(name, pass, userIp) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdRegisterFailCode, consts.CurdRegisterFailMsg, "")
@@ -37,20 +37,20 @@ func (u *Users) Login(context *gin.Context) {
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 
-	v_user_model := models.CreateUserFactory("").Login(name, pass)
-	if v_user_model != nil {
+	userModel := models.CreateUserFactory("").Login(name, pass)
+	if userModel != nil {
 		user_token_factory := userstoken.CreateUserFactory()
-		if usertoken, err := user_token_factory.GenerateToken(v_user_model.Id, v_user_model.Username, v_user_model.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
+		if usertoken, err := user_token_factory.GenerateToken(userModel.Id, userModel.Username, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
 			if user_token_factory.RecordLoginToken(usertoken, context.ClientIP()) {
-				v_data := gin.H{
-					"userid":     v_user_model.Id,
+				data := gin.H{
+					"userId":     userModel.Id,
 					"name":       name,
-					"real_name":  v_user_model.RealName,
+					"realName":   userModel.RealName,
 					"phone":      phone,
 					"token":      usertoken,
 					"updated_at": time.Now().Format("2006-01-02 15:04:05"),
 				}
-				response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, v_data)
+				response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, data)
 				return
 			}
 		}
@@ -62,10 +62,10 @@ func (u *Users) Login(context *gin.Context) {
 // 刷新用户token
 func (u *Users) RefreshToken(context *gin.Context) {
 
-	old_token := context.GetString(consts.ValidatorPrefix + "token")
-	if new_token, ok := userstoken.CreateUserFactory().RefreshToken(old_token, context.ClientIP()); ok {
+	oldToken := context.GetString(consts.ValidatorPrefix + "token")
+	if newToken, ok := userstoken.CreateUserFactory().RefreshToken(oldToken, context.ClientIP()); ok {
 		res := gin.H{
-			"token": new_token,
+			"token": newToken,
 		}
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, res)
 	} else {
@@ -79,8 +79,8 @@ func (u *Users) Show(context *gin.Context) {
 	name := context.GetString(consts.ValidatorPrefix + "name")
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
 	limits := context.GetFloat64(consts.ValidatorPrefix + "limits")
-	limit_start := (page - 1) * limits
-	showlist := models.CreateUserFactory("").Show(name, limit_start, limits)
+	limitStart := (page - 1) * limits
+	showlist := models.CreateUserFactory("").Show(name, limitStart, limits)
 	if showlist != nil {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, showlist)
 	} else {
@@ -92,11 +92,11 @@ func (u *Users) Show(context *gin.Context) {
 func (u *Users) Store(context *gin.Context) {
 	name := context.GetString(consts.ValidatorPrefix + "name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
-	real_name := context.GetString(consts.ValidatorPrefix + "real_name")
+	realName := context.GetString(consts.ValidatorPrefix + "realName")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 	remark := context.GetString(consts.ValidatorPrefix + "remark")
 
-	if curd.CreateUserCurdFactory().Store(name, pass, real_name, phone, remark) {
+	if curd.CreateUserCurdFactory().Store(name, pass, realName, phone, remark) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdCreatFailCode, consts.CurdCreatFailMsg, "")
@@ -106,16 +106,16 @@ func (u *Users) Store(context *gin.Context) {
 
 //5.用户更新(update)
 func (u *Users) Update(context *gin.Context) {
-	userid := context.GetFloat64(consts.ValidatorPrefix + "id")
+	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	name := context.GetString(consts.ValidatorPrefix + "name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
-	real_name := context.GetString(consts.ValidatorPrefix + "real_name")
+	realName := context.GetString(consts.ValidatorPrefix + "realName")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 	remark := context.GetString(consts.ValidatorPrefix + "remark")
-	user_ip := context.ClientIP()
+	userIp := context.ClientIP()
 	//注意：这里没有实现权限控制逻辑，例如：超级管理管理员可以更新全部用户数据，普通用户只能修改自己的数据。目前只是验证了token有效、合法之后就可以进行后续操作
 	// 实际使用请根据真是业务实现权限控制逻辑、再进行数据库操作
-	if curd.CreateUserCurdFactory().Update(userid, name, pass, real_name, phone, remark, user_ip) {
+	if curd.CreateUserCurdFactory().Update(userId, name, pass, realName, phone, remark, userIp) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdUpdatFailCode, consts.CurdUpdateFailMsg, "")
@@ -125,8 +125,8 @@ func (u *Users) Update(context *gin.Context) {
 
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
-	userid := context.GetFloat64(consts.ValidatorPrefix + "id")
-	if models.CreateUserFactory("").Destroy(userid) {
+	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
+	if models.CreateUserFactory("").Destroy(userId) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdDeleteFailCode, consts.CurdDeleteFailMsg, "")

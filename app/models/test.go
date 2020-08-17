@@ -9,11 +9,11 @@ import (
 	"strconv"
 )
 
-func CreateTestFactory(sql_type string) *Test {
-	if len(sql_type) == 0 {
-		sql_type = config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+func CreateTestFactory(sqlType string) *Test {
+	if len(sqlType) == 0 {
+		sqlType = config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
 	}
-	dbDriver := CreateBaseSqlFactory(sql_type)
+	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
 		return &Test{
 			BaseModel: dbDriver,
@@ -135,10 +135,10 @@ func (t *Test) TransAction(is_commit bool) bool {
 
 //  测试sql注入
 func (t *Test) QueryInject() {
-	v_str := "1;update tb_test  set  remark='sql注入信息' where   id=1"
+	tmpStr := "1;update tb_test  set  remark='sql注入信息' where   id=1"
 	sql := "SELECT  id, `name`,`sex`,`age`,`addr`,`remark`   FROM  tb_test where  id=? ORDER   BY  id  DESC   LIMIT ?"
 	// 单条查询，这里虽然查询10条数据，但是只返回结果的第一条数据
-	rows := t.QueryRow(sql, v_str, 10).Scan(&t.Id, &t.Name, &t.Sex, &t.Age, &t.Addr, &t.Remark)
+	rows := t.QueryRow(sql, tmpStr, 10).Scan(&t.Id, &t.Name, &t.Sex, &t.Age, &t.Addr, &t.Remark)
 	if rows == nil {
 		log.Println("查询sql执行无数据")
 	} else {
