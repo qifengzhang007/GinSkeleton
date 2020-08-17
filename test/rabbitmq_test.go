@@ -18,7 +18,7 @@ import (
 // 1.HelloWorld 模式
 func ExampleRabbitMqHelloWorldProducer() {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	hello_producer, _ := hello_world.CreateProducer()
 	var res bool
@@ -42,8 +42,8 @@ func ExampleRabbitMqHelloWorldProducer() {
 func TestMqHelloWorldConsumer(t *testing.T) {
 
 	// 单元测试是直接启动的函数，程序全局变量没有初始化，这里手动初始化程序运行根目录
-	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BASE_PATH
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
+	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BasePath
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
 
 	consumer, err := hello_world.CreateConsumer()
 	if err != nil {
@@ -52,7 +52,7 @@ func TestMqHelloWorldConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -64,7 +64,7 @@ func TestMqHelloWorldConsumer(t *testing.T) {
 // 2.WorkQueue模式
 func ExampleRabbitMqWorkQueueProducer() {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	producer, _ := work_queue.CreateProducer()
 	var res bool
@@ -88,8 +88,8 @@ func ExampleRabbitMqWorkQueueProducer() {
 func TestMqWorkQueueConsumer(t *testing.T) {
 
 	// 单元测试是直接启动的函数，程序全局变量没有初始化，这里手动初始化程序运行根目录
-	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BASE_PATH
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
+	// 正常情况下，程序都是通过统一入口Cmd/(Cli|Web|Api)等运行和编译，因此不需要设置BasePath
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 请手动设置本项目根目录，只为单元测试使用
 
 	consumer, err := work_queue.CreateConsumer()
 	if err != nil {
@@ -98,7 +98,7 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -110,7 +110,7 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 // 3.PublishSubscribe 发布、订阅模式模式
 func ExampleRabbitMqPublishSubscribeProducer() {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	producer, _ := publish_subscribe.CreateProducer()
 	var res bool
@@ -133,7 +133,7 @@ func ExampleRabbitMqPublishSubscribeProducer() {
 //消费者
 func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	consumer, err := publish_subscribe.CreateConsumer()
 	if err != nil {
@@ -142,7 +142,7 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 
 	consumer.Received(func(received_data string) {
@@ -154,7 +154,7 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 // Routing 路由模式
 func ExampleRabbitMqRoutingProducer() {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	producer, _ := routing.CreateProducer()
 	var res bool
@@ -185,7 +185,7 @@ func ExampleRabbitMqRoutingProducer() {
 // 消费者
 func TestRabbitMqRoutingConsumer(t *testing.T) {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 	consumer, err := routing.CreateConsumer()
 
 	if err != nil {
@@ -194,7 +194,7 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 	// 通过route_key 匹配指定队列的消息来处理
 	consumer.Received("key_even", func(received_data string) {
@@ -206,7 +206,7 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 //topics 模式
 func ExampleRabbitMqTopicsProducer() {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 
 	producer, _ := topics.CreateProducer()
 	var res bool
@@ -237,7 +237,7 @@ func ExampleRabbitMqTopicsProducer() {
 // 消费者
 func TestRabbitMqTopicsConsumer(t *testing.T) {
 
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton\\" // 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
 	consumer, err := topics.CreateConsumer()
 
 	if err != nil {
@@ -246,7 +246,7 @@ func TestRabbitMqTopicsConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(my_errors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 	// 通过route_key 模糊匹配队列路由键的消息来处理
 	consumer.Received("#.even", func(received_data string) {

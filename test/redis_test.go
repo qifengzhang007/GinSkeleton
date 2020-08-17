@@ -11,8 +11,8 @@ import (
 //  普通的key  value
 func TestRedisKeyValue(t *testing.T) {
 	// 因为单元测试是直接启动函数、执行
-	// 所以单元测试临时设置 BASE_PATH 项目根目录，主要是定位配置文件，请根据自己的项目实际路径设置
-	variable.BASE_PATH = "E:/GO/TestProject/goskeleton"
+	// 所以单元测试临时设置 BasePath 项目根目录，主要是定位配置文件，请根据自己的项目实际路径设置
+	variable.BasePath = "E:/GO/TestProject/goskeleton"
 
 	redis_client := redis_factory.GetOneRedisClient()
 
@@ -21,22 +21,22 @@ func TestRedisKeyValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	} else {
-		variable.Zap_Log.Info("Info 日志", zap.String("key2020", res))
+		variable.ZapLog.Info("Info 日志", zap.String("key2020", res))
 	}
 	//  get 命令，分为两步：1.执行get命令 2.将结果转为需要的格式
 	res, err = redis_client.String(redis_client.Execute("get", "key2020"))
 	if len(res) == 0 {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
-	variable.Zap_Log.Info("get key2020 ", zap.String("key2020", res))
+	variable.ZapLog.Info("get key2020 ", zap.String("key2020", res))
 
 }
 
 //  hash 键、值
 func TestRedisHashKey(t *testing.T) {
 	// 因为单元测试是直接启动函数、执行
-	// 所以单元测试临时设置项目根目录BASE_PATH，主要是定位配置文件，
-	variable.BASE_PATH = "E:\\GO\\GoSkeleton" // 单元测试临时设置项目跟目录
+	// 所以单元测试临时设置项目根目录BasePath，主要是定位配置文件，
+	variable.BasePath = "E:\\GO\\GoSkeleton" // 单元测试临时设置项目跟目录
 
 	redis_client := redis_factory.GetOneRedisClient()
 

@@ -21,12 +21,12 @@ func (u UpFiels) CheckParams(context *gin.Context) {
 	var is_pass bool
 	//获取文件发生错误，可能上传了空文件等
 	if error != nil {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Files_Upload_Fail_Code, consts.Files_Upload_Fail_Msg+", 获取上传文件发生错误!", error)
+		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadFailCode, consts.FilesUploadFailMsg+", 获取上传文件发生错误!", error)
 		return
 	}
 	//超过系统设定的最大值：32M
 	if tmp_file.Size > config.CreateYamlFactory().GetInt64("FileUploadSetting.Size")*1024*1024 {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Files_Upload_MoreThan_Max_Size_Code, consts.Files_Upload_MoreThan_Max_Size_Msg+",系统允许的最大值（M）："+config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
+		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+",系统允许的最大值（M）："+config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
 		return
 	}
 	//不允许的文件mime类型
@@ -41,12 +41,12 @@ func (u UpFiels) CheckParams(context *gin.Context) {
 		}
 		fp.Close()
 	} else {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Server_Occurred_Error_Code, consts.Server_Occurred_Error_Msg+",检测文件mime类型发生错误。", "")
+		response.ReturnJson(context, http.StatusBadRequest, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+",检测文件mime类型发生错误。", "")
 		return
 	}
 	//凡是存在相等的类型，通过验证，调用控制器
 	if !is_pass {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Files_Upload_MimeType_Fail_Code, consts.Files_Upload_MimeType_Fail_Msg, "")
+		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadMimeTypeFailCode, consts.FilesUploadMimeTypeFailMsg, "")
 	} else {
 		(&web.Upload{}).Start(context)
 	}

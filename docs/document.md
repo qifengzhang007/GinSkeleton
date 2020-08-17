@@ -17,9 +17,9 @@
 ```go  
 	// 1.初始化程序根目录
 	if path, err := os.Getwd(); err == nil {
-		variable.BASE_PATH = path
+		variable.BasePath = path
 	} else {
-		log.Fatal(MyErrors.Errors_BasePath)
+		log.Fatal(MyErrors.ErrorsBasePath)
 	}
 
 	//2.初始化表单参数验证器，注册在容器，具体注册了哪些验证器，请自行查看：app\http\validator/Registervalidator
@@ -28,8 +28,8 @@
 	// 3.websocket Hub中心启动
 	if Config.CreateYamlFactory().GetInt("websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化
-		variable.websocket_Hub = core.CreateHubFactory()
-		if WF, ok := variable.websocket_Hub.(*core.Hub); ok {
+		variable.WebsocketHub = core.CreateHubFactory()
+		if WF, ok := variable.WebsocketHub.(*core.Hub); ok {
 			go WF.Run()
 		}
 	}
@@ -55,7 +55,7 @@
 		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")
 		{
-			v_noAuth.POST("register", validatorFactory.Create(Consts.validator_Prefix+"UsersRegister"))
+			v_noAuth.POST("register", validatorFactory.Create(Consts.ValidatorPrefix+"UsersRegister"))
 		}
 
 		// 需要中间件验证的路由
@@ -65,7 +65,7 @@
 			v_users := V_Backend.Group("users/")
 			{
 				// 查询 ，这里的验证器直接从容器获取，是因为程序启动时，将验证器注册在了容器，具体代码位置：app\http\validator\Users\xxx
-				v_users.GET("index", validatorFactory.Create(Consts.validator_Prefix+"UsersShow"))
+				v_users.GET("index", validatorFactory.Create(Consts.ValidatorPrefix+"UsersShow"))
 			}
 
 		}
@@ -117,9 +117,9 @@ func (r *Register) CheckParams(context *gin.Context) {
 	}
 
 	//  该函数主要是将验证器绑定的字段（成员）以 键=>值 形式直接传递给下一步（控制器）
-	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.validator_Prefix, context)
+	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
-		response.returnJson(context, http.StatusInternalServerError, Consts.Server_Occurred_Error_Code, Consts.Server_Occurred_Error_Msg+",UserRegister表单验证器json化失败", "")
+		response.returnJson(context, http.StatusInternalServerError, Consts.ServerOccurredErrorCode, Consts.ServerOccurredErrorMsg+",UserRegister表单验证器json化失败", "")
 	} else {
 		// 验证完成，有验证器调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
 		(&Admin.Users{}).Register(extraAddBindDataContext)
@@ -139,17 +139,17 @@ func (u *Users) Register(context *gin.Context) {
 
 	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型
 	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
-	name := context.GetString(Consts.validator_Prefix + "name")
-	pass := context.GetString(Consts.validator_Prefix + "pass")
+	name := context.GetString(Consts.ValidatorPrefix + "name")
+	pass := context.GetString(Consts.ValidatorPrefix + "pass")
 	user_ip := context.ClientIP()
 
     // 如果对参数需要进一步加工，建议将业务逻辑切换到service层进行处理，将处理结果返回
     // 如果参数可以直接进行写库存储，那么可以直接调用 Model 的具体业务模型方法即可 
 
 	if Curd.CreateUserCurdFactory().Register(name, pass, user_ip) {
-		response.returnJson(context, http.StatusOK, Consts.Curd_Status_Ok_Code, Consts.Curd_Status_Ok_Msg, "")
+		response.returnJson(context, http.StatusOK, Consts.CurdStatusOkCode, Consts.CurdStatusOkMsg, "")
 	} else {
-		response.returnJson(context, http.StatusOK, Consts.Curd_Register_Fail_Code, Consts.Curd_Register_Fail_Msg, "")
+		response.returnJson(context, http.StatusOK, Consts.CurdRegisterFailCode, Consts.CurdRegisterFailMsg, "")
 	}
 }
 ```
@@ -226,7 +226,7 @@ func init() {
 		switch received {
 		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGILL, syscall.SIGTERM:
 			// 检测到程序退出时，按照键的前缀统一执行销毁类事件
-			(Event.CreateEventManageFactory()).FuzzyCall(variable.Event_destroy_Prefix)
+			(Event.CreateEventManageFactory()).FuzzyCall(variable.EventDestroyPrefix)
 			os.Exit(1)
 		}
 	}()

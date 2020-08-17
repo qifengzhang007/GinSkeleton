@@ -114,7 +114,7 @@ func (u *usersModel) OauthDestroyToken(userId float64) bool {
 // 判断用户token是否在数据库存在+状态OK
 func (u *usersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	sql := "SELECT   token  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  updated_at  DESC  LIMIT ?"
-	rows := u.QuerySql(sql, userId, consts.JwtToken_Online_Users)
+	rows := u.QuerySql(sql, userId, consts.JwtTokenOnlineUsers)
 	if rows != nil {
 		for rows.Next() {
 			var temp_token string
@@ -170,7 +170,7 @@ func (u *usersModel) Show(username string, limit_start float64, limit_items floa
 			if err == nil {
 				v_temp = append(v_temp, *u)
 			} else {
-				variable.Zap_Log.Error("sql查询错误", zap.Error(err))
+				variable.ZapLog.Error("sql查询错误", zap.Error(err))
 			}
 		}
 		//  凡是查询类记得释放记录集

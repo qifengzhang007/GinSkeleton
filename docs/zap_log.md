@@ -1,6 +1,6 @@
 ###    日志功能, 基于 zap + lumberjack 实现    
 > 1.特点：高性能、极速，功能：实现日志的标准管理、日志文件的自动分隔备份.      
-> 2.该日志在项目骨架启动时我们封装了全局变量(variable.Zap_Log)，直接调用即可，底层按照官方标准封装，使用者调用后不需要关闭日志，也不需要担心全局变量写日志存在并发冲突问题，底层会自动加锁后再写。  
+> 2.该日志在项目骨架启动时我们封装了全局变量(variable.ZapLog)，直接调用即可，底层按照官方标准封装，使用者调用后不需要关闭日志，也不需要担心全局变量写日志存在并发冲突问题，底层会自动加锁后再写。  
 > 3.相关包 github 地址：https://github.com/uber-go/zap 、 https://github.com/natefinch/lumberjack  
 
     
@@ -30,11 +30,11 @@
 ####    用法 1 , 高性能模式 .      
 >   1.举例展示最常用用法  
 ```code
-    variable.Zap_Log.Info("基本的运行提示类信息")
-    variable.Zap_Log.Warn("UserCreate接口参数非法警告，相关参数：",zap.String("userName","demo_name","userPass","demo_pass"))  
-    variable.Zap_Log.Panic("UserDestory接口参数异常，相关参数：",zap.String("userName","demo_name","userPass","demo_pass")) 
-    variable.Zap_Log.Error("UserDestory接口参数错误，相关参数：",zap.Error(error))  
-    variable.Zap_Log.Fatal("Mysql初始化参数错误，退出运行。相关参数：",zap.String("name","root"), zap.Int("端口",3306))  
+    variable.ZapLog.Info("基本的运行提示类信息")
+    variable.ZapLog.Warn("UserCreate接口参数非法警告，相关参数：",zap.String("userName","demo_name","userPass","demo_pass"))  
+    variable.ZapLog.Panic("UserDestory接口参数异常，相关参数：",zap.String("userName","demo_name","userPass","demo_pass")) 
+    variable.ZapLog.Error("UserDestory接口参数错误，相关参数：",zap.Error(error))  
+    variable.ZapLog.Fatal("Mysql初始化参数错误，退出运行。相关参数：",zap.String("name","root"), zap.Int("端口",3306))  
 
 ```     
     
@@ -42,13 +42,13 @@
 >   1.比第一种用法性能稍低，只不过基于第一种用法，相关的函数全部增加了格式化参数功能    
 ```code
  # 第一种的函数后面全部添加了一个 w ,相关的函数功能和第一种一模一样  
- variable.Zap_Log.Sugar().Infow("基本的运行提示类信息",zap.String("name","root"))
+ variable.ZapLog.Sugar().Infow("基本的运行提示类信息",zap.String("name","root"))
 
 # 格式化参数，第一种用法中的函数后面添加了一个 f 
- variable.Zap_Log.Sugar().Infof("参数 userId %d\n",2020)
+ variable.ZapLog.Sugar().Infof("参数 userId %d\n",2020)
 
- variable.Zap_Log.Sugar().Errorw("程序发生错误",zap.Error(error))
- variable.Zap_Log.Sugar().Errorf("参数非法，程序出错，userId %d\n",2020)
+ variable.ZapLog.Sugar().Errorw("程序发生错误",zap.Error(error))
+ variable.ZapLog.Sugar().Errorf("参数非法，程序出错，userId %d\n",2020)
 
  Warn  、 Panic 、Fatal用法类似
 
@@ -56,9 +56,9 @@
 
 ####   日志钩子  
 >   1.除了本项目骨架记录日志之外，您还可以对日志进行二次加工处理，例如：推送到 elasticsearch 、 阿里云日志中心等。    
->   2.日志钩子函数处理位置 > `App/Service/SysLogHook/Zap_LogHooks.go`    
+>   2.日志钩子函数处理位置 > `App/Service/SysLogHook/ZapLogHooks.go`    
 >   3.`BootStrap/Init.go` 中你可以修改钩子函数的位置
->   相关代码位置 ` variable.Zap_Log=ZapFactory.CreateZapFactory(SysLogHook.Zap_LogHandler)`  
+>   相关代码位置 ` variable.ZapLog=ZapFactory.CreateZapFactory(SysLogHook.ZapLogHandler)`  
 ```code 
 func ZapLogHandler(entry zapcore.Entry) error {
 

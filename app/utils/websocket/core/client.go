@@ -28,7 +28,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				variable.Zap_Log.Error(my_errors.Errors_Websocket_OnOpen_Fail, zap.Error(val))
+				variable.ZapLog.Error(my_errors.ErrorsWebsocketOnOpenFail, zap.Error(val))
 			}
 		}
 	}()
@@ -42,10 +42,10 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 
 	// 2.将http协议升级到websocket协议.初始化一个有效的websocket长连接客户端
 	if ws_conn, err := upgrader.Upgrade(context.Writer, context.Request, nil); err != nil {
-		variable.Zap_Log.Error(my_errors.Errors_Websocket_Upgrade_Fail + err.Error())
+		variable.ZapLog.Error(my_errors.ErrorsWebsocketUpgradeFail + err.Error())
 		return nil, false
 	} else {
-		if ws_hub, ok := variable.Websocket_Hub.(*Hub); ok {
+		if ws_hub, ok := variable.WebsocketHub.(*Hub); ok {
 			c.Hub = ws_hub
 		}
 		c.Conn = ws_conn
@@ -54,7 +54,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		c.ReadDeadline = config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
 		c.WriteDeadline = config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
 		c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second))
-		c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.Websocket_Handshake_Success))
+		c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess))
 		c.Conn.SetReadLimit(config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c
 		return c, true
@@ -69,7 +69,7 @@ func (c *Client) ReadPump(callback_on_message func(message_type int, received_da
 		err := recover()
 		if err != nil {
 			if real_err, is_ok := err.(error); is_ok {
-				variable.Zap_Log.Error(my_errors.Errors_Websocket_ReadMessage_Fail, zap.Error(real_err))
+				variable.ZapLog.Error(my_errors.ErrorsWebsocketReadMessageFail, zap.Error(real_err))
 			}
 		}
 		callback_on_close()
@@ -97,7 +97,7 @@ func (c *Client) Heartbeat(callback_close func()) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				variable.Zap_Log.Error(my_errors.Errors_Websocket_BeatHeart_Fail, zap.Error(val))
+				variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartFail, zap.Error(val))
 			}
 		}
 		ticker.Stop()    // 停止该client的心跳检测
@@ -121,14 +121,14 @@ func (c *Client) Heartbeat(callback_close func()) {
 		select {
 		case <-ticker.C:
 			c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second))
-			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.Websocket_Server_Ping_Msg)); err != nil {
+			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
 				c.HeartbeatFailTimes++
 				if c.HeartbeatFailTimes > config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
 					return
 				}
 			} else {
 				if err != nil {
-					variable.Zap_Log.Error(my_errors.Errors_Websocket_BeatHeartTicker_Fail + err.Error())
+					variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartTickerFail + err.Error())
 				}
 				if c.HeartbeatFailTimes > 0 {
 					c.HeartbeatFailTimes--

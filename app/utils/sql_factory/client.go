@@ -28,14 +28,14 @@ func Init_sql_driver(sql_type string) *sql.DB {
 		//db, err := sql.Open("mysql", string(User)+":"+Pass+"@tcp("+Host+":"+Port+")/"+DataBase+"?parseTime=True&loc=Local&charset="+Charset)
 		db, err := sql.Open("mysql", SqlConnString)
 		if err != nil {
-			variable.Zap_Log.Fatal(my_errors.Errors_Db_SqlDriverInitFail)
+			variable.ZapLog.Fatal(my_errors.ErrorsDbSqlDriverInitFail)
 		}
 		db.SetMaxIdleConns(SetMaxIdleConns)
 		db.SetMaxOpenConns(SetMaxOpenConns)
 		db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event.CreateEventManageFactory().Set(variable.Event_Destroy_Prefix+"Mysql_DB", func(args ...interface{}) {
+		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Mysql_DB", func(args ...interface{}) {
 			db.Close()
 		})
 		return db
@@ -52,14 +52,14 @@ func Init_sql_driver(sql_type string) *sql.DB {
 		SqlConnString := fmt.Sprintf("server=%s;port%d;database=%s;user id=%s;password=%s", Host, Port, DataBase, User, Pass)
 		db, err := sql.Open("mssql", SqlConnString)
 		if err != nil {
-			variable.Zap_Log.Fatal(my_errors.Errors_Db_SqlDriverInitFail + err.Error())
+			variable.ZapLog.Fatal(my_errors.ErrorsDbSqlDriverInitFail + err.Error())
 		}
 		db.SetMaxIdleConns(SetMaxIdleConns)
 		db.SetMaxOpenConns(SetMaxOpenConns)
 		db.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event.CreateEventManageFactory().Set(variable.Event_Destroy_Prefix+"Sqlserver_DB", func(args ...interface{}) {
+		event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Sqlserver_DB", func(args ...interface{}) {
 			db.Close()
 		})
 		return db
@@ -80,7 +80,7 @@ func GetOneEffectivePing(sql_type string) *sql.DB {
 			v_db_driver = Init_sql_driver(sql_type)
 			time.Sleep(time.Second * 1)
 			if i == max_retry_times {
-				variable.Zap_Log.Fatal("Mysql：" + my_errors.Errors_Db_GetConnFail)
+				variable.ZapLog.Fatal("Mysql：" + my_errors.ErrorsDbGetConnFail)
 			}
 		} else {
 			break

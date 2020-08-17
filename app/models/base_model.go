@@ -47,7 +47,7 @@ func CreateBaseSqlFactory(sql_type string) (res *BaseModel) {
 			res = &BaseModel{db_driver: sqlserver_driver}
 		}
 	default:
-		variable.Zap_Log.Error(my_errors.Errors_Db_Driver_NotExists)
+		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists)
 	}
 
 	return res
@@ -66,10 +66,10 @@ func (b *BaseModel) ExecuteSql(sql string, args ...interface{}) int64 {
 			if affectNum, err := res.RowsAffected(); err == nil {
 				return affectNum
 			} else {
-				variable.Zap_Log.Error(my_errors.Errors_Db_Execute_RunFail, zap.Error(err))
+				variable.ZapLog.Error(my_errors.ErrorsDbExecuteRunFail, zap.Error(err))
 			}
 		} else {
-			variable.Zap_Log.Error(my_errors.Errors_Db_Prepare_RunFail, zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsDbPrepareRunFail, zap.Error(err))
 		}
 	}
 	return -1
@@ -83,10 +83,10 @@ func (b *BaseModel) QuerySql(sql string, args ...interface{}) *sql.Rows {
 		if Rows, err := stm.Query(args...); err == nil {
 			return Rows
 		} else {
-			variable.Zap_Log.Error(my_errors.Errors_Db_Query_RunFail, zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsDbQueryRunFail, zap.Error(err))
 		}
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_Prepare_RunFail, zap.Error(err))
+		variable.ZapLog.Error(my_errors.ErrorsDbPrepareRunFail, zap.Error(err))
 	}
 	return nil
 
@@ -95,7 +95,7 @@ func (b *BaseModel) QueryRow(sql string, args ...interface{}) *sql.Row {
 	if stm, err := b.db_driver.Prepare(sql); err == nil {
 		return stm.QueryRow(args...)
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_QueryRow_RunFail, zap.Error(err))
+		variable.ZapLog.Error(my_errors.ErrorsDbQueryRowRunFail, zap.Error(err))
 		return nil
 	}
 }
@@ -106,7 +106,7 @@ func (b *BaseModel) PrepareSql(sql string) bool {
 		b.stm = v_stm
 		return true
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_Prepare_RunFail, zap.Error(err))
+		variable.ZapLog.Error(my_errors.ErrorsDbPrepareRunFail, zap.Error(err))
 		return false
 	}
 }
@@ -117,10 +117,10 @@ func (b *BaseModel) ExecuteSqlForMultiple(args ...interface{}) int64 {
 		if affectNum, err := res.RowsAffected(); err == nil {
 			return affectNum
 		} else {
-			variable.Zap_Log.Error("获取sql结果影响函数失败", zap.Error(err))
+			variable.ZapLog.Error("获取sql结果影响函数失败", zap.Error(err))
 		}
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_ExecuteForMultiple_Fail, zap.Error(err))
+		variable.ZapLog.Error(my_errors.ErrorsDbExecuteForMultipleFail, zap.Error(err))
 	}
 	return -1
 }
@@ -130,7 +130,7 @@ func (b *BaseModel) QuerySqlForMultiple(args ...interface{}) *sql.Rows {
 	if Rows, err := b.stm.Query(args...); err == nil {
 		return Rows
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_Query_RunFail, zap.Error(err))
+		variable.ZapLog.Error(my_errors.ErrorsDbQueryRunFail, zap.Error(err))
 	}
 	return nil
 }
@@ -140,7 +140,7 @@ func (b *BaseModel) BeginTx() *sql.Tx {
 	if tx, err := b.db_driver.Begin(); err == nil {
 		return tx
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_Db_Transaction_Begin_Fail + err.Error())
+		variable.ZapLog.Error(my_errors.ErrorsDbTransactionBeginFail + err.Error())
 	}
 	return nil
 }

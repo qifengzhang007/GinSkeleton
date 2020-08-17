@@ -29,14 +29,14 @@ func Upload(context *gin.Context, save_path string) bool {
 			succ := gin.H{
 				"path": save_path + save_file_name,
 			}
-			response.ReturnJson(context, http.StatusCreated, consts.Curd_Status_Ok_Code, consts.Curd_Status_Ok_Msg, succ)
+			response.ReturnJson(context, http.StatusCreated, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, succ)
 			return true
 		}
 	} else {
-		save_err = errors.New(my_errors.Errors_Snowflake_GetId_Fail)
+		save_err = errors.New(my_errors.ErrorsSnowflakeGetIdFail)
 	}
 
-	response.ReturnJson(context, http.StatusBadRequest, consts.Files_Upload_Fail_Code, consts.Files_Upload_Fail_Msg+", 文件保存失败!", save_err.Error())
+	response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadFailCode, consts.FilesUploadFailMsg+", 文件保存失败!", save_err.Error())
 	return false
 
 }

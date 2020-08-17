@@ -17,7 +17,7 @@ import (
 func InitApiRouter() *gin.Engine {
 
 	gin.DisableConsoleColor()
-	f, _ := os.Create(variable.BASE_PATH + config.CreateYamlFactory().GetString("Logs.GinLogName"))
+	f, _ := os.Create(variable.BasePath + config.CreateYamlFactory().GetString("Logs.GinLogName"))
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	router := gin.Default()
@@ -41,7 +41,7 @@ func InitApiRouter() *gin.Engine {
 		// 模拟一个首页路由
 		V_Api := V_Api.Group("home/")
 		{
-			V_Api.GET("news", validatorFactory.Create(consts.Validator_Prefix+"HomeNews"))
+			V_Api.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
 		}
 
 	}

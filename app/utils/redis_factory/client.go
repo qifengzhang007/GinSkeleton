@@ -20,13 +20,13 @@ func createRedisClientPool() *redis.Pool {
 			//此处对应redis ip及端口号
 			conn, err := redis.Dial("tcp", configFac.GetString("Redis.Host")+":"+configFac.GetString("Redis.Port"))
 			if err != nil {
-				variable.Zap_Log.Error(my_errors.Errors_Redis_InitConnFail + err.Error())
+				variable.ZapLog.Error(my_errors.ErrorsRedisInitConnFail + err.Error())
 			}
 			auth := configFac.GetString("Redis.Auth") //通过配置项设置redis密码
 			if len(auth) >= 1 {
 				if _, err := conn.Do("AUTH", auth); err != nil {
 					conn.Close()
-					variable.Zap_Log.Error(my_errors.Errors_Redis_AuhtFail + err.Error())
+					variable.ZapLog.Error(my_errors.ErrorsRedisAuhtFail + err.Error())
 				}
 			}
 			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
@@ -34,7 +34,7 @@ func createRedisClientPool() *redis.Pool {
 		},
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
-	event.CreateEventManageFactory().Set(variable.Event_Destroy_Prefix+"Redis", func(args ...interface{}) {
+	event.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
 		redis_pool.Close()
 	})
 	return redis_pool

@@ -14,7 +14,7 @@ import (
 
 func CreateUserFactory() *userToken {
 	return &userToken{
-		userJwt: my_jwt.CreateMyJWT(consts.JwtToken_SignKey),
+		userJwt: my_jwt.CreateMyJWT(consts.JwtTokenSignKey),
 	}
 }
 
@@ -56,9 +56,9 @@ func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string,
 	// 解析用户token的数据信息
 	_, code := u.isNotExpired(old_token)
 	switch code {
-	case consts.JwtToken_OK, consts.JwtToken_Expired:
+	case consts.JwtTokenOK, consts.JwtTokenExpired:
 		//如果token已经过期，那么执行更新
-		if new_token, err := u.userJwt.RefreshToken(old_token, consts.JwtToken_Refresh_ExpireAt); err == nil {
+		if new_token, err := u.userJwt.RefreshToken(old_token, consts.JwtTokenRefreshExpireAt); err == nil {
 			if custome_claims, err := u.userJwt.ParseToken(new_token); err == nil {
 				user_id := custome_claims.UserId
 				expires_at := custome_claims.ExpiresAt
@@ -67,8 +67,8 @@ func (u *userToken) RefreshToken(old_token, client_ip string) (new_token string,
 				}
 			}
 		}
-	case consts.JwtToken_Invalid:
-		variable.Zap_Log.Error(my_errors.Errors_Token_Invalid)
+	case consts.JwtTokenInvalid:
+		variable.ZapLog.Error(my_errors.ErrorsTokenInvalid)
 	}
 
 	return "", false
@@ -85,21 +85,21 @@ func (u *userToken) isNotExpired(token string) (*my_jwt.CustomClaims, int) {
 
 		if time.Now().Unix()-custome_claims.ExpiresAt < 0 {
 			// token有效
-			return custome_claims, consts.JwtToken_OK
+			return custome_claims, consts.JwtTokenOK
 		} else {
 			// 过期的token
-			return custome_claims, consts.JwtToken_Expired
+			return custome_claims, consts.JwtTokenExpired
 		}
 	} else {
 		// 无效的token
-		return nil, consts.JwtToken_Invalid
+		return nil, consts.JwtTokenInvalid
 	}
 }
 
 // 判断token是否有效（未过期+数据库用户信息正常）
 func (u *userToken) IsEffective(token string) bool {
 	cutomClaims, code := u.isNotExpired(token)
-	if consts.JwtToken_OK == code {
+	if consts.JwtTokenOK == code {
 		//if user_item := Model.CreateUserFactory("").ShowOneItem(cutomClaims.UserId); user_item != nil {
 		if models.CreateUserFactory("").OauthCheckTokenIsOk(cutomClaims.UserId, token) {
 			return true

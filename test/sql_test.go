@@ -10,7 +10,7 @@ import (
 // 新增
 func TestSqlInsert(t *testing.T) {
 	// 由于单元测试可以直接启动函数，无法自动获取项目根路径，所以手动设置一下项目根路径进行单元测试
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 
 	if models.CreateTestFactory("").InsertData() {
 		fmt.Println("数据插入成功")
@@ -21,7 +21,7 @@ func TestSqlInsert(t *testing.T) {
 
 // 查询（多条）
 func TestSqlSelect(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 
 	list := models.CreateTestFactory("").QueryData()
 	if list != nil {
@@ -35,7 +35,7 @@ func TestSqlSelect(t *testing.T) {
 
 // 查询（单条）
 func TestSqlSelectOne(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 
 	oneList := models.CreateTestFactory("").QueryRowData()
 	if oneList == nil {
@@ -47,7 +47,7 @@ func TestSqlSelectOne(t *testing.T) {
 
 // 测试提交事务的操作
 func TestSqlTransAction(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 	// 修改以下函数的参数，测试事务的提交（true）与回滚（false）
 	if models.CreateTestFactory("").TransAction(true) {
 		fmt.Println("数据插入成功(提交事务操作)")
@@ -58,7 +58,7 @@ func TestSqlTransAction(t *testing.T) {
 
 // 测试回滚事务的操作
 func TestSqlTransAction2(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 	// 参数 true 表示 提交事务；  false 表示 回滚事务
 	if models.CreateTestFactory("").TransAction(true) {
 		fmt.Println("数据插入成功(回滚事务操作)")
@@ -69,7 +69,7 @@ func TestSqlTransAction2(t *testing.T) {
 
 // 批量插入数据的正确姿势
 func TestSqlInsertMultiple(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 
 	if models.CreateTestFactory("").InsertDataMultiple() {
 		fmt.Println("批量插入数据OK")
@@ -80,7 +80,7 @@ func TestSqlInsertMultiple(t *testing.T) {
 
 // 批量插入数据的错误姿势
 func TestSqlInsertMultipleError(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 
 	if models.CreateTestFactory("").InsertDataMultipleErrorMethod() {
 		fmt.Println("批量插入数据OK")
@@ -91,6 +91,6 @@ func TestSqlInsertMultipleError(t *testing.T) {
 
 // 测试sql注入
 func TestSqlInject(t *testing.T) {
-	variable.BASE_PATH = "E:\\GO\\TestProject\\goskeleton"
+	variable.BasePath = "E:\\GO\\TestProject\\goskeleton"
 	models.CreateTestFactory("").QueryInject()
 }

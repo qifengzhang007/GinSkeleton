@@ -64,7 +64,7 @@ consumer, err := HelloWorld.CreateConsumer()
     // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
     // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+		log.Fatal(MyErrors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 
     // 进入阻塞状态，处理消息
@@ -112,7 +112,7 @@ consumer, err := HelloWorld.CreateConsumer()
     // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
     // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
         consumer.OnConnectionError(func(err *amqp.Error) {
-            log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+            log.Fatal(MyErrors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
         })
 
         // 通过route_key 模糊匹配队列路由键的消息来处理
@@ -132,7 +132,7 @@ consumer, err := HelloWorld.CreateConsumer()
         consumer.OnConnectionError(func(err *amqp.Error) {
         // 连接关闭的回调，主要是记录错误，进行后续更进一步处理，不要尝试在这里编写重连逻辑
         // 本项目已经封装了完善的消费者端重连逻辑，触发这里的代码说明重连已经超过了最大重试次数
-            log.Fatal(MyErrors.Errors_RabbitMq_Reconnect_Fail + "\n" + err.Error())
+            log.Fatal(MyErrors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
         })
 
         // 通过route_key 模糊匹配队列路由键的消息来处理

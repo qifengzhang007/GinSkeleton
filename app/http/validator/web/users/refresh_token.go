@@ -23,18 +23,18 @@ func (r RefreshToken) CheckParams(context *gin.Context) {
 			"tips": "Token参数校验失败，参数不符合规定，token 长度>=20",
 			"err":  err.Error(),
 		}
-		response.ReturnJson(context, http.StatusBadRequest, consts.Validator_ParamsCheck_Fail_Code, consts.Validator_ParamsCheck_Fail_Msg, errs)
+		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
 		return
 	}
 	token := strings.Split(r.Authorization, " ")
 	if len(token) == 2 {
-		context.Set(consts.Validator_Prefix+"token", token[1])
+		context.Set(consts.ValidatorPrefix+"token", token[1])
 		(&web.Users{}).RefreshToken(context)
 	} else {
 		errs := gin.H{
 			"tips": "Token不合法，token请放置在header头部分，按照按=>键提交，例如：Authorization：Bearer 你的实际token....",
 		}
-		response.ReturnJson(context, http.StatusBadRequest, consts.Validator_ParamsCheck_Fail_Code, consts.Validator_ParamsCheck_Fail_Msg, errs)
+		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
 	}
 
 }

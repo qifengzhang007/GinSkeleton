@@ -12,14 +12,14 @@ import (
 func CreateYamlFactory() *ConfigYml {
 
 	yaml_config := viper.New()
-	yaml_config.AddConfigPath(variable.BASE_PATH + "/Config")
+	yaml_config.AddConfigPath(variable.BasePath + "/Config")
 	// 需要读取的文件名
 	yaml_config.SetConfigName("config")
 	//设置配置文件类型
 	yaml_config.SetConfigType("yaml")
 
 	if err := yaml_config.ReadInConfig(); err != nil {
-		log.Fatal(my_errors.Errors_Config_Init_Fail + err.Error())
+		log.Fatal(my_errors.ErrorsConfigInitFail + err.Error())
 	}
 
 	return &ConfigYml{

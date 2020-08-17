@@ -11,7 +11,7 @@ func CreateSnowFlakeFactory() *snowflake {
 
 	v_snowflake := &snowflake{
 		lastTimestamp: time.Now().UnixNano() / 1e6,
-		machId:        consts.SnowFlake_Machine_Id,
+		machId:        consts.SnowFlakeMachineId,
 		index:         0,
 	}
 	return v_snowflake

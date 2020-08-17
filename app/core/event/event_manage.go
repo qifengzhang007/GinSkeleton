@@ -44,11 +44,11 @@ func (e *EventManage) Call(key string, args ...interface{}) {
 		if fn, ok := value_interface.(func(args ...interface{})); ok {
 			fn(args...)
 		} else {
-			variable.Zap_Log.Error(my_errors.Errors_FuncEvent_NotCall + ", 键名：" + key + ", 相关函数无法调用")
+			variable.ZapLog.Error(my_errors.ErrorsFuncEventNotCall + ", 键名：" + key + ", 相关函数无法调用")
 		}
 
 	} else {
-		variable.Zap_Log.Error(my_errors.Errors_FuncEvent_NotRegister + ", 键名：" + key)
+		variable.ZapLog.Error(my_errors.ErrorsFuncEventNotRegister + ", 键名：" + key)
 	}
 }
 

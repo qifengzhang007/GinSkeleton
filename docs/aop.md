@@ -12,7 +12,7 @@ func (u *Users) Destroy(context *gin.Context) {
     
     //  before 删除之前回调代码... 例如：判断删除数据的用户是否具备相关权限等
 
-	userid := context.GetFloat64(consts.Validator_Prefix + "id")
+	userid := context.GetFloat64(consts.ValidatorPrefix + "id")
     // 根据 userid 执行删除用户数据（最核心代码）
 
     //  after 删除之后回调代码... 例如 将删除的用户数据备份到相关的历史表
@@ -39,7 +39,7 @@ type destroyBefore struct{}
 
 // 前置函数必须具有返回值，这样才能控制流程是否继续向下执行
 func (d *destroyBefore) Before(context *gin.Context) bool {
-	userId := context.GetFloat64(consts.Validator_Prefix + "id")
+	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	fmt.Printf("模拟 Users 删除操作， Before 回调,用户ID：%.f\n", userId)
 	if userId > 10 {
 		return true
@@ -68,7 +68,7 @@ type destroyAfter struct{}
 func (d *destroyAfter) After(context *gin.Context) {
 	// 后置函数可以使用异步执行
 	go func() {
-		userId := context.GetFloat64(consts.Validator_Prefix + "id")
+		userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 		fmt.Printf("模拟 Users 删除操作， After 回调,用户ID：%.f\n", userId)
 	}()
 }

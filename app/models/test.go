@@ -69,7 +69,7 @@ func (t *Test) QueryRowData() *Test {
 	if err == nil {
 		return t
 	} else {
-		variable.Zap_Log.Error("单行查询出错", zap.Error(err))
+		variable.ZapLog.Error("单行查询出错", zap.Error(err))
 	}
 	return nil
 }

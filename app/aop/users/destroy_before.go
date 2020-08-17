@@ -12,8 +12,8 @@ type DestroyBefore struct{}
 
 // 前置函数必须具有返回值，这样才能控制流程是否继续向下执行
 func (d *DestroyBefore) Before(context *gin.Context) bool {
-	userId := context.GetFloat64(consts.Validator_Prefix + "id")
-	variable.Zap_Log.Sugar().Infof("模拟 Users 删除操作， Before 回调,用户ID：%.f\n", userId)
+	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
+	variable.ZapLog.Sugar().Infof("模拟 Users 删除操作， Before 回调,用户ID：%.f\n", userId)
 	if userId > 10 {
 		return true
 	} else {

@@ -19,7 +19,7 @@ func (c Connect) CheckParams(context *gin.Context) {
 
 	// 1. 首先检查是否开启websocket服务配置（在配置项中开启）
 	if config.CreateYamlFactory().GetInt("Websocket.Start") != 1 {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Ws_Server_Not_Start_Code, consts.Ws_Server_Not_Start_Msg, "")
+		response.ReturnJson(context, http.StatusBadRequest, consts.WsServerNotStartCode, consts.WsServerNotStartMsg, "")
 		return
 	}
 	//2.基本的验证规则没有通过
@@ -28,12 +28,12 @@ func (c Connect) CheckParams(context *gin.Context) {
 			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:2020?token=asasasaasasasssddsdsd",
 			"err":  err.Error(),
 		}
-		response.ReturnJson(context, http.StatusBadRequest, consts.Validator_ParamsCheck_Fail_Code, consts.Validator_ParamsCheck_Fail_Msg, errs)
+		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
 		return
 	}
 
 	if service_ws, ok := (&controller_ws.Ws{}).OnOpen(context); ok == false {
-		response.ReturnJson(context, http.StatusBadRequest, consts.Ws_Open_Fail_Code, consts.Ws_Open_Fail_Msg, "")
+		response.ReturnJson(context, http.StatusBadRequest, consts.WsOpenFailCode, consts.WsOpenFailMsg, "")
 	} else {
 		(&controller_ws.Ws{}).OnMessage(service_ws, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
 	}
