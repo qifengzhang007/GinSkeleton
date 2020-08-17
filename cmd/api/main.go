@@ -8,6 +8,6 @@ import (
 
 // 这里可以存放门户类网站入口
 func main() {
-	routers := routers.InitApiRouter()
-	_ = routers.Run(yml_config.CreateYamlFactory().GetString("HttpServer.Api.Port"))
+	router := routers.InitApiRouter()
+	_ = router.Run(yml_config.CreateYamlFactory().GetString("HttpServer.Api.Port"))
 }

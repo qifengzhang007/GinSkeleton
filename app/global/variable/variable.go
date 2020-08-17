@@ -1,7 +1,6 @@
 package variable
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
 	"log"
@@ -30,7 +29,6 @@ var (
 func init() {
 	// 1.初始化程序根目录
 	if path, err := os.Getwd(); err == nil {
-		fmt.Println("variable 处 初始化. 默认路径：", path)
 		// 路径进行处理，兼容单元测试程序程序启动时的奇怪路径
 		BasePath = strings.Replace(strings.Replace(path, `\test`, "", 1), `/test`, "", 1)
 	} else {

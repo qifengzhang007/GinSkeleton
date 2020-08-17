@@ -16,7 +16,7 @@ func CreateYamlFactory() *ymlConfig {
 	// 需要读取的文件名
 	yamlConfig.SetConfigName("config")
 	//设置配置文件类型
-	yamlConfig.SetConfigType("yaml")
+	yamlConfig.SetConfigType("yml")
 
 	if err := yamlConfig.ReadInConfig(); err != nil {
 		log.Fatal(my_errors.ErrorsConfigInitFail + err.Error())
