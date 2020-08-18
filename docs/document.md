@@ -18,7 +18,7 @@
 // 部分代码
 
 func init() {
-	// 1. 初始化 项目根路径，参见 variable 常量包
+	// 1. 初始化 项目根路径，参见 variable 常量包.位置：app\global\variable\variable.go  
 
 	checkRequiredFolders()
 	// 2.初始化全局日志句柄，并载入日志钩子处理函数
