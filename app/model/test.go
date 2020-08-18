@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"fmt"
@@ -81,7 +81,8 @@ func (t *Test) InsertDataMultiple() bool {
 	//1.首先独立预处理sql语句，无参数
 	if t.PrepareSql(sql) {
 		var age int8 = 18
-		for i := 1; i <= 10000; i++ {
+		// 你可以模拟插入更多条数据，例如 1万+
+		for i := 1; i <= 100; i++ {
 			sex := i % 2
 			//2.执行批量插入，注意 该函数的参数全部是 预处理 sql 的参数
 			if t.ExecuteSqlForMultiple("姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i)) == -1 {
@@ -96,8 +97,8 @@ func (t *Test) InsertDataMultiple() bool {
 func (t *Test) InsertDataMultipleErrorMethod() bool {
 	sql := "INSERT  INTO  tb_test(`name`,`sex`,`age`,`addr`,`remark`) VALUES(?,?,?,?,?)"
 	var age int8 = 18
-	// 一次性插入 2万 条数据
-	for i := 1; i <= 20000; i++ {
+	// 一次性插入 100 条数据，你可以模拟的更多，例如 1万+
+	for i := 1; i <= 100; i++ {
 		sex := i % 2
 		//2.批量数据插入，如果 预处理 语句不独立调用，ExecuteSql 命令每一次都会进行预编译、执行，导致数据库预编译的sql超过系统默认值
 		// 系统预处理sql数量超过 max_prepared_stmt_count（默认16382）设置的值

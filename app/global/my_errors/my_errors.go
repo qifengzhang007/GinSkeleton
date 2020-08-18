@@ -13,9 +13,9 @@ const (
 	ErrorsBasePath               string = "初始化项目根目录失败"
 	ErrorsNoAuthorization        string = "token鉴权未通过，请通过token授权接口重新获取token,"
 	// 数据库部分
-	ErrorsDbDriverNotExists        string = "数据库驱动不存在"
+	ErrorsDbDriverNotExists        string = "数据库驱动类型不存在"
 	ErrorsDbSqlDriverInitFail      string = "数据库驱动初始化失败"
-	ErrorsDbGetConnFail            string = "从数据库连接池获取一个连接失败，超过最大连接次数."
+	ErrorsDbGetConnFail            string = "从数据库连接池获取一个连接失败，超过最大连接重试次数."
 	ErrorsDbPrepareRunFail         string = "sql语句预处理（prepare）失败"
 	ErrorsDbQueryRunFail           string = "查询类sql语句执行失败"
 	ErrorsDbExecuteRunFail         string = "执行类sql语句执行失败"

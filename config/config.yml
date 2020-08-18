@@ -16,6 +16,7 @@ Mysql:
   Prefix: "tb_"
   User: "root"
   Pass: "DRsXT5ZJ6Oi55LPQ"
+  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   Charset: "utf8"
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
@@ -29,6 +30,7 @@ SqlServer:
   Prefix: "tb_"
   User: "sa"
   Pass: "secret2017"
+  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
   SetConnMaxLifetime: 60

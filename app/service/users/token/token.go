@@ -6,7 +6,7 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/middleware/my_jwt"
-	"goskeleton/app/models"
+	"goskeleton/app/model"
 	"time"
 )
 
@@ -44,7 +44,7 @@ func (u *userToken) RecordLoginToken(userToken, clientIp string) bool {
 	if customClaims, err := u.userJwt.ParseToken(userToken); err == nil {
 		userId := customClaims.UserId
 		expiresAt := customClaims.ExpiresAt
-		return models.CreateUserFactory("").OauthLoginToken(userId, userToken, expiresAt, clientIp)
+		return model.CreateUserFactory("").OauthLoginToken(userId, userToken, expiresAt, clientIp)
 	} else {
 		return false
 	}
@@ -62,7 +62,7 @@ func (u *userToken) RefreshToken(oldToken, clientIp string) (newToken string, re
 			if customClaims, err := u.userJwt.ParseToken(newToken); err == nil {
 				userId := customClaims.UserId
 				expiresAt := customClaims.ExpiresAt
-				if models.CreateUserFactory("").OauthRefreshToken(userId, expiresAt, oldToken, newToken, clientIp) {
+				if model.CreateUserFactory("").OauthRefreshToken(userId, expiresAt, oldToken, newToken, clientIp) {
 					return newToken, true
 				}
 			}
@@ -101,7 +101,7 @@ func (u *userToken) IsEffective(token string) bool {
 	customClaims, code := u.isNotExpired(token)
 	if consts.JwtTokenOK == code {
 		//if user_item := Model.CreateUserFactory("").ShowOneItem(customClaims.UserId); user_item != nil {
-		if models.CreateUserFactory("").OauthCheckTokenIsOk(customClaims.UserId, token) {
+		if model.CreateUserFactory("").OauthCheckTokenIsOk(customClaims.UserId, token) {
 			return true
 		}
 	}

@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"database/sql"
@@ -9,48 +9,11 @@ import (
 	"strings"
 )
 
-var mysqlDriver *sql.DB
-var sqlserverDriver *sql.DB
-
 // 创建一个数据库基类工厂
 func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
 	sqlType = strings.ToLower(strings.Replace(sqlType, " ", "", -1))
-	switch sqlType {
-	case "mysql":
-		if mysqlDriver == nil {
-			mysqlDriver = sql_factory.InitSqlDriver(sqlType)
-		}
-		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
-		if err := mysqlDriver.Ping(); err != nil {
-			// 重试
-			mysqlDriver = sql_factory.GetOneEffectivePing(sqlType)
-			// 如果重试成功
-			if err := mysqlDriver.Ping(); err == nil {
-				res = &BaseModel{dbDriver: mysqlDriver}
-			}
-		} else {
-			res = &BaseModel{dbDriver: mysqlDriver}
-		}
-	case "sqlserver", "mssql":
-		if sqlserverDriver == nil {
-			sqlserverDriver = sql_factory.InitSqlDriver(sqlType)
-		}
-		// Ping() 命令表示检测数据库连接是否ok，必要时从连接池建立一个连接
-		if err := sqlserverDriver.Ping(); err != nil {
-			// 重试
-			sqlserverDriver = sql_factory.GetOneEffectivePing(sqlType)
-			// 如果重试成功
-			if err := sqlserverDriver.Ping(); err == nil {
-				res = &BaseModel{dbDriver: sqlserverDriver}
-			}
-		} else {
-			res = &BaseModel{dbDriver: sqlserverDriver}
-		}
-	default:
-		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists)
-	}
-
-	return res
+	sqlDriver := sql_factory.GetOneSqlClient(sqlType)
+	return &BaseModel{dbDriver: sqlDriver}
 }
 
 // 定义一个数据库操作的基本结构体

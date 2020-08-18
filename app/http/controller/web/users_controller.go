@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
-	"goskeleton/app/models"
+	"goskeleton/app/model"
 	"goskeleton/app/service/users/curd"
 	userstoken "goskeleton/app/service/users/token"
 	"goskeleton/app/utils/response"
@@ -36,7 +36,7 @@ func (u *Users) Login(context *gin.Context) {
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 
-	userModel := models.CreateUserFactory("").Login(name, pass)
+	userModel := model.CreateUserFactory("").Login(name, pass)
 	if userModel != nil {
 		userTokenFactory := userstoken.CreateUserFactory()
 		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.Username, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
@@ -79,7 +79,7 @@ func (u *Users) Show(context *gin.Context) {
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
 	limits := context.GetFloat64(consts.ValidatorPrefix + "limits")
 	limitStart := (page - 1) * limits
-	showlist := models.CreateUserFactory("").Show(name, limitStart, limits)
+	showlist := model.CreateUserFactory("").Show(name, limitStart, limits)
 	if showlist != nil {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, showlist)
 	} else {
@@ -125,7 +125,7 @@ func (u *Users) Update(context *gin.Context) {
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
-	if models.CreateUserFactory("").Destroy(userId) {
+	if model.CreateUserFactory("").Destroy(userId) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdDeleteFailCode, consts.CurdDeleteFailMsg, "")
