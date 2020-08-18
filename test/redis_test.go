@@ -7,6 +7,7 @@ import (
 	"goskeleton/app/utils/redis_factory"
 	_ "goskeleton/bootstrap"
 	"testing"
+	"time"
 )
 
 //  普通的key  value
@@ -49,6 +50,21 @@ func TestRedisHashKey(t *testing.T) {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
 	fmt.Println(res2)
+}
+
+// 测试 redis 连接池
+func TestRedisConnPool(t *testing.T) {
+
+	for i := 1; i <= 20; i++ {
+		go func() {
+			redisClient := redis_factory.GetOneRedisClient()
+			fmt.Printf("获取的redis数据库连接池地址：%p\n", redisClient)
+			time.Sleep(time.Second * 10)
+			fmt.Printf("阻塞过程中，那您可以通过redis命令  client  list   查看链接的客户端")
+			redisClient.ReleaseOneRedisClientPool() // 释放从连接池获取的连接
+		}()
+	}
+	time.Sleep(time.Second * 20)
 }
 
 //  其他请参照以上示例即可

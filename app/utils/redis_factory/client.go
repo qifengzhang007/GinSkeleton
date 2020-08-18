@@ -12,12 +12,12 @@ import (
 var redisPool *redis.Pool
 
 func init() {
-	redisPool = createRedisClientPool()
+	redisPool = initRedisClientPool()
 }
-func createRedisClientPool() *redis.Pool {
+func initRedisClientPool() *redis.Pool {
 
 	configFac := yml_config.CreateYamlFactory()
-	redisPool := &redis.Pool{
+	redisPool = &redis.Pool{
 		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
 		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数
 		IdleTimeout: configFac.GetDuration("Redis.IdleTimeout") * time.Second, //最大的空闲连接等待时间，超过此时间后，空闲连接将被关闭
@@ -26,29 +26,40 @@ func createRedisClientPool() *redis.Pool {
 			conn, err := redis.Dial("tcp", configFac.GetString("Redis.Host")+":"+configFac.GetString("Redis.Port"))
 			if err != nil {
 				variable.ZapLog.Error(my_errors.ErrorsRedisInitConnFail + err.Error())
+				return nil, err
 			}
 			auth := configFac.GetString("Redis.Auth") //通过配置项设置redis密码
 			if len(auth) >= 1 {
 				if _, err := conn.Do("AUTH", auth); err != nil {
-					conn.Close()
+					_ = conn.Close()
 					variable.ZapLog.Error(my_errors.ErrorsRedisAuthFail + err.Error())
 				}
 			}
-			conn.Do("select", configFac.GetInt("Redis.IndexDb"))
+			_, _ = conn.Do("select", configFac.GetInt("Redis.IndexDb"))
 			return conn, err
 		},
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
 	event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
-		redisPool.Close()
+		_ = redisPool.Close()
 	})
 	return redisPool
 }
 
 //  从连接池获取一个redis连接
 func GetOneRedisClient() *RedisClient {
-	if redisPool == nil {
-		redisPool = createRedisClientPool()
+	configFac := yml_config.CreateYamlFactory()
+	maxRetryTimes := configFac.GetInt("Redis.ConnFailRetryTimes")
+	for i := 1; i <= maxRetryTimes; i++ {
+		if redisPool == nil {
+			initRedisClientPool()
+			if i == maxRetryTimes {
+				variable.ZapLog.Error("Redis：" + my_errors.ErrorsRedisGetConnFail)
+				return nil
+			}
+		} else {
+			break
+		}
 	}
 	return &RedisClient{redisPool.Get()}
 }
@@ -65,7 +76,7 @@ func (r *RedisClient) Execute(cmd string, args ...interface{}) (interface{}, err
 
 // 释放连接池
 func (r *RedisClient) ReleaseOneRedisClientPool() {
-	r.client.Close()
+	_ = r.client.Close()
 }
 
 //  封装几个数据类型转换的函数

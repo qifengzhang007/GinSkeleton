@@ -30,20 +30,22 @@ SqlServer:
   Prefix: "tb_"
   User: "sa"
   Pass: "secret2017"
-  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
+  ReConnectInterval: 5    # 数据库连接失败，每次重连时之间间隔秒数
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
   SetConnMaxLifetime: 60
-  PingFailRetryTimes: 3
+  PingFailRetryTimes: 3   #从连接池获取连接失败，最大重试次数
 
 Redis:
   Host: "127.0.0.1"
   Port: 6379
-  Auth: "Secret2017~"
+  Auth: ""
   MaxIdle: 10
   MaxActive: 1000
   IdleTimeout: 60
   IndexDb: 1
+  ConnFailRetryTimes: 3    #从连接池获取连接失败，最大重试次数
+  ReConnectInterval: 1     # 从连接池获取连接失败，每次重试之间间隔的秒数
 
 Logs:
   GinLogName: "/Storage/logs/gin.log"                  #设置 gin 框架的接口访问日志

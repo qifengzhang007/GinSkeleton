@@ -100,7 +100,8 @@ func GetOneSqlClient(sqlType string) *sql.DB {
 			dbDriver = initSqlDriver(sqlType)
 			time.Sleep(time.Second * yml_config.CreateYamlFactory().GetDuration("Mysql.ReConnectInterval"))
 			if i == maxRetryTimes {
-				variable.ZapLog.Fatal("Mysql：" + my_errors.ErrorsDbGetConnFail)
+				variable.ZapLog.Error("Mysql：" + my_errors.ErrorsDbGetConnFail)
+				return nil
 			}
 		} else {
 			break

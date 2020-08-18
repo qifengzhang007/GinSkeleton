@@ -26,6 +26,7 @@ const (
 	//redis部分
 	ErrorsRedisInitConnFail string = "初始化redis连接池失败"
 	ErrorsRedisAuthFail     string = "Redis Auth 鉴权失败，密码错误"
+	ErrorsRedisGetConnFail  string = "Redis 从连接池获取一个连接失败，超过最大重试次数"
 	// 验证器错误
 	ErrorsValidatorNotExists      string = "不存在的验证器"
 	ErrorsValidatorBindParamsFail string = "验证器绑定参数失败"
