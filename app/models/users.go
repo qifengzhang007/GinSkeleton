@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"goskeleton/app/global/consts"
@@ -79,7 +78,7 @@ func (u *usersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 //用户刷新token
 func (u *usersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=FROM_UNIXTIME(?),client_ip=?,updated_at=NOW()  WHERE   fr_user_id=? AND token=?"
-	fmt.Println(sql, newToken, expiresAt, clientIp, userId, oldToken)
+	variable.ZapLog.Sugar().Info(sql, newToken, expiresAt, clientIp, userId, oldToken)
 	if u.ExecuteSql(sql, newToken, expiresAt, clientIp, userId, oldToken) > 0 {
 		return true
 	}

@@ -83,7 +83,7 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 	for {
 		mt, bReceivedData, err := c.Conn.ReadMessage()
 		if err == nil {
-			if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline * time.Second)); err != nil {
+			if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline)); err != nil {
 				variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 			}
 			callbackOnMessage(mt, bReceivedData)
