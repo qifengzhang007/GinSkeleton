@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/models"
+	_ "goskeleton/bootstrap"
 	"testing"
 )
 

@@ -7,7 +7,7 @@ import (
 
 // 定义一个全局键值对存储容器
 
-var smap sync.Map
+var sMap sync.Map
 
 // 创建一个容器工厂
 func CreateContainersFactory() *containers {
@@ -22,7 +22,7 @@ type containers struct {
 func (e *containers) Set(key string, value interface{}) (res bool) {
 
 	if e.Get(key) == nil {
-		smap.Store(key, value)
+		sMap.Store(key, value)
 		res = true
 	}
 	return
@@ -30,13 +30,13 @@ func (e *containers) Set(key string, value interface{}) (res bool) {
 
 //  2.删除
 func (e *containers) Delete(key string) {
-	smap.Delete(key)
+	sMap.Delete(key)
 }
 
 //  3.传递键，从容器获取值
 func (e *containers) Get(key string) interface{} {
 
-	if value, exists := smap.Load(key); exists {
+	if value, exists := sMap.Load(key); exists {
 		return value
 	}
 	return nil
@@ -45,10 +45,10 @@ func (e *containers) Get(key string) interface{} {
 // 按照键的前缀模糊删除容器中注册的内容
 func (e *containers) FuzzyDelete(keyPre string) {
 
-	smap.Range(func(key, value interface{}) bool {
+	sMap.Range(func(key, value interface{}) bool {
 		if keyname, ok := key.(string); ok {
 			if strings.HasPrefix(keyname, keyPre) {
-				smap.Delete(keyname)
+				sMap.Delete(keyname)
 			}
 		}
 		return true

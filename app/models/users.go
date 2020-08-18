@@ -12,11 +12,11 @@ import (
 	// 	_ "github.com/denisenkom/go-mssqldb"   # 如果使用sqlserver，则加载该驱动
 )
 
-// 创建userfactory
+// 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *usersModel {
 	if len(sqlType) == 0 {
-		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
 	}
 	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
@@ -40,47 +40,47 @@ type usersModel struct {
 }
 
 // 用户注册（写一个最简单的使用账号、密码注册即可）
-func (u *usersModel) Register(username string, pass string, user_ip string) bool {
+func (u *usersModel) Register(username string, pass string, userIp string) bool {
 	sql := "INSERT  INTO tb_users(username,pass,last_login_ip) SELECT ?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
-	if u.ExecuteSql(sql, username, pass, user_ip, username) > 0 {
+	if u.ExecuteSql(sql, username, pass, userIp, username) > 0 {
 		return true
 	}
 	return false
 }
 
 // 用户登录,
-func (u *usersModel) Login(p_name string, p_pass string) *usersModel {
+func (u *usersModel) Login(name string, pass string) *usersModel {
 	sql := "select id, username,pass,phone  from tb_users where  username=?  limit 1"
-	rows := u.QuerySql(sql, p_name)
+	rows := u.QuerySql(sql, name)
 	for rows.Next() {
-		rows.Scan(&u.Id, &u.Username, &u.Pass, &u.Phone)
-		rows.Close()
+		_ = rows.Scan(&u.Id, &u.Username, &u.Pass, &u.Phone)
+		_ = rows.Close()
 		break
 	}
 	// 账号密码验证成功
-	if len(u.Pass) > 0 && (u.Pass == md5_encrypt.Base64Md5(p_pass)) {
+	if len(u.Pass) > 0 && (u.Pass == md5_encrypt.Base64Md5(pass)) {
 		return u
 	}
 	return nil
 }
 
 //记录用户登陆（login）生成的token，每次登陆记录一次token
-func (u *usersModel) OauthLoginToken(userId int64, token string, expries_at int64, client_ip string) bool {
+func (u *usersModel) OauthLoginToken(userId int64, token string, expiresAt int64, clientIp string) bool {
 	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
 		"SELECT  ?,'login',? ,FROM_UNIXTIME(?),? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
 	//注意：token的精确度为秒，如果在一秒之内，一个账号多次调用接口生成的token其实是相同的，这样写入数据库，第二次的影响行数为0，知己实际上操作仍然是有效的。
 	//所以这里的判断影响行数>=0 都是正确的，只有 -1 才是执行失败、错误
-	if u.ExecuteSql(sql, userId, token, expries_at, client_ip, userId, token) >= 0 {
+	if u.ExecuteSql(sql, userId, token, expiresAt, clientIp, userId, token) >= 0 {
 		return true
 	}
 	return false
 }
 
 //用户刷新token
-func (u *usersModel) OauthRefreshToken(userId, expries_at int64, oldToken, newtoken, clientIp string) bool {
+func (u *usersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=FROM_UNIXTIME(?),client_ip=?,updated_at=NOW()  WHERE   fr_user_id=? AND token=?"
-	fmt.Println(sql, newtoken, expries_at, clientIp, userId, oldToken)
-	if u.ExecuteSql(sql, newtoken, expries_at, clientIp, userId, oldToken) > 0 {
+	fmt.Println(sql, newToken, expiresAt, clientIp, userId, oldToken)
+	if u.ExecuteSql(sql, newToken, expiresAt, clientIp, userId, oldToken) > 0 {
 		return true
 	}
 	return false
@@ -117,17 +117,17 @@ func (u *usersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	rows := u.QuerySql(sql, userId, consts.JwtTokenOnlineUsers)
 	if rows != nil {
 		for rows.Next() {
-			var temp_token string
-			err := rows.Scan(&temp_token)
+			var tempToken string
+			err := rows.Scan(&tempToken)
 			if err == nil {
-				if temp_token == token {
-					rows.Close()
+				if tempToken == token {
+					_ = rows.Close()
 					return true
 				}
 			}
 		}
 		//  凡是查询类记得释放记录集
-		rows.Close()
+		_ = rows.Close()
 	}
 	return false
 }
@@ -153,16 +153,16 @@ func (u *usersModel) ShowOneItem(userId float64) *usersModel {
 			}
 		}
 		//  凡是查询类记得释放记录集
-		rows.Close()
+		_ = rows.Close()
 	}
 	return nil
 }
 
 // 查询（根据关键词模糊查询）
-func (u *usersModel) Show(username string, limit_start float64, limit_items float64) []usersModel {
+func (u *usersModel) Show(username string, limitStart float64, limitItems float64) []usersModel {
 
 	sql := "SELECT  `id`, `username`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   username like ? LIMIT ?,?"
-	rows := u.QuerySql(sql, "%"+username+"%", limit_start, limit_items)
+	rows := u.QuerySql(sql, "%"+username+"%", limitStart, limitItems)
 	if rows != nil {
 		temp := make([]usersModel, 0)
 		for rows.Next() {
@@ -174,26 +174,26 @@ func (u *usersModel) Show(username string, limit_start float64, limit_items floa
 			}
 		}
 		//  凡是查询类记得释放记录集
-		rows.Close()
+		_ = rows.Close()
 		return temp
 	}
 	return nil
 }
 
 //新增
-func (u *usersModel) Store(username string, pass string, real_name string, phone string, remark string) bool {
+func (u *usersModel) Store(username string, pass string, realName string, phone string, remark string) bool {
 	sql := "INSERT  INTO tb_users(username,pass,real_name,phone,remark) SELECT ?,?,?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
-	if u.ExecuteSql(sql, username, pass, real_name, phone, remark, username) > 0 {
+	if u.ExecuteSql(sql, username, pass, realName, phone, remark, username) > 0 {
 		return true
 	}
 	return false
 }
 
 //更新
-func (u *usersModel) Update(id float64, username string, pass string, real_name string, phone string, remark string, client_ip string) bool {
+func (u *usersModel) Update(id float64, username string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update tb_users set username=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
-	if u.ExecuteSql(sql, username, pass, real_name, phone, remark, id) > 0 {
-		if u.OauthResetToken(id, pass, client_ip) {
+	if u.ExecuteSql(sql, username, pass, realName, phone, remark, id) > 0 {
+		if u.OauthResetToken(id, pass, clientIp) {
 			return true
 		}
 	}

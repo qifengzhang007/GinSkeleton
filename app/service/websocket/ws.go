@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/websocket/core"
 	"time"
@@ -70,15 +71,15 @@ func (w *Ws) GetOnlineClients() {
 // 向全部在线客户端广播消息
 func (w *Ws) BroadcastMsg(sendMsg string) {
 
-	for onlineClient, _ := range w.WsClient.Hub.Clients {
+	for onlineClient := range w.WsClient.Hub.Clients {
 
 		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
 		if err := onlineClient.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline * time.Second)); err != nil {
-			variable.ZapLog.Error("设置ws消息截止时间出错", zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		//获取每一个在线的客户端，向远端发送消息
 		if err := onlineClient.Conn.WriteMessage(websocket.TextMessage, []byte(sendMsg)); err != nil {
-			variable.ZapLog.Error("消息发送出现错误", zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 	}
 }

@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/qifengzhang007/goCurl"
+	_ "goskeleton/bootstrap"
 	"testing"
 )
 

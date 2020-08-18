@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"goskeleton/app/service/weak_rela_service"
+	_ "goskeleton/bootstrap"
 	"testing"
 )
 

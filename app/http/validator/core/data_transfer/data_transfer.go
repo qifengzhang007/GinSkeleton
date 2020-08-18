@@ -6,7 +6,7 @@ import (
 	"goskeleton/app/http/validator/core/interf"
 )
 
-// 将验证绑定的结构体字段（成员）数据传输到上下文，方便控制器获取
+// 将验证器成员(字段)绑定到数据传输到上下文，方便控制器获取
 /**
 本函数参数说明：
 validatorInterface 实现了验证器接口的结构体

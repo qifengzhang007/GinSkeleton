@@ -57,7 +57,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		if err := c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess)); err != nil {
-			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteMgsFail, zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 		c.Conn.SetReadLimit(yml_config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c

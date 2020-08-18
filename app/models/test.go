@@ -12,7 +12,7 @@ import (
 
 func CreateTestFactory(sqlType string) *Test {
 	if len(sqlType) == 0 {
-		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlsver，那么就在这里
+		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
 	}
 	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
@@ -50,12 +50,12 @@ func (t *Test) QueryData() []Test {
 	// QuerySql 函数 适合一次性（或者小批量）执行就完成的操作
 	rows := t.QuerySql(sql, 10)
 	if rows != nil {
-		var temp = []Test{}
+		var temp []Test
 		for rows.Next() {
-			rows.Scan(&t.Name, &t.Sex, &t.Age, &t.Addr, &t.Remark)
+			_ = rows.Scan(&t.Name, &t.Sex, &t.Age, &t.Addr, &t.Remark)
 			temp = append(temp, *t)
 		}
-		rows.Close()
+		_ = rows.Close()
 		return temp
 	} else {
 		return nil
@@ -110,21 +110,21 @@ func (t *Test) InsertDataMultipleErrorMethod() bool {
 }
 
 //  sql事物操作
-func (t *Test) TransAction(is_commit bool) bool {
+func (t *Test) TransAction(isCommit bool) bool {
 	sql := "INSERT  INTO  tb_test(`name`,`sex`,`age`,`addr`,`remark`) VALUES(?,?,?,?,?)"
 	tx := t.BeginTx()
 	if tx != nil {
-		if v_stm, err := tx.Prepare(sql); err == nil {
-			if res, err2 := v_stm.Exec("姓名_测试_事务测试", 1, 18, "地址测试数据2020，事务测试", "备注信息数据，事务测试"); err2 == nil {
+		if vStm, err := tx.Prepare(sql); err == nil {
+			if res, err2 := vStm.Exec("姓名_测试_事务测试", 1, 18, "地址测试数据2020，事务测试", "备注信息数据，事务测试"); err2 == nil {
 				if _, err3 := res.RowsAffected(); err3 == nil {
-					if is_commit {
-						tx.Commit()
+					if isCommit {
+						_ = tx.Commit()
 						return true
 					} else {
-						tx.Rollback()
+						_ = tx.Rollback()
 					}
 				} else {
-					tx.Rollback()
+					_ = tx.Rollback()
 				}
 			}
 		}
