@@ -10,7 +10,7 @@
 
 ### RabbitMq常用的几种模式    
 ![全场景图](http://139.196.101.31:2080/images/rabbitmq.jpg)   
-####    1.`HelloWorld`模式(最基本模式)， 特点如下：   
+####    1.`hello_world`模式(最基本模式)， 特点如下：   
 >   1 一个生产者（producer）、一个消费者（consumer）通过队列（queue）进行 **一对一** 的数据传输。  
 >   2.使用非常简单，适合简单业务场景使用，相关的场景模型图：  
 >   ![场景图](http://139.196.101.31:2080/images/helloworld.png)  
@@ -21,19 +21,19 @@
 >   3.消费者支持设置更多的参数，使配置强的消费者可以多处理消息，配置低的可以少处理消息，做到尽其所能，资源最大化利用。    
 >   ![场景图](http://139.196.101.31:2080/images/workqueue.png)   
 
-####    3.`Publish/Subscribe`模式（同时向许多消费者发送消息）， 特点如下：   
+####    3.`publish/subscribe`模式（同时向许多消费者发送消息）， 特点如下：   
 >   1 生产者（producer）、多个消费者（consumer）通过队列（queue）进行**一对多、多对多**的数据传输。  
 >   2.生产者（producer）将消息发布到交换机（exchange）的某个队列（queue），多个消费者（consumer）处理消息。    
 >   3.该模式也叫作广播（broadcast）、扇形（fanout）、发布/订阅模式，消费者（consumer）可以通过配置，接收来自生产者（consumer）发送的全部消息；或者每种消费者只接收指定队列的消息，将生产者发送的消息进行分类（按照不同的队列）处理。         
 >   ![场景图](http://139.196.101.31:2080/images/fanout.png)  
 
-####    4.`Routing`模式（有选择性地接收消息）， 特点如下：   
+####    4.`routing`模式（有选择性地接收消息）， 特点如下：   
 >   1 生产者（producer）、多个消费者（consumer）通过队列（queue）进行**一对多、多对多**的数据传输。  
 >   2.生产者（producer）将消息发布到交换机（exchange）已经绑定好路由键的某个队列（queue），多个消费者（consumer）可以通过绑定的路由键获取消息、处理消息。    
 >   3.该模式下，消息的分类应该应该明确、种类数量不是非常多，那么就可以指定路由键（key）、绑定的到交换器的队列实现消息精准投递。         
 >   ![场景图](http://139.196.101.31:2080/images/routing.png)  
 
-####    5.`Topics`模式（基于主题接收消息）， 特点如下：   
+####    5.`topics`模式（基于主题接收消息）， 特点如下：   
 >   1 该模式就是`routing`模式的加强版，由原来的路由键精确匹配模式升级现在的模糊匹配模式。  
 >   2.语法层面主要表现为灵活的匹配规则：
 >   2.1 # 表示匹配一个或多个任意字符；
@@ -48,11 +48,11 @@
 
 ### RabbitMq快速使用指南   
 > 1.建议使用docker 快速安装使用即可，安装步骤请自行搜索。  
-> 2.详细使用指南参见单元测试demo代: [rabbitmq全量单元测试](../test/rabbitMq_test.go)  
+> 2.详细使用指南参见单元测试demo代: [rabbitmq全量单元测试](../test/rabbitmq.go)  
 > 3.六种场景模型我们封装了统一的使用规范。    
  
-####  1.HelloWorld、WorkQueue、PublishSubscribe 场景模型使用：      
-> 相关配置参见：Config/config.yaml, RabbitMq  部分    
+####  1.hello_world、work_queue、publish_subscribe 场景模型使用：      
+> 相关配置参见：config/config.yaml, rbbitmq  部分    
 ##### 1.1 启动一个消费者，通过回调函数在阻塞模式进行消息处理   
 ```go  
 consumer, err := HelloWorld.CreateConsumer()
@@ -74,11 +74,11 @@ consumer, err := HelloWorld.CreateConsumer()
 ```  
 ##### 1.2 调用生产者投递一个或者多个消息，投递通常都是一次性的。     
 ```go  
-    // 这里创建场景模型的时候通过不同的模型名称创建即可，主要有：HelloWorld、WorkQueue、PublishSubscribe
-	hello_producer, _ := HelloWorld.CreateProducer()
+    // 这里创建场景模型的时候通过不同的模型名称创建即可，主要有：hello_world、work_queue、publish_subscribe 
+	hello_producer, _ := hello_world.CreateProducer()
 	var res bool
 	for i := 0; i < 10; i++ {
-		str := fmt.Sprintf("%d_HelloWorld开始发送消息测试", (i + 1))
+		str := fmt.Sprintf("%d_hello_world开始发送消息测试", (i + 1))
 		res = hello_producer.Send(str)
 		//time.Sleep(time.Second * 1)
 	}
@@ -93,7 +93,7 @@ consumer, err := HelloWorld.CreateConsumer()
 	
 ```  
 
-####  2.Routing、Topics 场景模型使用：            
+####  2.routing、topics 场景模型使用：            
 >    `routing`模式属于路由键的严格匹配模式。     
 >   `topics`模式比`routing`模式更灵活，两者使用、功能几乎完全一致。该模式完全可以代理`routing`模式，因此这里仅介绍 `topics`模式。     
 >   注意：生产者设置键的规则必须是：关键词A.关键词B.关键词C等，即关键词之间必须使用.（点）隔开，消费者端只需要将.（点）左边或右边的关键词使用#代替即可。 

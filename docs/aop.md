@@ -22,7 +22,7 @@ func (u *Users) Destroy(context *gin.Context) {
 ```
 
 ####  使用 Aop 思想实现前置和后置回调需求      
->   1.编写删除数据之前（Before）的回调函数，[示例代码](../app/aop/users/destroyBefore.go)  
+>   1.编写删除数据之前（Before）的回调函数，[示例代码](../app/aop/users/destroy_before.go)  
 
 ```bash
 package Users
@@ -35,10 +35,10 @@ import (
 
 // 模拟Aop 实现对某个控制器函数的前置（Before）回调
 
-type destroyBefore struct{}
+type destroy_before struct{}
 
 // 前置函数必须具有返回值，这样才能控制流程是否继续向下执行
-func (d *destroyBefore) Before(context *gin.Context) bool {
+func (d *destroy_before) Before(context *gin.Context) bool {
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	fmt.Printf("模拟 Users 删除操作， Before 回调,用户ID：%.f\n", userId)
 	if userId > 10 {
@@ -49,7 +49,7 @@ func (d *destroyBefore) Before(context *gin.Context) bool {
 }
 
 ```
->   2.编写删除数据之后（After）的回调,[示例代码](../app/aop/users/destroyAfter.go)  
+>   2.编写删除数据之后（After）的回调,[示例代码](../app/aop/users/destroy_after.go)  
 
 ```bash
 
@@ -63,9 +63,9 @@ import (
 
 // 模拟Aop 实现对某个控制器函数的后置（After）回调
 
-type destroyAfter struct{}
+type destroy_after struct{}
 
-func (d *destroyAfter) After(context *gin.Context) {
+func (d *destroy_after) After(context *gin.Context) {
 	// 后置函数可以使用异步执行
 	go func() {
 		userId := context.GetFloat64(consts.ValidatorPrefix + "id")
@@ -76,7 +76,7 @@ func (d *destroyAfter) After(context *gin.Context) {
 
 ```
 
->   3.由于本项目骨架的控制器调用都是统一由验证器启动，因此在验证器调用控制器函数的地方，使用匿名函数，直接优雅地切入前置、后置回调代码,[示例代码](../app/http/validator/web/users/Destroy.go)   
+>   3.由于本项目骨架的控制器调用都是统一由验证器启动，因此在验证器调用控制器函数的地方，使用匿名函数，直接优雅地切入前置、后置回调代码,[示例代码](../app/http/validator/web/users/destroy.go)   
 ```go  
          
 //(&Web.Users{}).Destroy(extraAddBindDataContext)   // 原始方法进行如下改造  
@@ -91,7 +91,7 @@ func(before_callback_fn func(context *gin.Context) bool, after_callback_fn func(
         // 这里编写前置函数验证不通过的相关返回提示逻辑...
 
      }
-}((&Users.destroyBefore{}).Before, (&Users.destroyAfter{}).After)
+}((&Users.destroy_before{}).Before, (&Users.destroy_after{}).After)
 
 // 接口请求结果展示：
 模拟 Users 删除操作， Before 回调,用户ID：16

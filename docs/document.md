@@ -1,6 +1,6 @@
 ### 文档说明 
 >   1.首先请自行查看本项目骨架3分钟快速入门主线图，本文档将按照该图的主线逻辑展开...    
->   2.本项目骨架开发过程中涉及到的参考资料,了解详情有利于了解本项目骨架的核心。      
+>   2.本项目骨架开发过程中涉及到的参考资料,了解详情有利于了解本项目骨架的核心，建议您可以先学会本项目骨架之后再去了解相关引用。        
 >       2.1 gin框架：https://github.com/gin-gonic/gin  
 >       2.2 websocket：https://github.com/gorilla/websocket    
 >       2.3 表单参数验证器：https://github.com/go-playground/validator    
@@ -12,27 +12,31 @@
 >       2.9 cobra（Cli命令模式包） 相关资料：https://github.com/spf13/cobra/    
 >   3.本文档侧重介绍本项目骨架的主线逻辑以及相关核心模块，不对gin框架的具体语法做介绍。    
 
-####    1.框架启动 ，加载顺序：cmd/(web|api)/main.go—>routers—> init.go  
+####    1.框架启动 ，加载顺序：cmd/(web|api|cli)/main.go—>routers—> init.go  
 >   1.代码位置：bootstrap/init.go，主要功能：项目初始化所需要的变量、配置等都在此模块完成。    
 ```go  
-	// 1.初始化程序根目录
-	if path, err := os.Getwd(); err == nil {
-		variable.BasePath = path
-	} else {
-		log.Fatal(MyErrors.ErrorsBasePath)
-	}
+// 部分代码
 
-	//2.初始化表单参数验证器，注册在容器，具体注册了哪些验证器，请自行查看：app\http\validator/Registervalidator
-	Registervalidator.Registervalidator()
+func init() {
+	// 1. 初始化 项目根路径，参见 variable 常量包
 
-	// 3.websocket Hub中心启动
-	if Config.CreateYamlFactory().GetInt("websocket.Start") == 1 {
-		// websocket 管理中心hub全局初始化
+	checkRequiredFolders()
+	// 2.初始化全局日志句柄，并载入日志钩子处理函数
+	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
+
+	//3.初始化表单参数验证器，注册在容器
+	register_validator.register_validator()
+
+	// 4.websocket Hub中心启动
+	if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
+		// websocket 管理中心hub全局初始化一份
 		variable.WebsocketHub = core.CreateHubFactory()
-		if WF, ok := variable.WebsocketHub.(*core.Hub); ok {
-			go WF.Run()
+		if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
+			go Wh.Run()
 		}
 	}
+
+}
 
 ```
 
@@ -40,10 +44,10 @@
 #####   2.1.介绍路由之前首先介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：app\http\validator\(web|api)\xxx业务模块  
 ```code
     //1.首先编写参数验证器逻辑，例如：用户注册模块
-    // 详情参见：app\http\validator\web\Users\Register.go
+    // 详情参见：app\http\validator\web\users\register.go
 
     //2.将以上编写好的表单参数验证器在注册文件添加记录，便于程序启动时加载到容器，供路由从容器调用
-    // 详情参见：app\http\validator\Common\Registervalidator\Registervalidator.go
+    // 详情参见：app\http\validator\common\register_validator\register_validator.go
 
 ```   
 #####   2.2.路由 ，位置：routers\web.go   
@@ -101,7 +105,7 @@
 ```
  
 #####   2.4 表单参数验证器，位置：app\http\validator\(web|api)\（XXX业务模块）。
->开发完成一个表单参数验证器，必须在注册文件（app\http\validator\Registervalidator\Registervalidator.go）增加记录，待程序启动时统一自动注册到容器。    
+>开发完成一个表单参数验证器，必须在注册文件（app\http\validator\register_validator\register_validator.go）增加记录，待程序启动时统一自动注册到容器。    
 ```go  
 type Register struct {
 	Base
@@ -193,7 +197,7 @@ func (u *UsersCurd) Register(name string, pass string, user_ip string) bool {
 
 ```
 
-#####   2.6 response响应，位置：app\utils\response\returnJson.go
+#####   2.6 response响应，位置：app\utils\response\response.go
 >这里我们只封装了json格式数据返回，如果需要 xml 、html、text等，请按照gin语法自行追加函数即可。
 ```go  
 
@@ -238,12 +242,12 @@ func init() {
 ####    4.websocket模块  
 >   1.启动ws服务，位置：Config\config.yaml，找到相关配置开关开启。  
 >   2.该模块也遵守整个请求（ request——response）的生命周期。    
->   3.控制器位置：app\http\controller\websocket\Ws.go  
->   4.事件监听、处理位置：app\service\websocket\Ws.go,[查看详情](app/service/websocket/ws.go)     
+>   3.控制器位置：app\http\controller\websocket\ws.go  
+>   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](app/service/websocket/ws.go)     
 >   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
 >![业务主线图](http://139.196.101.31:2080/pingpong.png)  
 ####    5.yaml配置中心 
->   1.位置：Config\config.yaml，通过注释即可阅读各项功能。     
+>   1.位置：config\config.yml，通过注释即可阅读各项功能。     
 
 ####    6.日志记录 
->   1.位置：Storage\logs\gin.log.      
+>   1.位置：storage\logs\gin.log.      

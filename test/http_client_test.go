@@ -1,9 +1,8 @@
 package test
 
 import (
-	"fmt"
 	"github.com/qifengzhang007/goCurl"
-	_ "goskeleton/bootstrap"
+	_ "goskeleton/bootstrap" //  为了保证单元测试与正常启动效果一致，记得引入该包
 	"testing"
 )
 
@@ -17,7 +16,7 @@ func TestHttpClient(t *testing.T) {
 		if len(content) < 30 {
 			t.Errorf("单元测试未通过,返回值不符合要求：%s\n", content)
 		}
-		fmt.Printf("%s\n", content)
+		t.Log(content)
 	}
 }
 

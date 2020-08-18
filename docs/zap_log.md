@@ -5,7 +5,7 @@
 
     
 ###  前言  
->   1.日志相关的配置参见，Config目录内的config.yaml文件，Logs 部分，程序默认处于 debug 模式，日志输出在console面板，编译时记得切换模式。    
+>   1.日志相关的配置参见，config目录内的config.yml文件，Logs 部分，程序默认处于`app_debug|调试模式`，日志输出在console面板，编译时记得切换模式。    
 >   2.本文档列举几种最常用的用法, 想要深度学习请参考相关的 github 地址.  
 
 ###  日志处理, 标准函数
@@ -56,9 +56,9 @@
 
 ####   日志钩子  
 >   1.除了本项目骨架记录日志之外，您还可以对日志进行二次加工处理，例如：推送到 elasticsearch 、 阿里云日志中心等。    
->   2.日志钩子函数处理位置 > `App/Service/SysLogHook/ZapLogHooks.go`    
->   3.`BootStrap/Init.go` 中你可以修改钩子函数的位置
->   相关代码位置 ` variable.ZapLog=ZapFactory.CreateZapFactory(SysLogHook.ZapLogHandler)`  
+>   2.日志钩子函数处理位置 > `app/service/sys_log_hook/zap_log_hooks.go`    
+>   3.`bootStrap/init.go` 中你可以修改钩子函数的位置
+>   相关代码位置 ` variable.ZapLog=ZapFactory.CreateZapFactory(sys_log_hook.ZapLogHandler)`  
 ```code 
 func ZapLogHandler(entry zapcore.Entry) error {
 
@@ -72,9 +72,9 @@ func ZapLogHandler(entry zapcore.Entry) error {
 	//Stack      代码调用栈
 
 	//这里启动一个协程，hook丝毫不会影响程序性能，
-	go func(param_entry zapcore.Entry) {
-		fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
-		fmt.Printf("%#+v\n", param_entry)
+	go func(paramEntry zapcore.Entry) {
+		//fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
+		//fmt.Printf("%#+v\n", paramEntry)
 	}(entry)
 	return nil
 }

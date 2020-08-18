@@ -1,14 +1,14 @@
 ### cobra 概要    
->   1.`cobra`是一款非常强大、好用的`Cli`模式包，主要创建非http接口服务。    
+>   1.`cobra`是一款非常强大、好用的`command`模式包，主要创建非http接口服务。    
 >   2.`cobra`的全方位功能、细节介绍请自行百度搜索，这里主要介绍如何在本项目骨架中快速使用`cobra`编写程序。                    
 ### 关于 cobra入口、业务目录  
->   1.入口：`cmd/cli/Main.go`,主要用于编译。                   
->   2.业务代码目录：`Cli/cmd/`。             
+>   1.入口：`cmd/cli/main.go`,主要用于编译。                   
+>   2.业务代码目录：`command/cmd/`。             
 >           
 ### cobra 快速使用指南   
 > 快速创建模板的方法主要有：  
-> 1.复制`Cli/cmd/demo.go`基于此模板自行修改。   
-> 2.进入`Cli`目录,执行命令 `cobra  add  业务模块名`，也可以快速创建出模板文件。   
+> 1.复制`command/cmd/demo.go`基于此模板自行修改。   
+> 2.进入`command`目录,执行命令 `cobra  add  业务模块名`，也可以快速创建出模板文件。   
 
 ####  demo.go 代码介绍       
 
@@ -108,7 +108,6 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
