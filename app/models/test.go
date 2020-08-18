@@ -122,6 +122,7 @@ func (t *Test) TransAction(isCommit bool) bool {
 						return true
 					} else {
 						_ = tx.Rollback()
+						return true
 					}
 				} else {
 					_ = tx.Rollback()
@@ -143,6 +144,8 @@ func (t *Test) QueryInject() {
 	if rows == nil {
 		log.Println("查询sql执行无数据")
 	} else {
+
 		log.Println("查询sql执行完成！请检查是否发生sql注入,行数：", rows)
 	}
+
 }

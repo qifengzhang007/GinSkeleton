@@ -52,7 +52,7 @@ func TestSqlTransAction(t *testing.T) {
 // 测试回滚事务的操作
 func TestSqlTransAction2(t *testing.T) {
 	// 参数 true 表示 提交事务；  false 表示 回滚事务
-	if models.CreateTestFactory("").TransAction(true) {
+	if models.CreateTestFactory("").TransAction(false) {
 		fmt.Println("数据插入成功(回滚事务操作)")
 	} else {
 		t.Errorf("数据插入（回滚事务操作），单元测试失败！")
