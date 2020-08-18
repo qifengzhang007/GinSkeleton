@@ -48,7 +48,7 @@
 
 ### RabbitMq快速使用指南   
 > 1.建议使用docker 快速安装使用即可，安装步骤请自行搜索。  
-> 2.详细使用指南参见单元测试demo代: [rabbitmq全量单元测试](../test/rabbitmq.go)  
+> 2.详细使用指南参见单元测试demo代: [rabbitmq全量单元测试](../test/rabbitmq_test.go)  
 > 3.六种场景模型我们封装了统一的使用规范。    
  
 ####  1.hello_world、work_queue、publish_subscribe 场景模型使用：      

@@ -53,7 +53,7 @@ func (d *destroy_before) Before(context *gin.Context) bool {
 
 ```bash
 
-package Users
+package users
 
 import (
 	"goskeleton/app/global/consts"

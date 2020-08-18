@@ -9,7 +9,7 @@
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-newstype|form-data|string|必填|potal
+newsType|form-data|string|必填|potal
 pass|form-data|string|必填|1
 limit|form-data|string|必填|20
 > 返回示例：

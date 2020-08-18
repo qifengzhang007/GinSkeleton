@@ -31,7 +31,7 @@
 [进入项目骨架介绍文档](docs/document.md)  
 
 ##    本项目测试用例路由  
-[进入Api接口测试用例文档](docs/apiDoc.md)   
+[进入Api接口测试用例文档](docs/api_doc.md)   
 >GET    /                         
 >GET   /Admin/ws         
 >POST   /Admin/users/register     
@@ -46,38 +46,37 @@
 ##    开发常用模块   
 序号|功能模块 | 文档地址  
 ---|---|---
-1 | 消息队列（RabbitMq）| [RabbitMq文档](docs/rabbitMq.md)   
+1 | 消息队列（rabbitmq）| [rabbitmq文档](docs/rabbitmq.md)   
 2 | Cli命令| [Cobra文档](docs/cobra.md) 
 3 | GoCurl、httpClient|[GoCurl](https://gitee.com/daitougege/goCurl) 
 4|Websocket| [Websocket](app/service/websocket/ws.go)  
 5|Aop切面编程| [Aop切面编程](docs/aop.md) 
 6|Redis| [Redis使用示例](test/redis_test.go) 
-7|Sql语句| [sql操作示例](docs/sqlStament.md) 
-8|Zap日志|  [Zap日志](docs/zapLog.md) 
+7|Sql语句| [sql操作示例](docs/sql_stament.md) 
+8|Zap日志|  [Zap日志](docs/zap_log.md) 
 9| Nginx代理|[Nginx配置详情](docs/nginx.md) 
 10|Supervisor| [Supervisor进程守护](docs/supervisor.md) 
 
 ##    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
-1 | linux服务器| [详情](docs/deployLinux.md)   
-2 | Mysql| [详情](docs/deployMysql.md)  
-3 | Redis| [详情](docs/deployRedis.md)    
-4 | Nginx| [详情](docs/deployNginx.md)   
-5 | GO应用程序| [详情](docs/deployGo.md)  
+1 | linux服务器| [详情](docs/deploy_linux.md)   
+2 | Mysql| [详情](docs/deploy_mysql.md)  
+3 | Redis| [详情](docs/deploy_redis.md)    
+4 | Nginx| [详情](docs/deploy_nginx.md)   
+5 | GO应用程序| [详情](docs/deploy_go.md)  
 
 ## 版本
 V 1.1.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
->   2.编写完善的项目上线后期运维解决方案，主要监控 linux、mysql、nginx、go程序的运行状态。     
->   3.集成专业的日志包，将项目日志按照标准级别进行分类管理。       
->   4.根据其他使用者反馈，将增加 gorm 包.         
+>   2.根据其他使用者反馈，将增加 gorm 包.         
 
->V 1.2.00  2020-08-18  
->   1.项目全面规划化,不少地方做了精简。 
+V 1.2.00  2020-08-18  
+>   1.项目代码进行了一次全面规范化 , 对整个项目的代码严谨性进行了一次全面的梳理，部分地方做了精简。 
+>   2.本次更新较多,很多都是底层服务逻辑代码，使用上和原版本相差无几,详情参见文档.  
 
 V 1.1.00  2020-08-13  
->   1.集成高性能日志包 zap , [文档详情](docs/zapLog.md)    
+>   1.集成高性能日志包 zap , [文档详情](docs/zap_log.md)    
 >   2.Config/config.yaml 配置文件有关程序默认端口、运行模式都做了修改，请注意查看相关配置项。    
 
 V 1.0.26  2020-08-11  
@@ -91,7 +90,7 @@ V 1.0.24   2020-07-23
 
 V 1.0.23   2020-07-16   
 >   1.`SQL` 场景继续增强，将预编译命令独立，主要解决大批量sql重复执行，导致预编译sql太多，mysql拒绝继续执行命令的错误。      
->   2.封装了事务操作，补充相关的 [sql单元测试](test/sql_test.go) 和 [sql示例文档](app/models/test.go)       
+>   2.封装了事务操作，补充相关的 [sql单元测试](test/sql_test.go) 和 [sql示例文档](app/model/test.go)       
            
 V 1.0.22   2020-07-09   
 >   1.[Redis](test/redis_test.go)增加单元测试示例，并修复配置文件一处bug。    
@@ -106,7 +105,7 @@ V 1.0.20   2020-06-08
 >   3.增加项目骨架启动时，检查程序依赖的必须目录、文件，主要有：Config/config.yaml、Public、Storage/logs/      
 
 V 1.0.19   2020-06-05   
->   1.增加函数级别的`发布、订阅`功能 [查看详情](test/observerMode_test.go) ，该模式主要将与主业务有弱关联关系的一组子业务进行了简单解耦。备注：如果只是一个子业务需要异步，没有必要用这种方法。      
+>   1.增加函数级别的`发布、订阅`功能 [查看详情](test/observer_mode_test.go) ，该模式主要将与主业务有弱关联关系的一组子业务进行了简单解耦。备注：如果只是一个子业务需要异步，没有必要用这种方法。      
 >   2.增加 `nginx` 与 `supervisor` 部署相关的文档。  
 
 V 1.0.18   2020-06-03   
@@ -117,17 +116,17 @@ V 1.0.18   2020-06-03
 >   5.**特别提醒**：`httpClient`包的引用地址发生变更，主要为了解决和原库命名冲突,如果下载的项目骨架报错，请更新代码重新运行。     
 
 V 1.0.17   2020-05-28    
->   1.[RabbitMQ文档](docs/rabbitMq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
+>   1.[rabbitmq文档](docs/rabbitmq.md) 本次更新主要解决消费者端在阻塞状态处理消息时可能发生断网、服务端重启导致客户端掉线的情况。     
 >   2.增强了消费者端断线自动重连逻辑，增强程序自身的稳定性，增加错误回调函数。    
->   3.针对消息队列编写了全量的单元测试 [rabbitmq全量单元测试](Test/RabbitMq_test.go)        
+>   3.针对消息队列编写了全量的单元测试 [rabbitmq全量单元测试](test/rabbitmq_test.go)        
 
 V 1.0.16   2020-05-25  
 >   1.Cli命令模式包（Cobra）集成完成，可以创建非常强大的非http接口类服务。          
 >   2.[详情参见Cobra文档](docs/cobra.md)  
 
 V 1.0.15   2020-05-23  
->   1.消息队列RabbitMq开发完成，为了更好的使用RabbitMq我们编写了非常详细的使用指南，可以快速上手使用消息队列。       
->   2.[详情参见RabbitMQ文档](docs/rabbitMq.md)  
+>   1.消息队列rabbitmq开发完成，为了更好的使用rabbitmq我们编写了非常详细的使用指南，可以快速上手使用消息队列。       
+>   2.[详情参见rabbitmq文档](docs/rabbitmq.md)  
 
 V 1.0.14   2020-05-13  
 >   1.修复bug：表单参数验证器在一次请求之后没有及时释放上次请求相关的属性值。  

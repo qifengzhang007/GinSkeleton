@@ -240,14 +240,15 @@ func init() {
 ```    
 
 ####    4.websocket模块  
->   1.启动ws服务，位置：Config\config.yaml，找到相关配置开关开启。  
+>   1.启动ws服务，位置：config\config.yaml，找到相关配置开关开启。  
 >   2.该模块也遵守整个请求（ request——response）的生命周期。    
 >   3.控制器位置：app\http\controller\websocket\ws.go  
->   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](app/service/websocket/ws.go)     
+>   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](../app/service/websocket/ws.go)     
 >   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
 >![业务主线图](http://139.196.101.31:2080/pingpong.png)  
 ####    5.yaml配置中心 
 >   1.位置：config\config.yml，通过注释即可阅读各项功能。     
 
 ####    6.日志记录 
->   1.位置：storage\logs\gin.log.      
+>   1.gin接口访问日志：storage\logs\gin.log.      
+>   1.goskeleton项目运行日志：storage\logs\goskeleton.log.      
