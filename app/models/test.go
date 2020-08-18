@@ -85,7 +85,7 @@ func (t *Test) InsertDataMultiple() bool {
 			sex := i % 2
 			//2.执行批量插入，注意 该函数的参数全部是 预处理 sql 的参数
 			if t.ExecuteSqlForMultiple("姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i)) == -1 {
-				log.Panic("sql执行失败，sql:", sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i))
+				variable.ZapLog.Sugar().Warn("sql执行失败，sql:", sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i))
 			}
 		}
 	}
@@ -103,7 +103,7 @@ func (t *Test) InsertDataMultipleErrorMethod() bool {
 		// 系统预处理sql数量超过 max_prepared_stmt_count（默认16382）设置的值
 		// 报错信息： Error 1461: Can't create more than max_prepared_stmt_count statements (current value: 16382)
 		if t.ExecuteSql(sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i)) == -1 {
-			log.Panic("sql执行失败，sql:", sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i))
+			variable.ZapLog.Sugar().Warn("sql执行失败，sql:", sql, "姓名_测试_"+strconv.Itoa(i), sex, age, "地址测试数据,序号："+strconv.Itoa(i), "备注信息数据，测试使用，编号："+strconv.Itoa(i))
 		}
 	}
 	return true
