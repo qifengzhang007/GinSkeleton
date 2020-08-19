@@ -24,4 +24,5 @@ require (
 	go.uber.org/zap v1.15.0
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 	gopkg.in/ini.v1 v1.56.0 // indirect
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 )
