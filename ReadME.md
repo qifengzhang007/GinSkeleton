@@ -15,11 +15,11 @@
 ##    开箱即用
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
->   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`dataBase/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
->   4.双击`Cmd/(Web|Api|Cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
+>   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
+>   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
 >   5.`windwos`开发环境编译`linux`环境项目：  
 >   5.1 goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
->   5.2 进入根目录（goskeleton所在目录）：`go build Cmd/(Web|Api|Cli)/main.go` 可交叉编译出（Web|Api|Cli）对应的二进制文件。     
+>   5.2 进入根目录（goskeleton所在目录）：`go build cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ##    压力测试  
@@ -70,6 +70,9 @@
 V 1.2.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.根据其他使用者反馈，将增加 `gorm` 、`验证码` 包.              
+
+V 1.2.01  2020-08-19    
+>   1.配置文件`config.yml` 中 log 配置项修复一处被遗漏的路径大写问题。   
 
 V 1.2.00  2020-08-18  
 >   1.项目代码进行了一次全面规范化 , 对整个项目的代码严谨性进行了一次全面的梳理，部分地方做了精简。   
