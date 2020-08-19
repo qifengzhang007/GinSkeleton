@@ -4,8 +4,8 @@ package my_errors
 const (
 	//系统部分
 	ErrorsConfigYamlNotExists    string = "config.yaml 配置文件不存在"
-	ErrorsPublicNotExists        string = "Public 目录不存在"
-	ErrorsStorageLogsNotExists   string = "StorageLogs 目录不存在"
+	ErrorsPublicNotExists        string = "public 目录不存在"
+	ErrorsStorageLogsNotExists   string = "storage/logs 目录不存在"
 	ErrorsConfigInitFail         string = "初始化配置文件发生错误"
 	ErrorsFuncEventAlreadyExists string = "注册函数类事件失败，键名已经被注册"
 	ErrorsFuncEventNotRegister   string = "没有找到键名对应的函数"
