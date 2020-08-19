@@ -54,7 +54,7 @@
 6|Redis| [Redis使用示例](test/redis_test.go) 
 7|Sql语句| [sql操作示例](docs/sql_stament.md) 
 8|Zap日志|  [Zap日志](docs/zap_log.md) 
-9| Nginx代理|[Nginx配置详情](docs/nginx.md) 
+9| Nginx负载均衡部署|[Nginx配置详情](docs/nginx.md) 
 10|Supervisor| [Supervisor进程守护](docs/supervisor.md) 
 
 ##    项目上线后，运维方案(基于docker)    

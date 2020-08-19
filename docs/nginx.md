@@ -14,16 +14,16 @@ upstream  goskeleton_list {
 }
 server{
     #监听端口
-    listen 2020  ; 
+    listen 20201  ; 
     #  站点域名，没有的话，写项目名称即可
     server_name     www.goskeleton.com ;  
-    root            /home/wwwroot/GoProject2020/goskeleton/Public ;
+    root            /home/wwwroot/goproject2020/goskeleton/public ;
     index           index.htm  index.html ;   
     charset         utf-8 ;
     
    
     # 如果对跨域允许的ip管控不是很严格（对所有ip允许跨域），nginx 配置允许跨域即可
-    # goskeleton 项目的跨域需要屏蔽，详情参见 Routes/(Web.go|Api.go) 先关注释说明   
+    # goskeleton 项目的跨域需要屏蔽，详情参见 routes/(web.go|api.go) 先关注释说明   
     add_header Access-Control-Allow-Origin *;
     add_header Access-Control-Allow-Headers 'Authorization, User-Agent, Keep-Alive, Content-Type, X-Requested-With';
     add_header Access-Control-Allow-Methods OPTIONS, GET, POST, DELETE, PUT, PATCH
