@@ -19,7 +19,7 @@
 >   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
 >   5.`windwos`开发环境编译`linux`环境项目：  
 >   5.1 goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
->   5.2 进入根目录（goskeleton所在目录）：`go build cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
+>   5.2 进入根目录（goskeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
 ##    压力测试  
