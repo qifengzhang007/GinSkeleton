@@ -107,6 +107,5 @@ func GetOneSqlClient(sqlType string) *sql.DB {
 			break
 		}
 	}
-	fmt.Printf("dbDriver地址：%p\n", dbDriver)
 	return dbDriver
 }

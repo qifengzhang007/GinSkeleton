@@ -17,9 +17,11 @@ import (
 
 func InitApiRouter() *gin.Engine {
 
-	gin.DisableConsoleColor()
-	f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
-	gin.DefaultWriter = io.MultiWriter(f)
+	if yml_config.CreateYamlFactory().GetBool("APP_DEBUG") == false {
+		gin.DisableConsoleColor()
+		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
+		gin.DefaultWriter = io.MultiWriter(f)
+	}
 
 	router := gin.Default()
 
@@ -44,7 +46,6 @@ func InitApiRouter() *gin.Engine {
 		{
 			vApi.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
 		}
-
 	}
 	return router
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/http/controller/chaptcha"
 	"goskeleton/app/http/middleware/authorization"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
@@ -17,9 +18,11 @@ import (
 
 func InitWebRouter() *gin.Engine {
 
-	gin.DisableConsoleColor()
-	f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
-	gin.DefaultWriter = io.MultiWriter(f)
+	if yml_config.CreateYamlFactory().GetBool("APP_DEBUG") == false {
+		gin.DisableConsoleColor()
+		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
+		gin.DefaultWriter = io.MultiWriter(f)
+	}
 
 	router := gin.Default()
 
@@ -32,11 +35,19 @@ func InitWebRouter() *gin.Engine {
 		context.String(http.StatusOK, "HelloWorld,这是后端模块")
 	})
 
-	//处理静态资源（不建议gin框架处理静态资源，参见 Public/readme.md 说明 ）
-	router.Static("/public", "./Public")             //  定义静态资源路由与实际目录映射关系
-	router.StaticFS("/dir", http.Dir("./Public"))    // 将Public目录内的文件列举展示
-	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
+	//处理静态资源（不建议gin框架处理静态资源，参见 public/readme.md 说明 ）
+	router.Static("/public", "./public")             //  定义静态资源路由与实际目录映射关系
+	router.StaticFS("/dir", http.Dir("./public"))    // 将public目录内的文件列举展示
+	router.StaticFile("/abcd", "./public/readme.md") // 可以根据文件名绑定需要返回的文件名
 
+	// 创建一个验证码路由
+	verifyCode := router.Group("captcha")
+	{
+		// 验证码业务，该业务无需专门校验参数，所以可以直接调用控制器
+		verifyCode.GET("/", (&chaptcha.Captcha{}).GenerateId)                 //  获取验证码ID
+		verifyCode.GET("/:captchaId", (&chaptcha.Captcha{}).GetImg)           // 获取图像地址
+		verifyCode.GET("/:captchaId/:value", (&chaptcha.Captcha{}).CheckCode) // 校验验证码
+	}
 	//  创建一个后端接口路由组
 	backend := router.Group("/Admin/")
 	{

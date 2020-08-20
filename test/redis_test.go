@@ -27,7 +27,7 @@ func TestRedisKeyValue(t *testing.T) {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
 	variable.ZapLog.Info("get key2020 ", zap.String("key2020", res))
-	//操作完毕记得释放连接
+	//操作完毕记得释放连接，官方明确说，redis使用完毕，必须释放
 	redisClient.ReleaseOneRedisClientPool()
 
 }
@@ -50,6 +50,8 @@ func TestRedisHashKey(t *testing.T) {
 		t.Errorf("单元测试失败,%s\n", err.Error())
 	}
 	fmt.Println(res2)
+	//官方明确说，redis使用完毕，必须释放
+	redisClient.ReleaseOneRedisClientPool()
 }
 
 // 测试 redis 连接池
@@ -65,6 +67,31 @@ func TestRedisConnPool(t *testing.T) {
 		}()
 	}
 	time.Sleep(time.Second * 20)
+}
+
+//  测试redis 网络中断自动重连机制
+func TestRedisReConn(t *testing.T) {
+	redisClient := redis_factory.GetOneRedisClient()
+	res, err := redisClient.String(redisClient.Execute("set", "key2020", "测试网络抖动，自动重连机制"))
+	if err != nil {
+		t.Errorf("单元测试失败,%s\n", err.Error())
+	} else {
+		variable.ZapLog.Info("Info 日志", zap.String("key2020", res))
+	}
+	//官方明确说，redis使用完毕，必须释放
+	redisClient.ReleaseOneRedisClientPool()
+
+	//  以上内容输出后 ， 拔掉网线, 模拟短暂的网络抖动
+	t.Log("请在 10秒之内拔掉网线")
+	time.Sleep(time.Second * 10)
+	// 断网情况下就会自动进行重连
+	redisClient = redis_factory.GetOneRedisClient()
+	if res, err = redisClient.String(redisClient.Execute("get", "key2020")); err != nil {
+		t.Errorf("单元测试失败,%s\n", err.Error())
+	} else {
+		t.Log("获取的值：", res)
+	}
+	redisClient.ReleaseOneRedisClientPool()
 }
 
 //  其他请参照以上示例即可

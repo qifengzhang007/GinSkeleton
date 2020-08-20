@@ -12,8 +12,8 @@ import (
 func Create(key string) func(context *gin.Context) {
 
 	if value := container.CreateContainersFactory().Get(key); value != nil {
-		if value, ok := value.(interf.ValidatorInterface); ok {
-			return value.CheckParams
+		if val, isOk := value.(interf.ValidatorInterface); isOk {
+			return val.CheckParams
 		}
 	}
 	variable.ZapLog.Error(my_errors.ErrorsValidatorNotExists + ", 验证器模块：" + key)

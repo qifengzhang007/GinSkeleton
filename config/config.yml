@@ -37,7 +37,7 @@ SqlServer:
   PingFailRetryTimes: 3   #从连接池获取连接失败，最大重试次数
 
 Redis:
-  Host: "127.0.0.1"
+  Host: "192.168.8.62"
   Port: 6379
   Auth: ""
   MaxIdle: 10
@@ -45,7 +45,7 @@ Redis:
   IdleTimeout: 60
   IndexDb: 1
   ConnFailRetryTimes: 3    #从连接池获取连接失败，最大重试次数
-  ReConnectInterval: 1     # 从连接池获取连接失败，每次重试之间间隔的秒数
+  ReConnectInterval: 5     # 从连接池获取连接失败，每次重试之间间隔的秒数
 
 Logs:
   GinLogName: "/storage/logs/gin.log"                  #设置 gin 框架的接口访问日志

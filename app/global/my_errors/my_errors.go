@@ -43,7 +43,6 @@ const (
 	ErrorsWebsocketBeatHeartsMoreThanMaxTimes string = "websocket BeatHeart 失败次数超过最大值"
 	ErrorsWebsocketSetWriteDeadlineFail       string = "websocket  设置消息写入截止时间出错"
 	ErrorsWebsocketWriteMgsFail               string = "websocket  Write Msg(send msg) 失败"
-
 	// rabbitMq
 	ErrorsRabbitMqReconnectFail string = "RabbitMq消费者端掉线后重连失败，超过尝试最大次数"
 )

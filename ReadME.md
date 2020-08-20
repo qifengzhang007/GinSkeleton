@@ -6,6 +6,7 @@
 
 ## 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。 
+>   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
 
 ## golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/i5ZMMdyfzuh  
@@ -48,15 +49,16 @@
 序号|功能模块 | 文档地址  
 ---|---|---
 1 | 消息队列（rabbitmq）| [rabbitmq文档](docs/rabbitmq.md)   
-2 | Cli命令| [Cobra文档](docs/cobra.md) 
-3 | GoCurl、httpClient|[GoCurl](https://gitee.com/daitougege/goCurl) 
-4|Websocket| [Websocket](app/service/websocket/ws.go)  
-5|Aop切面编程| [Aop切面编程](docs/aop.md) 
-6|Redis| [Redis使用示例](test/redis_test.go) 
-7|Sql语句| [sql操作示例](docs/sql_stament.md) 
-8|Zap日志|  [Zap日志](docs/zap_log.md) 
-9| Nginx负载均衡部署|[Nginx配置详情](docs/nginx.md) 
-10|Supervisor| [Supervisor进程守护](docs/supervisor.md) 
+2 | cli命令| [cobra文档](docs/cobra.md) 
+3 | GoCurl、httpClient|[goCurl](https://gitee.com/daitougege/goCurl) 
+4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
+5|aop切面编程| [Aop切面编程](docs/aop.md) 
+6|redis| [redis使用示例](test/redis_test.go) 
+7|sql语句| [sql操作示例](docs/sql_stament.md) 
+8|zap日志|  [zap日志](docs/zap_log.md) 
+9| 验证码|  [验证码](docs/captcha.md)
+10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
+11|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 ##    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
@@ -70,7 +72,13 @@
 ## 版本
 V 1.2.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
->   2.根据其他使用者反馈，将增加 `gorm` 、`验证码` 包.              
+>   2.根据其他使用者反馈，将增加 `gorm`  包.              
+
+V 1.2.10  2020-08-20    
+>   1.验证码封装完成,[相关文档](./docs/captcha.md)    
+>   2.Redis 数据库底层继续增强，在网络出现短暂的断网情况下，程序能够自动等待、重连、从小异常中恢复，该功能 mysql 早已经支持。   
+>   3.`config>config.yml > APP_DEBUG: true` 则所有的日志全部打印到控制台,` APP_DEBUG: false ` 则所有日志打印到日志文件: `storage/logs` .  
+
 
 V 1.2.01  2020-08-19    
 >   1.配置文件`config.yml` 中 log 配置项修复一处被遗漏的路径大写问题。   

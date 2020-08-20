@@ -52,7 +52,17 @@ const (
 
 	//websocket
 	WsServerNotStartCode int    = -400300
-	WsServerNotStartMsg  string = "websocket 服务没有开启，请在配置文件开启，相关路径：Config/config.yaml"
+	WsServerNotStartMsg  string = "websocket 服务没有开启，请在配置文件开启，相关路径：config/config.yml"
 	WsOpenFailCode       int    = -400301
 	WsOpenFailMsg        string = "websocket open阶段初始化基本参数失败"
+
+	//验证码
+	CaptchaGetParamsInvalidMsg    string = "获取验证码：提交的验证码参数无效,请检查验证码ID以及文件名后缀是否完整"
+	CaptchaGetParamsInvalidCode   int    = -400350
+	CaptchaCheckParamsInvalidMsg  string = "校验验证码：提交的参数无效，请确保提交的验证码ID和值有效"
+	CaptchaCheckParamsInvalidCode int    = -400351
+	CaptchaCheckOkMsg             string = "验证码校验通过"
+	CaptchaCheckOkCode            int    = 200
+	CaptchaCheckFailCode          int    = -400355
+	CaptchaCheckFailMsg           string = "验证码校验失败"
 )

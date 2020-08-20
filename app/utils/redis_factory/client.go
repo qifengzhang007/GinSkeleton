@@ -2,6 +2,7 @@ package redis_factory
 
 import (
 	"github.com/gomodule/redigo/redis"
+	"go.uber.org/zap"
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
@@ -50,18 +51,22 @@ func initRedisClientPool() *redis.Pool {
 func GetOneRedisClient() *RedisClient {
 	configFac := yml_config.CreateYamlFactory()
 	maxRetryTimes := configFac.GetInt("Redis.ConnFailRetryTimes")
+	var oneConn redis.Conn
 	for i := 1; i <= maxRetryTimes; i++ {
-		if redisPool == nil {
-			initRedisClientPool()
+		oneConn = redisPool.Get()
+		if oneConn.Err() != nil {
+			//variable.ZapLog.Error("Redis：网络中断,开始重连进行中..." , zap.Error(oneConn.Err()))
 			if i == maxRetryTimes {
-				variable.ZapLog.Error("Redis：" + my_errors.ErrorsRedisGetConnFail)
+				variable.ZapLog.Error(my_errors.ErrorsRedisGetConnFail, zap.Error(oneConn.Err()))
 				return nil
 			}
+			//如果出现网络短暂的抖动，短暂休眠后，支持自动重连
+			time.Sleep(time.Second * configFac.GetDuration("Redis.ReConnectInterval"))
 		} else {
 			break
 		}
 	}
-	return &RedisClient{redisPool.Get()}
+	return &RedisClient{oneConn}
 }
 
 // 定义一个redis客户端结构体
