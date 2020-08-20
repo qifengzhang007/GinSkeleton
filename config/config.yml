@@ -16,11 +16,11 @@ Mysql:
   Prefix: "tb_"
   User: "root"
   Pass: "DRsXT5ZJ6Oi55LPQ"
-  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   Charset: "utf8"
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
   SetConnMaxLifetime: 60
+  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   PingFailRetryTimes: 3
 
 SqlServer:
@@ -30,14 +30,14 @@ SqlServer:
   Prefix: "tb_"
   User: "sa"
   Pass: "secret2017"
-  ReConnectInterval: 5    # 数据库连接失败，每次重连时之间间隔秒数
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128
   SetConnMaxLifetime: 60
+  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   PingFailRetryTimes: 3   #从连接池获取连接失败，最大重试次数
 
 Redis:
-  Host: "192.168.8.62"
+  Host: "127.0.0.1"
   Port: 6379
   Auth: ""
   MaxIdle: 10
@@ -45,7 +45,7 @@ Redis:
   IdleTimeout: 60
   IndexDb: 1
   ConnFailRetryTimes: 3    #从连接池获取连接失败，最大重试次数
-  ReConnectInterval: 5     # 从连接池获取连接失败，每次重试之间间隔的秒数
+  ReConnectInterval: 1     # 从连接池获取连接失败，每次重试之间间隔的秒数
 
 Logs:
   GinLogName: "/storage/logs/gin.log"                  #设置 gin 框架的接口访问日志
