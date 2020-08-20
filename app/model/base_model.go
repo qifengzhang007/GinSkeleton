@@ -80,7 +80,7 @@ func (b *BaseModel) ExecuteSqlForMultiple(args ...interface{}) int64 {
 		if affectNum, err := res.RowsAffected(); err == nil {
 			return affectNum
 		} else {
-			variable.ZapLog.Error("获取sql结果影响函数失败", zap.Error(err))
+			variable.ZapLog.Error(my_errors.ErrorsDbGetEffectiveRowsFail, zap.Error(err))
 		}
 	} else {
 		variable.ZapLog.Error(my_errors.ErrorsDbExecuteForMultipleFail, zap.Error(err))

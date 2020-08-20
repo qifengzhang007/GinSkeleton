@@ -21,6 +21,7 @@ const (
 	ErrorsDbExecuteRunFail         string = "执行类sql语句执行失败"
 	ErrorsDbQueryRowRunFail        string = "单行查询类sql语句执行失败"
 	ErrorsDbExecuteForMultipleFail string = "批量执行的sql语句执行失败"
+	ErrorsDbGetEffectiveRowsFail   string = "获取sql结果影响函数失败"
 	ErrorsDbTransactionBeginFail   string = "sql事务开启（begin）失败"
 
 	//redis部分
