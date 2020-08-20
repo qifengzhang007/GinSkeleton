@@ -79,6 +79,7 @@ V 1.2.10  2020-08-20
 >   2.Redis 数据库底层继续增强，在网络出现短暂的断网情况下，程序能够自动等待、重连、从小异常中恢复，该功能 mysql 早已经支持。   
 >   3.`config>config.yml > APP_DEBUG: true` 则所有的日志全部打印到控制台,` APP_DEBUG: false ` 则所有日志打印到日志文件: `storage/logs` .  
 >   4.本项目骨架的内核`gin` 框架更新至最新版本 [v1.6.3](https://github.com/gin-gonic/gin/pull/2351) ,官方说:"进一步提升context性能".    
+>   5.项目在升级的过程中，会出现旧版本包的舍弃，请记得在goland 终端执行 `go mod  tidy` 清理、整理项目依赖包.     
 
 V 1.2.01  2020-08-19    
 >   1.配置文件`config.yml` 中 log 配置项修复一处被遗漏的路径大写问题。   

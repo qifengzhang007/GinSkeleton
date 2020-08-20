@@ -1,8 +1,6 @@
 ##   websocket js 客户端      
-> 1.基于 `github.com/dchest/captcha` 包封装.    
-> 2.本项目只提供了数字验证功能,没有封装语音验证功能.    
 
-###  注意事项  
+###  前言   
 > ws地址: ws://127.0.0.1:20201/Admin/ws?token=sdsdsdsdsdsdsdsdsdsdsdsdssdsd  
 > 由于中间模拟校验了token参数，请自行随意提交超过20个字符         
 > 以下代码保存为 `ws.html` 在浏览器直接访问即可连接服务端  
