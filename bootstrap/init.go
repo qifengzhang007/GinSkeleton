@@ -13,7 +13,7 @@ import (
 	"os"
 )
 
-// 检查项目必须的非编译目录是否存在，避免编译后调用的时候确实相关目录
+// 检查项目必须的非编译目录是否存在，避免编译后调用的时候缺失相关目录
 func checkRequiredFolders() {
 	//1.检查配置文件是否存在
 	if _, err := os.Stat(variable.BasePath + "/config/config.yml"); err != nil {
@@ -30,16 +30,18 @@ func checkRequiredFolders() {
 }
 
 func init() {
-	// 1. 初始化 项目根路径，参见 variable 常量包
+	// 1. 初始化 项目根路径，参见 variable 常量包，相关路径：app\global\variable\variable.go
 
+	//2.检查配置文件以及日志目录等非编译性的必要条件
 	checkRequiredFolders()
-	// 2.初始化全局日志句柄，并载入日志钩子处理函数
+
+	// 3.初始化全局日志句柄，并载入日志钩子处理函数
 	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
 
-	//3.初始化表单参数验证器，注册在容器
+	//4.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	// 4.websocket Hub中心启动
+	// 5.websocket Hub中心启动
 	if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化一份
 		variable.WebsocketHub = core.CreateHubFactory()
