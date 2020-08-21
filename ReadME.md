@@ -9,20 +9,21 @@
 >   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
 
 ## golang.org官方依赖可能无法下载手动解决方案  
->   1.手动下载：https://wwa.lanzous.com/i5ZMMdyfzuh  
->   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录），复制在以下目录解压即可：  
+>   1.手动下载：https://wwa.lanzous.com/iqPH5fw11va  
+>   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录之外的任意目录），复制在以下目录解压即可：  
 >   ![操作图](http://139.196.101.31:2080/golang.org.png)   
 >   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
 
-##    开箱即用
+##    快速上手
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo.sql`导入数据库，自行配置账号、密码、端口等。    
 >   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
->   5.`windwos`开发环境编译`linux`环境项目：  
->   5.1 goland终端底栏打开`terminal`,依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
->   5.2 进入根目录（goskeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
+
+##  交叉编译(windows直接编译出linux可执行文件)    
+>   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
+>   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
 ##    压力测试  
 >   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
@@ -48,13 +49,13 @@
 ##    开发常用模块   
 序号|功能模块 | 文档地址  
 ---|---|---
-1 | 消息队列（rabbitmq）| [rabbitmq文档](docs/rabbitmq.md)   
+1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
 2 | cli命令| [cobra文档](docs/cobra.md) 
-3 | GoCurl、httpClient|[goCurl](https://gitee.com/daitougege/goCurl) 
+3 | goCurl、httpClient|[goCurl](https://gitee.com/daitougege/goCurl) 
 4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
 5|aop切面编程| [Aop切面编程](docs/aop.md) 
 6|redis| [redis使用示例](test/redis_test.go) 
-7|sql语句| [sql操作示例](docs/sql_stament.md) 
+7|原生sql操作| [sql操作示例](docs/sql_stament.md) 
 8|zap日志|  [zap日志](docs/zap_log.md) 
 9| 验证码|  [验证码](docs/captcha.md)
 10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
@@ -64,10 +65,10 @@
 序号|运维模块 | 文档地址  
 ---|---|---
 1 | linux服务器| [详情](docs/deploy_linux.md)   
-2 | Mysql| [详情](docs/deploy_mysql.md)  
-3 | Redis| [详情](docs/deploy_redis.md)    
-4 | Nginx| [详情](docs/deploy_nginx.md)   
-5 | GO应用程序| [详情](docs/deploy_go.md)  
+2 | mysql| [详情](docs/deploy_mysql.md)  
+3 | redis| [详情](docs/deploy_redis.md)    
+4 | nginx| [详情](docs/deploy_nginx.md)   
+5 | go应用程序| [详情](docs/deploy_go.md)  
 
 ## 版本
 V 1.2.xx   2020-08（开发计划预告）  
@@ -79,7 +80,7 @@ V 1.2.10  2020-08-20
 >   2.Redis 数据库底层继续增强，在网络出现短暂的断网情况下，程序能够自动等待、重连、从小异常中恢复，该功能 mysql 早已经支持。   
 >   3.`config>config.yml > APP_DEBUG: true` 则所有的日志全部打印到控制台,` APP_DEBUG: false ` 则所有日志打印到日志文件: `storage/logs` .  
 >   4.本项目骨架的内核`gin` 框架更新至最新版本 [v1.6.3](https://github.com/gin-gonic/gin/pull/2351) ,官方说:"进一步提升context性能".    
->   5.项目在升级的过程中，会出现旧版本包的舍弃，请记得在goland 终端执行 `go mod  tidy` 清理、整理项目依赖包.     
+>   5.项目在升级的过程中，会出现旧版本包的舍弃，请记得在 `goland` 终端执行 `go mod  tidy` 清理、整理项目依赖包.     
 
 V 1.2.01  2020-08-19    
 >   1.配置文件`config.yml` 中 log 配置项修复一处被遗漏的路径大写问题。   
