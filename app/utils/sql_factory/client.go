@@ -72,7 +72,7 @@ func initSqlDriver(sqlType string) *sql.DB {
 	return nil
 }
 
-// 从连接池获取一个连接
+// 从底层驱动中获取一个连接，初始化驱动的过程本质上就是根据参数初始化了一个连接池
 func GetOneSqlClient(sqlType string) *sql.DB {
 	configFac := yml_config.CreateYamlFactory()
 	maxRetryTimes := configFac.GetInt("SqlServer.PingFailRetryTimes")
