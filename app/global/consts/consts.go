@@ -9,7 +9,7 @@ const (
 
 	//服务器代码发生错误
 	ServerOccurredErrorCode int    = -500100
-	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误"
+	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误,检测文件mime类型发生错误。"
 
 	// token相关
 	JwtTokenSignKey         string = "goskeleton"
@@ -44,9 +44,9 @@ const (
 
 	//文件上传
 	FilesUploadFailCode            int    = -400250
-	FilesUploadFailMsg             string = "文件上传失败"
+	FilesUploadFailMsg             string = "文件上传失败, 获取上传文件发生错误!"
 	FilesUploadMoreThanMaxSizeCode int    = -400251
-	FilesUploadMoreThanMaxSizeMsg  string = "长传文件超过系统设定的最大值"
+	FilesUploadMoreThanMaxSizeMsg  string = "长传文件超过系统设定的最大值,系统允许的最大值（M）："
 	FilesUploadMimeTypeFailCode    int    = -400252
 	FilesUploadMimeTypeFailMsg     string = "文件mime类型不允许"
 

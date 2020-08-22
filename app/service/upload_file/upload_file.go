@@ -12,6 +12,7 @@ import (
 	"goskeleton/app/utils/snow_flake"
 	"net/http"
 	"path"
+	"strings"
 )
 
 func Upload(context *gin.Context, savePath string) bool {
@@ -24,11 +25,13 @@ func Upload(context *gin.Context, savePath string) bool {
 	if uniqueId, err := snow_flake.CreateSnowFlakeFactory().GetId(); err == nil {
 		saveFileName := fmt.Sprintf("%d%s", uniqueId, file.Filename)
 		saveFileName = md5_encrypt.MD5([]byte(saveFileName)) + path.Ext(saveFileName)
+
 		if saveErr = context.SaveUploadedFile(file, savePath+saveFileName); saveErr == nil {
-			//  上传成功,返回资源的存储路径，这里请根据实际返回绝对路径或者相对路径
+			//  上传成功,返回资源的相对路径，这里请根据实际返回绝对路径或者相对路径
 			success := gin.H{
-				"path": savePath + saveFileName,
+				"path": strings.ReplaceAll(savePath+saveFileName, variable.BasePath, ""),
 			}
+
 			response.ReturnJson(context, http.StatusCreated, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, success)
 			return true
 		}

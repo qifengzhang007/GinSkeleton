@@ -73,12 +73,17 @@
 ## 版本
 V 1.2.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
->   2.根据其他使用者反馈，将增加 `gorm`  包.              
+>   2.根据其他使用者反馈，将增加 `gorm`  包.  
+            
+V 1.2.20  2020-08-22   
+>   1.config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug , 书写保持全局一致性。  
+>   2.关于文件上传的配置项增加细节说明.     
+>   3.集成 gorm 包，使用文档：  .   
 
 V 1.2.10  2020-08-20    
 >   1.验证码封装完成,[相关文档](./docs/captcha.md)    
 >   2.Redis 数据库底层继续增强，在网络出现短暂的断网情况下，程序能够自动等待、重连、从小异常中恢复，该功能 mysql 早已经支持。   
->   3.`config>config.yml > APP_DEBUG: true` 则所有的日志全部打印到控制台,` APP_DEBUG: false ` 则所有日志打印到日志文件: `storage/logs` .  
+>   3.`config>config.yml > AppDebug: true` 则所有的日志全部打印到控制台,` AppDebug: false ` 则所有日志打印到日志文件: `storage/logs` .  
 >   4.本项目骨架的内核`gin` 框架更新至最新版本 [v1.6.3](https://github.com/gin-gonic/gin/pull/2351) ,官方说:"进一步提升context性能".    
 >   5.项目在升级的过程中，会出现旧版本包的舍弃，请记得在 `goland` 终端执行 `go mod  tidy` 清理、整理项目依赖包.     
 

@@ -1,4 +1,4 @@
-APP_DEBUG: true   # 设置程序所处的模式，debug=true 调试模式，日志优先显示在控制台， debug=false 非调试模式，将写入日志文件
+AppDebug: true   # 设置程序所处的模式，debug=true 调试模式，日志优先显示在控制台， debug=false 非调试模式，将写入日志文件
 
 UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、
 
@@ -57,7 +57,7 @@ Logs:
   MaxAge: 15                                           #保留旧日志最大天数
   Compress: false                                      #日志备份时，是否进行压缩
 
-Websocket:                            #该服务与Http具有相同的ip、端口，因此不需要额外设置端口
+Websocket: #该服务与Http具有相同的ip、端口，因此不需要额外设置端口
   Start: 1                            #默认不启动该服务（1=启动；0=不启动）
   WriteReadBufferSize: 20480          # 读写缓冲区分配字节，大概能存储 6800 多一点的文字
   MaxMessageSize: 65535               # 从消息管道读取消息的最大字节
@@ -67,8 +67,8 @@ Websocket:                            #该服务与Http具有相同的ip、端�
   WriteDeadline: 35                   # 消息单次写入超时时间，单位：秒
 
 FileUploadSetting:
-  Size: 32                            #设置上传文件的最大值，单位：M
-  AllowMimeType:                      #允许的文件mime类型列表
+  Size: 32                            #设置上传文件的最大值，单位：M，注意： 如果go前置nginx服务器，nginx 默认限制文件上传大小为 50 M ,用户上传文件限制好需要继续修改 nginx 配置
+  AllowMimeType: #允许的文件mime类型列表
     - "image/jpeg"                    #jpg、jpeg图片格式
     - "image/png"                     #png图片格式
     - "image/x-icon"                  #ico图片

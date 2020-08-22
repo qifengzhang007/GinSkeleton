@@ -1,6 +1,7 @@
 package files
 
 import (
+	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"mime/multipart"
 	"net/http"
@@ -21,14 +22,14 @@ import (
 func GetFilesMimeByFileName(filepath string) string {
 	f, err := os.Open(filepath)
 	if err != nil {
-		variable.ZapLog.Error("打开文件失败，详情： " + err.Error())
+		variable.ZapLog.Error(my_errors.ErrorsFilesUploadOpenFail + err.Error())
 	}
 	defer f.Close()
 
 	// 只需要前 32 个字节就可以了
 	buffer := make([]byte, 32)
 	if _, err := f.Read(buffer); err != nil {
-		variable.ZapLog.Error("读取文件32字节失败，详情： " + err.Error())
+		variable.ZapLog.Error(my_errors.ErrorsFilesUploadReadFail + err.Error())
 		return ""
 	}
 
@@ -40,7 +41,7 @@ func GetFilesMimeByFp(fp multipart.File) string {
 
 	buffer := make([]byte, 32)
 	if _, err := fp.Read(buffer); err != nil {
-		variable.ZapLog.Error("读取文件32字节失败，详情： " + err.Error())
+		variable.ZapLog.Error(my_errors.ErrorsFilesUploadReadFail + err.Error())
 		return ""
 	}
 

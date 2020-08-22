@@ -18,7 +18,7 @@ import (
 
 func InitWebRouter() *gin.Engine {
 
-	if yml_config.CreateYamlFactory().GetBool("APP_DEBUG") == false {
+	if yml_config.CreateYamlFactory().GetBool("AppDebug") == false {
 		gin.DisableConsoleColor()
 		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
 		gin.DefaultWriter = io.MultiWriter(f)
