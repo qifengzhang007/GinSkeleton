@@ -1,6 +1,6 @@
 AppDebug: true   # 设置程序所处的模式，debug=true 调试模式，日志优先显示在控制台， debug=false 非调试模式，将写入日志文件
 
-UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、
+UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、postgre
 
 HttpServer:
   Api:
@@ -35,6 +35,20 @@ SqlServer:
   SetConnMaxLifetime: 60
   ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
   PingFailRetryTimes: 3   #从连接池获取连接失败，最大重试次数
+
+PostgreSql:
+  Host: "127.0.0.1"
+  DataBase: "db_goskeleton"
+  Port: 5432                        #注意，非3306，请自行调整
+  Prefix: "tb_"
+  User: "postgres"
+  Pass: "secret2017"
+  Charset: "utf8"
+  SetMaxIdleConns: 10
+  SetMaxOpenConns: 128
+  SetConnMaxLifetime: 60
+  ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
+  PingFailRetryTimes: 3
 
 Redis:
   Host: "127.0.0.1"

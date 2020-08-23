@@ -1,3 +1,4 @@
+--  请自行创建  数据库,例如：  db_goskeleton
 CREATE TABLE   tb_users (
 	id int   IDENTITY(1,1) NOT NULL  primary  key,
 	user_name nvarchar(60) DEFAULT(''),

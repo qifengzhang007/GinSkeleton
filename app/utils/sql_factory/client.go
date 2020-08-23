@@ -3,8 +3,9 @@ package sql_factory
 import (
 	"database/sql"
 	"fmt"
-	//_ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
 	_ "github.com/go-sql-driver/mysql" // mysql 驱动
+	//_ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
+	// _ "github.com/lib/pq"		//  postgreSql  驱动
 	"go.uber.org/zap"
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
@@ -15,6 +16,7 @@ import (
 
 var mysqlDriver *sql.DB
 var sqlserverDriver *sql.DB
+var postgreSqlDriver *sql.DB
 
 // 初始化数据库驱动
 func initSqlDriver(sqlType string) *sql.DB {
@@ -70,6 +72,30 @@ func initSqlDriver(sqlType string) *sql.DB {
 			_ = sqlserverDriver.Close()
 		})
 		return sqlserverDriver
+	} else if sqlType == "postgre" {
+		Host := configFac.GetString("PostgreSql.Host")
+		Port := configFac.GetString("PostgreSql.Port")
+		DataBase := configFac.GetString("PostgreSql.DataBase")
+		User := configFac.GetString("PostgreSql.User")
+		Pass := configFac.GetString("PostgreSql.Pass")
+		SetMaxIdleConns := configFac.GetInt("PostgreSql.SetMaxIdleConns")
+		SetMaxOpenConns := configFac.GetInt("PostgreSql.SetMaxOpenConns")
+		SetConnMaxLifetime := configFac.GetDuration("PostgreSql.SetConnMaxLifetime")
+		SqlConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", Host, Port, DataBase, User, Pass)
+		fmt.Println("驱动连接文本", SqlConnString)
+		sqlserverDriver, err = sql.Open("postgres", SqlConnString)
+		if err != nil {
+			variable.ZapLog.Error(my_errors.ErrorsDbSqlDriverInitFail + err.Error())
+			return nil
+		}
+		sqlserverDriver.SetMaxIdleConns(SetMaxIdleConns)
+		sqlserverDriver.SetMaxOpenConns(SetMaxOpenConns)
+		sqlserverDriver.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
+		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Postgre_DB", func(args ...interface{}) {
+			_ = sqlserverDriver.Close()
+		})
+		return sqlserverDriver
 	}
 	return nil
 }
@@ -98,6 +124,14 @@ func GetOneSqlClient(sqlType string) *sql.DB {
 		}
 		maxRetryTimes = configFac.GetInt("SqlServer.PingFailRetryTimes")
 		reConnectInterval = yml_config.CreateYamlFactory().GetDuration("SqlServer.ReConnectInterval")
+	case "postgre":
+		if postgreSqlDriver == nil {
+			dbDriver = initSqlDriver(sqlType)
+		} else {
+			dbDriver = postgreSqlDriver
+		}
+		maxRetryTimes = configFac.GetInt("PostgreSql.PingFailRetryTimes")
+		reConnectInterval = yml_config.CreateYamlFactory().GetDuration("PostgreSql.ReConnectInterval")
 	default:
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + "，" + sqlType)
 		return nil
