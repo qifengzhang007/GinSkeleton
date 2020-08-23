@@ -50,15 +50,14 @@ func (u *usersModel) Register(username string, pass string, userIp string) bool 
 // 用户登录,
 func (u *usersModel) Login(name string, pass string) *usersModel {
 	sql := "select id, username,pass,phone  from tb_users where  username=?  limit 1"
-	rows := u.QuerySql(sql, name)
-	for rows.Next() {
-		_ = rows.Scan(&u.Id, &u.Username, &u.Pass, &u.Phone)
-		_ = rows.Close()
-		break
-	}
-	// 账号密码验证成功
-	if len(u.Pass) > 0 && (u.Pass == md5_encrypt.Base64Md5(pass)) {
-		return u
+	err := u.QueryRow(sql, name).Scan(&u.Id, &u.Username, &u.Pass, &u.Phone)
+	if err == nil {
+		// 账号密码验证成功
+		if len(u.Pass) > 0 && (u.Pass == md5_encrypt.Base64Md5(pass)) {
+			return u
+		}
+	} else {
+		variable.ZapLog.Error("根据账号查询单条记录出错:", zap.Error(err))
 	}
 	return nil
 }
