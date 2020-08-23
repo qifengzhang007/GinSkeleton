@@ -1,17 +1,20 @@
 ### Sql操作命令集合  
->本文档主要介绍了sql操作的核心命令，您也可以直接查看示例代码  [Mysql示例文档](../app/model/test.go) ,  sqlserver、postgreSql 操作同 mysql .        
+>本文档主要介绍了sql操作的核心命令，详细操作命令示例代码参见 [Mysql示例文档](../app/model/test.go) ,  sqlserver、postgreSql 操作方式同 mysql .      
+
 #### 1.查询类： 不会修改数据的sql、存储过程、视图
 ```sql
+    // 首先获取一个数据连接
+    sqlservConn := sql_factory.GetOneSqlClient("postgre")  // 参数为空,默认就是mysql驱动,您还可以传递 sqlserver 、 postgresql 参数获取对应数据库的一个连接.
     #1.多条查询： 
-        QuerySql
+        sqlservConn.QuerySql
     #2.单条查询： 
-        QueryRow
+         sqlservConn.QueryRow
 ```
 
 #### 2.执行类： 会修改数据的sql、存储过程等  
 ```sql
     #1.执行命令，主要有 insert 、 updated 、 delete   
-       ExecuteSql
+       sqlservConn.ExecuteSql
 ```       
 
 #### 3.预处理类：如果场景需要批量插入很多条数据，那么就需要独立调用预编译
@@ -20,17 +23,17 @@
 >   3.此时需要以下解决方案  
 ```sql
     #1.预编译，预处理类之后，执行批量语句
-       PrepareSql
+       sqlservConn.PrepareSql
     #2.（多条）执行类
-       ExecuteSqlForMultiple
+       sqlservConn.ExecuteSqlForMultiple
     #3.（多条）查询类
-       QuerySqlForMultiple    
+       sqlservConn.QuerySqlForMultiple    
 ```        
 
 #### 4.事务类操作
 ```sql
     #1.开启一个事务
-       tx:=BeginTx
+       tx:=sqlservConn.BeginTx()
     
     #2.预编译sql
        tx.Prepare
