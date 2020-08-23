@@ -76,7 +76,7 @@ V 1.2.xx   2020-08（开发计划预告）
 >   2.根据使用者反馈，将增加 `gorm`  包.  
 >   3.增加 postgre sql 相关的使用示例、单元测试.  
 
-V 1.2.21  2020-08-23   
+V 1.2.11  2020-08-23   
 >   1.增加 (sqlserver)[单元测试](./test/db_sqlserver_test.go),本次更新主要是兼容`sqlserver2008`,截止目前版本号>=2008的全部sqlserver都已经支持.     
 >   2.文件上传部分代码进行了规范化,相关配置项增加使用细节说明.      
 >   3.配置文件 config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug  .          

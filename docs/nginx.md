@@ -26,7 +26,7 @@ server{
     # goskeleton 项目的跨域需要屏蔽，详情参见 routes/(web.go|api.go) 先关注释说明   
     add_header Access-Control-Allow-Origin *;
     add_header Access-Control-Allow-Headers 'Authorization, User-Agent, Keep-Alive, Content-Type, X-Requested-With';
-    add_header Access-Control-Allow-Methods OPTIONS, GET, POST, DELETE, PUT, PATCH
+    add_header Access-Control-Allow-Methods OPTIONS, GET, POST, DELETE, PUT, PATCH ;
             
     if ($request_method = 'OPTIONS') {
         # 针对浏览器第一次OPTIONS请求响应状态码：200，消息：hello options（可随意填写，避免中文）
