@@ -74,16 +74,12 @@
 V 1.2.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.根据使用者反馈，将增加 `gorm`  包.  
+>   3.增加 postgre sql 相关的使用示例、单元测试.  
 
 V 1.2.21  2020-08-23   
 >   1.增加 (sqlserver)[单元测试](./test/db_sqlserver_test.go),本次更新主要是兼容`sqlserver2008`,截止目前版本号>=2008的全部sqlserver都已经支持.     
->   2.文件上传部分代码进行了规范化.      
->   3.配置文件 config/config.yml 中规范化一处键名：APP_DEBUG => AppDebug .      
-        
-V 1.2.20  2020-08-22   
->   1.config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug , 书写保持全局一致性。  
->   2.关于文件上传的配置项增加细节说明.     
->   3.集成 gorm 包，使用文档：  .   
+>   2.文件上传部分代码进行了规范化,相关配置项增加使用细节说明.      
+>   3.配置文件 config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug  .          
 
 V 1.2.10  2020-08-20    
 >   1.验证码封装完成,[相关文档](./docs/captcha.md)    
