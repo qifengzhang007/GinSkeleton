@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql" // mysql 驱动
-	//_ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
+	// _ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
 	// _ "github.com/lib/pq"		//  postgreSql  驱动
 	"go.uber.org/zap"
 	"goskeleton/app/core/event_manage"
