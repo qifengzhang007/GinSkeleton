@@ -10,6 +10,7 @@ CREATE TABLE   tb_users (
 	updated_at datetime DEFAULT (getdate())
 ) ;
 
+
 -- 模拟插入数据
 
 insert   into tb_users (

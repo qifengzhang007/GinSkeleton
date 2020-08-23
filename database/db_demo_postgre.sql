@@ -11,7 +11,7 @@ CREATE TABLE web.tb_users
 	created_at  DATE,
 	updated_at  DATE
 
-)   ;
+);
 
 insert  into  web.tb_users(name,sex,age,addr,remark,created_at,updated_at)  values
 ('goskeleton1',1,18,'postgresql 测试数据_postgre','备注信息001',current_date,current_date),
