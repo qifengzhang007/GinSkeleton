@@ -8,7 +8,7 @@ import (
 )
 
 //	测试 postgre 之前，首先请去  app/utils/sql_factory/client.go 第 8 行， 打开 被注释的驱动，否则 postgre 无法操作
-// database/db_demo_postgre.sql 有最简洁的创建表命令,您可以快速初始化一个 db_goskeleton 数据库 , 然后快速使用demo文件创建相关表.
+//  database/db_demo_postgre.sql 有最简洁的创建表命令,您可以快速初始化一个 db_goskeleton 数据库 , 然后快速使用demo文件创建相关表.
 // 本次测试使用最快捷的方式，只要保证 postgre 驱动初始化 ok 以及连接有效即可
 // 实际应用请在 app/model 里面建表，整个操作与 mysql 类似
 
