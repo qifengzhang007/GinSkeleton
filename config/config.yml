@@ -39,7 +39,7 @@ SqlServer:
 PostgreSql:
   Host: "127.0.0.1"
   DataBase: "db_goskeleton"
-  Port: 5432                        #注意，非3306，请自行调整
+  Port: 5432
   Prefix: "tb_"
   User: "postgres"
   Pass: "secret2017"
