@@ -55,7 +55,7 @@
 4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
 5|aop切面编程| [Aop切面编程](docs/aop.md) 
 6|redis| [redis使用示例](test/redis_test.go) 
-7|原生sql操作| [sql操作示例](docs/sql_stament.md) 
+7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
 8|zap日志|  [zap日志](docs/zap_log.md) 
 9| 验证码|  [验证码](docs/captcha.md)
 10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
