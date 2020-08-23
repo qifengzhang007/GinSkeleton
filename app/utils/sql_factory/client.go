@@ -3,6 +3,8 @@ package sql_factory
 import (
 	"database/sql"
 	"fmt"
+	//_ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
+	_ "github.com/go-sql-driver/mysql" // mysql 驱动
 	"go.uber.org/zap"
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
@@ -54,7 +56,7 @@ func initSqlDriver(sqlType string) *sql.DB {
 		SetMaxIdleConns := configFac.GetInt("SqlServer.SetMaxIdleConns")
 		SetMaxOpenConns := configFac.GetInt("SqlServer.SetMaxOpenConns")
 		SetConnMaxLifetime := configFac.GetDuration("SqlServer.SetConnMaxLifetime")
-		SqlConnString := fmt.Sprintf("server=%s;port=%s;database=%s;user id=%s;password=%s", Host, Port, DataBase, User, Pass)
+		SqlConnString := fmt.Sprintf("server=%s;port=%s;database=%s;user id=%s;password=%s;encrypt=disable", Host, Port, DataBase, User, Pass)
 		sqlserverDriver, err = sql.Open("mssql", SqlConnString)
 		if err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsDbSqlDriverInitFail + err.Error())
@@ -74,9 +76,10 @@ func initSqlDriver(sqlType string) *sql.DB {
 
 // 从底层驱动中获取一个连接，初始化驱动的过程本质上就是根据参数初始化了一个连接池
 func GetOneSqlClient(sqlType string) *sql.DB {
+	var maxRetryTimes int
+	var reConnectInterval time.Duration
 	configFac := yml_config.CreateYamlFactory()
-	maxRetryTimes := configFac.GetInt("SqlServer.PingFailRetryTimes")
-	// ping 失败允许重试
+
 	var dbDriver *sql.DB
 	switch sqlType {
 	case "mysql":
@@ -85,22 +88,27 @@ func GetOneSqlClient(sqlType string) *sql.DB {
 		} else {
 			dbDriver = mysqlDriver
 		}
+		maxRetryTimes = configFac.GetInt("Mysql.PingFailRetryTimes")
+		reConnectInterval = yml_config.CreateYamlFactory().GetDuration("Mysql.ReConnectInterval")
 	case "sqlserver", "mssql":
 		if sqlserverDriver == nil {
 			dbDriver = initSqlDriver(sqlType)
 		} else {
 			dbDriver = sqlserverDriver
 		}
+		maxRetryTimes = configFac.GetInt("SqlServer.PingFailRetryTimes")
+		reConnectInterval = yml_config.CreateYamlFactory().GetDuration("SqlServer.ReConnectInterval")
 	default:
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + "，" + sqlType)
 		return nil
 	}
 	for i := 1; i <= maxRetryTimes; i++ {
+		// ping 失败允许重试
 		if err := dbDriver.Ping(); err != nil { //  获取一个连接失败，进行重试
 			dbDriver = initSqlDriver(sqlType)
-			time.Sleep(time.Second * yml_config.CreateYamlFactory().GetDuration("Mysql.ReConnectInterval"))
+			time.Sleep(time.Second * reConnectInterval)
 			if i == maxRetryTimes {
-				variable.ZapLog.Error("Mysql：" + my_errors.ErrorsDbGetConnFail)
+				variable.ZapLog.Error(sqlType+my_errors.ErrorsDbGetConnFail, zap.Error(err))
 				return nil
 			}
 		} else {

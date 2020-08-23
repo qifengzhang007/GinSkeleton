@@ -28,7 +28,7 @@ SqlServer:
   DataBase: "db_goskeleton"
   Port: 1433
   Prefix: "tb_"
-  User: "sa"
+  User: "Sa"
   Pass: "secret2017"
   SetMaxIdleConns: 10
   SetMaxOpenConns: 128

@@ -91,8 +91,8 @@ func TestConnPool(t *testing.T) {
 	//  获取20个连接，数据库客户端使用命令： SHOW  PROCESSLIST 查看正在连接的数量，发现增多了不少
 	for i := 1; i <= 20; i++ {
 		go func() {
-			tmp_addr := model.CreateTestFactory("")
-			fmt.Printf("获取的数据库连接池地址：%p\n", tmp_addr)
+			tmpAddr := model.CreateTestFactory("")
+			fmt.Printf("获取的数据库连接池地址：%p\n", tmpAddr)
 			time.Sleep(time.Second * 20)
 		}()
 	}
