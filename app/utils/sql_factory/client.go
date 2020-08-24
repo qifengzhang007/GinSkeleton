@@ -40,7 +40,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 	default:
 		return nil
 	}
-	// 初始化公共配置项
+	// 初始化相同配置项
 	Host := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Host")
 	Port := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Port")
 	User := configFac.GetString(tmpSqlType + "." + readOrWrite + ".User")
