@@ -12,9 +12,12 @@ import (
 
 // 创建一个数据库基类工厂
 func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
+	var dbType string
+	var sqlDriverRead *sql.DB
+
 	sqlType = strings.ToLower(strings.Replace(sqlType, " ", "", -1))
 	sqlDriverWrite := sql_factory.GetOneSqlClient(sqlType, "Write")
-	var dbType string
+
 	switch sqlType {
 	case "mysql":
 		dbType = "Mysql"
@@ -26,12 +29,13 @@ func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + sqlType)
 		return nil
 	}
+	// 配置项是否开启读写分离
 	isOpenReadDb := yml_config.CreateYamlFactory().GetInt(dbType + ".IsOpenReadDb")
-	var sqlDriverRead *sql.DB
-
+	//开启读写分离配置，就继续初始化一个 Read 数据库连接
 	if isOpenReadDb == 1 {
 		sqlDriverRead = sql_factory.GetOneSqlClient(sqlType, "Read")
 	} else {
+		// 没有开启读写分离，那么 Read 数据库连接就是 Write 连接
 		sqlDriverRead = sqlDriverWrite
 	}
 	return &BaseModel{dbDriverWrite: sqlDriverWrite, dbDriverRead: sqlDriverRead}
@@ -97,7 +101,7 @@ func (b *BaseModel) PrepareSql(sql string) bool {
 	}
 }
 
-// 适合预一次性预编译sql之后，批量操作sql，避免mysql产生大量的预编译sql无法释放
+// 适合一次性预编译sql之后，批量操作sql，避免mysql产生大量的预编译sql无法释放
 func (b *BaseModel) ExecuteSqlForMultiple(args ...interface{}) int64 {
 	if res, err := b.stm.Exec(args...); err == nil {
 		if affectNum, err := res.RowsAffected(); err == nil {

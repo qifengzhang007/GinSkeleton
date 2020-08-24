@@ -1,5 +1,5 @@
 ### Sql操作命令集合  
->本文档主要介绍了sql操作的核心命令，详细操作命令示例代码参见 [Mysql示例文档](../app/model/test.go) ,  sqlserver、postgreSql 操作方式同 mysql .      
+>本文档主要介绍了sql操作的核心命令，详细操作命令示例代码参见 [mysql示例文档](../app/model/test.go) ,  [sqlserver测试用例](../test/db_sqlserver_test.go) , [postgreSql测试用例](../test/db_postgresql_test.go) 操作方式同 mysql .      
 
 #### 1.查询类： 不会修改数据的sql、存储过程、视图
 ```sql

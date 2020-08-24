@@ -56,15 +56,19 @@ func TestUpdate(t *testing.T) {
 	}
 }
 
-// 测试读写分离(
+// 测试读写分离
+// 您可以在config/config.yml> Sqlserver 配置不同的数据库ip等信息，测试  读 和 写 所操作的数据库
 func TestReadWrite(t *testing.T) {
 	sqlservConn := model.CreateBaseSqlFactory("sqlserver")
+
 	fmt.Printf("获取sql数据库的指针:%#+v\n", sqlservConn)
 	sql := "update   tb_users   set  created_at=getdate() ,updated_at=getdate() ,remark='数据修改测试'  where   id=3  "
+	// 这里的操作会在 Write 对应的数据库进行
 	effectiveRowNums := sqlservConn.ExecuteSql(sql)
 	fmt.Println("影响的行数：", effectiveRowNums)
 
 	sql = "select   user_name,pass,sex,age,remark,created_at,updated_at  from tb_users "
+	// 这里的操作会在 Read 对应的数据库进行
 	rows := sqlservConn.QuerySql(sql)
 	if rows != nil {
 		var userName, pass, sex, age, remark, createdAt, updatedAt string

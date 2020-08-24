@@ -76,8 +76,9 @@ V 1.2.xx   2020-08（开发计划预告）
 >   2.sql操作(mysql、sqlserver、postgreSql)测试、验证读写分离方案, 以便更好地在未来项目中发挥优势.     
 
 V 1.2.21  2020-08-24   
->   1.sql(mysql、sqlserver、postgresql)增加读写分离配置支持，详情参见：config/config.yml 数据库配置部分.   
+>   1.数据库(mysql、sqlserver、postgresql)增加读写分离配置支持，详情参见：config/config.yml 数据库配置部分.   
 >   2.修复上个版本中的一个Bug ，postgresql 数据库驱动初始化变量调用了 sqlserver 代码部分中的变量.    
+>   3.其它一些小地方进行了规范与完善.      
 
 V 1.2.20  2020-08-23   
 >   1.增加 (sqlserver)[测试用例](./test/db_sqlserver_test.go),本次更新主要是兼容`sqlserver2008`,截止目前版本号>=2008的全部sqlserver都已经支持.     

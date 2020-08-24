@@ -5,13 +5,13 @@ import (
 	"fmt"
 	//	_ "github.com/denisenkom/go-mssqldb" // sqlserver驱动
 	_ "github.com/go-sql-driver/mysql" // mysql 驱动
-	"strings"
-	// _ "github.com/lib/pq"		//  postgreSql  驱动
+	// _ "github.com/lib/pq"              //  postgreSql  驱动
 	"go.uber.org/zap"
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/yml_config"
+	"strings"
 	"time"
 )
 
@@ -35,7 +35,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		tmpSqlType = "Mysql"
 	case "sqlserver", "mssql":
 		tmpSqlType = "SqlServer"
-	case "postgre", "postgresql", "postgres":
+	case "postgre", "postgres", "postgresql":
 		tmpSqlType = "PostgreSql"
 	default:
 		return nil
@@ -110,7 +110,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 			return nil
 		}
 		return tmpDriver
-	} else if sqlType == "postgre" {
+	} else if sqlType == "postgre" || sqlType == "postgres" || sqlType == "postgresql" {
 		SqlConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", Host, Port, DataBase, User, Pass)
 		switch readOrWrite {
 		case "Write", "Read":
@@ -145,7 +145,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 
 // 从底层驱动中获取一个连接，初始化驱动的过程本质上就是根据参数初始化了一个连接池
 func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
-	if !strings.Contains("mysql,sqlserver,mssql,postgre", sqlType) {
+	if !strings.Contains("mysql,sqlserver,mssql,postgre,postgres,postgresql", sqlType) {
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + sqlType)
 		return nil
 	}
@@ -191,7 +191,7 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 		}
 		maxRetryTimes = configFac.GetInt("SqlServer." + readOrWrite + ".PingFailRetryTimes")
 		reConnectInterval = configFac.GetDuration("SqlServer." + readOrWrite + ".ReConnectInterval")
-	case "postgre":
+	case "postgre", "postgres", "postgresql":
 		if readOrWrite == "Write" {
 			if postgreSqlDriverWrite == nil {
 				dbDriver = initSqlDriver(sqlType, readOrWrite)

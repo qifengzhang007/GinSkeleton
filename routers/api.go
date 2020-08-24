@@ -35,8 +35,8 @@ func InitApiRouter() *gin.Engine {
 	})
 
 	//处理静态资源（不建议gin框架处理静态资源，参见 Public/readme.md 说明 ）
-	router.Static("/public", "./Public")             //  定义静态资源路由与实际目录映射关系
-	router.StaticFile("/abcd", "./Public/readme.md") // 可以根据文件名绑定需要返回的文件名
+	router.Static("/public", "./public")             //  定义静态资源路由与实际目录映射关系
+	router.StaticFile("/abcd", "./public/readme.md") // 可以根据文件名绑定需要返回的文件名
 
 	//  创建一个门户类接口路由组
 	vApi := router.Group("/api/v1/")
