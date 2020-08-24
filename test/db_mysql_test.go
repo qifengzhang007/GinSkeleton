@@ -8,13 +8,23 @@ import (
 	"time"
 )
 
-// 新增
+// 新增 与查询，可以在 config/config.yml 开启读写分离配置项，进行测试读写分离
 func TestSqlInsert(t *testing.T) {
-
-	if model.CreateTestFactory("").InsertData() {
+	sqlFact := model.CreateTestFactory("")
+	if sqlFact.InsertData() {
 		fmt.Println("数据插入成功")
 	} else {
 		t.Errorf("数据插入操作，单元测试失败")
+	}
+
+	//  如果 开启了读写分离，查询则连接的 Read 库
+	list := sqlFact.QueryData()
+	if list != nil {
+		for index, item := range list {
+			fmt.Printf("%d, %s,%d, %d, %s, %s\n", index, item.Name, item.Age, item.Sex, item.Addr, item.Remark)
+		}
+	} else {
+		t.Errorf("数据查询操作，单元测试失败")
 	}
 }
 

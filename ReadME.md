@@ -56,7 +56,7 @@
 5|aop切面编程| [Aop切面编程](docs/aop.md) 
 6|redis| [redis使用示例](test/redis_test.go) 
 7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
-8|zap日志|  [zap日志](docs/zap_log.md) 
+8|高性能日志|  [zap日志](docs/zap_log.md) 
 9| 验证码|  [验证码](docs/captcha.md)
 10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
 11|supervisor| [supervisor进程守护](docs/supervisor.md)   
@@ -74,6 +74,10 @@
 V 1.2.xx   2020-08（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.sql操作(mysql、sqlserver、postgreSql)测试、验证读写分离方案, 以便更好地在未来项目中发挥优势.     
+
+V 1.2.21  2020-08-24   
+>   1.sql(mysql、sqlserver、postgresql)增加读写分离配置支持，详情参见：config/config.yml 数据库配置部分.   
+>   2.修复上个版本中的一个Bug ，postgresql 数据库驱动初始化变量调用了 sqlserver 代码部分中的变量.    
 
 V 1.2.20  2020-08-23   
 >   1.增加 (sqlserver)[测试用例](./test/db_sqlserver_test.go),本次更新主要是兼容`sqlserver2008`,截止目前版本号>=2008的全部sqlserver都已经支持.     
