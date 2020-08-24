@@ -41,9 +41,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		SetConnMaxLifetime := configFac.GetDuration("Mysql." + readOrWrite + ".SetConnMaxLifetime")
 		SqlConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True&loc=Local&charset=%s", User, Pass, Host, Port, DataBase, Charset)
 		switch readOrWrite {
-		case "Write":
-			tmpDriver, err = sql.Open("mysql", SqlConnString)
-		case "Read":
+		case "Write", "Read":
 			tmpDriver, err = sql.Open("mysql", SqlConnString)
 		default:
 			variable.ZapLog.Error(my_errors.ErrorsDbSqlWriteReadInitFail + readOrWrite)
