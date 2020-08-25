@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"goskeleton/app/global/variable"
 	"goskeleton/app/model"
 	_ "goskeleton/bootstrap"
 	"testing"
@@ -47,7 +46,7 @@ func TestUpdatePostgre(t *testing.T) {
 		fmt.Println("修改数据音响行数：", effectiveRows)
 
 	} else {
-		t.Errorf("执行sql失败,影响行数<=：%s", effectiveRows)
+		t.Errorf("执行sql失败,影响行数<=：%d", effectiveRows)
 	}
 }
 
@@ -73,11 +72,10 @@ func TestPostgreReadWrite(t *testing.T) {
 		for rows.Next() {
 			_ = rows.Scan(&userName, &sex, &age, &addr, &remark, &createdAt, &updatedAt)
 			fmt.Println(userName, sex, age, addr, remark, createdAt, updatedAt)
-			variable.ZapLog.Sugar().Info(userName, sex, age, addr, remark, createdAt, updatedAt)
 		}
 		_ = rows.Close()
 	} else {
-		fmt.Println("获取postgresql连接失败")
+		fmt.Println("查询无数据")
 	}
 
 }
