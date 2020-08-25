@@ -1,4 +1,12 @@
---  请自行创建  数据库,例如：  db_goskeleton
+-- 创建数据库,例如：  db_goskeleton
+USE [master]
+IF NOT EXISTS(SELECT 1 FROM sysdatabases WHERE NAME=N'db_goskeleton')
+BEGIN
+CREATE DATABASE db_goskeleton
+END
+GO
+use db_goskeleton ;
+--  创建表  tb_users 以及 写入模拟数据
 CREATE TABLE   tb_users (
 	id int   IDENTITY(1,1) NOT NULL  primary  key,
 	user_name nvarchar(60) DEFAULT(''),

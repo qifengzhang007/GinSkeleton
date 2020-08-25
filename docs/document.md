@@ -46,7 +46,7 @@ func init() {
     //1.首先编写参数验证器逻辑，例如：用户注册模块
     // 详情参见：app\http\validator\web\users\register.go
 
-    //2.将以上编写好的表单参数验证器在注册文件添加记录，便于程序启动时加载到容器，供路由从容器调用
+    //2.将以上编写好的表单参数验证器进行注册，便于程序启动时自动加载到容器，路由则从容器调用
     // 详情参见：app\http\validator\common\register_validator\register_validator.go
 
 ```   
@@ -246,6 +246,7 @@ func init() {
 >   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](../app/service/websocket/ws.go)     
 >   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
 >![业务主线图](http://139.196.101.31:2080/pingpong.png)  
+
 ####    5.yaml配置中心 
 >   1.位置：config\config.yml，通过注释即可阅读各项功能。     
 

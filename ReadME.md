@@ -30,10 +30,10 @@
 ![压力测试图](http://139.196.101.31:2080/concurrent.png)  
 
 
-##    框架使用文档  
-[进入项目骨架介绍文档](docs/document.md)  
+##    项目骨架主线逻辑  
+[主线逻辑文档](docs/document.md)  
 
-##    本项目测试用例路由  
+##    测试用例路由  
 [进入Api接口测试用例文档](docs/api_doc.md)   
 >GET    /                         
 >GET   /Admin/ws         

@@ -3,7 +3,6 @@ package test
 import (
 	"fmt"
 	"goskeleton/app/model"
-	"goskeleton/app/utils/sql_factory"
 	_ "goskeleton/bootstrap"
 	"testing"
 )
@@ -16,13 +15,13 @@ import (
 // 查询类
 func TestSelect(t *testing.T) {
 
-	sqlservConn := sql_factory.GetOneSqlClient("sqlserver", "Read")
+	sqlservConn := model.CreateBaseSqlFactory("sqlserver")
 	if sqlservConn == nil {
 		return
 	}
 	sql := "select   user_name,pass,sex,age,remark,created_at,updated_at  from tb_users "
-	rows, err := sqlservConn.Query(sql)
-	if err == nil {
+	rows := sqlservConn.QuerySql(sql)
+	if rows != nil {
 		var userName, pass, sex, age, remark, createdAt, updatedAt string
 		for rows.Next() {
 			_ = rows.Scan(&userName, &pass, &sex, &age, &remark, &createdAt, &updatedAt)
@@ -30,29 +29,24 @@ func TestSelect(t *testing.T) {
 		}
 		_ = rows.Close()
 	} else {
-		fmt.Println(err.Error())
+		fmt.Println("查询无数据")
 	}
 }
 
 //执行类： 以修改数据为例，其他类似
 func TestUpdate(t *testing.T) {
 
-	sqlservConn := sql_factory.GetOneSqlClient("sqlserver", "Write")
+	sqlservConn := model.CreateBaseSqlFactory("sqlserver")
 	if sqlservConn == nil {
 		return
 	}
 	sql := "update   tb_users   set  created_at=getdate() ,updated_at=getdate() ,remark='数据修改测试'  where   id=3  "
-	result, err := sqlservConn.Exec(sql)
-	if err == nil {
-		effectiveNum, err2 := result.RowsAffected()
-		if err2 == nil {
-			fmt.Println("修改数据音响行数：", effectiveNum)
-		} else {
-			t.Errorf("修改数据发生错误：%s", err2.Error())
-		}
+	effectiveRows := sqlservConn.ExecuteSql(sql)
+	if effectiveRows >= 0 {
+		fmt.Println("修改数据音响行数：", effectiveRows)
 
 	} else {
-		t.Errorf("执行sql发生错误：%s", err.Error())
+		t.Errorf("执行sql失败，影响行数小于0:%d", effectiveRows)
 	}
 }
 
