@@ -17,7 +17,7 @@
 docker pull zhangqifeng/nginx_vts:v1.3  
 
 # step2， 启动nginx_vts 镜像，镜像中nginx 的配置、日志目录：/usr/local/nginx/   数据卷映射暂时忽略，您可以通过 -v 自行映射
-docker container  run  --name    nginx_vts  -d -p    172.19.130.185:9506:80  -e TZ=Asia/Shanghai   zhangqifeng/nginx_vts:v1.3
+docker container  run  --name    nginx_vts  -d -p    172.19.130.185:9506:80  zhangqifeng/nginx_vts:v1.3
 
 # step3， 此时你可以验证该nginx是否正常运行，只要有数据就是启动ok
 访问地址  http://172.19.130.185:9506/status 、http://139.196.101.31:9506/status/format/json
