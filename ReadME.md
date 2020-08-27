@@ -75,6 +75,9 @@ V 1.2.xx   2020-08（开发计划预告）
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.sql操作(mysql、sqlserver、postgreSql)测试、验证读写分离方案, 以便更好地在未来项目中发挥优势.     
 
+V 1.2.22  2020-08-27 
+>   1.nginx运维文档更新,本次更新主要将 zhangqifeng/nginx_vts 镜像基于alpine3.12 重新编写，大幅度减小体积,更便于快速拉取使用.    
+
 V 1.2.21  2020-08-24   
 >   1.数据库(mysql、sqlserver、postgresql)增加读写分离配置支持，详情参见：config/config.yml 数据库配置部分.   
 >   2.修复上个版本中的一个Bug ，postgresql 数据库驱动初始化变量调用了 sqlserver 代码部分中的变量.    
