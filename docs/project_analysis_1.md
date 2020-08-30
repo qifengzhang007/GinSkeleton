@@ -19,7 +19,7 @@
 ###  cpu数据分析步骤   
 >  1.首先下载安装 [graphviz](https://www.graphviz.org/download/) ,根据您的系统选择相对应的版本安装，安装完成记得将安装目录/bin, 加入系统环境变量.  
 >  2.打开cmd,执行 `dot -V` ,会显示版本信息，说明安装已经OK, 那么继续执行 `dot  -c` 安装图形显示所需要的插件.   
->  3.在cpu数据采集环节,您已经得到了 `demo_profile` 文件,那么就在同目录打开cmd窗口,执行 `go  tool  pprof  demo_profile`, 然后输入 `web` 回车，就自动生成了如下图：  
+>  3.在cpu数据采集环节,您已经得到了 `profile` 文件,那么就在同目录打开cmd窗口,执行 `go  tool  pprof  profile`, 然后输入 `web` 回车，就自动生成了如下图：  
 ![cpu分析_上](http://139.196.101.31:2080/images/pprof_cmd.jpg)    
 ![cpu分析_上](http://139.196.101.31:2080/images/analysis1.png)  
 

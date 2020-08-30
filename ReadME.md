@@ -60,6 +60,7 @@
 9| 验证码|  [验证码](docs/captcha.md)
 10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
 11|supervisor| [supervisor进程守护](docs/supervisor.md)   
+12| pprof+graphviz | [性能分析报告](./docs/project_analysis_1.md) 
 
 ##    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
