@@ -20,7 +20,7 @@ func (n News) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(&n); err != nil {
 		errs := gin.H{
-			"tips": "HomeNews参数校验失败，参数不符合规定，limit(长度>=1)、page>=1、limit>=1,请按照规则自己检查",
+			"tips": "HomeNews参数校验失败，参数不符合规定，newsType(长度>=1)、page>=1、limit>=1,请按照规则自己检查",
 			"err":  err.Error(),
 		}
 		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)

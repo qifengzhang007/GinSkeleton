@@ -20,5 +20,27 @@ func TestHttpClient(t *testing.T) {
 	}
 }
 
+// 向门户服务接口请求，用于收集cpu占用情况。
+func TestPprof(t *testing.T) {
+	cli := goCurl.NewClient()
+	for i := 1; i <= 300; i++ {
+		resp, err := cli.Post("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
+			Headers: map[string]interface{}{
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+			FormParams: map[string]interface{}{
+				"newsType": "potal",
+				"page":     "1",
+				"limit":    "50",
+			},
+		})
+		if err == nil {
+			if txt, err := resp.GetContents(); err == nil {
+				t.Log(txt)
+			}
+		}
+	}
+}
+
 //更详细的使用文档 https://gitee.com/daitougege/goCurl
 // 更多单元测试 https://gitee.com/daitougege/goCurl/tree/master/examples

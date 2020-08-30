@@ -71,9 +71,14 @@
 5 | go应用程序| [详情](docs/deploy_go.md)  
 
 ## 版本
-V 1.2.xx   2020-08（开发计划预告）  
+V 1.2.xx   2020-09（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
->   2.sql操作(mysql、sqlserver、postgreSql)测试、验证读写分离方案, 以便更好地在未来项目中发挥优势.     
+>   2.基于 `pprof+graphviz`, 对项目骨架做全方位的cpu、内存性能分析,给所有使用者展示本项目骨架的每一处性能细节参数.   
+>   3.我们的目标是追求极致的高性能，9月份将完成所有环节的性能分析,并出俱4份报告.          
+
+V 1.2.22  2020-08-30   
+>   1.开始启动项目骨架全方位性能分析,持续更新[性能分析报告_NO.1](./docs/project_analysis_1.md).  
+>   2.路由文件：api 和 web 微调, 注释有更新.    
 
 V 1.2.21  2020-08-24   
 >   1.数据库(mysql、sqlserver、postgresql)增加读写分离配置支持，详情参见：config/config.yml 数据库配置部分.   
@@ -84,8 +89,7 @@ V 1.2.20  2020-08-23
 >   1.增加 (sqlserver)[测试用例](./test/db_sqlserver_test.go),本次更新主要是兼容`sqlserver2008`,截止目前版本号>=2008的全部sqlserver都已经支持.     
 >   2.增加 (postgreSql)[测试用例](./test/db_postgresql_test.go).         
 >   3.文件上传部分代码进行了规范化,相关配置项增加使用细节说明.      
->   4.配置文件 config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug  .          
->   5.原计划在本月底之前集成 `gorm` ,经过评测发现，该包不支持读写分离,因此我们放弃了支持 `gorm` ,建议sql操作使用本项目骨架原生sql操作方式,比任何orm都高效、极速.                                         
+>   4.配置文件 config/config.yml , 规范化被遗漏的 APP_DEBUG 为： AppDebug  .                                            
 
 V 1.2.10  2020-08-20    
 >   1.验证码封装完成,[相关文档](./docs/captcha.md)    
