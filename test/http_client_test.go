@@ -10,7 +10,7 @@ import (
 //Example函数名称
 
 func TestHttpClient(t *testing.T) {
-	cli := goCurl.NewClient()
+	cli := goCurl.CreateHttpClient()
 	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
 		content, _ := resp.GetContents()
 		if len(content) < 30 {
@@ -22,9 +22,9 @@ func TestHttpClient(t *testing.T) {
 
 // 向门户服务接口请求，用于收集cpu占用情况。
 func TestPprof(t *testing.T) {
-	cli := goCurl.NewClient()
+	cli := goCurl.CreateHttpClient()
 	for i := 1; i <= 1; i++ {
-		resp, err := cli.Post("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
+		resp, err := cli.Get("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
 			Headers: map[string]interface{}{
 				"Content-Type": "application/x-www-form-urlencoded",
 			},

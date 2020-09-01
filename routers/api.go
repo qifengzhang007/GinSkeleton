@@ -53,7 +53,7 @@ func InitApiRouter() *gin.Engine {
 		// 模拟一个首页路由
 		vApi := vApi.Group("home/")
 		{
-			vApi.POST("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
+			vApi.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
 		}
 	}
 	return router

@@ -5,12 +5,12 @@
 ### 门户网站类
 >   1.ip、端口使用本项目默认配置，即：`http://127.0.0.1:20191`，门户类接口通用  
 ####    1.首页新闻   
->    <font color=#FF4500>*get*，/api/v1/home/news  
+>    <font color=#FF4500>*get*，/api/v1/home/news?newsType=portal&page=1&limit=50 
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
 newsType|form-data|string|必填|potal
-pass|form-data|string|必填|1
+page|form-data|string|必填|1
 limit|form-data|string|必填|20
 > 返回示例：
 ```json
