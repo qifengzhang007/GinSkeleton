@@ -18,5 +18,7 @@
 >  2.打开cmd窗口,执行 `dot -V` ,会显示版本信息，说明安装已经OK, 那么继续执行 `dot  -c` 安装图形显示所需要的插件.   
 >  3.在cpu数据采集环节第三步,您已经得到了 `profile` 文件,那么就在同目录打开cmd窗口,执行 `go  tool  pprof  profile`, 然后输入 `web` 回车就会自动打开浏览器，展示给您如下结果图：  
 ![cpu分析_上](http://139.196.101.31:2080/images/pprof_cmd.jpg)    
+
+###  报告详情参见如下图  
 ![cpu分析_上](http://139.196.101.31:2080/images/analysis1.png)  
 
