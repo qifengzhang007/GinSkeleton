@@ -109,6 +109,42 @@ func (t *Test) InsertDataMultipleErrorMethod() bool {
 	return true
 }
 
+// 超多数据批量查询的正确姿势
+func (t *Test) SelectDataMultiple() bool {
+	// 如果您要亲自测试，请确保相关表存在，并且有数据
+	sql := `
+			SELECT
+			code,name,company_name,indudtry,created_at 
+			FROM
+			db_stocks.tb_code_list 
+			LIMIT 0, 1000 ;
+		`
+	//1.首先独立预处理sql语句，无参数
+	if t.PrepareSql(sql) {
+		// 你可以模拟插入更多条数据，例如 1万+
+		var code, name, company_name, indudtry, created_at string
+		for i := 1; i <= 100; i++ {
+			//2.执行批量查询
+			rows := t.QuerySqlForMultiple()
+			if rows == nil {
+				variable.ZapLog.Sugar().Error("sql执行失败，sql:", sql)
+				return false
+			} else {
+				// 我们只输出最后一行数据
+				if i == 100 {
+					for rows.Next() {
+						_ = rows.Scan(&code, &name, &company_name, &indudtry, &created_at)
+						fmt.Println(code, name, company_name, indudtry, created_at)
+					}
+				}
+			}
+			rows.Close()
+		}
+	}
+	variable.ZapLog.Info("批量查询sql执行完毕！")
+	return true
+}
+
 //  sql事物操作
 func (t *Test) TransAction(isCommit bool) bool {
 	sql := "INSERT  INTO  tb_test(`name`,`sex`,`age`,`addr`,`remark`) VALUES(?,?,?,?,?)"

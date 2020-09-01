@@ -51,7 +51,7 @@
 ---|---|---
 1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
 2 | cli命令| [cobra文档](docs/cobra.md) 
-3 | goCurl、httpClient|[goCurl](https://gitee.com/daitougege/goCurl) 
+3 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
 4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
 5|aop切面编程| [Aop切面编程](docs/aop.md) 
 6|redis| [redis使用示例](test/redis_test.go) 
@@ -60,7 +60,7 @@
 9| 验证码|  [验证码](docs/captcha.md)
 10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
 11|supervisor| [supervisor进程守护](docs/supervisor.md)   
-12| pprof+graphviz | [性能分析报告](./docs/project_analysis_1.md) 
+
 
 ##    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
@@ -71,15 +71,28 @@
 4 | nginx| [详情](docs/deploy_nginx.md)   
 5 | go应用程序| [详情](docs/deploy_go.md)  
 
+##  性能分析报告  
+> 1.开发之初，我们的目标就是追求极致的高性能,因此在项目整体功能越来越趋于完善之时，我们现将进行一次全面的性能分析评测.    
+> 2.通过相关代码段的执行，跟踪cpu 耗时 和 内存占用来分析各个部分的性能.     
+
+###  通过CPU的耗时来分析相关代码段的性能  
+序号|相关功能 | 文档地址  
+---|---|---
+1| 项目骨架主线CPU耗时分析| [主线分析报告](./docs/project_analysis_1.md)
+2| 操作数据库CPU耗时分析| [数据库分析报告](./docs/project_analysis_2.md)
+
+ 
 ## 版本
 V 1.2.xx   2020-09（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.基于 `pprof+graphviz`, 对项目骨架做全方位的cpu、内存性能分析,给所有使用者展示本项目骨架的每一处性能细节参数.   
 >   3.我们的目标是追求极致的高性能，9月份将完成所有环节的性能分析,并出俱4份报告.          
 
-V 1.2.22  2020-08-30   
->   1.开始启动项目骨架全方位性能分析,持续更新[性能分析报告_NO.1](./docs/project_analysis_1.md).  
+V 1.2.23  2020-09-01   
+>   1.开始启动项目骨架全方位性能分析.   
 >   2.路由文件：api 和 web 微调, 注释有更新.    
+>   3.[goCurl](https://gitee.com/daitougege/goCurl) 包升级到最新版 `v1.2.2`,一切从快速应用的角度出发，提供了全新的使用文档,代码进行了增强与精简.        
+>   4.本次版本更新后，请记得使用 `go mod  tidy`  清理、整理相关引用包,保持项目干净利落.      
 
 V 1.2.22  2020-08-27 
 >   1.nginx运维文档更新,本次更新主要将 zhangqifeng/nginx_vts 镜像基于alpine3.12 重新编写，大幅度减小体积,更便于快速拉取使用.    

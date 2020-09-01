@@ -23,7 +23,7 @@ func TestHttpClient(t *testing.T) {
 // 向门户服务接口请求，用于收集cpu占用情况。
 func TestPprof(t *testing.T) {
 	cli := goCurl.CreateHttpClient()
-	for i := 1; i <= 1; i++ {
+	for i := 1; i <= 300; i++ {
 		resp, err := cli.Get("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
 			Headers: map[string]interface{}{
 				"Content-Type": "application/x-www-form-urlencoded",
