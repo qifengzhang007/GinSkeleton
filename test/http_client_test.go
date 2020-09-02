@@ -2,6 +2,7 @@ package test
 
 import (
 	"github.com/qifengzhang007/goCurl"
+	"goskeleton/app/global/variable"
 	_ "goskeleton/bootstrap" //  为了保证单元测试与正常启动效果一致，记得引入该包
 	"testing"
 )
@@ -23,7 +24,7 @@ func TestHttpClient(t *testing.T) {
 // 向门户服务接口请求，用于收集cpu占用情况。
 func TestPprof(t *testing.T) {
 	cli := goCurl.CreateHttpClient()
-	for i := 1; i <= 300; i++ {
+	for i := 1; i <= 500; i++ {
 		resp, err := cli.Get("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
 			Headers: map[string]interface{}{
 				"Content-Type": "application/x-www-form-urlencoded",
@@ -36,7 +37,10 @@ func TestPprof(t *testing.T) {
 		})
 		if err == nil {
 			if txt, err := resp.GetContents(); err == nil {
-				t.Log(txt)
+				if i == 500 {
+					//最后一次输出返回结果，避免中间过程频繁操作io
+					variable.ZapLog.Info(txt)
+				}
 			}
 		} else {
 			t.Log(err.Error())

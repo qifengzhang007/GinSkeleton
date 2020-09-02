@@ -114,7 +114,7 @@ func (t *Test) SelectDataMultiple() bool {
 	// 如果您要亲自测试，请确保相关表存在，并且有数据
 	sql := `
 			SELECT
-			code,name,company_name,indudtry,created_at 
+			code,name,company_name,concepts,indudtry,province,city,introduce,created_at 
 			FROM
 			db_stocks.tb_code_list 
 			LIMIT 0, 1000 ;
@@ -122,20 +122,48 @@ func (t *Test) SelectDataMultiple() bool {
 	//1.首先独立预处理sql语句，无参数
 	if t.PrepareSql(sql) {
 		// 你可以模拟插入更多条数据，例如 1万+
-		var code, name, company_name, indudtry, created_at string
-		for i := 1; i <= 100; i++ {
+		var code, name, company_name, concepts, indudtry, province, city, introduce, created_at string
+
+		type Column struct {
+			Code         string `json:"code"`
+			Name         string `json:"name"`
+			Company_name string `json:"company_name"`
+			Concepts     string `json:"concepts"`
+			Indudtry     string `json:"indudtry"`
+			Province     string `json:"province"`
+			City         string `json:"city"`
+			Introduce    string `json:"introduce"`
+			Created_at   string `json:"created_at"`
+		}
+
+		for i := 1; i <= 500; i++ {
+			var nColumn = make([]Column, 0)
 			//2.执行批量查询
 			rows := t.QuerySqlForMultiple()
 			if rows == nil {
 				variable.ZapLog.Sugar().Error("sql执行失败，sql:", sql)
 				return false
 			} else {
-				// 我们只输出最后一行数据
-				if i == 100 {
-					for rows.Next() {
-						_ = rows.Scan(&code, &name, &company_name, &indudtry, &created_at)
-						fmt.Println(code, name, company_name, indudtry, created_at)
+				for rows.Next() {
+					_ = rows.Scan(&code, &name, &company_name, &concepts, &indudtry, &province, &city, &introduce, &created_at)
+					oneColumn := Column{
+						code,
+						name,
+						company_name,
+						concepts,
+						indudtry,
+						province,
+						city,
+						introduce,
+						created_at,
 					}
+					nColumn = append(nColumn, oneColumn)
+
+				}
+				//// 我们只输出最后一行数据
+				if i == 500 {
+					fmt.Println("循环结束，最终需要返回的结果成员数量：", len(nColumn))
+					fmt.Printf("%#+v\n", nColumn)
 				}
 			}
 			rows.Close()
