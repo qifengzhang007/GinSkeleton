@@ -1,17 +1,34 @@
 ### 测试用例接口   
 >   1.文档主要提供本项目骨架已经集成的Api接口使用说明。            
->   2.相关测试全部基于`postman`工具进行。              
+>   2.相关测试全部基于`postman`工具进行。     
+
+### 默认已经集成的路由  
+
+####  门户网站类  
+>GET    http://127.0.0.1:20191    
+>GET    /api/v1/home/news?newsType=portal&page=1&limit=50 
+
+#### 后台管理类
+>GET    /http://127.0.0.1:20201                         
+>GET   /Admin/ws         
+>POST   /Admin/users/register     
+>POST   /Admin/users/login        
+>POST   /Admin/users/refreshtoken        
+>GET    /Admin/users/index        
+>POST   /Admin/users/create       
+>POST   /Admin/users/edit         
+>POST   /Admin/users/delete       
+>POST   /Admin/upload/file           
+
+#### pprof 路由
+>调试模式自动开启，以pprof开头的路由   
+> http://127.0.0.1:20191/debug/pprof/  
+> http://127.0.0.1:20201/debug/pprof/  
 
 ### 门户网站类
 >   1.ip、端口使用本项目默认配置，即：`http://127.0.0.1:20191`，门户类接口通用  
 ####    1.首页新闻   
 >    <font color=#FF4500>*get*，/api/v1/home/news?newsType=portal&page=1&limit=50 
-
-参数字段|参数属性|类型|选项|默认值
----|---|---|---|---
-newsType|form-data|string|必填|potal
-page|form-data|string|必填|1
-limit|form-data|string|必填|20
 > 返回示例：
 ```json
 {

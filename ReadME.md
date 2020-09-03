@@ -4,7 +4,7 @@
 >   3.本项目骨架请使用 `master` 分支版本即可，该分支是最新稳定分支。    
 >   4.[在线演示系统](http://139.196.101.31:9506)   
 
-## 问题反馈  
+### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
 >   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
 
@@ -14,39 +14,24 @@
 >   ![操作图](http://139.196.101.31:2080/golang.org.png)   
 >   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
 
-##    快速上手
+###    快速上手
 >   1.安装的go语言版本最好>=1.14,只为更好的支持 `go module` 包管理.  
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
 >   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
-##  交叉编译(windows直接编译出linux可执行文件)    
+###  交叉编译(windows直接编译出linux可执行文件)    
 >   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0`   
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
-##    压力测试  
->   2核4g云服务器，并发（Qps）可以达到1w+，所有请求100%成功！  
-![压力测试图](http://139.196.101.31:2080/concurrent.png)  
+###    项目骨架主线逻辑  
+[进入主线逻辑文档](docs/document.md)  
 
+###    测试用例路由  
+[进入Api接口测试用例文档](docs/api_doc.md)      
 
-##    项目骨架主线逻辑  
-[主线逻辑文档](docs/document.md)  
-
-##    测试用例路由  
-[进入Api接口测试用例文档](docs/api_doc.md)   
->GET    /                         
->GET   /Admin/ws         
->POST   /Admin/users/register     
->POST   /Admin/users/login        
->POST   /Admin/users/refreshtoken        
->GET    /Admin/users/index        
->POST   /Admin/users/create       
->POST   /Admin/users/edit         
->POST   /Admin/users/delete       
->POST   /Admin/upload/file     
-
-##    开发常用模块   
+###    开发常用模块   
 序号|功能模块 | 文档地址  
 ---|---|---
 1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
@@ -62,7 +47,7 @@
 11|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 
-##    项目上线后，运维方案(基于docker)    
+###    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
 1 | linux服务器| [详情](docs/deploy_linux.md)   
@@ -71,23 +56,10 @@
 4 | nginx| [详情](docs/deploy_nginx.md)   
 5 | go应用程序| [详情](docs/deploy_go.md)  
 
-##  性能分析报告  
-> 1.开发之初，我们的目标就是追求极致的高性能,因此在项目整体功能越来越趋于完善之时，我们现将进行一次全面的性能分析评测.    
-> 2.通过执行相关代码, 跟踪 cpu 耗时 和 内存占用 来分析各个部分的性能,CPU耗时越短性、内存占用越低能越优秀,反之就比较垃圾.        
-
-###  通过CPU的耗时来分析相关代码段的性能  
-序号|分析对象 | 文档地址  
----|---|---
-1| 项目骨架主线逻辑| [主线分析报告](./docs/project_analysis_1.md)
-2| 操作数据库代码段| [操作数据库代码段分析报告](./docs/project_analysis_2.md)
-
-###  通过内存占用来分析相关代码段的性能 
-序号|分析对象 | 文档地址  
----|---|---
-1| 操作数据库代码段| [操作数据库代码段](./docs/project_analysis_3.md) 
-
+### 并发测试与性能分析报告  
+[进入详情](docs/bench_cpu_memory.md)
  
-## 版本
+#### 版本
 V 1.2.xx   2020-09（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.基于 `pprof+graphviz`, 对项目骨架做全方位的cpu、内存性能分析,给所有使用者展示本项目骨架的每一处性能细节参数.       
