@@ -30,7 +30,11 @@ func init() {
 	// 1.初始化程序根目录
 	if path, err := os.Getwd(); err == nil {
 		// 路径进行处理，兼容单元测试程序程序启动时的奇怪路径
-		BasePath = strings.Replace(strings.Replace(path, `\test`, "", 1), `/test`, "", 1)
+		if len(os.Args) > 1 && os.Args[1] == "-test.v" {
+			BasePath = strings.Replace(strings.Replace(path, `\test`, "", 1), `/test`, "", 1)
+		} else {
+			BasePath = path
+		}
 	} else {
 		log.Fatal(my_errors.ErrorsBasePath)
 	}
