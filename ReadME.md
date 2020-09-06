@@ -6,6 +6,7 @@
 ### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
 >   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
+>   3.从 `v1.2.26` 版本之后开启qq群答疑, QQ群：129885228 欢迎喜欢gin框架go开发者一期参与讨论.  
 
 ## golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/iqPH5fw11va  
