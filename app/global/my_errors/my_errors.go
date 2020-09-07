@@ -1,6 +1,5 @@
 package my_errors
 
-// 这里定义的常量，一般只有错误说明，无错误代码，常用于记录日志使用
 const (
 	//系统部分
 	ErrorsConfigYamlNotExists    string = "config.yml 配置文件不存在"
@@ -49,7 +48,6 @@ const (
 	ErrorsRabbitMqReconnectFail string = "RabbitMq消费者端掉线后重连失败，超过尝试最大次数"
 
 	//文件上传
-	ErrorsFilesUploadOpenFail        string = "打开文件失败，详情："
-	ErrorsFilesUploadReadFail        string = "读取文件32字节失败，详情："
-	ErrorsFilesUploadMoreThanMaxSize string = "超过系统设置上传最大值限制"
+	ErrorsFilesUploadOpenFail string = "打开文件失败，详情："
+	ErrorsFilesUploadReadFail string = "读取文件32字节失败，详情："
 )
