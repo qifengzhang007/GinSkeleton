@@ -1,4 +1,4 @@
-### 文档说明 
+## 文档说明 
 >   1.首先请自行查看本项目骨架3分钟快速入门主线图，本文档将按照该图的主线逻辑展开...    
 >   2.本项目骨架开发过程中涉及到的参考资料,了解详情有利于了解本项目骨架的核心，建议您可以先学会本项目骨架之后再去了解相关引用。        
 >       2.1 gin框架：https://github.com/gin-gonic/gin  
@@ -12,36 +12,37 @@
 >       2.9 cobra（Cli命令模式包） 相关资料：https://github.com/spf13/cobra/    
 >   3.本文档侧重介绍本项目骨架的主线逻辑以及相关核心模块，不对gin框架的具体语法做介绍。    
 
-####    1.框架启动 ，加载顺序：cmd/(web|api|cli)/main.go—>routers—> init.go  
->   1.代码位置：bootstrap/init.go，主要功能：项目初始化所需要的变量、配置等都在此模块完成。    
+###    1.框架启动, 初始化全局变量等相关的代码段  
+>   代码位置：[进入详情](../bootstrap/init.go)      
 ```go  
-// 部分代码
-
-func init() {
-	// 1. 初始化 项目根路径，参见 variable 常量包.位置：app\global\variable\variable.go  
-
-	checkRequiredFolders()
-	// 2.初始化全局日志句柄，并载入日志钩子处理函数
-	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
-
-	//3.初始化表单参数验证器，注册在容器
-	register_validator.register_validator()
-
-	// 4.websocket Hub中心启动
-	if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
-		// websocket 管理中心hub全局初始化一份
-		variable.WebsocketHub = core.CreateHubFactory()
-		if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
-			go Wh.Run()
-		}
-	}
-
-}
+    // 摘取主要代码段
+    func init() {
+        // 1. 初始化 项目根路径，参见 variable 常量包，相关路径：app\global\variable\variable.go
+    
+        //2.检查配置文件以及日志目录等非编译性的必要条件
+        checkRequiredFolders()
+    
+        // 3.初始化全局日志句柄，并载入日志钩子处理函数
+        variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
+    
+        //4.初始化表单参数验证器，注册在容器
+        register_validator.RegisterValidator()
+    
+        // 5.websocket Hub中心启动
+        if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
+            // websocket 管理中心hub全局初始化一份
+            variable.WebsocketHub = core.CreateHubFactory()
+            if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
+                go Wh.Run()
+            }
+        }
+    
+    }
 
 ```
 
-####    2.一个 request 到 response 的生命周期    
-#####   2.1.介绍路由之前首先介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：app\http\validator\(web|api)\xxx业务模块  
+###    2.一个 request 到 response 的生命周期    
+#####   2.1.介绍路由之前首先简要介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：app\http\validator\(web|api)\xxx业务模块  
 ```code
     //1.首先编写参数验证器逻辑，例如：用户注册模块
     // 详情参见：app\http\validator\web\users\register.go
@@ -81,7 +82,7 @@ func init() {
      2.不需要鉴权，直接切换到表单参数验证器模块，验证参数的合法性。  
      3.需要鉴权，首先切入中间件，中间件完成验证，再将请求切换到表单参数验证器模块，验证参数的合法性。  
 
-#####   2.3 中间件，位置：app\http\middleware\authorization
+#####   2.3 中间件，位置：app\http\middleware\authorization  
 ```go  
     // 选取一段代码说明
     type HeaderParams struct {
@@ -113,7 +114,7 @@ type Register struct {
 	Pass  string `form:"pass" json:"pass" binding:"required,min=3,max=20"` //必填，密码长度范围：【3,20】闭区间
 }
 // 函数名称受验证器接口约束，命名必须是：CheckParams
-func (r *Register) CheckParams(context *gin.Context) {
+func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(r); err != nil {
         ....
@@ -211,8 +212,13 @@ func ReturnJson(Context *gin.Context, http_code int, data_code int, msg string, 
 		"msg":  msg,
 		"data": data,
 	})
+}
 
-    // 返回xml  ...等请自行根据实际需求追加即可
+// 将json字符窜以标准json格式返回（例如，从redis读取json、格式的字符串，返回给浏览器json格式）
+func ReturnJsonFromString(Context *gin.Context, http_code int, json_str string) {
+	Context.Header("Content-Type", "application/json; charset=utf-8")
+	Context.String(http_code, json_str)
+}
 }
 
 ```  
@@ -221,35 +227,25 @@ func ReturnJson(Context *gin.Context, http_code int, data_code int, msg string, 
 >该协程会在框架启动时被启动，用于监听程序可能收到的退出信号  
 ```go  
 func init() {
-	//  用于系统信号的监听,这里主要监听linux系统 ctrl+c、kill -9、kill -15 、interrupt 等多种退出信号
-    //收到退出信号之后，根据事件函数注册时的前缀，统一释放资源
+	//  用于系统信号的监听
 	go func() {
 		c := make(chan os.Signal)
-		signal.Notify(c) // 监听信号
-		received := <-c  //接收信号管道中的值
-		switch received {
-		case os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGILL, syscall.SIGTERM:
-			// 检测到程序退出时，按照键的前缀统一执行销毁类事件
-			(Event.CreateEventManageFactory()).FuzzyCall(variable.EventDestroyPrefix)
-			os.Exit(1)
-		}
+		signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGQUIT, syscall.SIGINT, syscall.SIGTERM) // 监听可能的退出信号
+		received := <-c                                                                           //接收信号管道中的值
+		variable.ZapLog.Warn(consts.ProcessKilled, zap.String("信号值", received.String()))
+		(event_manage.CreateEventManageFactory()).FuzzyCall(variable.EventDestroyPrefix)
+		close(c)
+		os.Exit(1)
 	}()
 
 }
 
 ```    
-
-####    4.websocket模块  
->   1.启动ws服务，位置：config\config.yaml，找到相关配置开关开启。  
->   2.该模块也遵守整个请求（ request——response）的生命周期。    
->   3.控制器位置：app\http\controller\websocket\ws.go  
->   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](../app/service/websocket/ws.go)     
->   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
->![业务主线图](http://139.196.101.31:2080/pingpong.png)  
-
-####    5.yaml配置中心 
->   1.位置：config\config.yml，通过注释即可阅读各项功能。     
-
-####    6.日志记录 
->   1.gin接口访问日志：storage\logs\gin.log.      
->   1.goskeleton项目运行日志：storage\logs\goskeleton.log.      
+ 
+ ###    websocket模块  
+ >   1.或许你觉得websocket不应该出现在主线模块，但是在go中，ws长连接的建立确实是通过http升级协议完成的, 因此这块内容我们仍然放在了主线的最后.  
+ >   2.启动ws服务，位置：config\config.yaml，找到相关配置开关开启。  
+ >   3.控制器位置：app\http\controller\websocket\ws.go  
+ >   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](../app/service/websocket/ws.go)     
+ >   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
+ >![业务主线图](http://139.196.101.31:2080/pingpong.png)  
