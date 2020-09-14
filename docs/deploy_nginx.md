@@ -15,7 +15,7 @@
 ```code  
 # step1，拉取 nginx_vts 镜像，该 nginx 版本已经集成了 https://codeload.github.com/vozlt/nginx-module-vts/tar.gz/v0.1.18,并且对容器进行了配置，直接在ip：80/status提供状态数据。
 docker pull zhangqifeng/nginx_vts:v1.4
-# step2， 启动nginx_vts 镜像，镜像中nginx 的配置、日志目录：/usr/local/nginx/   数据卷映射暂时忽略，您可以通过 -v 自行映射
+# step2， 启动nginx_vts 镜像，镜像中nginx 的配置(/usr/local/nginx/conf/)、日志目录(/usr/local/nginx/logs/) 站点根目录：/usr/local/nginx/html/   数据卷映射暂时忽略，您可以通过 -v 自行映射
 docker container  run  --name    nginx_vts  -d -p    172.19.130.185:9506:80  zhangqifeng/nginx_vts:v1.4
 
 # step3， 此时你可以验证该nginx是否正常运行，只要有数据就是启动ok
