@@ -13,7 +13,7 @@ func CreateConsumer() (*consumer, error) {
 	queueName := configFac.GetString("RabbitMq.WorkQueue.QueueName")
 	dura := configFac.GetBool("RabbitMq.WorkQueue.Durable")
 	chanNumber := configFac.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
-	reconnectIntervalSec := configFac.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
+	reconnectInterval := configFac.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
 	retryTimes := configFac.GetInt("RabbitMq.WorkQueue.RetryCount")
 
 	if err != nil {
@@ -26,7 +26,7 @@ func CreateConsumer() (*consumer, error) {
 		durable:                     dura,
 		chanNumber:                  chanNumber,
 		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
-		offLineReconnectIntervalSec: reconnectIntervalSec,
+		offLineReconnectIntervalSec: reconnectInterval,
 		retryTimes:                  retryTimes,
 	}
 	return consumer, nil
@@ -40,19 +40,19 @@ type consumer struct {
 	chanNumber                  int
 	occurError                  error
 	connErr                     chan *amqp.Error
-	callbackForReceived         func(received_data string) //   断线重连，结构体内部使用
+	callbackForReceived         func(receivedData string) //   断线重连，结构体内部使用
 	offLineReconnectIntervalSec time.Duration
 	retryTimes                  int
 	callbackOffLine             func(err *amqp.Error) //   断线重连，结构体内部使用
 }
 
 // 接收、处理消息
-func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
+func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 	defer func() {
-		c.connect.Close()
+		_ = c.connect.Close()
 	}()
 	// 将回调函数地址赋值给结构体变量，用于掉线重连使用
-	c.callbackForReceived = callback_fun_deal_smg
+	c.callbackForReceived = callbackFunDealSmg
 
 	blocking := make(chan bool)
 
@@ -61,7 +61,9 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 
 			ch, err := c.connect.Channel()
 			c.occurError = errorDeal(err)
-			defer ch.Close()
+			defer func() {
+				_ = ch.Close()
+			}()
 
 			q, err := ch.QueueDeclare(
 				c.queueName,
@@ -93,8 +95,8 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 
 			for msg := range msgs {
 				// 通过回调处理消息
-				callback_fun_deal_smg(string(msg.Body))
-				msg.Ack(false) //  false 表示只确认本通道（chan）的消息
+				callbackFunDealSmg(string(msg.Body))
+				_ = msg.Ack(false) //  false 表示只确认本通道（chan）的消息
 			}
 
 		}(i)
@@ -105,12 +107,12 @@ func (c *consumer) Received(callback_fun_deal_smg func(received_data string)) {
 }
 
 //消费者端，掉线重连失败后的错误回调
-func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error)) {
-	c.callbackOffLine = callback_offline_err
+func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
+	c.callbackOffLine = callbackOfflineErr
 	go func() {
 		select {
 		case err := <-c.connErr:
-			var i int = 1
+			var i = 1
 			for i = 1; i <= c.retryTimes; i++ {
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
@@ -127,7 +129,7 @@ func (c *consumer) OnConnectionError(callback_offline_err func(err *amqp.Error))
 				}
 			}
 			if i > c.retryTimes {
-				callback_offline_err(err)
+				callbackOfflineErr(err)
 			}
 		}
 	}()

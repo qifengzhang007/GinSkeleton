@@ -46,7 +46,9 @@ func (p *producer) Send(routeKey string, data string) bool {
 	// 获取一个频道
 	ch, err := p.connect.Channel()
 	p.occurError = errorDeal(err)
-	defer ch.Close()
+	defer func() {
+		_ = ch.Close()
+	}()
 
 	// 声明交换机，该模式生产者只负责将消息投递到交换机即可
 	err = ch.ExchangeDeclare(
@@ -80,7 +82,7 @@ func (p *producer) Send(routeKey string, data string) bool {
 
 //发送完毕手动关闭，这样不影响send多次发送数据
 func (p *producer) Close() {
-	p.connect.Close()
+	_ = p.connect.Close()
 }
 
 // 定义一个错误处理函数

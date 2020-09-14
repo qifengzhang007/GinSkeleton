@@ -41,7 +41,9 @@ func (p *producer) Send(data string) bool {
 	ch, err := p.connect.Channel()
 	p.occurError = errorDeal(err)
 
-	defer ch.Close()
+	defer func() {
+		_ = ch.Close()
+	}()
 
 	// 声明消息队列
 	_, err = ch.QueueDeclare(
@@ -74,7 +76,7 @@ func (p *producer) Send(data string) bool {
 
 //发送完毕手动关闭，这样不影响send多次发送数据
 func (p *producer) Close() {
-	p.connect.Close()
+	_ = p.connect.Close()
 }
 
 // 定义一个错误处理函数
