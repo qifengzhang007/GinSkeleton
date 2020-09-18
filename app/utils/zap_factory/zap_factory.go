@@ -44,6 +44,7 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 		enc.AppendString(t.Format(recordTimeFormat))
 	}
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	encoderConfig.TimeKey = "@timestamp" // 生成json格式日志的时间键字段，默认为 ts,修改以后方便日志导入到 ELK 服务器
 
 	var encoder zapcore.Encoder
 	switch configFact.GetString("Logs.TextFormat") {
