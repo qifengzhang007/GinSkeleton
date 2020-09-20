@@ -19,7 +19,7 @@ docker pull zhangqifeng/nginx_vts:v1.4
 docker container  run  --name    nginx_vts  -d -p    172.19.130.185:9506:80  zhangqifeng/nginx_vts:v1.4
 
 # step3， 此时你可以验证该nginx是否正常运行，只要有数据就是启动ok
-访问地址  http://172.19.130.185:9506/status 、http://139.196.101.31:9506/status/format/json
+访问地址  http://172.19.130.185:9506/status 、http://172.19.130.185:9506/status/format/json
 
 # step4， 拉取 nginx-vts-expoter 镜像，该镜像负责收集上一个镜像提供的运行状态数据，等待prometheus获取
 docker pull sophos/nginx-vts-exporter:latest    #  该镜像的github地址：https://github.com/hnlq715/nginx-vts-exporter

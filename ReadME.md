@@ -41,10 +41,11 @@
 5|aop切面编程| [Aop切面编程](docs/aop.md) 
 6|redis| [redis使用示例](test/redis_test.go) 
 7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
-8|高性能日志|  [zap日志](docs/zap_log.md) 
-9| 验证码|  [验证码](docs/captcha.md)
-10| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
-11|supervisor| [supervisor进程守护](docs/supervisor.md)   
+8|日志记录|  [zap高性能日志](docs/zap_log.md) 
+9|日志对接到 ELK 管理、统计、分析中心服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+10| 验证码|  [验证码](docs/captcha.md)
+11| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
+12|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 
 ###    项目上线后，运维方案(基于docker)    

@@ -24,7 +24,7 @@ import (
 
 type Register struct {
 	Base
-	Pass  string `form:"pass" json:"pass" binding:"required,min=3,max=20"` //必填，密码长度范围：【3,20】闭区间
+	Pass  string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //必填，密码长度范围：【6,20】闭区间
 	Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
 	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
@@ -33,7 +33,7 @@ func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(&r); err != nil {
 		errs := gin.H{
-			"tips": "UserRegister参数校验失败，参数不符合规定，name长度(>=1)、pass长度(3,6)、Phone（=11位），不允许注册",
+			"tips": "UserRegister参数校验失败，参数不符合规定，name长度(>=1)、pass长度[3,6]、Phone（=11位），不允许注册",
 			"err":  err.Error(),
 		}
 		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
