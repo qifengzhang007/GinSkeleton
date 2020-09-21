@@ -6,7 +6,7 @@
 ### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
 >   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
->   3.从 `v1.2.26` 版本之后开启qq群答疑, QQ群：129885228 欢迎喜欢gin框架go开发者一期参与讨论.  
+>   3.从 `v1.2.26` 版本之后开启qq群答疑, QQ群：273078549 欢迎喜欢gin框架go开发者一期参与讨论.  
 
 ## golang.org官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/iqPH5fw11va  
@@ -42,7 +42,7 @@
 6|redis| [redis使用示例](test/redis_test.go) 
 7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
 8|日志记录|  [zap高性能日志](docs/zap_log.md) 
-9|日志对接到 ELK 管理、统计、分析中心服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+9|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
 10| 验证码|  [验证码](docs/captcha.md)
 11| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
 12|supervisor| [supervisor进程守护](docs/supervisor.md)   
@@ -82,6 +82,11 @@
 V 1.2.xx   2020-09（开发计划预告）  
 >   1.基于`GoSkeleton`的实践项目，进行不断地完善、增强功能，发现bug、寻找性能薄弱环节，进一步增强本项目骨架的各项功能。             
 >   2.基于 `pprof+graphviz`, 对项目骨架做全方位的cpu、内存性能分析,给所有使用者展示本项目骨架的每一处性能细节参数.       
+
+V 1.3.00  2020-09-21     
+>   1.为项目日志(nginx 的 access.log、error.log，goskeleton.log)提供了顶级解决方案.  
+>   2.修复注册验证器、登录验证器校验的密码字段pass长度不一致问题.   
+>   3.其他地方格式化、规划化了代码书写格式.     
 
 V 1.2.27  2020-09-08     
 >   1.文档更新,增加 FAQ 常见问题汇总、答疑文档.    
