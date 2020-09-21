@@ -154,7 +154,7 @@ docker restart  logstash
 ```
 > 4.4.2 接下来我们继续修改数据采集配置项,主要是实现采集 nginx 的 access、error 日志, goskeleton 项目的运行日志到 elk 服务器 .   
 > logstash配置文件我们已经映射出来了，相关位置： `/home/mysoft/logstash/conf/logstash.conf`  
-> 以下配置必须完全按照我们提供的文档操作，否则很容器报错，全程必须是小写，不小心使用大写都有可能都会报错.  
+> 以下配置必须完全按照我们提供的文档操作，否则很容易报错，全程必须是小写，不小心使用大写都有可能都会报错.  
 ```code   
 #数据采集规则
 input {
