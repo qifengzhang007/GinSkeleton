@@ -26,6 +26,7 @@
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
 ###    项目骨架主线逻辑  
+>   1.这部分主要介绍了项目初始化流程、路由、表单参数验证器、控制器、model、service以及websocket为核心的主干逻辑.  
 [进入主线逻辑文档](docs/document.md)  
 
 ###    测试用例路由  
