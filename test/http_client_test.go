@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-//函数级别单元测试格式：
-//Example函数名称
+// goCurl 更详细的使用文档 https://gitee.com/daitougege/goCurl
 
+// 一个简单的get请求
 func TestHttpClient(t *testing.T) {
 	cli := goCurl.CreateHttpClient()
 	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
@@ -26,9 +26,6 @@ func TestPprof(t *testing.T) {
 	cli := goCurl.CreateHttpClient()
 	for i := 1; i <= 500; i++ {
 		resp, err := cli.Get("http://127.0.0.1:20191/api/v1/home/news", goCurl.Options{
-			Headers: map[string]interface{}{
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
 			FormParams: map[string]interface{}{
 				"newsType": "portal",
 				"page":     "2",
@@ -47,6 +44,3 @@ func TestPprof(t *testing.T) {
 		}
 	}
 }
-
-//更详细的使用文档 https://gitee.com/daitougege/goCurl
-// 更多单元测试 https://gitee.com/daitougege/goCurl/tree/master/examples
