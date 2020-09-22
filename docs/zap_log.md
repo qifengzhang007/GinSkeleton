@@ -58,7 +58,7 @@
 >   1.除了本项目骨架记录日志之外，您还可以对日志进行二次加工处理.      
 >   2.日志钩子函数处理位置 > `app/service/sys_log_hook/zap_log_hooks.go`    
 >   3.`bootStrap/init.go` 中你可以修改钩子函数的位置
->   相关代码位置 ` variable.ZapLog=ZapFactory.CreateZapFactory(sys_log_hook.ZapLogHandler)`  
+>   相关代码位置 `app/service/sys_log_hook/zap_log_hooks.go `  
 ```code 
 func ZapLogHandler(entry zapcore.Entry) error {
 
