@@ -16,6 +16,9 @@
 >   1.nginx 的 access.log.  
 >   2.nginx 的 error.log.  
 >   3.本项目骨架 的 goskeleton.log ,该日志是项目运行日志,按照行业标准提供了 info 、 warn 、error 、fatal 等不同级别日志.    
+>   提醒：本项目骨架版本 >= v1.3.00, 则 `storage/logs/goskeleton.log` 格式已经默认设置ok（json格式，记录的时间字段已经调整为 created_at）,否则，请您升级版本至最新版，或者自行修改配置文件 config/config.yml 中的日志部分，
+ 修改日志格式为 json，此外还需要调整一个地方：
+ 参见最新版本代码 app/utils/zap_factory/zap_factory.go ，47行，重新定义日志记录的时间字段：encoderConfig.TimeKey = "created_at"
 
 ### 4.进入对接环节  
 > 1.后续所有方案基于docker.  
