@@ -122,6 +122,7 @@ func (r Register) CheckParams(context *gin.Context) {
 	}
 
 	//  该函数主要是将验证器绑定的字段（成员）以 键=>值 形式直接传递给下一步（控制器）
+    //  数据的绑定规则按照 json 标签定义的键为准!
 	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
 		response.returnJson(context, http.StatusInternalServerError, Consts.ServerOccurredErrorCode, Consts.ServerOccurredErrorMsg+",UserRegister表单验证器json化失败", "")
