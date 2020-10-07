@@ -11,6 +11,7 @@ import (
 var (
 	BasePath           string       // 定义项目的根目录
 	EventDestroyPrefix = "Destroy_" //  程序退出时需要销毁的事件前缀
+	ConfigKeyPrefix    = "Config_"  //  配置文件键值缓存时，键的前缀
 	//上传文件保存路径
 	UploadFileField    = "files"                  // post上传文件时，表单的键名
 	UploadFileSavePath = "/storage/app/uploaded/" // 该路径与 BasePath 进行拼接使用

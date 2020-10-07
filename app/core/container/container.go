@@ -27,7 +27,7 @@ func (c *containers) Set(key string, value interface{}) (res bool) {
 		sMap.Store(key, value)
 		res = true
 	} else {
-		variable.ZapLog.Warn(my_errors.ErrorsContainerKeyAlreadyExists)
+		variable.ZapLog.Warn(my_errors.ErrorsContainerKeyAlreadyExists + ", 相关键：" + key)
 	}
 	return
 }

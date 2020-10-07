@@ -34,7 +34,7 @@ type ymlConfig struct {
 
 // 判断相关键是否已经缓存
 func (c *ymlConfig) keyIsCache(keyName string) bool {
-	if _, exists := container.CreateContainersFactory().KeyIsExists(keyName); exists {
+	if _, exists := container.CreateContainersFactory().KeyIsExists(variable.ConfigKeyPrefix + keyName); exists {
 		return true
 	} else {
 		return false
@@ -43,12 +43,12 @@ func (c *ymlConfig) keyIsCache(keyName string) bool {
 
 // 对键值进行缓存
 func (c *ymlConfig) cache(keyName string, value interface{}) bool {
-	return container.CreateContainersFactory().Set(keyName, value)
+	return container.CreateContainersFactory().Set(variable.ConfigKeyPrefix+keyName, value)
 }
 
 // 通过键获取缓存的值
 func (c *ymlConfig) getValueFromCache(keyName string) interface{} {
-	return container.CreateContainersFactory().Get(keyName)
+	return container.CreateContainersFactory().Get(variable.ConfigKeyPrefix + keyName)
 }
 
 // Get 一个原始值
