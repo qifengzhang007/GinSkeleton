@@ -44,7 +44,7 @@ func init() {
 	ymlConf := yml_config.CreateYamlFactory()
 
 	// 5.启动针对配置文件变化的监听
-	ymlConf.ConfigFileChange()
+	ymlConf.ConfigFileChangeListen()
 
 	// 6.websocket Hub中心启动
 	if ymlConf.GetInt("Websocket.Start") == 1 {

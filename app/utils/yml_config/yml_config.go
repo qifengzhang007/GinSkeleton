@@ -34,7 +34,7 @@ type ymlConfig struct {
 }
 
 //监听文件变化
-func (c *ymlConfig) ConfigFileChange() {
+func (c *ymlConfig) ConfigFileChangeListen() {
 	c.viper.OnConfigChange(func(changeEvent fsnotify.Event) {
 		if changeEvent.Op.String() == "WRITE" {
 			c.clearCache()
