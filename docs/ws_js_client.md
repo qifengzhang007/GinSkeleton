@@ -4,6 +4,7 @@
 > ws地址: ws://127.0.0.1:20201/Admin/ws?token=sdsdsdsdsdsdsdsdsdsdsdsdssdsd  
 > 由于中间模拟校验了token参数，请自行随意提交超过20个字符         
 > 以下代码保存为 `ws.html` 在浏览器直接访问即可连接服务端  
+> ws服务默认开启，请自行在配置文件 config/config.yml ,找到 websocket 选项，开启即可.    
 ```html  
 
 <!DOCTYPE html>

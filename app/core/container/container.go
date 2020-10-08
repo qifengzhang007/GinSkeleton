@@ -52,7 +52,6 @@ func (c *containers) KeyIsExists(key string) (interface{}, bool) {
 
 // 按照键的前缀模糊删除容器中注册的内容
 func (c *containers) FuzzyDelete(keyPre string) {
-
 	sMap.Range(func(key, value interface{}) bool {
 		if keyname, ok := key.(string); ok {
 			if strings.HasPrefix(keyname, keyPre) {

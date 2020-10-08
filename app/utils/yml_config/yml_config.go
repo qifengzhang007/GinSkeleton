@@ -1,6 +1,7 @@
 package yml_config
 
 import (
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"goskeleton/app/core/container"
 	"goskeleton/app/global/my_errors"
@@ -32,6 +33,16 @@ type ymlConfig struct {
 	viper *viper.Viper
 }
 
+//监听文件变化
+func (c *ymlConfig) ConfigFileChange() {
+	c.viper.OnConfigChange(func(changeEvent fsnotify.Event) {
+		if changeEvent.Op.String() == "WRITE" {
+			c.clearCache()
+		}
+	})
+	c.viper.WatchConfig()
+}
+
 // 判断相关键是否已经缓存
 func (c *ymlConfig) keyIsCache(keyName string) bool {
 	if _, exists := container.CreateContainersFactory().KeyIsExists(variable.ConfigKeyPrefix + keyName); exists {
@@ -49,6 +60,11 @@ func (c *ymlConfig) cache(keyName string, value interface{}) bool {
 // 通过键获取缓存的值
 func (c *ymlConfig) getValueFromCache(keyName string) interface{} {
 	return container.CreateContainersFactory().Get(variable.ConfigKeyPrefix + keyName)
+}
+
+// 清空已经窜换的配置项信息
+func (c *ymlConfig) clearCache() {
+	container.CreateContainersFactory().FuzzyDelete(variable.ConfigKeyPrefix)
 }
 
 // Get 一个原始值

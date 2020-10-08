@@ -41,8 +41,13 @@ func init() {
 	//4.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	// 5.websocket Hub中心启动
-	if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
+	ymlConf := yml_config.CreateYamlFactory()
+
+	// 5.启动针对配置文件变化的监听
+	ymlConf.ConfigFileChange()
+
+	// 6.websocket Hub中心启动
+	if ymlConf.GetInt("Websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化一份
 		variable.WebsocketHub = core.CreateHubFactory()
 		if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
