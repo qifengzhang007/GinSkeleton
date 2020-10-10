@@ -1,7 +1,8 @@
-### 项目部署
+###  nginx 配置
+>   1.本片主要介绍 `nginx` 负载均衡与 `https(ssl)` 证书相关的配置.  
 
-#### 1.nginx 代理 `http` 、 `websocket` 接口  
-> 在本项目，只要开启了 websocket 配置，相关协议会自动升级，不需要为 `websocket` 额外配置独立的端口。         
+#### 1.nginx 负载均衡代理 `http` 、 `websocket` 服务.    
+>   1.在本项目，只要开启了 websocket 配置，相关协议会自动升级，不需要为 `websocket` 额外配置独立的端口。         
 
 ```nginx
 
@@ -14,13 +15,21 @@ upstream  goskeleton_list {
 }
 server{
     #监听端口
-    listen 20201  ; 
+    listen 443 ssl  ; 
     #  站点域名，没有的话，写项目名称即可
     server_name     www.goskeleton.com ;  
     root            /home/wwwroot/goproject2020/goskeleton/public ;
     index           index.htm  index.html ;   
     charset         utf-8 ;
-    
+
+    # 配置 https 证书
+          # ssl on;  #  注意，在很早的低版本nginx上，此项是允许打开的，但是在高于 1.1x.x 版本要求必须关闭.
+          ssl_certificate      ginskeleton.crt;   # 实际配置建议您指定证书的绝对路径
+          ssl_certificate_key  ginskeleton.key;   # ginskeleton.crt 、ginskeleton.key 需要向云服务器厂商申请，后续有介绍
+          ssl_session_timeout  5m;
+          ssl_protocols TLSv1 TLSv1.1 TLSv1.2 SSLv2 SSLv3;
+          ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+          ssl_prefer_server_ciphers on;
    
     # 如果对跨域允许的ip管控不是很严格（对所有ip允许跨域），nginx 配置允许跨域即可
     # goskeleton 项目的跨域需要屏蔽，详情参见 routes/(web.go|api.go) 先关注释说明   
@@ -68,3 +77,10 @@ server{
      }
 
 ```   
+
+#### 2.关于 `https` 的简要介绍      
+>   1.首先能保证数据在传输过程中的安全性.       
+>   2.证书需要向第三方代理机构申请（华为云、阿里云、腾讯云等）, 个人证书一般都会有免费一年的体验期.      
+>   3.证书申请时需要提交您的相关域名, 颁发机构会把您的域名信息和证书绑定, 最终配置在nginx, 当使用浏览器访问时, 浏览器地址栏会变成绿色安全图标.      
+>   4.本次使用的ssl证书是在腾讯云申请的（1年免费期）,证书申请地址：`https://console.cloud.tencent.com/ssl` , 企业证书一年至少在 3000+ 元.      
+>   5.项目前置 `nginx` 服务器配置 `ssl` 证书实现了 `https` 数据在网络中的传输, 当加密数据到达 `nginx` 时,会被 `http_ssl_module` 模块解密为明文,因此代理的负载均衡服务器不需要配置 `ssl` 选项.          

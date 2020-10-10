@@ -39,7 +39,7 @@
 8|日志记录|  [zap高性能日志](docs/zap_log.md) 
 9|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
 10| 验证码|  [验证码](docs/captcha.md)
-11| nginx负载均衡部署|[nginx配置详情](docs/nginx.md) 
+11| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
 12|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 
