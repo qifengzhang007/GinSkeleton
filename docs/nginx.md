@@ -91,7 +91,7 @@ server{
     #监听端口
     listen 443 ssl  ; 
     #  站点域名，没有的话，写项目名称即可
-    server_name     www.goskeleton.com ;  
+    server_name     www.ginskeleton.com ;  
     root            /home/wwwroot/goproject2020/goskeleton/public ;
     index           index.html  index.htm ;   
     charset         utf-8 ;
@@ -120,6 +120,7 @@ server{
          # 静态资源、目录交给ngixn本身处理，动态路由请求执行后续的代理代码
          try_files $uri $uri/  @goskeleton;
      }
+    // 这里的 @goskeleton 和 try_files 语法块的名称必须一致 
     location   @goskeleton {
 
         #将客户端的ip和头域信息一并转发到后端服务器  
