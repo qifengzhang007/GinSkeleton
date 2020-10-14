@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/utils/response"
-	"net/http"
 )
 
 type Home struct {
@@ -21,13 +20,12 @@ func (u *Home) News(context *gin.Context) {
 	userIp := context.ClientIP()
 
 	// 这里随便模拟一条数据返回
-	fakeData := gin.H{
+	response.SuccessReturnData(context, gin.H{
 		"newsType": newsType,
 		"page":     page,
 		"limit":    limit,
 		"userIp":   userIp,
 		"title":    "门户首页公司新闻标题001",
 		"content":  "门户新闻内容001",
-	}
-	response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, fakeData)
+	})
 }
