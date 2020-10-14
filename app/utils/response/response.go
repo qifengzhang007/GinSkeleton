@@ -59,5 +59,9 @@ func ErrorAuthFail(c *gin.Context) {
 }
 
 func ErrorParam(c *gin.Context, wrongParam interface{}) {
-	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, wrongParam)
+	ReturnJson(c, http.StatusOK, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, wrongParam)
+}
+
+func ErrorSystem(c *gin.Context, msg string) {
+	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, "")
 }
