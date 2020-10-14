@@ -7,7 +7,6 @@ import (
 	"goskeleton/app/global/variable"
 	userstoken "goskeleton/app/service/users/token"
 	"goskeleton/app/utils/response"
-	"net/http"
 	"strings"
 )
 
@@ -33,15 +32,11 @@ func CheckAuth() gin.HandlerFunc {
 				if tokenIsEffective {
 					context.Next()
 				} else {
-					response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
-					//暂停执行
-					context.Abort()
+					response.ErrorAuthFail(context)
 				}
 			}
 		} else {
-			response.ReturnJson(context, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
-			//暂停执行
-			context.Abort()
+			response.ErrorAuthFail(context)
 		}
 
 	}
