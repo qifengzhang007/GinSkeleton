@@ -10,6 +10,17 @@ import (
 	"time"
 )
 
+// 由于 vipver 包本身对于文件的变化事件有一个bug，相关事件会被回调两次
+// 常年未彻底解决，相关的 issue 清单：https://github.com/spf13/viper/issues?q=OnConfigChange
+// 设置一个内部全局变量，记录配置文件变化时的时间点，如果两次回调事件事件差小于1秒，我们认为是第二次回调事件，而不是人工修改配置文件
+// 这样就避免了 vipver 包的这个bug
+
+var lastChangeTime time.Time
+
+func init() {
+	lastChangeTime = time.Now()
+}
+
 // 创建一个yaml配置文件工厂
 func CreateYamlFactory() *ymlConfig {
 
@@ -36,8 +47,11 @@ type ymlConfig struct {
 //监听文件变化
 func (c *ymlConfig) ConfigFileChangeListen() {
 	c.viper.OnConfigChange(func(changeEvent fsnotify.Event) {
-		if changeEvent.Op.String() == "WRITE" {
-			c.clearCache()
+		if time.Now().Sub(lastChangeTime).Seconds() >= 1 {
+			if changeEvent.Op.String() == "WRITE" {
+				c.clearCache()
+				lastChangeTime = time.Now()
+			}
 		}
 	})
 	c.viper.WatchConfig()
