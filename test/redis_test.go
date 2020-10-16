@@ -28,7 +28,7 @@ func TestRedisKeyValue(t *testing.T) {
 	}
 	variable.ZapLog.Info("get key2020 ", zap.String("key2020", res))
 	//操作完毕记得释放连接，官方明确说，redis使用完毕，必须释放
-	redisClient.ReleaseOneRedisClientPool()
+	redisClient.ReleaseOneRedisClient()
 
 }
 
@@ -51,7 +51,7 @@ func TestRedisHashKey(t *testing.T) {
 	}
 	fmt.Println(res2)
 	//官方明确说，redis使用完毕，必须释放
-	redisClient.ReleaseOneRedisClientPool()
+	redisClient.ReleaseOneRedisClient()
 }
 
 // 测试 redis 连接池
@@ -63,7 +63,7 @@ func TestRedisConnPool(t *testing.T) {
 			fmt.Printf("获取的redis数据库连接池地址：%p\n", redisClient)
 			time.Sleep(time.Second * 10)
 			fmt.Printf("阻塞过程中，那您可以通过redis命令  client  list   查看链接的客户端")
-			redisClient.ReleaseOneRedisClientPool() // 释放从连接池获取的连接
+			redisClient.ReleaseOneRedisClient() // 释放从连接池获取的连接
 		}()
 	}
 	time.Sleep(time.Second * 20)
@@ -79,7 +79,7 @@ func TestRedisReConn(t *testing.T) {
 		variable.ZapLog.Info("Info 日志", zap.String("key2020", res))
 	}
 	//官方明确说，redis使用完毕，必须释放
-	redisClient.ReleaseOneRedisClientPool()
+	redisClient.ReleaseOneRedisClient()
 
 	//  以上内容输出后 ， 拔掉网线, 模拟短暂的网络抖动
 	t.Log("请在 10秒之内拔掉网线")
@@ -91,7 +91,7 @@ func TestRedisReConn(t *testing.T) {
 	} else {
 		t.Log("获取的值：", res)
 	}
-	redisClient.ReleaseOneRedisClientPool()
+	redisClient.ReleaseOneRedisClient()
 }
 
 //  其他请参照以上示例即可

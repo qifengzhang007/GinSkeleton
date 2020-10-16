@@ -79,8 +79,8 @@ func (r *RedisClient) Execute(cmd string, args ...interface{}) (interface{}, err
 	return r.client.Do(cmd, args...)
 }
 
-// 释放连接池
-func (r *RedisClient) ReleaseOneRedisClientPool() {
+// 释放连接到连接池
+func (r *RedisClient) ReleaseOneRedisClient() {
 	_ = r.client.Close()
 }
 
