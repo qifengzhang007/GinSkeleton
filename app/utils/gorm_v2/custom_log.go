@@ -20,8 +20,8 @@ func createCustomeGormLog() gormLog.Interface {
 		traceErrStr  = "[traceErr] %s %s [%.3fms] [rows:%v] %s\n"
 	)
 	logConf := gormLog.Config{
-		SlowThreshold: time.Millisecond * 200, // 慢 SQL 阈值(sql执行时间超过此时间单位，就会触发gorm自带的日志输出)
-		LogLevel:      gormLog.Warn,           // Log level
+		SlowThreshold: time.Second * 30, // 慢 SQL 阈值(sql执行时间超过此时间单位，就会触发gorm自带的日志输出)
+		LogLevel:      gormLog.Warn,     // Log level
 		Colorful:      false,
 	}
 	return &logger{
