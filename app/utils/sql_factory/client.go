@@ -111,7 +111,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		}
 		return tmpDriver
 	} else if sqlType == "postgre" || sqlType == "postgres" || sqlType == "postgresql" {
-		SqlConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", Host, Port, DataBase, User, Pass)
+		SqlConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable TimeZone=Asia/Shanghai", Host, Port, DataBase, User, Pass)
 		switch readOrWrite {
 		case "Write", "Read":
 			tmpDriver, err = sql.Open("postgres", SqlConnString)

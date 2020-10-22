@@ -1,0 +1,71 @@
+Gormv2: # 只针对 gorm v2 操作数据库有效
+  Mysql:
+    Write:
+      Host: "192.168.8.62"
+      DataBase: "db_test"
+      Port: 3308                        #注意，非3306，请自行调整
+      Prefix: "tb_"
+      User: "root"
+      Pass: "Password01!"
+      Charset: "utf8"
+      #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
+      #PingFailRetryTimes: 3   # 保留项,最大重连次数
+    SetMaxIdleConns: 10
+    SetMaxOpenConns: 128
+    SetConnMaxLifetime: 60    # 连接的最大生存时间(秒)
+    IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略
+    Read:
+      Host: "192.168.8.62"
+      DataBase: "db_stocks"
+      Port: 3308                        #注意，非3306，请自行调整
+      Prefix: "tb_"
+      User: "root"
+      Pass: "yourPassword"
+      Charset: "utf8"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
+
+  SqlServer:
+    Write:
+      Host: "127.0.0.1"
+      DataBase: "db_goskeleton"
+      Port: 1433
+      Prefix: "tb_"
+      User: "Sa"
+      Pass: "secret2017"
+      #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
+      #PingFailRetryTimes: 3   # 保留项,最大重连次数
+    SetMaxIdleConns: 10
+    SetMaxOpenConns: 128
+    SetConnMaxLifetime: 60
+    IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
+    Read:
+      Host: "127.0.0.1"
+      DataBase: "db_goskeleton"
+      Port: 1433
+      Prefix: "tb_"
+      User: "Sa"
+      Pass: "secret2017"
+
+  PostgreSql:
+    Write:
+      Host: "127.0.0.1"
+      DataBase: "db_goskeleton"
+      Port: 5432
+      Prefix: "tb_"
+      User: "postgres"
+      Pass: "secret2017"
+    #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
+    #PingFailRetryTimes: 3   # 保留项,最大重连次数
+    SetMaxIdleConns: 10
+    SetMaxOpenConns: 128
+    SetConnMaxLifetime: 60
+    IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
+    Read:
+      Host: "127.0.0.1"
+      DataBase: "db_goskeleton"
+      Port: 5432
+      Prefix: "tb_"
+      User: "postgres"
+      Pass: "secret2017"

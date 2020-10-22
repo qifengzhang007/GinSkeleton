@@ -3,6 +3,7 @@ package variable
 import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
+	"goskeleton/app/utils/yml_config/interf"
 	"log"
 	"os"
 	"strings"
@@ -16,9 +17,11 @@ var (
 	UploadFileField    = "files"                  // post上传文件时，表单的键名
 	UploadFileSavePath = "/storage/app/uploaded/" // 该路径与 BasePath 进行拼接使用
 
-	//日志存储路径
-	ZapLog *zap.Logger //  全局日志句柄
-
+	// 全局日志指针
+	ZapLog *zap.Logger
+	// 全局配置文件指针
+	//ConfigYml *yml_config.YmlConfig // 全局变量定义了 YmlConfig， 在 yml_config 包又使用了本包
+	ConfigYml interf.YmlConfigInterf //这里导致了包的交叉嵌套调用
 	//websocket
 	WebsocketHub              interface{}
 	WebsocketHandshakeSuccess = "Websocket Handshake+OnOpen Success"

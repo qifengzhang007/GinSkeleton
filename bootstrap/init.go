@@ -41,13 +41,14 @@ func init() {
 	//4.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	ymlConf := yml_config.CreateYamlFactory()
+	variable.ConfigYml = yml_config.CreateYamlFactory()
 
-	// 5.启动针对配置文件变化的监听
-	ymlConf.ConfigFileChangeListen()
+	// 5.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听
+	variable.ConfigYml.ConfigFileChangeListen()
+	variable.ConfigYml.Clone("gorm_v2").ConfigFileChangeListen()
 
 	// 6.websocket Hub中心启动
-	if ymlConf.GetInt("Websocket.Start") == 1 {
+	if variable.ConfigYml.GetInt("Websocket.Start") == 1 {
 		// websocket 管理中心hub全局初始化一份
 		variable.WebsocketHub = core.CreateHubFactory()
 		if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
