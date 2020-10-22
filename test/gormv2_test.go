@@ -136,6 +136,6 @@ func TestGormDelete(t *testing.T) {
 }
 
 // 原生sql
-func RawSqlTest(t testing.T) {
+func RawSqlTest(t *testing.T) {
 
 }

@@ -8,7 +8,6 @@ import (
 )
 
 func getDsn(sqlType, readWrite string) string {
-	fmt.Println("Gormv2."+sqlType+"."+readWrite+".Host", "Gormv2."+sqlType+"."+readWrite+".DataBase")
 	Host := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".Host")
 	DataBase := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".DataBase")
 	Port := gormv2Conf.GetInt("Gormv2." + sqlType + "." + readWrite + ".Port")
