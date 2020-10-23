@@ -3,16 +3,14 @@ package work_queue
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 )
 
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.WorkQueue.Addr"))
-	queueName := configFac.GetString("RabbitMq.WorkQueue.QueueName")
-	dura := configFac.GetBool("RabbitMq.WorkQueue.Durable")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.WorkQueue.Addr"))
+	queueName := variable.ConfigYml.GetString("RabbitMq.WorkQueue.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.WorkQueue.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())

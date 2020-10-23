@@ -91,12 +91,13 @@ func TestSqlInsertMultipleError(t *testing.T) {
 
 // 批量查询数据，测试 pprof cpu性能
 func TestSqlSelecttMultiple(t *testing.T) {
-
+	time1 := time.Now()
 	if model.CreateTestFactory("").SelectDataMultiple() {
 		fmt.Println("批量查询数据OK")
 	} else {
 		t.Errorf("批量查询数据出错")
 	}
+	fmt.Printf("总计耗时(毫秒): %d\n", time.Now().Sub(time1).Milliseconds())
 }
 
 // 测试sql注入

@@ -5,7 +5,6 @@ import (
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/md5_encrypt"
-	"goskeleton/app/utils/yml_config"
 	"log"
 )
 
@@ -13,7 +12,7 @@ import (
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *usersModel {
 	if len(sqlType) == 0 {
-		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
+		sqlType = variable.ConfigYml.GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
 	}
 	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {

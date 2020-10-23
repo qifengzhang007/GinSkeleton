@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 	"log"
 	"strconv"
 )
 
 func CreateTestFactory(sqlType string) *Test {
 	if len(sqlType) == 0 {
-		sqlType = yml_config.CreateYamlFactory().GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
+		sqlType = variable.ConfigYml.GetString("UseDbType") //如果系统的某个模块需要使用非默认（mysql）数据库，例如 sqlserver，那么就在这里
 	}
 	dbDriver := CreateBaseSqlFactory(sqlType)
 	if dbDriver != nil {
@@ -117,7 +116,7 @@ func (t *Test) SelectDataMultiple() bool {
 			code,name,company_name,concepts,indudtry,province,city,introduce,created_at 
 			FROM
 			db_stocks.tb_code_list 
-			LIMIT 0, 1000 ;
+			where  id<3500 ;
 		`
 	//1.首先独立预处理sql语句，无参数
 	if t.PrepareSql(sql) {
@@ -136,12 +135,13 @@ func (t *Test) SelectDataMultiple() bool {
 			Created_at   string `json:"created_at"`
 		}
 
-		for i := 1; i <= 500; i++ {
+		for i := 1; i <= 100; i++ {
 			var nColumn = make([]Column, 0)
 			//2.执行批量查询
 			rows := t.QuerySqlForMultiple()
 			if rows == nil {
-				variable.ZapLog.Sugar().Error("sql执行失败，sql:", sql)
+				//variable.ZapLog.Sugar().Error("sql执行失败，sql:", sql)
+				fmt.Println("有sql执行失败现象？？？")
 				return false
 			} else {
 				for rows.Next() {
@@ -161,9 +161,9 @@ func (t *Test) SelectDataMultiple() bool {
 
 				}
 				//// 我们只输出最后一行数据
-				if i == 500 {
+				if i == 100 {
 					fmt.Println("循环结束，最终需要返回的结果成员数量：", len(nColumn))
-					fmt.Printf("%#+v\n", nColumn)
+					//fmt.Printf("%#+v\n", nColumn)
 				}
 			}
 			rows.Close()

@@ -3,18 +3,16 @@ package publish_subscribe
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 )
 
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.PublishSubscribe.Addr"))
-	exchangeType := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeType")
-	exchangeName := configFac.GetString("RabbitMq.PublishSubscribe.ExchangeName")
-	queueName := configFac.GetString("RabbitMq.PublishSubscribe.QueueName")
-	dura := configFac.GetBool("RabbitMq.PublishSubscribe.Durable")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.PublishSubscribe.Addr"))
+	exchangeType := variable.ConfigYml.GetString("RabbitMq.PublishSubscribe.ExchangeType")
+	exchangeName := variable.ConfigYml.GetString("RabbitMq.PublishSubscribe.ExchangeName")
+	queueName := variable.ConfigYml.GetString("RabbitMq.PublishSubscribe.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.PublishSubscribe.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())

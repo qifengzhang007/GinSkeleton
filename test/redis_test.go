@@ -62,7 +62,7 @@ func TestRedisConnPool(t *testing.T) {
 			redisClient := redis_factory.GetOneRedisClient()
 			fmt.Printf("获取的redis数据库连接池地址：%p\n", redisClient)
 			time.Sleep(time.Second * 10)
-			fmt.Printf("阻塞过程中，那您可以通过redis命令  client  list   查看链接的客户端")
+			fmt.Printf("阻塞过程中，您可以通过redis命令  client  list   查看链接的客户端")
 			redisClient.ReleaseOneRedisClient() // 释放从连接池获取的连接
 		}()
 	}

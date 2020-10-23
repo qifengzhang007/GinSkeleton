@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/gorm_v2"
 	_ "goskeleton/bootstrap"
 	"os"
@@ -67,9 +68,9 @@ func TestGormSelect(t *testing.T) {
 	var roles []tb_roles
 
 	// tb_users 查询数据会从  db_test 查询
-	db.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
+	variable.GormDbMysql.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
 	fmt.Printf("tb_users表数据：%v\n", users)
-	db.Model(tb_roles{}).Where("name  like ?", "%test%").Find(&roles)
+	variable.GormDbMysql.Model(tb_roles{}).Where("name  like ?", "%test%").Find(&roles)
 	fmt.Printf("tb_roles表数据：%v\n", roles)
 }
 
@@ -149,4 +150,57 @@ func TestGormDelete(t *testing.T) {
 	if result.RowsAffected < 0 {
 		t.Error("delete失败，错误详情：", result.Error.Error())
 	}
+}
+
+// 原生sql
+
+func TestRawSql(t *testing.T) {
+
+	// 查询类
+	var receive []tb_user_log
+	variable.GormDbMysql.Raw("select * from   tb_user_log  where id>?", 0).Scan(&receive)
+	fmt.Printf("%v\n", receive)
+
+	//执行类
+	variable.GormDbMysql.Exec("update tb_user_log  set  remark=?  where   id=?", "gorm原生sql执行修改操作", 11)
+}
+
+// 性能测试
+
+func TestBench(t *testing.T) {
+	// SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_list`  where   id<3500;
+
+	type tb_code_lists struct {
+		Code            string
+		Name            string
+		Company_name    string
+		Concepts        string
+		Concepts_detail string
+		Province        string
+		City            string
+		Status          uint8
+		Reamrk          string
+		Created_at      time.Time
+		Updated_at      time.Time
+	}
+	//循环查询100次，每次查询3500条数据，计算总耗时
+	var receives []tb_code_lists
+	var time1 = time.Now()
+	for i := 0; i < 100; i++ {
+
+		variable.GormDbMysql.Model(tb_code_lists{}).Select("code", "name", "company_name", "concepts", "concepts_detail", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<?", 3500).Find(&receives)
+
+		receives = make([]tb_code_lists, 0)
+	}
+	fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
+	fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds()) //  经过测试，遍历处理35万条数据，需要 4.002 秒
+
+	//  直接使用 gorm 的原生
+	//for i:=0;i<100;i++{
+	//	receives=make([]tb_code_lists,0)
+	//	variable.GormDbMysql.Raw("SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_lists`  where id<3500 ").Scan(&receives)
+	//}
+	//fmt.Printf("gorm 原生sql数据遍历完毕：最后一次条数：%d\n",len(receives))
+	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())  //  经过测试，遍历处理35万条数据，需要 4.58 秒
+
 }

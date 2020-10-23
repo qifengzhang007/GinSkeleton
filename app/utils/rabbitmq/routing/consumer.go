@@ -2,20 +2,19 @@ package routing
 
 import (
 	"github.com/streadway/amqp"
-	"goskeleton/app/utils/yml_config"
+	"goskeleton/app/global/variable"
 	"time"
 )
 
 func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Routing.Addr"))
-	exchangeType := configFac.GetString("RabbitMq.Routing.ExchangeType")
-	exchangeName := configFac.GetString("RabbitMq.Routing.ExchangeName")
-	queueName := configFac.GetString("RabbitMq.Routing.QueueName")
-	dura := configFac.GetBool("RabbitMq.Routing.Durable")
-	reconnectInterval := configFac.GetDuration("RabbitMq.Routing.OffLineReconnectIntervalSec")
-	retryTimes := configFac.GetInt("RabbitMq.Routing.RetryCount")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.Routing.Addr"))
+	exchangeType := variable.ConfigYml.GetString("RabbitMq.Routing.ExchangeType")
+	exchangeName := variable.ConfigYml.GetString("RabbitMq.Routing.ExchangeName")
+	queueName := variable.ConfigYml.GetString("RabbitMq.Routing.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.Routing.Durable")
+	reconnectInterval := variable.ConfigYml.GetDuration("RabbitMq.Routing.OffLineReconnectIntervalSec")
+	retryTimes := variable.ConfigYml.GetInt("RabbitMq.Routing.RetryCount")
 
 	if err != nil {
 		return nil, err

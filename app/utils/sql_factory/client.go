@@ -10,7 +10,6 @@ import (
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 	"strings"
 	"time"
 )
@@ -26,7 +25,6 @@ var postgreSqlDriverRead *sql.DB
 
 // 初始化数据库驱动
 func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
-	configFac := yml_config.CreateYamlFactory()
 	var tmpSqlType string
 	var tmpDriver *sql.DB
 	var err error
@@ -41,17 +39,17 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		return nil
 	}
 	// 初始化相同配置项
-	Host := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Host")
-	Port := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Port")
-	User := configFac.GetString(tmpSqlType + "." + readOrWrite + ".User")
-	Pass := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Pass")
-	DataBase := configFac.GetString(tmpSqlType + "." + readOrWrite + ".DataBase")
-	SetMaxIdleConns := configFac.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxIdleConns")
-	SetMaxOpenConns := configFac.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxOpenConns")
-	SetConnMaxLifetime := configFac.GetDuration(tmpSqlType + "." + readOrWrite + ".SetConnMaxLifetime")
+	Host := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Host")
+	Port := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Port")
+	User := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".User")
+	Pass := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Pass")
+	DataBase := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".DataBase")
+	SetMaxIdleConns := variable.ConfigYml.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxIdleConns")
+	SetMaxOpenConns := variable.ConfigYml.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxOpenConns")
+	SetConnMaxLifetime := variable.ConfigYml.GetDuration(tmpSqlType + "." + readOrWrite + ".SetConnMaxLifetime")
 
 	if sqlType == "mysql" {
-		Charset := configFac.GetString(tmpSqlType + "." + readOrWrite + ".Charset")
+		Charset := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Charset")
 		SqlConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True&loc=Local&charset=%s", User, Pass, Host, Port, DataBase, Charset)
 		switch readOrWrite {
 		case "Write", "Read":
@@ -155,7 +153,6 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 	}
 	var maxRetryTimes int
 	var reConnectInterval time.Duration
-	configFac := yml_config.CreateYamlFactory()
 
 	var dbDriver *sql.DB
 	switch sqlType {
@@ -173,8 +170,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = mysqlDriverRead
 			}
 		}
-		maxRetryTimes = configFac.GetInt("Mysql." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = configFac.GetDuration("Mysql." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigYml.GetInt("Mysql." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigYml.GetDuration("Mysql." + readOrWrite + ".ReConnectInterval")
 	case "sqlserver", "mssql":
 		if readOrWrite == "Write" {
 			if sqlServerDriverWrite == nil {
@@ -189,8 +186,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = sqlServerDriverRead
 			}
 		}
-		maxRetryTimes = configFac.GetInt("SqlServer." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = configFac.GetDuration("SqlServer." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigYml.GetInt("SqlServer." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigYml.GetDuration("SqlServer." + readOrWrite + ".ReConnectInterval")
 	case "postgre", "postgres", "postgresql":
 		if readOrWrite == "Write" {
 			if postgreSqlDriverWrite == nil {
@@ -205,8 +202,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = postgreSqlDriverRead
 			}
 		}
-		maxRetryTimes = configFac.GetInt("PostgreSql." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = configFac.GetDuration("PostgreSql." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigYml.GetInt("PostgreSql." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigYml.GetDuration("PostgreSql." + readOrWrite + ".ReConnectInterval")
 	default:
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + "，" + sqlType)
 		return nil

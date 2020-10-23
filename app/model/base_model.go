@@ -6,7 +6,6 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/sql_factory"
-	"goskeleton/app/utils/yml_config"
 	"strings"
 )
 
@@ -30,7 +29,7 @@ func CreateBaseSqlFactory(sqlType string) (res *BaseModel) {
 		return nil
 	}
 	// 配置项是否开启读写分离
-	isOpenReadDb := yml_config.CreateYamlFactory().GetInt(dbType + ".IsOpenReadDb")
+	isOpenReadDb := variable.ConfigYml.GetInt(dbType + ".IsOpenReadDb")
 	//开启读写分离配置，就继续初始化一个 Read 数据库连接
 	if isOpenReadDb == 1 {
 		sqlDriverRead = sql_factory.GetOneSqlClient(sqlType, "Read")

@@ -6,7 +6,6 @@ import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 	"net/http"
 	"time"
 )
@@ -33,8 +32,8 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		}
 	}()
 	var upGrader = websocket.Upgrader{
-		ReadBufferSize:  yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
-		WriteBufferSize: yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"),
+		ReadBufferSize:  variable.ConfigYml.GetInt("Websocket.WriteReadBufferSize"),
+		WriteBufferSize: variable.ConfigYml.GetInt("Websocket.WriteReadBufferSize"),
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
@@ -49,17 +48,17 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 			c.Hub = wsHub
 		}
 		c.Conn = wsConn
-		c.Send = make(chan []byte, yml_config.CreateYamlFactory().GetInt("Websocket.WriteReadBufferSize"))
-		c.PingPeriod = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.PingPeriod")
-		c.ReadDeadline = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.ReadDeadline")
-		c.WriteDeadline = time.Second * yml_config.CreateYamlFactory().GetDuration("Websocket.WriteDeadline")
+		c.Send = make(chan []byte, variable.ConfigYml.GetInt("Websocket.WriteReadBufferSize"))
+		c.PingPeriod = time.Second * variable.ConfigYml.GetDuration("Websocket.PingPeriod")
+		c.ReadDeadline = time.Second * variable.ConfigYml.GetDuration("Websocket.ReadDeadline")
+		c.WriteDeadline = time.Second * variable.ConfigYml.GetDuration("Websocket.WriteDeadline")
 		if err := c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second)); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		if err := c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess)); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
-		c.Conn.SetReadLimit(yml_config.CreateYamlFactory().GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
+		c.Conn.SetReadLimit(variable.ConfigYml.GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c
 		return c, true
 	}
@@ -129,7 +128,7 @@ func (c *Client) Heartbeat(callbackClose func()) {
 			_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
 				c.HeartbeatFailTimes++
-				if c.HeartbeatFailTimes > yml_config.CreateYamlFactory().GetInt("Websocket.HeartbeatFailMaxTimes") {
+				if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
 					variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))
 					return
 				}

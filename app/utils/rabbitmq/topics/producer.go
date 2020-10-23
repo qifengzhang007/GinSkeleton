@@ -3,18 +3,16 @@ package topics
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 )
 
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Topics.Addr"))
-	exchangeType := configFac.GetString("RabbitMq.Topics.ExchangeType")
-	exchangeName := configFac.GetString("RabbitMq.Topics.ExchangeName")
-	queueName := configFac.GetString("RabbitMq.Topics.QueueName")
-	dura := configFac.GetBool("RabbitMq.Topics.Durable")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.Topics.Addr"))
+	exchangeType := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeType")
+	exchangeName := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeName")
+	queueName := variable.ConfigYml.GetString("RabbitMq.Topics.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.Topics.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())

@@ -3,9 +3,9 @@ package websocket
 import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
+	"goskeleton/app/global/variable"
 	controllerWs "goskeleton/app/http/controller/websocket"
 	"goskeleton/app/utils/response"
-	"goskeleton/app/utils/yml_config"
 	"net/http"
 )
 
@@ -18,7 +18,7 @@ type Connect struct {
 func (c Connect) CheckParams(context *gin.Context) {
 
 	// 1. 首先检查是否开启websocket服务配置（在配置项中开启）
-	if yml_config.CreateYamlFactory().GetInt("Websocket.Start") != 1 {
+	if variable.ConfigYml.GetInt("Websocket.Start") != 1 {
 		response.ReturnJson(context, http.StatusBadRequest, consts.WsServerNotStartCode, consts.WsServerNotStartMsg, "")
 		return
 	}

@@ -9,7 +9,6 @@ import (
 	"goskeleton/app/http/middleware/authorization"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/yml_config"
 	"io"
 	"net/http"
 	"os"
@@ -20,10 +19,10 @@ import (
 func InitWebRouter() *gin.Engine {
 	var router *gin.Engine
 	// 非调试模式（生产模式） 日志写到日志文件
-	if yml_config.CreateYamlFactory().GetBool("AppDebug") == false {
+	if variable.ConfigYml.GetBool("AppDebug") == false {
 		//1.将日志写入日志文件
 		gin.DisableConsoleColor()
-		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
+		f, _ := os.Create(variable.BasePath + variable.ConfigYml.GetString("Logs.GinLogName"))
 		gin.DefaultWriter = io.MultiWriter(f)
 		// 2.如果是有nginx前置做代理，基本不需要gin框架记录访问日志，开启下面一行代码，屏蔽上面的三行代码，性能提升 5%
 		//gin.SetMode(gin.ReleaseMode)
@@ -36,7 +35,7 @@ func InitWebRouter() *gin.Engine {
 	}
 
 	//根据配置进行设置跨域
-	if yml_config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
+	if variable.ConfigYml.GetBool("HttpServer.AllowCrossDomain") {
 		router.Use(cors.Next())
 	}
 

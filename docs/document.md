@@ -29,7 +29,7 @@
         register_validator.RegisterValidator()
     
         // 5.websocket Hub中心启动
-        if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
+        if variable.ConfigYml.GetInt("Websocket.Start") == 1 {
             // websocket 管理中心hub全局初始化一份
             variable.WebsocketHub = core.CreateHubFactory()
             if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {

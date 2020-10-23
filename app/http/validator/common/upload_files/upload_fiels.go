@@ -25,7 +25,7 @@ func (u UpFiles) CheckParams(context *gin.Context) {
 		return
 	}
 	//超过系统设定的最大值：32M
-	if tmpFile.Size > yml_config.CreateYamlFactory().GetInt64("FileUploadSetting.Size")<<20 {
+	if tmpFile.Size > variable.ConfigYml.GetInt64("FileUploadSetting.Size")<<20 {
 		response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+yml_config.CreateYamlFactory().GetString("FileUploadSetting.Size"), "")
 		return
 	}
@@ -33,7 +33,7 @@ func (u UpFiles) CheckParams(context *gin.Context) {
 	if fp, err := tmpFile.Open(); err == nil {
 		mimeType := files.GetFilesMimeByFp(fp)
 
-		for _, value := range yml_config.CreateYamlFactory().GetStringSlice("FileUploadSetting.AllowMimeType") {
+		for _, value := range variable.ConfigYml.GetStringSlice("FileUploadSetting.AllowMimeType") {
 			if strings.ReplaceAll(value, " ", "") == strings.ReplaceAll(mimeType, " ", "") {
 				isPass = true
 				break
