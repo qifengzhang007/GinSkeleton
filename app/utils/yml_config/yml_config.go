@@ -3,6 +3,7 @@ package yml_config
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"goskeleton/app/core/container"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
@@ -88,15 +89,19 @@ func (y *ymlConfig) clearCache() {
 	container.CreateContainersFactory().FuzzyDelete(variable.ConfigKeyPrefix)
 }
 
-// 允许 clone 一个不同文件名的配置器
-//func (y *ymlConfig) Clone(fileName string) interf.YmlConfigInterf {
-//	var tmp = *y
-//	(&tmp).viper.SetConfigName(fileName)
-//	if err := (&tmp).viper.ReadInConfig(); err != nil {
-//		variable.ZapLog.Error(my_errors.ErrorsConfigInitFail, zap.Error(err))
-//	}
-//	return &tmp
-//}
+// 允许 clone 一个相同功能的结构体
+func (y *ymlConfig) Clone(fileName string) interf.YmlConfigInterf {
+	// 这里存在一个深拷贝，需要注意，避免拷贝的结构体操作对原始结构体造成影响
+	var ymlC = *y
+	var ymlConfViper = *(y.viper)
+	(&ymlC).viper = &ymlConfViper
+
+	(&ymlC).viper.SetConfigName(fileName)
+	if err := (&ymlC).viper.ReadInConfig(); err != nil {
+		variable.ZapLog.Error(my_errors.ErrorsConfigInitFail, zap.Error(err))
+	}
+	return &ymlC
+}
 
 // Get 一个原始值
 func (y *ymlConfig) Get(keyName string) interface{} {

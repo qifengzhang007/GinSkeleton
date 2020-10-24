@@ -6,7 +6,7 @@ import (
 
 type YmlConfigInterf interface {
 	ConfigFileChangeListen()
-	//Clone(fileName string) YmlConfigInterf
+	Clone(fileName string) YmlConfigInterf
 	Get(keyName string) interface{}
 	GetString(keyName string) string
 	GetBool(keyName string) bool
