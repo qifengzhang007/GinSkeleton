@@ -2,16 +2,15 @@ package test
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/gorm_v2"
 	_ "goskeleton/bootstrap"
-	"os"
 	"testing"
 	"time"
 )
 
 //  gorm v2  操作数据库单元测试
+// 测试本篇首先保证 config/gorm_v2.yml 文件配置正确，相关配置项 IsInitGolobalGormMysql = 1
+// 更多使用用法参见官方文档：https://gorm.io/zh_CN/docs/v2_release_note.html
 
 // 模拟创建 3 个数据表，请在数据库按照结构体字段自行创建，字段全部使用小写
 type tb_users struct {
@@ -50,17 +49,6 @@ func (tb_user_log) TableName() string {
 	return "tb_user_log"
 }
 
-var db *gorm.DB
-
-func init() {
-	if driver, err := gorm_v2.GetOneMysqlClient(); err != nil {
-		fmt.Println("gorm初始化数据库驱动失败", err.Error())
-		os.Exit(1)
-	} else {
-		db = driver
-	}
-}
-
 // 查询
 func TestGormSelect(t *testing.T) {
 	// 查询 tb_users，由于没有配置指定的主从数据库。，所以默认连接的是
@@ -86,13 +74,13 @@ func TestGormInsert(t *testing.T) {
 	}
 
 	// 方式1：相关sql 语句： insert  into Tb_user_log(user_id,ip,login_time,created_at,updated_at)  values(1,"192.168.1.10","当前时间","当前时间")
-	result := db.Create(usr_log)
+	result := variable.GormDbMysql.Create(usr_log)
 	if result.RowsAffected < 0 {
 		t.Error("新增失败，错误详情：", result.Error.Error())
 	}
 
 	// 方式2：相关sql 语句： insert  into Tb_user_log(user_id,ip,remark)  values(1,"192.168.1.10","备注信息001")
-	result = db.Select("user_id", "ip", "remark").Create(usr_log)
+	result = variable.GormDbMysql.Select("user_id", "ip", "remark").Create(usr_log)
 	if result.RowsAffected < 0 {
 		t.Error("新增失败，错误详情：", result.Error.Error())
 	}
@@ -110,7 +98,7 @@ func TestGormUpdate(t *testing.T) {
 		Updated_at: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	// 整个结构体全量更新
-	result := db.Save(usr_ip)
+	result := variable.GormDbMysql.Save(usr_ip)
 	if result.RowsAffected < 0 {
 		t.Error("update失败，错误详情：", result.Error.Error())
 	}
@@ -127,7 +115,7 @@ func TestGormUpdate(t *testing.T) {
 		"remark":     "指定字段更新，备注信息",
 	}
 	// 更新sql： update  Tb_user_log  set user_id=66，ip='192.168.6.66' , login_time='当前时间', remark='指定字段更新，备注信息'  where  id=11
-	result = db.Model(key_primary_struct).Select("user_id", "ip", "login_time", "remark").Updates(rela_value)
+	result = variable.GormDbMysql.Model(key_primary_struct).Select("user_id", "ip", "login_time", "remark").Updates(rela_value)
 	if result.RowsAffected < 0 {
 		t.Error("update失败，错误详情：", result.Error.Error())
 	}
@@ -140,13 +128,13 @@ func TestGormDelete(t *testing.T) {
 		Id: 3,
 	}
 	// 方法1： sql：delete  from tb_roles where  id =3
-	result := db.Delete(key_primary_struct)
+	result := variable.GormDbMysql.Delete(key_primary_struct)
 	if result.RowsAffected < 0 {
 		t.Error("delete失败，错误详情：", result.Error.Error())
 	}
 
 	// 方法2： sql：delete  from tb_roles where  id =4
-	result = db.Where("id=?", 4).Delete(&tb_roles{})
+	result = variable.GormDbMysql.Where("id=?", 4).Delete(&tb_roles{})
 	if result.RowsAffected < 0 {
 		t.Error("delete失败，错误详情：", result.Error.Error())
 	}
@@ -183,7 +171,8 @@ func TestBench(t *testing.T) {
 		Created_at      time.Time
 		Updated_at      time.Time
 	}
-	//循环查询100次，每次查询3500条数据，计算总耗时
+	// 循环查询100次，每次查询3500条数据
+	// 累计35万条数据，主要测试返回最终结果给 receives 切片变量，总计耗时，以此做一个基本的基本的性能测试
 	var receives []tb_code_lists
 	var time1 = time.Now()
 	for i := 0; i < 100; i++ {
@@ -193,14 +182,16 @@ func TestBench(t *testing.T) {
 		receives = make([]tb_code_lists, 0)
 	}
 	fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
-	fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds()) //  经过测试，遍历处理35万条数据，需要 4.002 秒
+	//  经过测试，遍历处理35万条数据，需要 4.002 秒
+	fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds())
 
 	//  直接使用 gorm 的原生
 	//for i:=0;i<100;i++{
 	//	receives=make([]tb_code_lists,0)
-	//	variable.GormDbMysql.Raw("SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_lists`  where id<3500 ").Scan(&receives)
+	//	variable.GormDbMysql.Raw("SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_lists`  where id<3500 ").Find(&receives)
 	//}
 	//fmt.Printf("gorm 原生sql数据遍历完毕：最后一次条数：%d\n",len(receives))
-	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())  //  经过测试，遍历处理35万条数据，需要 4.58 秒
+	//  经过测试，遍历处理35万条数据，需要 4.58 秒
+	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())
 
 }
