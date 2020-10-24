@@ -3,17 +3,18 @@ package gorm_v2
 import (
 	"fmt"
 	gormLog "gorm.io/gorm/logger"
+	"goskeleton/app/global/variable"
 	"strings"
 )
 
 //  根据配置参数生成数据库驱动 dsn
 func getDsn(sqlType, readWrite string) string {
-	Host := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".Host")
-	DataBase := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".DataBase")
-	Port := gormv2Conf.GetInt("Gormv2." + sqlType + "." + readWrite + ".Port")
-	User := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".User")
-	Pass := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".Pass")
-	Charset := gormv2Conf.GetString("Gormv2." + sqlType + "." + readWrite + ".Charset")
+	Host := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Host")
+	DataBase := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".DataBase")
+	Port := variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + "." + readWrite + ".Port")
+	User := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".User")
+	Pass := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Pass")
+	Charset := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Charset")
 	switch strings.ToLower(sqlType) {
 	case "mysql":
 		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", User, Pass, Host, Port, DataBase, Charset)

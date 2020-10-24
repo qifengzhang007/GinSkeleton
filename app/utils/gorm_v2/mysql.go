@@ -4,6 +4,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
+	"goskeleton/app/global/variable"
 	"time"
 )
 
@@ -21,7 +22,7 @@ func getMysqlDriver() (*gorm.DB, error) {
 	var resolverConf dbresolver.Config
 
 	// 如果开启了读写分离，配置读数据库（resource、read、replicas）
-	if gormv2Conf.GetInt("Gormv2.Mysql.IsOpenReadDb") == 1 {
+	if variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsOpenReadDb") == 1 {
 		readDb := getDsn("Mysql", "Read")
 		resolverConf = dbresolver.Config{
 			Sources:  []gorm.Dialector{mysql.Open(writeDb)}, //  写 操作库， 执行类 , 默认就是
@@ -35,9 +36,9 @@ func getMysqlDriver() (*gorm.DB, error) {
 		}
 	}
 	err = gormDb.Use(dbresolver.Register(resolverConf, "").SetConnMaxIdleTime(time.Minute).
-		SetConnMaxLifetime(gormv2Conf.GetDuration("Gormv2.Mysql.SetConnMaxLifetime") * time.Second).
-		SetMaxIdleConns(gormv2Conf.GetInt("Gormv2.Mysql.SetMaxIdleConns")).
-		SetMaxOpenConns(gormv2Conf.GetInt("Gormv2.Mysql.SetMaxOpenConns")))
+		SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2.Mysql.SetConnMaxLifetime") * time.Second).
+		SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.SetMaxIdleConns")).
+		SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.SetMaxOpenConns")))
 	if err != nil {
 		return nil, err
 	}

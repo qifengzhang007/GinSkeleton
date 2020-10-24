@@ -4,6 +4,7 @@ import (
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
+	"goskeleton/app/global/variable"
 	"time"
 )
 
@@ -19,7 +20,7 @@ func getSqlserverDriver() (*gorm.DB, error) {
 	}
 
 	// 如果开启了读写分离，配置读数据库（resource、read、replicas）
-	if gormv2Conf.GetInt("Gormv2.SqlServer.IsOpenReadDb") == 1 {
+	if variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.IsOpenReadDb") == 1 {
 		readDb := getDsn("SqlServer", "Read")
 		err := gormDb.Use(dbresolver.Register(dbresolver.Config{
 			//Sources:  []gorm.Dialector{sqlserver.Open(writeDb)}, //  写 操作库， 执行类

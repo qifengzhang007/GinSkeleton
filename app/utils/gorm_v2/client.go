@@ -3,6 +3,7 @@ package gorm_v2
 import (
 	"errors"
 	"gorm.io/gorm"
+	"goskeleton/app/global/my_errors"
 )
 
 // 初始化一个 gorm v2 的sql驱动
@@ -15,7 +16,7 @@ func initSqlDriver(sqlType string) (*gorm.DB, error) {
 	case "postgresql", "postgre", "postgres":
 		return getPostgreSqlDriver()
 	default:
-		return nil, errors.New("您需要的数据库驱动不存在：" + sqlType)
+		return nil, errors.New(my_errors.ErrorsDbDriverNotExists + sqlType)
 	}
 }
 
