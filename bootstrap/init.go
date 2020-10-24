@@ -45,16 +45,35 @@ func init() {
 	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听
 	variable.ConfigYml = yml_config.CreateYamlFactory() // 配置文件操作指针，初始化一个全局变量
 	variable.ConfigYml.ConfigFileChangeListen()
-	yml_config.CreateYamlFactory("gorm_v2").ConfigFileChangeListen()
+	variable.ConfigGormv2Yml = variable.ConfigYml.Clone("gorm_v2")
+	variable.ConfigGormv2Yml.ConfigFileChangeListen()
 
 	// 5.初始化全局日志句柄，并载入日志钩子处理函数
 	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
 
-	// 6.如果您操作数据库使用的 gorm ，那么需要初始化相关的数据库客户端连接
-	if db, err := gorm_v2.GetOneMysqlClient(); err != nil {
-		log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
-	} else {
-		variable.GormDbMysql = db
+	// 6.// 根据配置初始化 gorm mysql 全局 *gorm.Db
+	if variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGolobalGormMysql") == 1 {
+		if db, err := gorm_v2.GetOneMysqlClient(); err != nil {
+			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
+		} else {
+			variable.GormDbMysql = db
+		}
+	}
+	// 根据配置初始化 gorm sqlserver 全局 *gorm.Db
+	if variable.ConfigGormv2Yml.GetInt("Gormv2.Sqlserver.IsInitGolobalGormSqlserver") == 1 {
+		if db, err := gorm_v2.GetOneSqlserverClient(); err != nil {
+			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
+		} else {
+			variable.GormDbSqlserver = db
+		}
+	}
+	// 根据配置初始化 gorm postgresql 全局 *gorm.Db
+	if variable.ConfigGormv2Yml.GetInt("Gormv2.PostgreSql.IsInitGolobalGormPostgreSql") == 1 {
+		if db, err := gorm_v2.GetOnePostgreSqlClient(); err != nil {
+			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
+		} else {
+			variable.GormDbPostgreSql = db
+		}
 	}
 
 	// 7.websocket Hub中心启动
