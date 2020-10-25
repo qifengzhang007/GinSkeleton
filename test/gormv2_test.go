@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"goskeleton/app/global/variable"
 	_ "goskeleton/bootstrap"
+	"sync"
 	"testing"
 	"time"
 )
@@ -154,7 +155,6 @@ func TestRawSql(t *testing.T) {
 }
 
 // 性能测试
-
 func TestBench(t *testing.T) {
 	// SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_list`  where   id<3500;
 
@@ -171,19 +171,18 @@ func TestBench(t *testing.T) {
 		Created_at      time.Time
 		Updated_at      time.Time
 	}
-	// 循环查询100次，每次查询3500条数据
-	// 累计35万条数据，主要测试返回最终结果给 receives 切片变量，总计耗时，以此做一个基本的基本的性能测试
-	var receives []tb_code_lists
-	var time1 = time.Now()
-	for i := 0; i < 100; i++ {
-
-		variable.GormDbMysql.Model(tb_code_lists{}).Select("code", "name", "company_name", "concepts", "concepts_detail", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<?", 3500).Find(&receives)
-
-		receives = make([]tb_code_lists, 0)
-	}
-	fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
+	//循环查询100次，每次查询3500条数据，计算总耗时
+	//var receives []tb_code_lists
+	//var time1 = time.Now()
+	//for i := 0; i < 100; i++ {
+	//
+	//	variable.GormDbMysql.Model(tb_code_lists{}).Select("code", "name", "company_name", "concepts", "concepts_detail", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<?", 3500).Find(&receives)
+	//
+	//	receives = make([]tb_code_lists, 0)
+	//}
+	//fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
 	//  经过测试，遍历处理35万条数据，需要 4.002 秒
-	fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds())
+	//fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds())
 
 	//  直接使用 gorm 的原生
 	//for i:=0;i<100;i++{
@@ -193,5 +192,35 @@ func TestBench(t *testing.T) {
 	//fmt.Printf("gorm 原生sql数据遍历完毕：最后一次条数：%d\n",len(receives))
 	//  经过测试，遍历处理35万条数据，需要 4.58 秒
 	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())
+
+	//  并发性能测试
+	var wg sync.WaitGroup
+	// 数据库的并发最大连接数建议设置为 128, 后续测试将通过测试数据验证
+	var conNum = make(chan uint16, 128)
+	wg.Add(1000)
+	time1 := time.Now()
+	for i := 1; i <= 1000; i++ {
+		conNum <- 1
+		go func() {
+			defer func() {
+				<-conNum
+				wg.Done()
+			}()
+			var received []tb_code_lists
+			variable.GormDbMysql.Table("tb_code_list").Select("code", "name", "company_name", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<=?", 3500).Find(&received)
+			//fmt.Printf("本次读取的数据条数:%d\n",len(received))
+		}()
+	}
+	wg.Wait()
+	fmt.Printf("耗时（ms）:%d\n", time.Now().Sub(time1).Milliseconds())
+
+	// 测试结果：
+	// 1.数据库并发在 1000 （相当于有1000个客户端连接操作数据库，可以在数据库使用 show processlist 自行实时刷新观察、验证），
+	// 2.并发设置为 1000，累计查询、返回结果的数据条数：350万. 最终耗时：(14.28s)
+	// 3.并发设置为 500，累计查询、返回结果的数据条数：350万. 最终耗时：(14.03s)
+	// 4.并发设置为 250，累计查询、返回结果的数据条数：350万. 最终耗时：(13.57s)
+	// 5.并发设置为 128，累计查询、返回结果的数据条数：350万. 最终耗时：(13.27s)   //  由此可见，数据库并发性能最优值就是同时有128个连接,该值相当于抛物线的最高性能点
+	// 6.并发设置为 100，累计查询、返回结果的数据条数：350万. 最终耗时：(13.43s)
+	// 7.并发设置为 64，累计查询、返回结果的数据条数：350万. 最终耗时：(15.10s)
 
 }
