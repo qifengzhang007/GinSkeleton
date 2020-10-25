@@ -1,7 +1,5 @@
 AppDebug: true   # 设置程序所处的模式，debug=true 调试模式，日志优先显示在控制台， debug=false 非调试模式，将写入日志文件
 
-UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、postgre
-
 HttpServer:
   Api:
     Port: ":20191"                 #门户网站类端口,注意前面有冒号

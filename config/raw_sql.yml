@@ -1,6 +1,7 @@
 # 原生sql操作配置,从 v1.4.00 开始我们建议开发者统一使用 gorm v2操作数据库, 本人也开始参与开发此包，提交pr
 # gorm v2 配置项参见同目录的 gorm_v2.yml 文件
 RawSql:
+  UseDbType: "mysql"                  #默认启用 mysql 数据库，备选项：mysql、sqlserver、postgre
   Mysql:
     Write:
       Host: "127.0.0.1"
