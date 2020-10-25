@@ -40,8 +40,9 @@
 9|日志记录|  [zap高性能日志](docs/zap_log.md) 
 10|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
 11| 验证码|  [验证码](docs/captcha.md)
-12| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
-13|supervisor| [supervisor进程守护](docs/supervisor.md)   
+12| 全局变量|  [清单一览](docs/global_variable.md)  
+13| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
+14|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -84,6 +85,12 @@
 #### 版本
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .      
+
+V 1.4.00  2020-10-25    
+>   1.`gorm v2` 集成至本项目骨架, 测试、验证相关功能，并提交pr协助作者改进了几个bug .     
+>   2.对项目骨架中频繁使用的几个变量，进行了全局初始化，主要包括：日志、配置文件、gorm驱动,从而使程序的底层代码得到简化.     
+>   3.本次升级之后原本使用原生 `sql` 操作数据库的部分，将切换到 `gorm v2`, 本人最近也参与了该包的开发(pr提交、被合并),后续在使用中将继续完善该包.    
+>   4.目前已经处于最后的单元测试阶段...
 
 V 1.3.06  2020-10-16    
 >   1.`cobra` 包升级至最新版, 相关的文档同步更新.     

@@ -53,26 +53,26 @@ func init() {
 
 	// 6.// 根据配置初始化 gorm mysql 全局 *gorm.Db
 	if variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGolobalGormMysql") == 1 {
-		if db, err := gorm_v2.GetOneMysqlClient(); err != nil {
+		if dbMysql, err := gorm_v2.GetOneMysqlClient(); err != nil {
 			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
 		} else {
-			variable.GormDbMysql = db
+			variable.GormDbMysql = dbMysql
 		}
 	}
 	// 根据配置初始化 gorm sqlserver 全局 *gorm.Db
 	if variable.ConfigGormv2Yml.GetInt("Gormv2.Sqlserver.IsInitGolobalGormSqlserver") == 1 {
-		if db, err := gorm_v2.GetOneSqlserverClient(); err != nil {
+		if dbSqlserver, err := gorm_v2.GetOneSqlserverClient(); err != nil {
 			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
 		} else {
-			variable.GormDbSqlserver = db
+			variable.GormDbSqlserver = dbSqlserver
 		}
 	}
 	// 根据配置初始化 gorm postgresql 全局 *gorm.Db
 	if variable.ConfigGormv2Yml.GetInt("Gormv2.PostgreSql.IsInitGolobalGormPostgreSql") == 1 {
-		if db, err := gorm_v2.GetOnePostgreSqlClient(); err != nil {
+		if dbPostgre, err := gorm_v2.GetOnePostgreSqlClient(); err != nil {
 			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
 		} else {
-			variable.GormDbPostgreSql = db
+			variable.GormDbPostgreSql = dbPostgre
 		}
 	}
 
