@@ -39,17 +39,17 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		return nil
 	}
 	// 初始化相同配置项
-	Host := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Host")
-	Port := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Port")
-	User := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".User")
-	Pass := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Pass")
-	DataBase := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".DataBase")
-	SetMaxIdleConns := variable.ConfigYml.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxIdleConns")
-	SetMaxOpenConns := variable.ConfigYml.GetInt(tmpSqlType + "." + readOrWrite + ".SetMaxOpenConns")
-	SetConnMaxLifetime := variable.ConfigYml.GetDuration(tmpSqlType + "." + readOrWrite + ".SetConnMaxLifetime")
+	Host := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".Host")
+	Port := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".Port")
+	User := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".User")
+	Pass := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".Pass")
+	DataBase := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".DataBase")
+	SetMaxIdleConns := variable.ConfigRawSqlYml.GetInt("RawSql." + tmpSqlType + "." + readOrWrite + ".SetMaxIdleConns")
+	SetMaxOpenConns := variable.ConfigRawSqlYml.GetInt("RawSql." + tmpSqlType + "." + readOrWrite + ".SetMaxOpenConns")
+	SetConnMaxLifetime := variable.ConfigRawSqlYml.GetDuration("RawSql." + tmpSqlType + "." + readOrWrite + ".SetConnMaxLifetime")
 
 	if sqlType == "mysql" {
-		Charset := variable.ConfigYml.GetString(tmpSqlType + "." + readOrWrite + ".Charset")
+		Charset := variable.ConfigRawSqlYml.GetString("RawSql." + tmpSqlType + "." + readOrWrite + ".Charset")
 		SqlConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True&loc=Local&charset=%s", User, Pass, Host, Port, DataBase, Charset)
 		switch readOrWrite {
 		case "Write", "Read":
@@ -170,8 +170,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = mysqlDriverRead
 			}
 		}
-		maxRetryTimes = variable.ConfigYml.GetInt("Mysql." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = variable.ConfigYml.GetDuration("Mysql." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigRawSqlYml.GetInt("RawSql.Mysql." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigRawSqlYml.GetDuration("RawSql.Mysql." + readOrWrite + ".ReConnectInterval")
 	case "sqlserver", "mssql":
 		if readOrWrite == "Write" {
 			if sqlServerDriverWrite == nil {
@@ -186,8 +186,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = sqlServerDriverRead
 			}
 		}
-		maxRetryTimes = variable.ConfigYml.GetInt("SqlServer." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = variable.ConfigYml.GetDuration("SqlServer." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigRawSqlYml.GetInt("RawSql.SqlServer." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigRawSqlYml.GetDuration("RawSql.SqlServer." + readOrWrite + ".ReConnectInterval")
 	case "postgre", "postgres", "postgresql":
 		if readOrWrite == "Write" {
 			if postgreSqlDriverWrite == nil {
@@ -202,8 +202,8 @@ func GetOneSqlClient(sqlType, readOrWrite string) *sql.DB {
 				dbDriver = postgreSqlDriverRead
 			}
 		}
-		maxRetryTimes = variable.ConfigYml.GetInt("PostgreSql." + readOrWrite + ".PingFailRetryTimes")
-		reConnectInterval = variable.ConfigYml.GetDuration("PostgreSql." + readOrWrite + ".ReConnectInterval")
+		maxRetryTimes = variable.ConfigRawSqlYml.GetInt("RawSql.PostgreSql." + readOrWrite + ".PingFailRetryTimes")
+		reConnectInterval = variable.ConfigRawSqlYml.GetDuration("RawSql.PostgreSql." + readOrWrite + ".ReConnectInterval")
 	default:
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + "，" + sqlType)
 		return nil

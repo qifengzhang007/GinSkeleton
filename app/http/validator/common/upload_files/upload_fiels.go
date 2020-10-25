@@ -17,7 +17,7 @@ type UpFiles struct {
 
 // 文件上传公共模块表单参数验证器
 func (u UpFiles) CheckParams(context *gin.Context) {
-	tmpFile, err := context.FormFile(variable.UploadFileField) //  file 是一个文件结构体（文件对象）
+	tmpFile, err := context.FormFile(variable.ConfigYml.GetString("FileUploadSetting.UploadFileField")) //  file 是一个文件结构体（文件对象）
 	var isPass bool
 	//获取文件发生错误，可能上传了空文件等
 	if err != nil {

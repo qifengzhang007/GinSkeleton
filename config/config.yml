@@ -9,90 +9,6 @@ HttpServer:
     Port: ":20201"                 #后端应用类端口,注意前面有冒号
   AllowCrossDomain: true           #是否允许跨域，默认 允许，注意：本项目跨域和nginx跨域只能允许设置一个即可，如果同时设置跨域，反而会造成无法跨域
 
-# 以下配置的数据库是原生sql操作数据库相关的参数，gorm v2 配置项参见同目录的 gorm_v2.yml 文件
-Mysql:
-  Write:
-    Host: "127.0.0.1"
-    DataBase: "db_stocks"
-    Port: 3308                        #注意，非3306，请自行调整
-    Prefix: "tb_"
-    User: "root"
-    Pass: "DRsXT5ZJ6Oi55LPQ"
-    Charset: "utf8"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1              # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3
-  IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略
-  Read:
-    Host: "192.168.8.62"
-    DataBase: "db_stocks"
-    Port: 3308                        #注意，非3306，请自行调整
-    Prefix: "tb_"
-    User: "root"
-    Pass: "yourPassword"
-    Charset: "utf8"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3
-
-SqlServer:
-  Write:
-    Host: "127.0.0.1"
-    DataBase: "db_goskeleton"
-    Port: 1433
-    Prefix: "tb_"
-    User: "Sa"
-    Pass: "secret2017"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1     # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3    #从连接池获取连接失败，最大重试次数
-  IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
-  Read:
-    Host: "127.0.0.1"
-    DataBase: "db_goskeleton"
-    Port: 1433
-    Prefix: "tb_"
-    User: "Sa"
-    Pass: "secret2017"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3   #从连接池获取连接失败，最大重试次数
-
-PostgreSql:
-  Write:
-    Host: "127.0.0.1"
-    DataBase: "db_goskeleton"
-    Port: 5432
-    Prefix: "tb_"
-    User: "postgres"
-    Pass: "secret2017"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3
-  IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
-  Read:
-    Host: "127.0.0.1"
-    DataBase: "db_goskeleton"
-    Port: 5432
-    Prefix: "tb_"
-    User: "postgres"
-    Pass: "secret2017"
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
-    ReConnectInterval: 1    # 数据库连接失败，每次重连时之间间隔秒数
-    PingFailRetryTimes: 3
-
 Redis:
   Host: "127.0.0.1"
   Port: 6379
@@ -125,6 +41,8 @@ Websocket: #该服务与Http具有相同的ip、端口，因此不需要额外�
 
 FileUploadSetting:
   Size: 32                            #设置上传文件的最大值，单位：M，注意： 如果go前置nginx服务器，nginx 默认限制文件上传大小为 50 M ,用户上传文件限制还需要继续修改 nginx 配置
+  UploadFileField: "files"            #post上传文件时，表单的键名
+  UploadFileSavePath: "/storage/app/uploaded/" #上传文件保存在路径, 该路径与 BasePath 进行拼接使用
   AllowMimeType: #允许的文件mime类型列表
     - "image/jpeg"                    #jpg、jpeg图片格式
     - "image/png"                     #png图片格式

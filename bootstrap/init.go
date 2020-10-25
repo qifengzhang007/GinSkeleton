@@ -42,11 +42,15 @@ func init() {
 	//3.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听
-	variable.ConfigYml = yml_config.CreateYamlFactory() // 配置文件操作指针，初始化一个全局变量
+	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听， 配置文件操作指针，初始化为全局变量
+	variable.ConfigYml = yml_config.CreateYamlFactory()
 	variable.ConfigYml.ConfigFileChangeListen()
+	// config>gorm_v2.yml 启动文件变化监听事件
 	variable.ConfigGormv2Yml = variable.ConfigYml.Clone("gorm_v2")
 	variable.ConfigGormv2Yml.ConfigFileChangeListen()
+	// config>raw_sql.yml 启动文件变化监听事件
+	variable.ConfigRawSqlYml = variable.ConfigYml.Clone("raw_sql")
+	variable.ConfigRawSqlYml.ConfigFileChangeListen()
 
 	// 5.初始化全局日志句柄，并载入日志钩子处理函数
 	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
