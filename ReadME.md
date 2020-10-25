@@ -40,7 +40,7 @@
 9|日志记录|  [zap高性能日志](docs/zap_log.md) 
 10|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
 11| 验证码|  [验证码](docs/captcha.md)
-12| 全局变量|  [清单一览](docs/global_variable.md)  
+12| 全局变量(日志、gorm、配置模块)|  [清单一览](docs/global_variable.md)  
 13| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
 14|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
