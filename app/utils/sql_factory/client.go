@@ -66,7 +66,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		tmpDriver.SetMaxOpenConns(SetMaxOpenConns)
 		tmpDriver.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+tmpSqlType+readOrWrite, func(args ...interface{}) {
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"RawSql."+tmpSqlType+readOrWrite, func(args ...interface{}) {
 			_ = tmpDriver.Close()
 		})
 		switch readOrWrite {
@@ -96,7 +96,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		tmpDriver.SetMaxOpenConns(SetMaxOpenConns)
 		tmpDriver.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+tmpSqlType+readOrWrite, func(args ...interface{}) {
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"RawSql."+tmpSqlType+readOrWrite, func(args ...interface{}) {
 			_ = tmpDriver.Close()
 		})
 		switch readOrWrite {
@@ -125,7 +125,7 @@ func initSqlDriver(sqlType, readOrWrite string) *sql.DB {
 		tmpDriver.SetMaxOpenConns(SetMaxOpenConns)
 		tmpDriver.SetConnMaxLifetime(SetConnMaxLifetime * time.Second)
 		// 将需要销毁的事件统一注册在事件管理器，由程序退出时统一销毁
-		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+tmpSqlType+readOrWrite, func(args ...interface{}) {
+		event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"RawSql."+tmpSqlType+readOrWrite, func(args ...interface{}) {
 			_ = tmpDriver.Close()
 		})
 		switch readOrWrite {

@@ -193,7 +193,7 @@ func TestBench(t *testing.T) {
 	//  经过测试，遍历处理35万条数据，需要 4.58 秒
 	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())
 
-	//  并发性能测试
+	//  并发性能测试，同时测试连接池
 	var wg sync.WaitGroup
 	// 数据库的并发最大连接数建议设置为 128, 后续测试将通过测试数据验证
 	var conNum = make(chan uint16, 128)
@@ -224,3 +224,24 @@ func TestBench(t *testing.T) {
 	// 7.并发设置为 64，累计查询、返回结果的数据条数：350万. 最终耗时：(15.10s)
 
 }
+
+//  sqlserver 数据库测试, 以查询为例，其他操作参见mysql
+// 请在配置项 config > gorm_v2.yml 中，sqlserver 部分，设置 IsInitGolobalGormSqlserver =1 ，否则全局变量无法使用
+func TestSqlserver(t *testing.T) {
+	var users []tb_users
+	result := variable.GormDbSqlserver.Table("tb_users").Select("").Select("id", "phone", "email", "remark").Where("id > ?", 0).Find(&users)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
+	}
+	fmt.Printf("sqlserver数据查询结果：%v\n", users)
+}
+
+//  PostgreSql 数据库测试, 以查询为例，其他操作参见mysql
+//func TestPostgreSql(t *testing.T)  {
+//	var users []tb_users
+//	result:=variable.GormDbSqlserver.Table("tb_users").Select("").Select("id",  "phone", "email", "remark").Where("id > ?", 0).Find(&users)
+//	if result.Error!=nil{
+//		t.Errorf("单元测试失败，错误明细：%s\n",result.Error.Error())
+//	}
+//	fmt.Printf("sqlserver数据查询结果：%v\n",users)
+//}
