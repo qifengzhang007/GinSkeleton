@@ -109,15 +109,18 @@ func TestSqlInject(t *testing.T) {
 
 func TestConnPool(t *testing.T) {
 
-	//  获取20个连接，数据库客户端使用命令： SHOW  PROCESSLIST 查看正在连接的数量，发现增多了不少
-	for i := 1; i <= 20; i++ {
-		go func() {
+	//  设置 100 个并发操作数据库, 自行在连接池设置最大连接数限制
+	//  数据库客户端使用命令： SHOW  PROCESSLIST 查看正在连接的客户端数量，结果就是 连接池最大数目+已有的连接数
+	for i := 1; i <= 100; i++ {
+		go func(i int) {
 			tmpAddr := model.CreateTestFactory("")
-			fmt.Printf("获取的数据库连接池地址：%p\n", tmpAddr)
+			fmt.Printf("任务序号:%d 获取的数据库连接池地址：%p\n", i, tmpAddr)
+			tmpAddr.QueryRow("select 2020,2021 from  Dual")
 			time.Sleep(time.Second * 20)
-		}()
+			tmpAddr.QueryRow("select 2020,2021 from  Dual")
+		}(i)
 	}
 	fmt.Printf("20秒以后应该释放连接池并不会释放，数据库使用 SHOW  PROCESSLIST  查看依然能看见很多连接...")
-	time.Sleep(time.Second * 30)
+	time.Sleep(time.Second * 25)
 	//  知道本函数执行完毕，相关的连接会自动释放，继续使用  SHOW  PROCESSLIST 查看验证
 }
