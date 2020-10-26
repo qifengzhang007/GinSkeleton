@@ -17,6 +17,8 @@ import (
 type tb_users struct {
 	ID         uint   `json:"id"  gorm:"primaryKey" `
 	Name       string `json:"name"`
+	Age        uint8  `json:"age"`
+	Addr       string `json:"addr"`
 	Email      string `json:"email"`
 	Phone      string `json:"phone"`
 	Created_at string `json:"created_at"`
@@ -226,7 +228,8 @@ func TestBench(t *testing.T) {
 }
 
 //  sqlserver 数据库测试, 以查询为例，其他操作参见mysql
-// 请在配置项 config > gorm_v2.yml 中，sqlserver 部分，设置 IsInitGolobalGormSqlserver =1 ，否则全局变量无法使用
+// 请在配置项 config > gorm_v2.yml 中，sqlserver 部分，正确配置数据库参数
+// 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
 func TestSqlserver(t *testing.T) {
 	var users []tb_users
 	result := variable.GormDbSqlserver.Table("tb_users").Select("").Select("id", "phone", "email", "remark").Where("id > ?", 0).Find(&users)
@@ -236,12 +239,14 @@ func TestSqlserver(t *testing.T) {
 	fmt.Printf("sqlserver数据查询结果：%v\n", users)
 }
 
-//  PostgreSql 数据库测试, 以查询为例，其他操作参见mysql
-//func TestPostgreSql(t *testing.T)  {
-//	var users []tb_users
-//	result:=variable.GormDbSqlserver.Table("tb_users").Select("").Select("id",  "phone", "email", "remark").Where("id > ?", 0).Find(&users)
-//	if result.Error!=nil{
-//		t.Errorf("单元测试失败，错误明细：%s\n",result.Error.Error())
-//	}
-//	fmt.Printf("sqlserver数据查询结果：%v\n",users)
-//}
+//  PostgreSql 数据库测试
+// 请在配置项 config > gorm_v2.yml 中，PostgreSql 部分，正确配置数据库参数。
+// 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
+func TestPostgreSql(t *testing.T) {
+	var users []tb_users
+	result := variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
+	}
+	fmt.Printf("sqlserver数据查询结果：%v\n", users)
+}
