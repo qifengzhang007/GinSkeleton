@@ -30,6 +30,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
 
   SqlServer:
     IsInitGolobalGormSqlserver: 0
+    SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
@@ -56,6 +57,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
 
   PostgreSql:
     IsInitGolobalGormPostgreSql: 0
+    SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
