@@ -11,15 +11,9 @@ import (
 	"time"
 )
 
+// 自定义日志格式, 对 gorm 自带日志进行拦截重写
 func createCustomeGormLog(options ...Options) gormLog.Interface {
-	//var (
-	//	infoStr      = "[info] %s\n "
-	//	warnStr      = "[warn] %s\n"
-	//	errStr       = "[error] %s\n"
-	//	traceStr     = "[traceStr] %s [%.3fms] [rows:%v] %s\n"
-	//	traceWarnStr = "[traceWarn] %s %s [%.3fms] [rows:%v] %s\n"
-	//	traceErrStr  = "[traceErr] %s %s [%.3fms] [rows:%v] %s\n"
-	//)
+
 	var (
 		infoStr      = "%s\n[info] "
 		warnStr      = "%s\n[warn] "
@@ -49,7 +43,6 @@ func createCustomeGormLog(options ...Options) gormLog.Interface {
 	return log
 }
 
-// 对 gorm v2 自带的日志进行接管，使用本项目统一的日志工具 zaplog 管理
 type logOutPut struct{}
 
 func (l logOutPut) Printf(strFormat string, args ...interface{}) {
