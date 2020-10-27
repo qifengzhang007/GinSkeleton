@@ -19,14 +19,16 @@
 >   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0` , 特别说明：以上命令执行时后面不要有空格，否则报错!    
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
-###    项目骨架主线逻辑  
+###    <font color="red">项目骨架主线逻辑</font>  
 >   1.这部分主要介绍了`项目初始化流程`、`路由`、`表单参数验证器`、`控制器`、`model`、`service` 以及 `websocket` 为核心的主线逻辑.   
 [进入主线逻辑文档](docs/document.md)  
 
 ###    测试用例路由  
 [进入Api接口测试用例文档](docs/api_doc.md)      
 
-###    开发常用模块   
+###    开发常用模块  
+>   随着项目不断完善以下列表模块会陆续增加, 各个模块被贯穿在本项目骨架的主线中, 因此只要掌握主线核心逻辑, 其余在为主线提供服务.  
+
 序号|功能模块 | 文档地址  
 ---|---|---
 1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
