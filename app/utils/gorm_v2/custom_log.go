@@ -12,8 +12,7 @@ import (
 )
 
 // 自定义日志格式, 对 gorm 自带日志进行拦截重写
-func createCustomeGormLog(options ...Options) gormLog.Interface {
-
+func createCustomGormLog(sqlType string, options ...Options) gormLog.Interface {
 	var (
 		infoStr      = "%s\n[info] "
 		warnStr      = "%s\n[warn] "
@@ -23,8 +22,8 @@ func createCustomeGormLog(options ...Options) gormLog.Interface {
 		traceErrStr  = "%s %s\n[%.3fms] [rows:%v] %s"
 	)
 	logConf := gormLog.Config{
-		SlowThreshold: time.Second * 30, // 慢 SQL 阈值(sql执行时间超过此时间单位，就会触发gorm自带的日志输出)
-		LogLevel:      gormLog.Warn,     // Log level
+		SlowThreshold: time.Second * variable.ConfigGormv2Yml.GetDuration("Gormv2."+sqlType+"."+".SlowThreshold"),
+		LogLevel:      gormLog.Warn,
 		Colorful:      false,
 	}
 	log := &logger{
@@ -47,12 +46,14 @@ type logOutPut struct{}
 
 func (l logOutPut) Printf(strFormat string, args ...interface{}) {
 	logRes := fmt.Sprintf(strFormat, args...)
+	logFlag := "gorm_v2 日志:"
+	detailFlag := "详情："
 	if strings.HasPrefix(strFormat, "[info]") || strings.HasPrefix(strFormat, "[traceStr]") {
-		variable.ZapLog.Info("gorm_v2 日志:", zap.String("详情：", logRes))
+		variable.ZapLog.Info(logFlag, zap.String(detailFlag, logRes))
 	} else if strings.HasPrefix(strFormat, "[error]") || strings.HasPrefix(strFormat, "[traceErr]") {
-		variable.ZapLog.Error("gorm_v2 日志:", zap.String("详情：", logRes))
+		variable.ZapLog.Error(logFlag, zap.String(detailFlag, logRes))
 	} else if strings.HasPrefix(strFormat, "[warn]") || strings.HasPrefix(strFormat, "[traceWarn]") {
-		variable.ZapLog.Warn("gorm_v2 日志:", zap.String("详情：", logRes))
+		variable.ZapLog.Warn(logFlag, zap.String(detailFlag, logRes))
 	}
 
 }

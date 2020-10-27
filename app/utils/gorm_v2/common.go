@@ -27,8 +27,8 @@ func getDsn(sqlType, readWrite string) string {
 }
 
 // 创建自定义日志模块，对 gorm 日志进行拦截、
-func redefineLog() gormLog.Interface {
-	return createCustomeGormLog(
+func redefineLog(sqlType string) gormLog.Interface {
+	return createCustomGormLog(sqlType,
 		SetInfoStrFormat("[info] %s\n"), SetWarnStrFormat("[warn] %s\n"), SetErrStrFormat("[error] %s\n"),
 		SetTraceStrFormat("[traceStr] %s [%.3fms] [rows:%v] %s\n"), SetTracWarnStrFormat("[traceWarn] %s %s [%.3fms] [rows:%v] %s\n"), SetTracErrStrFormat("[traceErr] %s %s [%.3fms] [rows:%v] %s\n"))
 }

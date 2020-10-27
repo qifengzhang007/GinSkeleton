@@ -13,7 +13,7 @@ func getPostgreSqlDriver() (*gorm.DB, error) {
 	gormDb, err := gorm.Open(postgres.Open(writeDb), &gorm.Config{
 		SkipDefaultTransaction: true,
 		PrepareStmt:            true,
-		Logger:                 redefineLog(), //本项目骨架接管 gorm v2 自带日志
+		Logger:                 redefineLog("PostgreSql"), //本项目骨架接管 gorm v2 自带日志
 	})
 	if err != nil {
 		//gorm 数据库驱动初始化失败

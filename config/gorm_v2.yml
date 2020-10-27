@@ -1,6 +1,7 @@
 Gormv2: # 只针对 gorm  操作数据库有效
   Mysql:
     IsInitGolobalGormMysql: 0    #是否随程序启动，为gorm db初始化一个全局*gorm.Db(variable.GormDbMysql) ，0 为 不初始化全局变量; 1 为初始化
+    SlowThreshold: 30            # 慢 SQL 阈值(sql执行时间超过此时间单位（秒），就会触发系统日志记录)
     Write:
       Host: "127.0.0.1"
       DataBase: "db_stocks"
