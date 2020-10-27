@@ -23,17 +23,27 @@ func getSqlserverDriver() (*gorm.DB, error) {
 	// 如果开启了读写分离，配置读数据库（resource、read、replicas）
 	if variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.IsOpenReadDb") == 1 {
 		readDb := getDsn("SqlServer", "Read")
-		err := gormDb.Use(dbresolver.Register(dbresolver.Config{
-			//Sources:  []gorm.Dialector{sqlserver.Open(writeDb)}, //  写 操作库， 执行类
+		resolverConf := dbresolver.Config{
 			Replicas: []gorm.Dialector{sqlserver.Open(readDb)}, //  读 操作库，查询类
 			Policy:   dbresolver.RandomPolicy{},                // sources/replicas 负载均衡策略适用于
-		}, "").SetConnMaxIdleTime(time.Minute).
-			SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2.SqlServer.SetConnMaxLifetime") * time.Second).
-			SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.SetMaxIdleConns")).
-			SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.SetMaxOpenConns")))
+		}
+		err := gormDb.Use(dbresolver.Register(resolverConf, "").SetConnMaxIdleTime(time.Second * 30).
+			SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2.SqlServer.Read.SetConnMaxLifetime") * time.Second).
+			SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.Read.SetMaxIdleConns")).
+			SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2.SqlServer.Read.SetMaxOpenConns")))
 		if err != nil {
 			return nil, err
 		}
 	}
-	return gormDb, nil
+
+	// 为主连接设置连接池
+	if rawDb, err := gormDb.DB(); err != nil {
+		return nil, err
+	} else {
+		rawDb.SetConnMaxIdleTime(time.Second * 30)
+		rawDb.SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2.SqlServer.Write.SetConnMaxLifetime") * time.Second)
+		rawDb.SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.SqlServer.SetMaxIdleConns"))
+		rawDb.SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.SqlServer.SetMaxOpenConns"))
+		return gormDb, nil
+	}
 }

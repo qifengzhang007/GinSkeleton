@@ -9,11 +9,11 @@ Gormv2: # 只针对 gorm  操作数据库有效
       User: "root"
       Pass: "DRsXT5ZJ6Oi55LPQ"
       Charset: "utf8"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60    # 连接不活动时的最大生存时间(秒)
       #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
       #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60    # 连接的最大生存时间(秒)
     IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "192.168.8.62"
@@ -38,9 +38,9 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Pass: "secret2017"
       #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
       #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
     IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "127.0.0.1"
@@ -49,6 +49,9 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "Sa"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
 
   PostgreSql:
     IsInitGolobalGormPostgreSql: 0
@@ -59,11 +62,11 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "postgres"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
     #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
     #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
     IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "127.0.0.1"
@@ -72,3 +75,6 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "postgres"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
