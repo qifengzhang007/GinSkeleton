@@ -47,6 +47,21 @@ type tb_user_log struct {
 	Updated_at string `json:"updated_at"`
 }
 
+// code_list表
+type tb_code_lists struct {
+	Code            string
+	Name            string
+	Company_name    string
+	Concepts        string
+	Concepts_detail string
+	Province        string
+	City            string
+	Status          uint8
+	Reamrk          string
+	Created_at      time.Time
+	Updated_at      time.Time
+}
+
 // 如果不自定义，默认使用的是表名的复数形式，即：Tb_user_logs
 func (tb_user_log) TableName() string {
 	return "tb_user_log"
@@ -153,38 +168,26 @@ func TestRawSql(t *testing.T) {
 	fmt.Printf("%v\n", receive)
 
 	//执行类
-	variable.GormDbMysql.Exec("update tb_user_log  set  remark=?  where   id=?", "gorm原生sql执行修改操作", 11)
+	result := variable.GormDbMysql.Exec("update tb_user_log  set  remark=?  where   id=?", "gorm原生sql执行修改操作", 11)
+	if result.RowsAffected < 0 {
+		t.Error("原生sql执行失败，错误详情：", result.Error.Error())
+	}
 }
 
-// 性能测试
-func TestBench(t *testing.T) {
-	// SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_list`  where   id<3500;
+// 性能测试(大量查询计算耗时，评测性能)
+func TestUseTime(t *testing.T) {
+	//循环查询100次，每次查询3500条数据，累计查询数据量为 35 万, 计算总耗时
+	var receives []tb_code_lists
+	var time1 = time.Now()
+	for i := 0; i < 100; i++ {
 
-	type tb_code_lists struct {
-		Code            string
-		Name            string
-		Company_name    string
-		Concepts        string
-		Concepts_detail string
-		Province        string
-		City            string
-		Status          uint8
-		Reamrk          string
-		Created_at      time.Time
-		Updated_at      time.Time
+		variable.GormDbMysql.Model(tb_code_lists{}).Select("code", "name", "company_name", "concepts", "concepts_detail", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<=?", 3500).Find(&receives)
+
+		receives = make([]tb_code_lists, 0)
 	}
-	//循环查询100次，每次查询3500条数据，计算总耗时
-	//var receives []tb_code_lists
-	//var time1 = time.Now()
-	//for i := 0; i < 100; i++ {
-	//
-	//	variable.GormDbMysql.Model(tb_code_lists{}).Select("code", "name", "company_name", "concepts", "concepts_detail", "province", "city", "remark", "status", "created_at", "updated_at").Where("id<?", 3500).Find(&receives)
-	//
-	//	receives = make([]tb_code_lists, 0)
-	//}
-	//fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
-	//  经过测试，遍历处理35万条数据，需要 4.002 秒
-	//fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds())
+	fmt.Printf("gorm数据遍历完毕：最后一次条数：%d\n", len(receives))
+	//经过测试，遍历处理35万条数据，需要 4.002 秒
+	fmt.Printf("本次耗时（毫秒）：%d\n", time.Now().Sub(time1).Milliseconds())
 
 	//  直接使用 gorm 的原生
 	//for i:=0;i<100;i++{
@@ -192,10 +195,13 @@ func TestBench(t *testing.T) {
 	//	variable.GormDbMysql.Raw("SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_lists`  where id<3500 ").Find(&receives)
 	//}
 	//fmt.Printf("gorm 原生sql数据遍历完毕：最后一次条数：%d\n",len(receives))
-	//  经过测试，遍历处理35万条数据，需要 4.58 秒
+	//// 经过测试，遍历处理35万条数据，需要 4.58 秒
 	//fmt.Printf("本次耗时（毫秒）：%d\n",time.Now().Sub(time1).Milliseconds())
+}
 
-	//  并发性能测试，同时测试连接池
+// 性能测试(并发与连接池)
+func TestCocurrent(t *testing.T) {
+	// SELECT   `code`,  `name`,  `company_name`,  `concepts`,  `concepts_detail`,  `province`,  `city`,  `remark`,  `status`,  `created_at`,  `updated_at` FROM `tb_code_list`  where   id<3500;
 	var wg sync.WaitGroup
 	// 数据库的并发最大连接数建议设置为 128, 后续测试将通过测试数据验证
 	var conNum = make(chan uint16, 128)
