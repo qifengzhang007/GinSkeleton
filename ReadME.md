@@ -19,28 +19,30 @@
 >   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0` , 特别说明：以上命令执行时后面不要有空格，否则报错!    
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
-###    项目骨架主线逻辑  
+###    <font color="red">项目骨架主线、核心逻辑</font>  
 >   1.这部分主要介绍了`项目初始化流程`、`路由`、`表单参数验证器`、`控制器`、`model`、`service` 以及 `websocket` 为核心的主线逻辑.   
 [进入主线逻辑文档](docs/document.md)  
 
 ###    测试用例路由  
 [进入Api接口测试用例文档](docs/api_doc.md)      
 
-###    开发常用模块   
+###    开发常用模块  
+>   随着项目不断完善以下列表模块会陆续增加, 各个模块被贯穿在本项目骨架的主线中, 因此只要掌握主线核心逻辑, 其余在为主线提供服务.  
+
 序号|功能模块 | 文档地址  
 ---|---|---
-1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
-2 | cli命令| [cobra文档](docs/cobra.md) 
-3 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
-4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
-5|aop切面编程| [Aop切面编程](docs/aop.md) 
-6|redis| [redis使用示例](test/redis_test.go) 
-7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
-8|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 测试用例](test/gormv2_test.go) 
-9|日志记录|  [zap高性能日志](docs/zap_log.md) 
-10|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
-11| 验证码|  [验证码](docs/captcha.md)
-12| 全局变量(日志、gorm、配置模块)|  [清单一览](docs/global_variable.md)  
+1| 全局变量(日志、gorm、配置模块)|  [清单一览](docs/global_variable.md)  
+2 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
+3 | cli命令| [cobra文档](docs/cobra.md) 
+4 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
+5|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
+6|aop切面编程| [Aop切面编程](docs/aop.md) 
+7|redis| [redis使用示例](test/redis_test.go) 
+8|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
+9|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 测试用例](test/gormv2_test.go) 
+10|日志记录|  [zap高性能日志](docs/zap_log.md) 
+11|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+12| 验证码|  [验证码](docs/captcha.md)
 13| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
 14|supervisor| [supervisor进程守护](docs/supervisor.md)   
 

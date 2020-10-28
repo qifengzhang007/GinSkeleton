@@ -11,9 +11,9 @@ RawSql:
       User: "root"
       Pass: "DRsXT5ZJ6Oi55LPQ"
       Charset: "utf8"
-      SetMaxIdleConns: 10
-      SetMaxOpenConns: 128
-      SetConnMaxLifetime: 60
+      SetMaxIdleConns: 10               #空闲连接数
+      SetMaxOpenConns: 128              #数据库连接池允许的最大连接数
+      SetConnMaxLifetime: 60            # 连接不活动时的最大生存时间(秒)
       ReConnectInterval: 1              # 数据库连接失败，每次重连时之间间隔秒数
       PingFailRetryTimes: 3
     IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略

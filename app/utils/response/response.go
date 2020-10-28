@@ -46,10 +46,10 @@ func SuccessReturnMsg(c *gin.Context, msg string) {
 	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, "")
 }
 
-// -------------------------- 简易接口错误返回 ----------------------------------
-// 业务内逻辑异常
+// 业务逻辑异常
 func ErrorReturnMsg(c *gin.Context, code int, msg string) {
 	ReturnJson(c, http.StatusBadRequest, code, msg, "")
+	c.Abort()
 }
 
 func ErrorAuthFail(c *gin.Context) {
@@ -65,4 +65,5 @@ func ErrorParam(c *gin.Context, wrongParam interface{}) {
 
 func ErrorSystem(c *gin.Context, msg string) {
 	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, "")
+	c.Abort()
 }

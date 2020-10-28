@@ -42,7 +42,7 @@ func init() {
 	//3.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听， 配置文件操作指针，初始化为全局变量
+	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml、raw_sql.yml)变化的监听， 配置文件操作指针，初始化为全局变量
 	variable.ConfigYml = yml_config.CreateYamlFactory()
 	variable.ConfigYml.ConfigFileChangeListen()
 	// config>gorm_v2.yml 启动文件变化监听事件

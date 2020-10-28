@@ -1,6 +1,7 @@
 Gormv2: # 只针对 gorm  操作数据库有效
   Mysql:
-    IsInitGolobalGormMysql: 1    #是否随程序启动，为gorm db初始化一个全局*gorm.Db(variable.GormDbMysql) ，0 为 不初始化全局变量; 1 为初始化
+    IsInitGolobalGormMysql: 1    # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
+    SlowThreshold: 30            # 慢 SQL 阈值(sql执行时间超过此时间单位（秒），就会触发系统日志记录)
     Write:
       Host: "192.168.8.62"
       DataBase: "db_stocks"
@@ -9,11 +10,11 @@ Gormv2: # 只针对 gorm  操作数据库有效
       User: "root"
       Pass: "Password01!"
       Charset: "utf8"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60    # 连接不活动时的最大生存时间(秒)
       #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
       #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 30
-    SetConnMaxLifetime: 60    # 连接的最大生存时间(秒)
     IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "192.168.8.62"
@@ -28,7 +29,8 @@ Gormv2: # 只针对 gorm  操作数据库有效
       SetConnMaxLifetime: 60
 
   SqlServer:
-    IsInitGolobalGormSqlserver: 0
+    IsInitGolobalGormSqlserver: 0 # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
+    SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
@@ -38,9 +40,9 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Pass: "secret2017"
       #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
       #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
     IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "127.0.0.1"
@@ -49,9 +51,13 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "Sa"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
 
   PostgreSql:
-    IsInitGolobalGormPostgreSql: 0
+    IsInitGolobalGormPostgreSql: 0  # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
+    SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
@@ -59,11 +65,11 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "postgres"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
     #ReConnectInterval: 1    # 保留项,重连数据库间隔秒数
     #PingFailRetryTimes: 3   # 保留项,最大重连次数
-    SetMaxIdleConns: 10
-    SetMaxOpenConns: 128
-    SetConnMaxLifetime: 60
     IsOpenReadDb: 0            # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read  部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "127.0.0.1"
@@ -72,3 +78,6 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Prefix: "tb_"
       User: "postgres"
       Pass: "secret2017"
+      SetMaxIdleConns: 10
+      SetMaxOpenConns: 128
+      SetConnMaxLifetime: 60
