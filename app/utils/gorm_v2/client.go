@@ -69,7 +69,7 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 			return nil, err
 		}
 	}
-	// 为主连接设置连接池(14行返回的数据库驱动指针)
+	// 为主连接设置连接池(43行返回的数据库驱动指针)
 	if rawDb, err := gormDb.DB(); err != nil {
 		return nil, err
 	} else {
