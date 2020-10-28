@@ -24,7 +24,7 @@ func Upload(context *gin.Context, savePath string) bool {
 	var saveErr error
 	if uniqueId, err := snow_flake.CreateSnowFlakeFactory().GetId(); err == nil {
 		saveFileName := fmt.Sprintf("%d%s", uniqueId, file.Filename)
-		saveFileName = md5_encrypt.MD5([]byte(saveFileName)) + path.Ext(saveFileName)
+		saveFileName = md5_encrypt.MD5(saveFileName) + path.Ext(saveFileName)
 
 		if saveErr = context.SaveUploadedFile(file, savePath+saveFileName); saveErr == nil {
 			//  上传成功,返回资源的相对路径，这里请根据实际返回绝对路径或者相对路径
