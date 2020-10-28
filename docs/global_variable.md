@@ -6,27 +6,29 @@
 
 ###  2.gorm 全局变量   
 >   1.请按照配置文件 `congfig/gorm_v2.yml` 中的提示正确配置数据库，开启程序启动初始化数据库参数,程序在启动时会自动为您初始化全局变量.  
->   2.不同类型的数据库全局变量名不一样.  
->   3.更多用法参见单元测试：[gorm_v2单元测试](../test/gormv2_test.go), 本文档我们主要介绍核心原理.      
+>   2.不同类型的数据库全局变量名不一样, 对照关系参见以下代码段说明.    
+>   3.更多用法参见单元测试：[gorm_v2单元测试](../test/gormv2_test.go).  
+>   4.本文档我们主要介绍 gorm 全局变量初始化的核心.        
 ```code 
 
-//  例如：原始语法
+//  例如：原始语法,我们以 mysql 驱动的初始化为例进行说明
 // 1.连接数据库,获取mysql连接
  dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
- db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})  
+ mysqlDb, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})  
+
 // 2.查询
 db.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
 
 
-// 本项目中, `variable.GormDbMysql` 等于 上文中返回的 mysql db 
+// 本项目中, `variable.GormDbMysql` 完全等于上文中返回的 mysqlDb
 variable.GormDbMysql.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
 
-// 为 gorm 操作数据库封装全局变量列表
-variable.GormDbMysql    
-variable.GormDbSqlserver  
-variable.GormDbPostgreSql  
-
+// gorm 数据库驱动与本项目骨架对照关系
+variable.GormDbMysql       <====完全等于==>      gorm.Open(mysql.Open(dsn), &gorm.Config{})    
+variable.GormDbSqlserver   <====完全等于==>      gorm.Open(sqlserver.Open(dsn), &gorm.Config{})    
+variable.GormDbPostgreSql  <====完全等于==>      gorm.Open(postgres.Open(dsn), &gorm.Config{})   
 ```
+
 
 ###  3.日志全局变量  
 >   1.为了随意、方便地记录项目中日志，我们封装了全局变量 `variable.ZapLog` .  
