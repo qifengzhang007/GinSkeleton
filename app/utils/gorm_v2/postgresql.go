@@ -27,7 +27,7 @@ func getPostgreSqlDriver() (*gorm.DB, error) {
 			Replicas: []gorm.Dialector{postgres.Open(readDb)}, //  读 操作库，查询类
 			Policy:   dbresolver.RandomPolicy{},
 		}
-		err := gormDb.Use(dbresolver.Register(resolverConf, "").SetConnMaxIdleTime(time.Second * 30).
+		err := gormDb.Use(dbresolver.Register(resolverConf).SetConnMaxIdleTime(time.Second * 30).
 			SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2.PostgreSql.Read.SetConnMaxLifetime") * time.Second).
 			SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2.PostgreSql.Read.SetMaxIdleConns")).
 			SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2.PostgreSql.Read.SetMaxOpenConns")))
