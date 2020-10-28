@@ -29,7 +29,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
       SetConnMaxLifetime: 60
 
   SqlServer:
-    IsInitGolobalGormSqlserver: 0
+    IsInitGolobalGormSqlserver: 0 # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
     SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
@@ -56,7 +56,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
       SetConnMaxLifetime: 60
 
   PostgreSql:
-    IsInitGolobalGormPostgreSql: 0
+    IsInitGolobalGormPostgreSql: 0  # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
     SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
