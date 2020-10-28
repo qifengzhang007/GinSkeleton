@@ -11,7 +11,6 @@ func ReturnJson(Context *gin.Context, httpCode int, dataCode int, msg string, da
 
 	//Context.Header("key2020","value2020")  	//可以根据实际情况在头部添加额外的其他信息
 
-	// 返回 json数据
 	Context.JSON(httpCode, gin.H{
 		"code": dataCode,
 		"msg":  msg,
@@ -25,30 +24,16 @@ func ReturnJsonFromString(Context *gin.Context, httpCode int, jsonStr string) {
 	Context.String(httpCode, jsonStr)
 }
 
-// -------------------------- 简易接口成功返回 ----------------------------------
+// 语法糖函数封装
+
 // 直接返回成功
-func SuccessReturn(c *gin.Context) {
-	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, "ok", "")
-}
-
-// 仅返回成功数据
-func SuccessReturnData(c *gin.Context, data interface{}) {
-	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, "ok", data)
-}
-
-// 返回成功数据加信息
-func SuccessReturnDataMsg(c *gin.Context, data interface{}, msg string) {
+func Success(c *gin.Context, msg string, data interface{}) {
 	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, data)
 }
 
-// 仅返回成功信息
-func SuccessReturnMsg(c *gin.Context, msg string) {
-	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, "")
-}
-
 // 业务逻辑异常
-func ErrorReturnMsg(c *gin.Context, code int, msg string) {
-	ReturnJson(c, http.StatusBadRequest, code, msg, "")
+func Fail(c *gin.Context, msg string, data interface{}) {
+	ReturnJson(c, http.StatusBadRequest, http.StatusBadRequest, msg, data)
 	c.Abort()
 }
 
