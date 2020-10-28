@@ -74,9 +74,15 @@ func TestGormSelect(t *testing.T) {
 	var roles []tb_roles
 
 	// tb_users 查询数据会从  db_test 查询
-	variable.GormDbMysql.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
+	result := variable.GormDbMysql.Select("id", "name", "phone", "email", "remark").Where("name  like ?", "%test%").Find(&users)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
+	}
 	fmt.Printf("tb_users表数据：%v\n", users)
-	variable.GormDbMysql.Model(tb_roles{}).Where("name  like ?", "%test%").Find(&roles)
+	result = variable.GormDbMysql.Model(tb_roles{}).Where("name  like ?", "%test%").Find(&roles)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
+	}
 	fmt.Printf("tb_roles表数据：%v\n", roles)
 }
 
