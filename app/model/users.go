@@ -10,11 +10,11 @@ import (
 // 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *UsersModel {
-	return &UsersModel{Model: Model{DB: useDbConn(sqlType)}}
+	return &UsersModel{model: model{DB: useDbConn(sqlType)}}
 }
 
 type UsersModel struct {
-	Model       `json:"-"`
+	model       `json:"-"`
 	UserName    string `gorm:"column:user_name" json:"user_name" form:"user_name"`
 	Pass        string `json:"pass" form:"pass"`
 	Phone       string `json:"phone" form:"phone"`

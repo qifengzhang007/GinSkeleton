@@ -8,7 +8,7 @@ import (
 	"goskeleton/app/global/variable"
 )
 
-type Model struct {
+type model struct {
 	*gorm.DB
 	Id int64 `gorm:"primary_key" json:"id" example:"主键ID"`
 }
