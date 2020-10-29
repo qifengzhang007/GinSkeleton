@@ -17,6 +17,7 @@ const (
 	// 数据库部分
 	ErrorsDbDriverNotExists        string = "数据库驱动类型不存在,目前支持的数据库类型：mysql、sqlserver、postgresql，您提交数据库类型："
 	ErrorsDbSqlDriverInitFail      string = "数据库驱动初始化失败"
+	ErrorsDialectorDbInitFail      string = "gorm dialector 初始化失败,dbType:"
 	ErrorsDbSqlWriteReadInitFail   string = "数据库读写分离支持的单次：Write、Read，您提交的读写分离单词："
 	ErrorsDbGetConnFail            string = "从数据库连接池获取一个连接失败，超过最大连接重试次数."
 	ErrorsDbPrepareRunFail         string = "sql语句预处理（prepare）失败"

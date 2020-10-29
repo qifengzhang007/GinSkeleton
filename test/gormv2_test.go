@@ -11,6 +11,7 @@ import (
 
 //  gorm v2  操作数据库单元测试
 // 测试本篇首先保证 config/gorm_v2.yml 文件配置正确，相关配置项 IsInitGolobalGormMysql = 1
+// 本文件测试到的相关数据表由于数据量较大, 最终的数据库文件没有放置在本项目骨架中，如果你动手能力很强，可以通过 issue 留言获取，重新进行测试
 // 更多使用用法参见官方文档：https://gorm.io/zh_CN/docs/v2_release_note.html
 
 // 模拟创建 3 个数据表，请在数据库按照结构体字段自行创建，字段全部使用小写
@@ -21,6 +22,7 @@ type tb_users struct {
 	Addr       string `json:"addr"`
 	Email      string `json:"email"`
 	Phone      string `json:"phone"`
+	Remark     string `json:"remark"`
 	Created_at string `json:"created_at"`
 	Updated_at string `json:"updated_at"`
 }
@@ -92,7 +94,7 @@ func TestGormInsert(t *testing.T) {
 		User_id:    4,
 		Ip:         "192.168.1.110",
 		Login_time: time.Now().Format("2006-01-02 15:04:05"),
-		Remark:     "备注信息001",
+		Remark:     "备注信息1028",
 		Created_at: time.Now().Format("2006-01-02 15:04:05"),
 		Updated_at: time.Now().Format("2006-01-02 15:04:05"),
 	}
@@ -244,7 +246,15 @@ func TestCocurrent(t *testing.T) {
 // 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
 func TestSqlserver(t *testing.T) {
 	var users []tb_users
-	result := variable.GormDbSqlserver.Table("tb_users").Select("").Select("id", "phone", "email", "remark").Where("id > ?", 0).Find(&users)
+
+	// 执行类sql，如果配置了读写分离，该命令会在 write 数据库执行
+	result := variable.GormDbSqlserver.Exec("update   tb_users  set  remark='update 操作 write数据库' where   id=?", 1)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
+	}
+
+	// 查询类，如果配置了读写分离，该命令会在 read 数据库执行
+	result = variable.GormDbSqlserver.Table("tb_users").Select("id", "user_name", "pass", "remark").Where("id > ?", 0).Find(&users)
 	if result.Error != nil {
 		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
 	}
@@ -256,7 +266,14 @@ func TestSqlserver(t *testing.T) {
 // 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
 func TestPostgreSql(t *testing.T) {
 	var users []tb_users
-	result := variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
+
+	// 执行类sql，如果配置了读写分离，该命令会在 write 数据库执行
+	result := variable.GormDbPostgreSql.Exec("update   web.tb_users  set  remark='update 操作 write数据库' where   id=?", 1)
+	if result.Error != nil {
+		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
+	}
+	// 查询类，如果配置了读写分离，该命令会在 read 数据库执行
+	result = variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
 	if result.Error != nil {
 		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
 	}
