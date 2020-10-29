@@ -81,17 +81,17 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 	}
 }
 
-// 获取一个特定类型的 Dialector
+// 获取一个数据库方言(Dialector),通俗的说就是根据不同的连接参数，获取具体的一类数据库的连接指针
 func getDbDialector(sqlType, readWrite string) (gorm.Dialector, error) {
 	var dbDialector gorm.Dialector
-	writeDb := getDsn(sqlType, readWrite)
+	dsn := getDsn(sqlType, readWrite)
 	switch strings.ToLower(sqlType) {
 	case "mysql":
-		dbDialector = mysql.Open(writeDb)
+		dbDialector = mysql.Open(dsn)
 	case "sqlserver", "mssql":
-		dbDialector = sqlserver.Open(writeDb)
+		dbDialector = sqlserver.Open(dsn)
 	case "postgres", "postgresql", "postgre":
-		dbDialector = postgres.Open(writeDb)
+		dbDialector = postgres.Open(dsn)
 	default:
 		return nil, errors.New(my_errors.ErrorsDbDriverNotExists + sqlType)
 	}
