@@ -16,14 +16,11 @@ type Users struct {
 
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
-
 	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、GetInt64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名都是小写
 	// 当然也可以通过gin框架的上下文原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
-	name := context.GetString(consts.ValidatorPrefix + "name")
-	pass := context.GetString(consts.ValidatorPrefix + "pass")
-	userIp := context.ClientIP()
-
-	if curd.CreateUserCurdFactory().Register(name, pass, userIp) {
+	data := model.UsersModel{}
+	context.ShouldBind(&data)
+	if curd.CreateUserCurdFactory().Register(&data) {
 		response.ReturnJson(context, http.StatusOK, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, "")
 	} else {
 		response.ReturnJson(context, http.StatusOK, consts.CurdRegisterFailCode, consts.CurdRegisterFailMsg, "")
@@ -38,8 +35,9 @@ func (u *Users) Login(context *gin.Context) {
 
 	userModel := model.CreateUserFactory("").Login(name, pass)
 	if userModel != nil {
+
 		userTokenFactory := userstoken.CreateUserFactory()
-		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.Username, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
+		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.UserName, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
 			if userTokenFactory.RecordLoginToken(userToken, context.ClientIP()) {
 				data := gin.H{
 					"userId":     userModel.Id,
