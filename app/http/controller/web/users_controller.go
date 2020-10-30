@@ -85,7 +85,7 @@ func (u *Users) Show(context *gin.Context) {
 func (u *Users) Store(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
-	realName := context.GetString(consts.ValidatorPrefix + "realName")
+	realName := context.GetString(consts.ValidatorPrefix + "real_name")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 	remark := context.GetString(consts.ValidatorPrefix + "remark")
 
