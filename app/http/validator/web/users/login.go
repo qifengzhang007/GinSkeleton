@@ -11,7 +11,7 @@ import (
 type Login struct {
 	Base
 	Pass    string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //  密码为 必填，长度>=6
-	Captcha string `form:"captcha" json:"captcha" binding:"required,len=4"`  //  验证码，必填，长度为：4
+	Captcha string `form:"captcha" json:"captcha"`                           //  验证码 ,如果不需要任何校验，删除 binding 标签即可
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
