@@ -263,7 +263,7 @@ func TestSqlserver(t *testing.T) {
 
 //  PostgreSql 数据库测试
 // 请在配置项 config > gorm_v2.yml 中，PostgreSql 部分，正确配置数据库参数。
-// 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
+// 设置 IsInitGolobalGormPostgreSql =1 ，程序自动初始化全局变量
 func TestPostgreSql(t *testing.T) {
 	var users []tb_users
 
