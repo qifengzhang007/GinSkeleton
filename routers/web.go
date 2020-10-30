@@ -57,7 +57,7 @@ func InitWebRouter() *gin.Engine {
 		verifyCode.GET("/:captchaId/:value", (&chaptcha.Captcha{}).CheckCode) // 校验验证码
 	}
 	//  创建一个后端接口路由组
-	backend := router.Group("/Admin/")
+	backend := router.Group("/admin/")
 	{
 		// 创建一个websocket,如果ws需要账号密码登录才能使用，就写在需要鉴权的分组，这里暂定是开放式的，不需要严格鉴权，我们简单验证一下token值
 		backend.GET("ws", validatorFactory.Create(consts.ValidatorPrefix+"WebsocketConnect"))
