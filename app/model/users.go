@@ -32,7 +32,7 @@ func (u *UsersModel) TableName() string {
 // 用户注册（写一个最简单的使用账号、密码注册即可）
 func (u *UsersModel) Register(userName, pass, userIp string) bool {
 	sql := "INSERT  INTO tb_users(user_name,pass,last_login_ip) SELECT ?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  user_name=?)"
-	result := u.Debug().Exec(sql, userName, pass, userIp, userName)
+	result := u.Exec(sql, userName, pass, userIp, userName)
 	if result.RowsAffected > 0 {
 		return true
 	} else {
