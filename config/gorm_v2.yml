@@ -5,11 +5,11 @@ Gormv2: # 只针对 gorm  操作数据库有效
     SlowThreshold: 30            # 慢 SQL 阈值(sql执行时间超过此时间单位（秒），就会触发系统日志记录)
     Write:
       Host: "192.168.8.62"
-      DataBase: "db_stocks"
+      DataBase: "db_goskeleton"
       Port: 3308                        #注意，非3306，请自行调整
       Prefix: "tb_"
       User: "root"
-      Pass: "Password01!"
+      Pass: "yourPass"
       Charset: "utf8"
       SetMaxIdleConns: 10
       SetMaxOpenConns: 128
@@ -19,7 +19,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
     IsOpenReadDb: 0                     # 是否开启读写分离配置（1=开启、0=关闭），IsOpenReadDb=1,Read 部分参数有效，否则Read部分参数直接忽略
     Read:
       Host: "192.168.8.62"
-      DataBase: "db_stocks"
+      DataBase: "db_goskeleton"
       Port: 3308                        #注意，非3306，请自行调整
       Prefix: "tb_"
       User: "root"
