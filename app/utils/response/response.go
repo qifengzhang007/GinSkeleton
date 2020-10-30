@@ -10,7 +10,6 @@ import (
 func ReturnJson(Context *gin.Context, httpCode int, dataCode int, msg string, data interface{}) {
 
 	//Context.Header("key2020","value2020")  	//可以根据实际情况在头部添加额外的其他信息
-
 	Context.JSON(httpCode, gin.H{
 		"code": dataCode,
 		"msg":  msg,
@@ -31,24 +30,27 @@ func Success(c *gin.Context, msg string, data interface{}) {
 	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, data)
 }
 
-// 业务逻辑异常
-func Fail(c *gin.Context, msg string, data interface{}) {
-	ReturnJson(c, http.StatusBadRequest, http.StatusBadRequest, msg, data)
+// 失败的业务逻辑
+func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
+	ReturnJson(c, http.StatusBadRequest, dataCode, msg, data)
 	c.Abort()
 }
 
+//权限校验失败
 func ErrorAuthFail(c *gin.Context) {
 	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
 	//暂停执行
 	c.Abort()
 }
 
+//参数校验错误
 func ErrorParam(c *gin.Context, wrongParam interface{}) {
 	ReturnJson(c, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, wrongParam)
 	c.Abort()
 }
 
-func ErrorSystem(c *gin.Context, msg string) {
-	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, "")
+// 系统执行代码错误
+func ErrorSystem(c *gin.Context, msg string, data interface{}) {
+	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, data)
 	c.Abort()
 }

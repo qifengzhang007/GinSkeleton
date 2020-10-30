@@ -1,16 +1,17 @@
 package model
 
 import (
-	"errors"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
+	"time"
 )
 
-type model struct {
-	*gorm.DB
-	Id int64 `gorm:"primary_key" json:"id" example:"主键ID"`
+type Model struct {
+	*gorm.DB  `gorm:"-"	json:"-"`
+	Id        int64     `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func useDbConn(sqlType string) *gorm.DB {
@@ -23,7 +24,7 @@ func useDbConn(sqlType string) *gorm.DB {
 	case "postgres":
 		db = variable.GormDbPostgreSql
 	default:
-		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists, zap.Error(errors.New("模拟一个错误")))
+		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + sqlType)
 	}
 	return db
 }
