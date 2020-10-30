@@ -19,7 +19,7 @@ func (s Show) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
 	if err := context.ShouldBind(&s); err != nil {
 		errs := gin.H{
-			"tips": "UserShow参数校验失败，参数不符合规定，name（不能为空）、page的值(>0)、limits的值（>0)",
+			"tips": "UserShow参数校验失败，参数不符合规定，user_name（长度>0）、page的值(>0)、limits的值（>0)",
 			"err":  err.Error(),
 		}
 		response.ErrorParam(context, errs)
