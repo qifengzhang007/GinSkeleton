@@ -48,9 +48,6 @@ func init() {
 	// config>gorm_v2.yml 启动文件变化监听事件
 	variable.ConfigGormv2Yml = variable.ConfigYml.Clone("gorm_v2")
 	variable.ConfigGormv2Yml.ConfigFileChangeListen()
-	// config>raw_sql.yml 启动文件变化监听事件
-	variable.ConfigRawSqlYml = variable.ConfigYml.Clone("raw_sql")
-	variable.ConfigRawSqlYml.ConfigFileChangeListen()
 
 	// 5.初始化全局日志句柄，并载入日志钩子处理函数
 	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
