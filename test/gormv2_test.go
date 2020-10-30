@@ -273,7 +273,7 @@ func TestPostgreSql(t *testing.T) {
 		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
 	}
 	// 查询类，如果配置了读写分离，该命令会在 read 数据库执行
-	result = variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
+	result = variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "user_name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
 	if result.Error != nil {
 		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
 	}
