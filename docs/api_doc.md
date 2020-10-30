@@ -56,9 +56,8 @@
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-name|form-data|string|必填|admin123
-pass|form-data|string|必填|123456abc
-phone|form-data|string|必填|1360177xxxx
+user_name|form-data|string|必填|goskeleton1.4  
+pass|form-data|string|必填|goskeleton1.4  
 > 返回示例：
 ```json
 {
@@ -73,32 +72,32 @@ phone|form-data|string|必填|1360177xxxx
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-user_name/form-data|string|必填|admin123
-pass|form-data|string|必填|123456abc
+user_name/form-data|string|必填|goskeleton1.4
+pass|form-data|string|必填|goskeleton1.4
 captcha|form-data|string|非必填|1360177xxxx
 > 返回示例：
 ```json
 {
     "code": 200,
     "data": {
-        "user_name": "admin123",
         "phone": "",
-        "real_name": "",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU",
-        "updated_at": "2020-04-30 16:36:17",
-        "userid": 14
+        "realName": "",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A",
+        "updated_at": "2020-10-30 17:02:53",
+        "userId": 47,
+        "user_name": "goskeleton1.4"
     },
     "msg": "Success"
 }
 ```  
 
 ####    3.根据关键词查询用户表      
->    <font color=#FF4500>*get*，/admin/users/index   ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个行业标准，网页端显示换行，不要被误导! 
+>    <font color=#FF4500>*get*，/admin/users/index   ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个是行业标准，网页端显示换行，不要被误导! 
 >   CURD相关的其他接口格式与本接口基本一致，例如：/admin/users/create、/admin/users/edit、/admin/users/delete，只不过表单参数不一致。    
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A
 user_name|form-data|string|必填|a
 page|form-data|int|必填|1
 limits|form-data|int|必填|20
@@ -107,14 +106,26 @@ limits|form-data|int|必填|20
 ```json
 {
     "code": 200,
-    "data": {
-        "user_name": "admin123",
-        "phone": "",
-        "real_name": "",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU",
-        "updated_at": "2020-04-30 16:36:17",
-        "userid": 14
-    },
+    "data": [
+            {
+                "user_name": "goskeleton1.4",
+                "pass": "",
+                "phone": "",
+                "real_name": "",
+                "status": 1,
+                "token": "",
+                "last_login_ip": ""
+            },
+            {
+                "user_name": "hello2008",
+                "pass": "",
+                "phone": "1660177xxxx",
+                "real_name": "测试姓名",
+                "status": 1,
+                "token": "",
+                "last_login_ip": ""
+            }
+],
     "msg": "Success"
 }
 ```  
@@ -124,14 +135,14 @@ limits|form-data|int|必填|20
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU  
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A  
 
 > 返回示例：
 ```json
 {
     "code": 200,
     "data": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyNDQxMDYsIm5iZiI6MTU4ODIzNTc2N30.Yaxah-3GdK6lFOxRaDGAiZ1vBh66uN8vL1mnxcVnlOQ"
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTYxMDcsIm5iZiI6MTYwNDA0ODU2M30.JPE6G-9YE9UTdxHiWuvdVlD-akiIkvp6Ezf9y4_ud9M"
     },
     "msg": "Success"
 }
@@ -142,14 +153,14 @@ Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjE0LCJuYW1lIjoiIiwicGhvbmUiOiIiLCJleHAiOjE1ODgyMzkzNzcsIm5iZiI6MTU4ODIzNTc2N30.jOGFKEitESsaT965RNXZMEgG6cVxOCU_pFCacfUU1iU
+Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A
 files|form-data|string|必填|(注意表单键名为files，如果需要修改成别的键名，参见：App\Global\Variable\Variable.go ，UploadFileField=files)
 > 返回示例：
 ```json
 {
     "code": 200,
     "data": {
-        "path": "E:\\GO\\TestProject\\goskeleton/Storage/app/uploaded/9c7e67955cfc32b3399695c3ae814bef.png"
+        "path": "/storage/app/uploaded/3c5d5f59484cad593e46d7fe0c6b078e.sql"
     },
     "msg": "Success"
 }
