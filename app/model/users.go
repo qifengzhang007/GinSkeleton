@@ -15,13 +15,13 @@ func CreateUserFactory(sqlType string) *UsersModel {
 
 type UsersModel struct {
 	Model       `json:"-"`
-	UserName    string `gorm:"column:user_name" json:"user_name" form:"user_name"`
+	UserName    string `gorm:"column:user_name" json:"user_name"`
 	Pass        string `json:"pass" form:"pass"`
 	Phone       string `json:"phone" form:"phone"`
-	RealName    string `gorm:"column:real_name" json:"real_name" form:"real_name"`
+	RealName    string `gorm:"column:real_name" json:"real_name"`
 	Status      int    `json:"status" form:"status"`
 	Token       string `json:"token" form:"token"`
-	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip" form:"last_login_ip"`
+	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
 }
 
 // 表名
@@ -42,7 +42,7 @@ func (u *UsersModel) Register(userName, pass, userIp string) bool {
 
 // 用户登录,
 func (u *UsersModel) Login(userName string, pass string) *UsersModel {
-	sql := "select id, user_name,pass,phone  from tb_users where  user_name=?  limit 1"
+	sql := "select id, user_name,real_name,pass,phone  from tb_users where  user_name=?  limit 1"
 	result := u.Raw(sql, userName).First(u)
 	if result.Error == nil {
 		// 账号密码验证成功
