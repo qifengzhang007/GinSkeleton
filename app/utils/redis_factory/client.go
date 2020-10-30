@@ -6,7 +6,6 @@ import (
 	"goskeleton/app/core/event_manage"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 	"time"
 )
 
@@ -16,27 +15,25 @@ func init() {
 	redisPool = initRedisClientPool()
 }
 func initRedisClientPool() *redis.Pool {
-
-	configFac := yml_config.CreateYamlFactory()
 	redisPool = &redis.Pool{
-		MaxIdle:     configFac.GetInt("Redis.MaxIdle"),                        //最大空闲数
-		MaxActive:   configFac.GetInt("Redis.MaxActive"),                      //最大活跃数
-		IdleTimeout: configFac.GetDuration("Redis.IdleTimeout") * time.Second, //最大的空闲连接等待时间，超过此时间后，空闲连接将被关闭
+		MaxIdle:     variable.ConfigYml.GetInt("Redis.MaxIdle"),                        //最大空闲数
+		MaxActive:   variable.ConfigYml.GetInt("Redis.MaxActive"),                      //最大活跃数
+		IdleTimeout: variable.ConfigYml.GetDuration("Redis.IdleTimeout") * time.Second, //最大的空闲连接等待时间，超过此时间后，空闲连接将被关闭
 		Dial: func() (redis.Conn, error) {
 			//此处对应redis ip及端口号
-			conn, err := redis.Dial("tcp", configFac.GetString("Redis.Host")+":"+configFac.GetString("Redis.Port"))
+			conn, err := redis.Dial("tcp", variable.ConfigYml.GetString("Redis.Host")+":"+variable.ConfigYml.GetString("Redis.Port"))
 			if err != nil {
 				variable.ZapLog.Error(my_errors.ErrorsRedisInitConnFail + err.Error())
 				return nil, err
 			}
-			auth := configFac.GetString("Redis.Auth") //通过配置项设置redis密码
+			auth := variable.ConfigYml.GetString("Redis.Auth") //通过配置项设置redis密码
 			if len(auth) >= 1 {
 				if _, err := conn.Do("AUTH", auth); err != nil {
 					_ = conn.Close()
 					variable.ZapLog.Error(my_errors.ErrorsRedisAuthFail + err.Error())
 				}
 			}
-			_, _ = conn.Do("select", configFac.GetInt("Redis.IndexDb"))
+			_, _ = conn.Do("select", variable.ConfigYml.GetInt("Redis.IndexDb"))
 			return conn, err
 		},
 	}
@@ -49,8 +46,7 @@ func initRedisClientPool() *redis.Pool {
 
 //  从连接池获取一个redis连接
 func GetOneRedisClient() *RedisClient {
-	configFac := yml_config.CreateYamlFactory()
-	maxRetryTimes := configFac.GetInt("Redis.ConnFailRetryTimes")
+	maxRetryTimes := variable.ConfigYml.GetInt("Redis.ConnFailRetryTimes")
 	var oneConn redis.Conn
 	for i := 1; i <= maxRetryTimes; i++ {
 		oneConn = redisPool.Get()
@@ -61,7 +57,7 @@ func GetOneRedisClient() *RedisClient {
 				return nil
 			}
 			//如果出现网络短暂的抖动，短暂休眠后，支持自动重连
-			time.Sleep(time.Second * configFac.GetDuration("Redis.ReConnectInterval"))
+			time.Sleep(time.Second * variable.ConfigYml.GetDuration("Redis.ReConnectInterval"))
 		} else {
 			break
 		}
@@ -79,8 +75,8 @@ func (r *RedisClient) Execute(cmd string, args ...interface{}) (interface{}, err
 	return r.client.Do(cmd, args...)
 }
 
-// 释放连接池
-func (r *RedisClient) ReleaseOneRedisClientPool() {
+// 释放连接到连接池
+func (r *RedisClient) ReleaseOneRedisClient() {
 	_ = r.client.Close()
 }
 

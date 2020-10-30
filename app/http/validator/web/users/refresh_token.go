@@ -5,7 +5,6 @@ import (
 	"goskeleton/app/global/consts"
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/utils/response"
-	"net/http"
 	"strings"
 )
 
@@ -23,7 +22,7 @@ func (r RefreshToken) CheckParams(context *gin.Context) {
 			"tips": "Token参数校验失败，参数不符合规定，token 长度>=20",
 			"err":  err.Error(),
 		}
-		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
+		response.ErrorParam(context, errs)
 		return
 	}
 	token := strings.Split(r.Authorization, " ")
@@ -34,7 +33,7 @@ func (r RefreshToken) CheckParams(context *gin.Context) {
 		errs := gin.H{
 			"tips": "Token不合法，token请放置在header头部分，按照按=>键提交，例如：Authorization：Bearer 你的实际token....",
 		}
-		response.ReturnJson(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, errs)
+		response.Fail(context, consts.JwtTokenFormatErrCode, consts.JwtTokenFormatErrMsg, errs)
 	}
 
 }

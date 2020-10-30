@@ -2,19 +2,18 @@ package work_queue
 
 import (
 	"github.com/streadway/amqp"
-	"goskeleton/app/utils/yml_config"
+	"goskeleton/app/global/variable"
 	"time"
 )
 
 func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.WorkQueue.Addr"))
-	queueName := configFac.GetString("RabbitMq.WorkQueue.QueueName")
-	dura := configFac.GetBool("RabbitMq.WorkQueue.Durable")
-	chanNumber := configFac.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
-	reconnectInterval := configFac.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
-	retryTimes := configFac.GetInt("RabbitMq.WorkQueue.RetryCount")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.WorkQueue.Addr"))
+	queueName := variable.ConfigYml.GetString("RabbitMq.WorkQueue.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.WorkQueue.Durable")
+	chanNumber := variable.ConfigYml.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
+	reconnectInterval := variable.ConfigYml.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
+	retryTimes := variable.ConfigYml.GetInt("RabbitMq.WorkQueue.RetryCount")
 
 	if err != nil {
 		return nil, err

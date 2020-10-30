@@ -13,8 +13,8 @@ import (
 func TestHttpClient(t *testing.T) {
 	cli := goCurl.CreateHttpClient()
 	if resp, err := cli.Get("http://hq.sinajs.cn/list=sh601360"); err == nil {
-		content, _ := resp.GetContents()
-		if len(content) < 30 {
+		content, err := resp.GetContents()
+		if err != nil {
 			t.Errorf("单元测试未通过,返回值不符合要求：%s\n", content)
 		}
 		t.Log(content)

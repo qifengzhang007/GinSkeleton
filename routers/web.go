@@ -9,7 +9,6 @@ import (
 	"goskeleton/app/http/middleware/authorization"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/yml_config"
 	"io"
 	"net/http"
 	"os"
@@ -20,10 +19,10 @@ import (
 func InitWebRouter() *gin.Engine {
 	var router *gin.Engine
 	// 非调试模式（生产模式） 日志写到日志文件
-	if yml_config.CreateYamlFactory().GetBool("AppDebug") == false {
+	if variable.ConfigYml.GetBool("AppDebug") == false {
 		//1.将日志写入日志文件
 		gin.DisableConsoleColor()
-		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
+		f, _ := os.Create(variable.BasePath + variable.ConfigYml.GetString("Logs.GinLogName"))
 		gin.DefaultWriter = io.MultiWriter(f)
 		// 2.如果是有nginx前置做代理，基本不需要gin框架记录访问日志，开启下面一行代码，屏蔽上面的三行代码，性能提升 5%
 		//gin.SetMode(gin.ReleaseMode)
@@ -36,7 +35,7 @@ func InitWebRouter() *gin.Engine {
 	}
 
 	//根据配置进行设置跨域
-	if yml_config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
+	if variable.ConfigYml.GetBool("HttpServer.AllowCrossDomain") {
 		router.Use(cors.Next())
 	}
 
@@ -58,7 +57,7 @@ func InitWebRouter() *gin.Engine {
 		verifyCode.GET("/:captchaId/:value", (&chaptcha.Captcha{}).CheckCode) // 校验验证码
 	}
 	//  创建一个后端接口路由组
-	backend := router.Group("/Admin/")
+	backend := router.Group("/admin/")
 	{
 		// 创建一个websocket,如果ws需要账号密码登录才能使用，就写在需要鉴权的分组，这里暂定是开放式的，不需要严格鉴权，我们简单验证一下token值
 		backend.GET("ws", validatorFactory.Create(consts.ValidatorPrefix+"WebsocketConnect"))
@@ -91,9 +90,7 @@ func InitWebRouter() *gin.Engine {
 			{
 				uploadFiles.POST("files", validatorFactory.Create(consts.ValidatorPrefix+"UploadFiles"))
 			}
-
 		}
-
 	}
 	return router
 }

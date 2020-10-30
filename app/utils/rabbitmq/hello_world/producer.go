@@ -3,16 +3,14 @@ package hello_world
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 )
 
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.HelloWorld.Addr"))
-	queueName := configFac.GetString("RabbitMq.HelloWorld.QueueName")
-	dura := configFac.GetBool("RabbitMq.HelloWorld.Durable")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.HelloWorld.Addr"))
+	queueName := variable.ConfigYml.GetString("RabbitMq.HelloWorld.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.HelloWorld.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())

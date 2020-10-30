@@ -3,18 +3,16 @@ package routing
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
 )
 
 // 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Routing.Addr"))
-	exchangeType := configFac.GetString("RabbitMq.Routing.ExchangeType")
-	exchangeName := configFac.GetString("RabbitMq.Routing.ExchangeName")
-	queueName := configFac.GetString("RabbitMq.Routing.QueueName")
-	dura := configFac.GetBool("RabbitMq.Routing.Durable")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.Routing.Addr"))
+	exchangeType := variable.ConfigYml.GetString("RabbitMq.Routing.ExchangeType")
+	exchangeName := variable.ConfigYml.GetString("RabbitMq.Routing.ExchangeName")
+	queueName := variable.ConfigYml.GetString("RabbitMq.Routing.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.Routing.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())

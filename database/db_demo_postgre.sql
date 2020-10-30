@@ -3,7 +3,7 @@
 CREATE TABLE web.tb_users
 (
     id serial ,
-    name   varchar(30) ,
+    user_name   varchar(30) ,
     sex int,
     age int,
     addr varchar(120),
@@ -13,7 +13,7 @@ CREATE TABLE web.tb_users
 
 );
 
-insert  into  web.tb_users(name,sex,age,addr,remark,created_at,updated_at)  values
+insert  into  web.tb_users(user_name,sex,age,addr,remark,created_at,updated_at)  values
 ('goskeleton1',1,18,'postgresql 测试数据_postgre','备注信息001',current_date,current_date),
 ('goskeleton2',1,18,'postgresql 测试数据_postgre2','备注信息002',current_date,current_date),
 ('goskeleton3',1,18,'postgresql 测试数据_postgre3','备注信息003',current_date,current_date),

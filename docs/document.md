@@ -29,7 +29,7 @@
         register_validator.RegisterValidator()
     
         // 5.websocket Hub中心启动
-        if yml_config.CreateYamlFactory().GetInt("Websocket.Start") == 1 {
+        if variable.ConfigYml.GetInt("Websocket.Start") == 1 {
             // websocket 管理中心hub全局初始化一份
             variable.WebsocketHub = core.CreateHubFactory()
             if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
@@ -47,7 +47,8 @@
     //1.首先编写参数验证器逻辑，例如：用户注册模块
     // 详情参见：app\http\validator\web\users\register.go
 
-    //2.将以上编写好的表单参数验证器进行注册，便于程序启动时自动加载到容器，路由则从容器调用
+    //2.将以上编写好的表单参数验证器进行注册，便于程序启动时自动加载到容器，在路由定义处我们根据注册时的键，就可以直接调用相关的验证器代码段
+    // 例如 我们注册该验证器的键： consts.ValidatorPrefix + "UsersRegister" ，程序启动时会自动加载到容器
     // 详情参见：app\http\validator\common\register_validator\register_validator.go
 
 ```   
@@ -60,6 +61,7 @@
 		//  【不需要】中间件验证的路由  用户注册、登录
 		v_noAuth := V_Backend.Group("users/")
 		{
+            // 参数2说明： validatorFactory.Create(Consts.ValidatorPrefix+"UsersRegister") 该函数就是按照键直接从容器获取验证器代码
 			v_noAuth.POST("register", validatorFactory.Create(Consts.ValidatorPrefix+"UsersRegister"))
 		}
 
@@ -100,7 +102,7 @@
         ...
 	    context.Next()   // OK 下一步
         }else{
-        	context.Abort()  // 不 OK 终止请求
+        	context.Abort()  // 不 OK 终止已注册代码执行
         }
 
 ```
@@ -110,26 +112,34 @@
 ```go  
 type Register struct {
 	Base
-	Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
-	Pass  string `form:"pass" json:"pass" binding:"required,min=3,max=20"` //必填，密码长度范围：【3,20】闭区间
+	Pass string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //必填，密码长度范围：【6,20】闭区间
+	//Captcha string `form:"captcha" json:"captcha" binding:"required,len=4"` //  验证码，必填，长度为：4
+	//Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
+	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
-// 函数名称受验证器接口约束，命名必须是：CheckParams
+
 func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
-	if err := context.ShouldBind(r); err != nil {
-        ....
-        return
+	if err := context.ShouldBind(&r); err != nil {
+		errs := gin.H{
+			"tips": "UserRegister参数校验失败，参数不符合规定，user_name 长度(>=1)、pass长度[6,20]、不允许注册",
+			"err":  err.Error(),
+		}
+		response.ErrorParam(context, errs)
+		return
+	}
+	//2.继续验证具有中国特色的参数，例如 身份证号码等，基本语法校验了长度18位，然后可以自行编写正则表达式等更进一步验证每一部分组成
+	// r.CardNo  获取值继续校验，这里省略.....
+
+	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	extraAddBindDataContext := data_transfer.DataAddContext(r, consts.ValidatorPrefix, context)
+	if extraAddBindDataContext == nil {
+		response.ErrorSystem(context, "UserRegister表单验证器json化失败", "")
+	} else {
+		// 验证完成，调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
+		(&web.Users{}).Register(extraAddBindDataContext)
 	}
 
-	//  该函数主要是将验证器绑定的字段（成员）以 键=>值 形式直接传递给下一步（控制器）
-    //  数据的绑定规则按照 json 标签定义的键为准!
-	extraAddBindDataContext := DaTaTransfer.DataAddContext(r, Consts.ValidatorPrefix, context)
-	if extraAddBindDataContext == nil {
-		response.returnJson(context, http.StatusInternalServerError, Consts.ServerOccurredErrorCode, Consts.ServerOccurredErrorMsg+",UserRegister表单验证器json化失败", "")
-	} else {
-		// 验证完成，有验证器调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
-		(&Admin.Users{}).Register(extraAddBindDataContext)
-	}
 }
 
 ``` 
@@ -142,20 +152,15 @@ type Users struct {
 
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
-
-	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、Getint64()、GetFloat64（）等快捷获取需要的数据类型
-	// 当然也可以通过gin框架的上下缘原始方法获取，例如： context.PostForm("name") 获取，这样获取的数据格式为文本，需要自己继续转换
-	name := context.GetString(Consts.ValidatorPrefix + "name")
-	pass := context.GetString(Consts.ValidatorPrefix + "pass")
-	user_ip := context.ClientIP()
-
-    // 如果对参数需要进一步加工，建议将业务逻辑切换到service层进行处理，将处理结果返回
-    // 如果参数可以直接进行写库存储，那么可以直接调用 Model 的具体业务模型方法即可 
-
-	if Curd.CreateUserCurdFactory().Register(name, pass, user_ip) {
-		response.returnJson(context, http.StatusOK, Consts.CurdStatusOkCode, Consts.CurdStatusOkMsg, "")
+	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、GetInt64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名规则：  前缀+验证器结构体中的 json 标签
+	// 当然也可以通过gin框架的上下文原始方法获取，例如： context.PostForm("user_name") 获取，这样获取的数据格式为文本，需要自己继续转换
+	userName := context.GetString(consts.ValidatorPrefix + "user_name")
+	pass := context.GetString(consts.ValidatorPrefix + "pass")
+	userIp := context.ClientIP()
+	if curd.CreateUserCurdFactory().Register(userName, pass, userIp) {
+		response.Success(context, consts.CurdStatusOkMsg, "")
 	} else {
-		response.returnJson(context, http.StatusOK, Consts.CurdRegisterFailCode, Consts.CurdRegisterFailMsg, "")
+		response.Fail(context, consts.CurdRegisterFailCode, consts.CurdRegisterFailMsg, "")
 	}
 }
 ```
@@ -163,24 +168,32 @@ func (u *Users) Register(context *gin.Context) {
 ######   2.5.1 Model业务层，位置：app\models\（XXX业务模块）
 > 控制器调度Model业务模块  
 ```go  
-type usersModel struct {
-	*BaseModel
-	Id       int64  `json:"id"`
-	Username string `json:"username"`
-	Pass     string `json:"-"`
-	Phone    string `json:"phone"`
-	RealName string `json:"realname"`
-	Status   int    `json:"status"`
-	Token    string `json:"-"`
+
+type UsersModel struct {
+	Model       `json:"-"`
+	UserName    string `gorm:"column:user_name" json:"user_name"`
+	Pass        string `json:"pass" form:"pass"`
+	Phone       string `json:"phone" form:"phone"`
+	RealName    string `gorm:"column:real_name" json:"real_name"`
+	Status      int    `json:"status" form:"status"`
+	Token       string `json:"token" form:"token"`
+	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
+}
+
+// 表名
+func (u *UsersModel) TableName() string {
+	return "tb_users"
 }
 
 // 用户注册（写一个最简单的使用账号、密码注册即可）
-func (u *usersModel) Register(username string, pass string, user_ip string) bool {
-	sql := "INSERT  INTO tb_users(username,pass,last_login_ip) SELECT ?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  username=?)"
-	if u.ExecuteSql(sql, username, pass, user_ip, username) > 0 {
+func (u *UsersModel) Register(userName, pass, userIp string) bool {
+	sql := "INSERT  INTO tb_users(user_name,pass,last_login_ip) SELECT ?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  user_name=?)"
+	result := u.Exec(sql, userName, pass, userIp, userName)
+	if result.RowsAffected > 0 {
 		return true
+	} else {
+		return false
 	}
-	return false
 }
 
 ```  
@@ -192,9 +205,9 @@ func (u *usersModel) Register(username string, pass string, user_ip string) bool
 type UsersCurd struct {
 }
  // 预先处理密码加密，然后存储在数据库
-func (u *UsersCurd) Register(name string, pass string, user_ip string) bool {
-	pass = md5Encrypt.Base64Md5(pass)
-	return Model.CreateUserFactory("").Register(name, pass, user_ip)
+func (u *UsersCurd) Register(userName, pass, userIp string) bool {
+	pass = md5_encrypt.Base64Md5(pass) // 预先处理密码加密，然后存储在数据库
+	return model.CreateUserFactory("").Register(userName, pass, userIp)
 }
 
 ```
@@ -220,6 +233,39 @@ func ReturnJsonFromString(Context *gin.Context, http_code int, json_str string) 
 	Context.Header("Content-Type", "application/json; charset=utf-8")
 	Context.String(http_code, json_str)
 }
+}
+
+// v1.4.00 版本之后我们封装了其他一些语法糖函数，进一步精简代码
+// 语法糖函数封装
+
+// 直接返回成功
+func Success(c *gin.Context, msg string, data interface{}) {
+	ReturnJson(c, http.StatusOK, consts.CurdStatusOkCode, msg, data)
+}
+
+// 失败的业务逻辑
+func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
+	ReturnJson(c, http.StatusBadRequest, dataCode, msg, data)
+	c.Abort()
+}
+
+//权限校验失败
+func ErrorAuthFail(c *gin.Context) {
+	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
+	//暂停执行
+	c.Abort()
+}
+
+//参数校验错误
+func ErrorParam(c *gin.Context, wrongParam interface{}) {
+	ReturnJson(c, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, wrongParam)
+	c.Abort()
+}
+
+// 系统执行代码错误
+func ErrorSystem(c *gin.Context, msg string, data interface{}) {
+	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, data)
+	c.Abort()
 }
 
 ```  

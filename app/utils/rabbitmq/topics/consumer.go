@@ -2,20 +2,19 @@ package topics
 
 import (
 	"github.com/streadway/amqp"
-	"goskeleton/app/utils/yml_config"
+	"goskeleton/app/global/variable"
 	"time"
 )
 
 func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
-	configFac := yml_config.CreateYamlFactory()
-	conn, err := amqp.Dial(configFac.GetString("RabbitMq.Topics.Addr"))
-	exchangeType := configFac.GetString("RabbitMq.Topics.ExchangeType")
-	exchangeName := configFac.GetString("RabbitMq.Topics.ExchangeName")
-	queueName := configFac.GetString("RabbitMq.Topics.QueueName")
-	dura := configFac.GetBool("RabbitMq.Topics.Durable")
-	reconnectInterval := configFac.GetDuration("RabbitMq.Topics.OffLineReconnectIntervalSec")
-	retryTimes := configFac.GetInt("RabbitMq.Topics.RetryCount")
+	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.Topics.Addr"))
+	exchangeType := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeType")
+	exchangeName := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeName")
+	queueName := variable.ConfigYml.GetString("RabbitMq.Topics.QueueName")
+	dura := variable.ConfigYml.GetBool("RabbitMq.Topics.Durable")
+	reconnectInterval := variable.ConfigYml.GetDuration("RabbitMq.Topics.OffLineReconnectIntervalSec")
+	retryTimes := variable.ConfigYml.GetInt("RabbitMq.Topics.RetryCount")
 
 	if err != nil {
 		return nil, err

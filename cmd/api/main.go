@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goskeleton/app/utils/yml_config"
+	"goskeleton/app/global/variable"
 	_ "goskeleton/bootstrap"
 	"goskeleton/routers"
 )
@@ -9,5 +9,5 @@ import (
 // 这里可以存放门户类网站入口
 func main() {
 	router := routers.InitApiRouter()
-	_ = router.Run(yml_config.CreateYamlFactory().GetString("HttpServer.Api.Port"))
+	_ = router.Run(variable.ConfigYml.GetString("HttpServer.Api.Port"))
 }

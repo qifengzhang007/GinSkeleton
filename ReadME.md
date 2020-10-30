@@ -19,28 +19,31 @@
 >   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0` , 特别说明：以上命令执行时后面不要有空格，否则报错!    
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
 
-###    项目骨架主线逻辑  
+###    <font color="red">项目骨架主线、核心逻辑</font>  
 >   1.这部分主要介绍了`项目初始化流程`、`路由`、`表单参数验证器`、`控制器`、`model`、`service` 以及 `websocket` 为核心的主线逻辑.   
 [进入主线逻辑文档](docs/document.md)  
 
 ###    测试用例路由  
 [进入Api接口测试用例文档](docs/api_doc.md)      
 
-###    开发常用模块   
+###    开发常用模块  
+>   随着项目不断完善以下列表模块会陆续增加, 各个模块被贯穿在本项目骨架的主线中, 因此只要掌握主线核心逻辑, 其余在为主线提供服务.  
+
 序号|功能模块 | 文档地址  
 ---|---|---
-1 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
-2 | cli命令| [cobra文档](docs/cobra.md) 
-3 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
-4|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
-5|aop切面编程| [Aop切面编程](docs/aop.md) 
-6|redis| [redis使用示例](test/redis_test.go) 
-7|原生sql操作(mysql、sqlserver、postgreSql)| [sql操作示例](docs/sql_stament.md) 
-8|日志记录|  [zap高性能日志](docs/zap_log.md) 
-9|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
-10| 验证码|  [验证码](docs/captcha.md)
-11| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
-12|supervisor| [supervisor进程守护](docs/supervisor.md)   
+1| 全局变量(日志、gorm、配置模块)|  [清单一览](docs/global_variable.md)  
+2 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
+3 | cli命令| [cobra文档](docs/cobra.md) 
+4 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
+5|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
+6|aop切面编程| [Aop切面编程](docs/aop.md) 
+7|redis| [redis使用示例](test/redis_test.go) 
+8|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 测试用例](test/gormv2_test.go) 
+9|日志记录|  [zap高性能日志](docs/zap_log.md) 
+10|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+11| 验证码|  [验证码](docs/captcha.md)
+12| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
+13|supervisor| [supervisor进程守护](docs/supervisor.md)   
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -84,31 +87,16 @@
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .      
 
-V 1.3.05  2020-10-15    
->   1.`response` 响应中心增加常用的快捷函数(语法糖函数).   
->   2.配置文件管理中心 `(app/utils/yml_config)` 文件变化监听事件升级、完善，避免 `vipver` 包文件变化事件回调函数触发两次的小问题.  
+V 1.4.00  2020-10-30    
+>   1.`gorm v2` 集成至本项目骨架, 测试、验证相关功能，并提交pr(被合并、也有被close)协助作者改进了几个bug .     
+>   2.对项目骨架中频繁使用的几个变量，进行了全局初始化，主要包括：日志、配置文件、gorm驱动,从而使程序的底层代码得到简化.     
+>   3.本次升级之后原本使用原生 `sql` 操作数据库相关的全部代码被移除，新版本将切换到 `gorm v2`.   
+>   4.针对 `response` 响应模块增加了语法糖函数,使代码得到了精简,降低耦合,相关调用处整体进行了更新.  
+>   5.相关的数据库demo文件,统一了数据库名、字段名,项目骨架调用处同步更新,因此该版本需要测试数据库时，需要重新导入 `database/` 目录下的数据库文件.    
+>   6.后端web路由组名称更改：Admin -> admin ,相关测试用例文档也已经同步更新.       
+>   7.总之, v1.4.00 是一个代码改动较大的版本,尤其是使用方面简化了很多调用方式.    
 
-V 1.3.04  2020-10-10    
->   1.`nginx` 配置部分增加 `https` 配置与说明.
-
-V 1.3.03  2020-10-08     
->   1.对配置文件`(config/config.yml)`管理中心`(app/utils/yml_config)`进行了升级，相关键值凡是调用都会触发同步缓存功能,进而提升性能, 同时避免了配置文件多次调用额外增加的io开销.   
->   2.增加了配置文件`(config/config.yml)`变化的监听事件,以便清除原有的缓存，当下次调用时,自动缓存最新值(备注：针对一次性加载项无效.例如：程序端口,项目启动时只初始化一次,不会有二次调用,因此无效.).   
->   3.该功能基于 `viper` 包实现, `windows` 系统无法实时刷新,文件变化监听事件有滞后, `linux` 系统可实时刷新.  
-
-V 1.3.02  2020-09-29     
->   1.主线文档完善，主要对验证器定义的数据绑定到 context 上下文进行了补充说明.  
-
-V 1.3.01  2020-09-22     
->   1.项目文档排版进行了微调.   
->   2.httpClient 和 zap日志 文档修正了一些描述不准确问题.  
-
-V 1.3.00  2020-09-21     
->   1.为项目日志(nginx 的 access.log、error.log，goskeleton.log)提供了顶级解决方案.  
->   2.修复注册验证器、登录验证器校验的密码字段pass长度不一致问题.   
->   3.其他地方格式化、规划化了代码书写格式.     
-
-V 1.1.xx - 1.2.xx  版本日志  
+V 1.1.xx - 1.3.xx  版本日志  
 >   1.[历史日志](docs/history_log.md)  
   
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  

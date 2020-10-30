@@ -27,7 +27,7 @@ func (c *Captcha) GenerateId(context *gin.Context) {
 	c.ImgUrl = "/captcha/" + captchaId + ".png"
 	c.Refresh = c.ImgUrl + "?reload=1"
 	c.Verify = "/captcha/" + captchaId + "/这里替换为正确的验证码进行验证"
-	response.ReturnJson(context, http.StatusOK, 200, "验证码信息", c)
+	response.Success(context, "验证码信息", c)
 }
 
 // 获取验证码图像
@@ -37,7 +37,7 @@ func (c *Captcha) GetImg(context *gin.Context) {
 	ext := path.Ext(file)
 	id := file[:len(file)-len(ext)]
 	if ext == "" || captchaId == "" {
-		response.ReturnJson(context, http.StatusBadRequest, consts.CaptchaGetParamsInvalidCode, consts.CaptchaGetParamsInvalidMsg, nil)
+		response.Fail(context, consts.CaptchaGetParamsInvalidCode, consts.CaptchaGetParamsInvalidMsg, "")
 		return
 	}
 
@@ -63,12 +63,12 @@ func (c *Captcha) CheckCode(context *gin.Context) {
 	captchaId := context.Param("captchaId")
 	value := context.Param("value")
 	if captchaId == "" || value == "" {
-		response.ReturnJson(context, http.StatusBadRequest, consts.CaptchaCheckParamsInvalidCode, consts.CaptchaCheckParamsInvalidMsg, nil)
+		response.Fail(context, consts.CaptchaCheckParamsInvalidCode, consts.CaptchaCheckParamsInvalidMsg, "")
 		return
 	}
 	if captcha.VerifyString(captchaId, value) {
-		response.ReturnJson(context, http.StatusOK, consts.CaptchaCheckOkCode, consts.CaptchaCheckOkMsg, nil)
+		response.Success(context, consts.CaptchaCheckOkMsg, "")
 	} else {
-		response.ReturnJson(context, http.StatusBadRequest, consts.CaptchaCheckFailCode, consts.CaptchaCheckFailMsg, nil)
+		response.Fail(context, consts.CaptchaCheckFailCode, consts.CaptchaCheckFailMsg, "")
 	}
 }

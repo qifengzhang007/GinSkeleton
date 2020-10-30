@@ -13,9 +13,9 @@ func CreateUserCurdFactory() *UsersCurd {
 type UsersCurd struct {
 }
 
-func (u *UsersCurd) Register(name string, pass string, userIp string) bool {
+func (u *UsersCurd) Register(userName, pass, userIp string) bool {
 	pass = md5_encrypt.Base64Md5(pass) // 预先处理密码加密，然后存储在数据库
-	return model.CreateUserFactory("").Register(name, pass, userIp)
+	return model.CreateUserFactory("").Register(userName, pass, userIp)
 }
 
 func (u *UsersCurd) Store(name string, pass string, realName string, phone string, remark string) bool {

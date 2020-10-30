@@ -20,7 +20,7 @@ func (u *Home) News(context *gin.Context) {
 	userIp := context.ClientIP()
 
 	// 这里随便模拟一条数据返回
-	response.SuccessReturnData(context, gin.H{
+	response.Success(context, "ok", gin.H{
 		"newsType": newsType,
 		"page":     page,
 		"limit":    limit,

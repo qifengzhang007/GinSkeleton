@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goskeleton/app/utils/yml_config"
+	"goskeleton/app/global/variable"
 	_ "goskeleton/bootstrap"
 	"goskeleton/routers"
 )
@@ -9,5 +9,5 @@ import (
 // 这里可以存放后端路由（例如后台管理系统）
 func main() {
 	router := routers.InitWebRouter()
-	_ = router.Run(yml_config.CreateYamlFactory().GetString("HttpServer.Web.Port"))
+	_ = router.Run(variable.ConfigYml.GetString("HttpServer.Web.Port"))
 }

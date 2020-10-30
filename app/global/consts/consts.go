@@ -11,16 +11,18 @@ const (
 
 	//服务器代码发生错误
 	ServerOccurredErrorCode int    = -500100
-	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误,检测文件mime类型发生错误。"
+	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误, "
 
 	// token相关
 	JwtTokenSignKey         string = "goskeleton"
-	JwtTokenCreatedExpireAt int64  = 3600    // 创建时token默认有效期3600秒
-	JwtTokenRefreshExpireAt int64  = 7200    // 刷新token时，延长7200秒
-	JwtTokenOK              int    = 200100  //token有效
-	JwtTokenInvalid         int    = -400100 //无效的token
-	JwtTokenExpired         int    = -400101 //过期的token
-	JwtTokenOnlineUsers     int    = 10      // 设置一个账号最大允许几个用户同时在线，默认为10
+	JwtTokenCreatedExpireAt int64  = 3600             // 创建时token默认有效期3600秒
+	JwtTokenRefreshExpireAt int64  = 7200             // 刷新token时，延长7200秒
+	JwtTokenOK              int    = 200100           //token有效
+	JwtTokenInvalid         int    = -400100          //无效的token
+	JwtTokenExpired         int    = -400101          //过期的token
+	JwtTokenFormatErrCode   int    = -400102          //提交的 token 格式错误
+	JwtTokenFormatErrMsg    string = "提交的 token 格式错误" //提交的 token 格式错误
+	JwtTokenOnlineUsers     int    = 10               // 设置一个账号最大允许几个用户同时在线，默认为10
 
 	//snowflake错误
 	SnowFlakeMachineId      int16  = 1024
@@ -64,7 +66,7 @@ const (
 	CaptchaCheckParamsInvalidMsg  string = "校验验证码：提交的参数无效，请确保提交的验证码ID和值有效"
 	CaptchaCheckParamsInvalidCode int    = -400351
 	CaptchaCheckOkMsg             string = "验证码校验通过"
-	CaptchaCheckOkCode            int    = 200
-	CaptchaCheckFailCode          int    = -400355
-	CaptchaCheckFailMsg           string = "验证码校验失败"
+	//CaptchaCheckOkCode            int    = 200
+	CaptchaCheckFailCode int    = -400355
+	CaptchaCheckFailMsg  string = "验证码校验失败"
 )

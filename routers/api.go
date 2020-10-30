@@ -7,8 +7,6 @@ import (
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/middleware/cors"
 	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/yml_config"
-
 	"io"
 	"net/http"
 	"os"
@@ -19,10 +17,10 @@ import (
 func InitApiRouter() *gin.Engine {
 	var router *gin.Engine
 	// 非调试模式（生产模式） 日志写到日志文件
-	if yml_config.CreateYamlFactory().GetBool("AppDebug") == false {
+	if variable.ConfigYml.GetBool("AppDebug") == false {
 		//1.将日志写入日志文件
 		gin.DisableConsoleColor()
-		f, _ := os.Create(variable.BasePath + yml_config.CreateYamlFactory().GetString("Logs.GinLogName"))
+		f, _ := os.Create(variable.BasePath + variable.ConfigYml.GetString("Logs.GinLogName"))
 		gin.DefaultWriter = io.MultiWriter(f)
 		// 2.如果是有nginx前置做代理，基本不需要gin框架记录访问日志，开启下面一行代码，屏蔽上面的三行代码，性能提升 5%
 		//gin.SetMode(gin.ReleaseMode)
@@ -35,7 +33,7 @@ func InitApiRouter() *gin.Engine {
 	}
 
 	//根据配置进行设置跨域
-	if yml_config.CreateYamlFactory().GetBool("HttpServer.AllowCrossDomain") {
+	if variable.ConfigYml.GetBool("HttpServer.AllowCrossDomain") {
 		router.Use(cors.Next())
 	}
 
@@ -53,6 +51,10 @@ func InitApiRouter() *gin.Engine {
 		// 模拟一个首页路由
 		vApi := vApi.Group("home/")
 		{
+			// 第二个参数说明：
+			// 1.它是一个表单参数验证器函数代码段，该函数从容器中解析，整个代码段略显复杂，但是对于使用者，您只需要了解用法即可，使用很简单，看下面 ↓↓↓
+			// 2.编写该接口的验证器，位置：app/http/validator/api/home/news.go
+			// 3.将以上验证器注册在容器：app/http/validator/common/register_validator/register_validator.go  46行为注册时的键（consts.ValidatorPrefix + "HomeNews"）。那么获取的时候就用该键即可从容器获取
 			vApi.GET("news", validatorFactory.Create(consts.ValidatorPrefix+"HomeNews"))
 		}
 	}
