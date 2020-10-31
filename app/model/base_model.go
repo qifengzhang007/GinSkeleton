@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type Model struct {
+type BaseModel struct {
 	*gorm.DB  `gorm:"-"	json:"-"`
 	Id        int64     `gorm:"primarykey" json:"id"`
 	CreatedAt time.Time `json:"created_at"`
