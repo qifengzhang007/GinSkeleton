@@ -79,6 +79,7 @@ func InitWebRouter() *gin.Engine {
 			// 用户组路由
 			users := backend.Group("users/")
 			{
+				// 刷新token，当token过期，用旧token换取新token
 				noAuth.POST("refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))
 				// 查询 ，这里的验证器直接从容器获取，是因为程序启动时，将验证器注册在了容器，具体代码位置：App\Http\Validator\Web\Users\xxx
 				users.GET("index", validatorFactory.Create(consts.ValidatorPrefix+"UsersShow"))
