@@ -190,12 +190,9 @@ func (u *UsersModel) Update(id float64, userName string, pass string, realName s
 
 //删除用户以及关联的token记录
 func (u *UsersModel) Destroy(id float64) bool {
-	sql := "delete  from tb_oauth_access_tokens  where  fr_user_id=?"
-	if u.Exec(sql, id).Error == nil {
-		if u.Exec("DELETE  FROM tb_users  WHERE  id=? ", id).Error == nil {
-			if u.OauthDestroyToken(id) {
-				return true
-			}
+	if u.Exec("DELETE  FROM tb_users  WHERE  id=? ", id).Error == nil {
+		if u.OauthDestroyToken(id) {
+			return true
 		}
 	}
 	return false
