@@ -58,7 +58,7 @@ func (u *userToken) RefreshToken(oldToken, clientIp string) (newToken string, re
 	switch code {
 	case consts.JwtTokenOK, consts.JwtTokenExpired:
 		//如果token已经过期，那么执行更新
-		if newToken, err := u.userJwt.RefreshToken(oldToken, consts.JwtTokenRefreshExpireAt); err == nil {
+		if newToken, err := u.userJwt.RefreshToken(oldToken, variable.ConfigYml.GetInt64("Token.JwtTokenRefreshExpireAt")); err == nil {
 			if customClaims, err := u.userJwt.ParseToken(newToken); err == nil {
 				userId := customClaims.UserId
 				expiresAt := customClaims.ExpiresAt

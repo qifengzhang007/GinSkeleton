@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
+	"goskeleton/app/global/variable"
 	"goskeleton/app/model"
 	"goskeleton/app/service/users/curd"
 	userstoken "goskeleton/app/service/users/token"
@@ -36,7 +37,7 @@ func (u *Users) Login(context *gin.Context) {
 
 	if userModel != nil {
 		userTokenFactory := userstoken.CreateUserFactory()
-		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.UserName, userModel.Phone, consts.JwtTokenCreatedExpireAt); err == nil {
+		if userToken, err := userTokenFactory.GenerateToken(userModel.Id, userModel.UserName, userModel.Phone, variable.ConfigYml.GetInt64("Token.JwtTokenCreatedExpireAt")); err == nil {
 			if userTokenFactory.RecordLoginToken(userToken, context.ClientIP()) {
 				data := gin.H{
 					"userId":     userModel.Id,
