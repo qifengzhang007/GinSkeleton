@@ -32,7 +32,7 @@
 
 序号|功能模块 | 文档地址  
 ---|---|---
-1| 全局变量(日志、gorm、配置模块)|  [清单一览](docs/global_variable.md)  
+1| 全局变量(日志、gorm、配置模块、雪花算法)|  [清单一览](docs/global_variable.md)  
 2 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
 3 | cli命令| [cobra文档](docs/cobra.md) 
 4 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
@@ -87,6 +87,11 @@
 #### 版本
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .      
+
+#### V 1.4.06  2020-11-08  
+*功能增强 ：  
+1.为雪花算法(snowflake)封装全局变量，方便分布式场景随时随地获取唯一id  
+2.本次更新主要为后续我们正在测试、验证的分布式数据库方案提供基础功能.   
 
 #### V 1.4.05  2020-11-04  
 * 隐藏bug修复：  
