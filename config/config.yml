@@ -40,6 +40,9 @@ Websocket: #该服务与Http具有相同的ip、端口，因此不需要额外�
   HeartbeatFailMaxTimes: 4            # 允许心跳失败的最大次数（默认设置为PingPeriod=30秒检测一次，连续4次没有心跳就会清除后端在线信息）
   ReadDeadline: 0                     # 客户端在线情况下，正常的业务消息间隔秒数必须小于该值，否则服务器将会主动断开,单位：秒。 0 表示不设限制，即服务器不主动断开不发送任何消息的在线客户端
   WriteDeadline: 35                   # 消息单次写入超时时间，单位：秒
+  
+SnowFlake:
+  SnowFlakeMachineId: 2               #如果本项目同时部署在多台机器，并且需要同时使用该算法，请为每一台机器设置不同的ID，区间范围: [0,1023]
 
 FileUploadSetting:
   Size: 32                            #设置上传文件的最大值，单位：M，注意： 如果go前置nginx服务器，nginx 默认限制文件上传大小为 50 M ,用户上传文件限制还需要继续修改 nginx 配置

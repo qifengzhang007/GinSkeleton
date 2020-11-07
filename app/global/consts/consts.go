@@ -22,10 +22,10 @@ const (
 	JwtTokenFormatErrMsg  string = "提交的 token 格式错误" //提交的 token 格式错误
 	JwtTokenOnlineUsers   int    = 10               // 设置一个账号最大允许几个用户同时在线，默认为10
 
-	SnowFlakeMachineId int64 = 2                    // 定义一个机器ID，[0,1023] 区间即可
-	StartTimeStamp           = int64(1483228800000) //开始时间截 (2017-01-01)
-	MachineIdBits            = uint(10)             //机器id所占的位数
-	SequenceBits             = uint(12)             //序列所占的位数
+	//SnowFlake 雪花算法
+	StartTimeStamp = int64(1483228800000) //开始时间截 (2017-01-01)
+	MachineIdBits  = uint(10)             //机器id所占的位数
+	SequenceBits   = uint(12)             //序列所占的位数
 	//MachineIdMax   = int64(-1 ^ (-1 << MachineIdBits)) //支持的最大机器id数量
 	SequenceMask   = int64(-1 ^ (-1 << SequenceBits)) //
 	MachineIdShift = SequenceBits                     //机器id左移位数
