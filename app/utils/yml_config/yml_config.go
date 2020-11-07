@@ -7,7 +7,7 @@ import (
 	"goskeleton/app/core/container"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config/interf"
+	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"log"
 	"time"
 )
@@ -25,7 +25,7 @@ func init() {
 
 // 创建一个yaml配置文件工厂
 // 参数设置为可变参数的文件名，这样参数就可以不需要传递，如果传递了多个，我们只取第一个参数作为配置文件名
-func CreateYamlFactory(fileName ...string) interf.YmlConfigInterf {
+func CreateYamlFactory(fileName ...string) ymlconfig_interf.YmlConfigInterf {
 
 	yamlConfig := viper.New()
 	// 配置文件所在目录
@@ -90,7 +90,7 @@ func (y *ymlConfig) clearCache() {
 }
 
 // 允许 clone 一个相同功能的结构体
-func (y *ymlConfig) Clone(fileName string) interf.YmlConfigInterf {
+func (y *ymlConfig) Clone(fileName string) ymlconfig_interf.YmlConfigInterf {
 	// 这里存在一个深拷贝，需要注意，避免拷贝的结构体操作对原始结构体造成影响
 	var ymlC = *y
 	var ymlConfViper = *(y.viper)

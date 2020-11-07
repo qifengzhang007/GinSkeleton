@@ -9,8 +9,6 @@ import (
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/md5_encrypt"
 	"goskeleton/app/utils/response"
-	"goskeleton/app/utils/snow_flake"
-	"net/http"
 	"path"
 	"strings"
 )
@@ -22,8 +20,8 @@ func Upload(context *gin.Context, savePath string) bool {
 
 	//  保存文件，原始文件名进行全局唯一编码加密、md5 加密，保证在后台存储不重复
 	var saveErr error
-	if uniqueId, err := snow_flake.CreateSnowFlakeFactory().GetId(); err == nil {
-		saveFileName := fmt.Sprintf("%d%s", uniqueId, file.Filename)
+	if sequence := variable.SnowFlake.GetId(); sequence > 0 {
+		saveFileName := fmt.Sprintf("%d%s", sequence, file.Filename)
 		saveFileName = md5_encrypt.MD5(saveFileName) + path.Ext(saveFileName)
 
 		if saveErr = context.SaveUploadedFile(file, savePath+saveFileName); saveErr == nil {
@@ -31,15 +29,13 @@ func Upload(context *gin.Context, savePath string) bool {
 			success := gin.H{
 				"path": strings.ReplaceAll(savePath+saveFileName, variable.BasePath, ""),
 			}
-
-			response.ReturnJson(context, http.StatusCreated, consts.CurdStatusOkCode, consts.CurdStatusOkMsg, success)
+			response.Success(context, consts.CurdStatusOkMsg, success)
 			return true
 		}
 	} else {
 		saveErr = errors.New(my_errors.ErrorsSnowflakeGetIdFail)
 	}
-
-	response.ReturnJson(context, http.StatusBadRequest, consts.FilesUploadFailCode, consts.FilesUploadFailMsg+", 文件保存失败!", saveErr.Error())
+	response.Fail(context, consts.FilesUploadFailCode, consts.FilesUploadFailMsg+", 文件保存失败!", saveErr.Error())
 	return false
 
 }

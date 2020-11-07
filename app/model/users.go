@@ -10,17 +10,17 @@ import (
 // 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *UsersModel {
-	return &UsersModel{Model: Model{DB: useDbConn(sqlType)}}
+	return &UsersModel{BaseModel: BaseModel{DB: useDbConn(sqlType)}}
 }
 
 type UsersModel struct {
-	Model       `json:"-"`
+	BaseModel   `json:"-"`
 	UserName    string `gorm:"column:user_name" json:"user_name"`
-	Pass        string `json:"pass" form:"pass"`
-	Phone       string `json:"phone" form:"phone"`
+	Pass        string `json:"-"`
+	Phone       string `json:"phone"`
 	RealName    string `gorm:"column:real_name" json:"real_name"`
-	Status      int    `json:"status" form:"status"`
-	Token       string `json:"token" form:"token"`
+	Status      int    `json:"status"`
+	Token       string `json:"token"`
 	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
 }
 
@@ -79,11 +79,12 @@ func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newTok
 //当用户更改密码后，所有的token都失效，必须重新登录
 func (u *UsersModel) OauthResetToken(userId float64, newPass, clientIp string) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
-	if u.ShowOneItem(userId) != nil && u.ShowOneItem(userId).Pass == newPass {
+	userItem, err := u.ShowOneItem(userId)
+	if userItem != nil && err == nil && userItem.Pass == newPass {
 		return true
-	} else if u.ShowOneItem(userId) != nil {
+	} else if userItem != nil {
 		sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
-		if u.Exec(sql, clientIp, userId).Error == nil {
+		if u.Debug().Exec(sql, clientIp, userId).Error == nil {
 			return true
 		}
 	}
@@ -135,20 +136,14 @@ func (u *UsersModel) SetTokenInvalid(userId int) bool {
 }
 
 //根据用户ID查询一条信息
-func (u *UsersModel) ShowOneItem(userId float64) *UsersModel {
-	sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`, `token`  FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
-	rows, err := u.Raw(sql, userId).Rows()
-	if err == nil && rows != nil {
-		for rows.Next() {
-			err := rows.Scan(&u.Id, &u.UserName, &u.RealName, &u.Phone, &u.Status, &u.Token)
-			if err == nil {
-				return u
-			}
-		}
-		//  凡是查询类记得释放记录集
-		_ = rows.Close()
+func (u *UsersModel) ShowOneItem(userId float64) (*UsersModel, error) {
+	sql := "SELECT  `id`, `user_name`,`pass`, `real_name`, `phone`, `status` FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
+	result := u.Raw(sql, userId).First(u)
+	if result.Error == nil {
+		return u, nil
+	} else {
+		return nil, result.Error
 	}
-	return nil
 }
 
 // 查询（根据关键词模糊查询）
@@ -185,7 +180,7 @@ func (u *UsersModel) Store(userName string, pass string, realName string, phone 
 //更新
 func (u *UsersModel) Update(id float64, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update tb_users set user_name=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
-	if u.Exec(sql, userName, pass, realName, phone, remark, id).RowsAffected > 0 {
+	if u.Exec(sql, userName, pass, realName, phone, remark, id).RowsAffected >= 0 {
 		if u.OauthResetToken(id, pass, clientIp) {
 			return true
 		}
@@ -195,12 +190,9 @@ func (u *UsersModel) Update(id float64, userName string, pass string, realName s
 
 //删除用户以及关联的token记录
 func (u *UsersModel) Destroy(id float64) bool {
-	sql := "delete  from tb_oauth_access_tokens  where  fr_user_id=?"
-	if u.Exec(sql, id).Error == nil {
-		if u.Exec("DELETE  FROM tb_users  WHERE  id=? ", id).Error == nil {
-			if u.OauthDestroyToken(id) {
-				return true
-			}
+	if u.Exec("DELETE  FROM tb_users  WHERE  id=? ", id).Error == nil {
+		if u.OauthDestroyToken(id) {
+			return true
 		}
 	}
 	return false

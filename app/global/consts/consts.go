@@ -14,19 +14,22 @@ const (
 	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误, "
 
 	// token相关
-	JwtTokenSignKey         string = "goskeleton"
-	JwtTokenCreatedExpireAt int64  = 3600             // 创建时token默认有效期3600秒
-	JwtTokenRefreshExpireAt int64  = 7200             // 刷新token时，延长7200秒
-	JwtTokenOK              int    = 200100           //token有效
-	JwtTokenInvalid         int    = -400100          //无效的token
-	JwtTokenExpired         int    = -400101          //过期的token
-	JwtTokenFormatErrCode   int    = -400102          //提交的 token 格式错误
-	JwtTokenFormatErrMsg    string = "提交的 token 格式错误" //提交的 token 格式错误
-	JwtTokenOnlineUsers     int    = 10               // 设置一个账号最大允许几个用户同时在线，默认为10
+	JwtTokenSignKey       string = "goskeleton"
+	JwtTokenOK            int    = 200100           //token有效
+	JwtTokenInvalid       int    = -400100          //无效的token
+	JwtTokenExpired       int    = -400101          //过期的token
+	JwtTokenFormatErrCode int    = -400102          //提交的 token 格式错误
+	JwtTokenFormatErrMsg  string = "提交的 token 格式错误" //提交的 token 格式错误
+	JwtTokenOnlineUsers   int    = 10               // 设置一个账号最大允许几个用户同时在线，默认为10
 
-	//snowflake错误
-	SnowFlakeMachineId      int16  = 1024
-	SnowFlakeMachineIllegal string = "SnowFlake数据越界，大于65535"
+	SnowFlakeMachineId int64 = 2                    // 定义一个机器ID，[0,1023] 区间即可
+	StartTimeStamp           = int64(1483228800000) //开始时间截 (2017-01-01)
+	MachineIdBits            = uint(10)             //机器id所占的位数
+	SequenceBits             = uint(12)             //序列所占的位数
+	//MachineIdMax   = int64(-1 ^ (-1 << MachineIdBits)) //支持的最大机器id数量
+	SequenceMask   = int64(-1 ^ (-1 << SequenceBits)) //
+	MachineIdShift = SequenceBits                     //机器id左移位数
+	TimestampShift = SequenceBits + MachineIdBits     //时间戳左移位数
 
 	// CURD 常用业务状态码
 	CurdStatusOkCode         int    = 200
