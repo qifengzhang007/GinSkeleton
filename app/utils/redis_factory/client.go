@@ -7,12 +7,12 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/yml_config"
-	"goskeleton/app/utils/yml_config/interf"
+	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"time"
 )
 
 var redisPool *redis.Pool
-var configYml interf.YmlConfigInterf
+var configYml ymlconfig_interf.YmlConfigInterf
 
 // 处于程序底层的包，init 初始化的代码段的执行会优先于上层代码，因此这里读取配置项不能使用全局配置项变量
 func init() {

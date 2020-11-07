@@ -1,39 +1,46 @@
 package snow_flake
 
 import (
-	"errors"
 	"goskeleton/app/global/consts"
+	"goskeleton/app/utils/snow_flake/snowflake_interf"
+	"sync"
 	"time"
 )
 
-// 创建一个snowflake工厂
-func CreateSnowFlakeFactory() *snowflake {
-
-	snowflake := &snowflake{
-		lastTimestamp: time.Now().UnixNano() / 1e6,
-		machId:        consts.SnowFlakeMachineId,
-		index:         0,
+// 创建一个雪花算法生成器(生成工厂)
+func CreateSnowflakeFactory() snowflake_interf.InterfaceSnowFlake {
+	return &snowflake{
+		timestamp: 0,
+		machineId: consts.SnowFlakeMachineId,
+		sequence:  0,
 	}
-	return snowflake
 }
 
 type snowflake struct {
-	lastTimestamp int64
-	index         int16
-	machId        int16
+	sync.Mutex
+	timestamp int64
+	machineId int64
+	sequence  int64
 }
 
-func (s *snowflake) GetId() (int64, error) {
-	curTimestamp := time.Now().UnixNano() / 1e6
-	if curTimestamp == s.lastTimestamp {
-		s.index++
-		if s.index > 0xfff {
-			s.index = 0xfff
-			return -1, errors.New(consts.SnowFlakeMachineIllegal)
+// 生成分布式ID
+func (s *snowflake) GetId() int64 {
+	s.Lock()
+	defer func() {
+		s.Unlock()
+	}()
+	now := time.Now().UnixNano() / 1e6
+	if s.timestamp == now {
+		s.sequence = (s.sequence + 1) & consts.SequenceMask
+		if s.sequence == 0 {
+			for now <= s.timestamp {
+				now = time.Now().UnixNano() / 1e6
+			}
 		}
 	} else {
-		s.index = 0
-		s.lastTimestamp = curTimestamp
+		s.sequence = 0
 	}
-	return (0x1ffffffffff&s.lastTimestamp)<<22 + int64(0xff<<10) + int64(0xfff&s.index), nil
+	s.timestamp = now
+	r := (now-consts.StartTimeStamp)<<consts.TimestampShift | (s.machineId << consts.MachineIdShift) | (s.sequence)
+	return r
 }
