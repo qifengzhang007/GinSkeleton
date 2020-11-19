@@ -148,24 +148,13 @@ func (u *UsersModel) ShowOneItem(userId float64) (*UsersModel, error) {
 
 // 查询（根据关键词模糊查询）
 func (u *UsersModel) Show(userName string, limitStart float64, limitItems float64) []UsersModel {
-
+	var temp []UsersModel
 	sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
-	rows, err := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Rows()
-	if err == nil && rows != nil {
-		temp := make([]UsersModel, 0)
-		for rows.Next() {
-			err := rows.Scan(&u.Id, &u.UserName, &u.RealName, &u.Phone, &u.Status)
-			if err == nil {
-				temp = append(temp, *u)
-			} else {
-				variable.ZapLog.Error("sql查询错误", zap.Error(err))
-			}
-		}
-		//  凡是查询类记得释放记录集
-		_ = rows.Close()
+	if res := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Find(&temp); res.RowsAffected > 0 {
 		return temp
+	} else {
+		return nil
 	}
-	return nil
 }
 
 //新增
