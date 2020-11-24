@@ -2,6 +2,7 @@ package snow_flake
 
 import (
 	"goskeleton/app/global/consts"
+	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/snow_flake/snowflake_interf"
 	"sync"
 	"time"
@@ -11,7 +12,7 @@ import (
 func CreateSnowflakeFactory() snowflake_interf.InterfaceSnowFlake {
 	return &snowflake{
 		timestamp: 0,
-		machineId: consts.SnowFlakeMachineId,
+		machineId: variable.ConfigYml.GetInt64("SnowFlake.SnowFlakeMachineId"),
 		sequence:  0,
 	}
 }
