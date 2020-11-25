@@ -1,4 +1,4 @@
-## 文档说明 
+### 文档说明 
 >   1.首先请自行查看本项目骨架3分钟快速入门主线图，本文档将按照该图的主线逻辑展开...    
 >   2.本项目骨架开发过程中涉及到的参考资料,了解详情有利于了解本项目骨架的核心，建议您可以先学会本项目骨架之后再去了解相关引用。        
 >       2.1 gin框架：https://github.com/gin-gonic/gin  
@@ -12,43 +12,58 @@
 >       2.9 cobra（Cli命令模式包） 相关资料：https://github.com/spf13/cobra/    
 >   3.本文档侧重介绍本项目骨架的主线逻辑以及相关核心模块，不对gin框架的具体语法做介绍。    
 
+###  前言  
+> 1.为了更好地理解后续文档，我们先说明一下 `gin（https://github.com/gin-gonic/gin）` 路由包的本质.  
+> 2.我们用以下代码为例进行说明  
+```code 
+
+ // gin的中间件、路由组、路由    
+authorized.Use(fun(c  *gin.Context){ c.Next() })
+	{
+      authorized.Group("/v1")   //  路由组的第二个参数同样支持回调函数： fun(c  *gin.Context){ ...省略代码  } 
+      {
+            authorized.POST("/login", fun(c  *gin.Context){
+                 c.PostForm("userName")   
+            })
+    
+            authorized.POST("/update", fun(c  *gin.Context){
+                 c.PostForm("userName")   
+            })
+       }
+	}
+
+```
+> 3.从以上代码我们可以看出 `gin` 路由包的的中间件、路由组、路由本质都是采用的回调函数在处理后续的逻辑,回调函数最大的数量为 63 个.  
+> 4.我们也可以看出，`gin` 的回调函数非常工整、统一,只有一个参数 *gin.Context ,整个请求的数据全部在这个主线（上下文）里面,我们可以从这个参数获取表单请求参数,也可以自己额外绑定、追加.  
+> 5.其实，在任何时候不管我们通过方式，只要保证你的代码段形式是以上回调函数的形式，整个逻辑就是OK的.  
+ 
+
 ###    1.框架启动, 初始化全局变量等相关的代码段  
->   代码位置：[进入详情](../bootstrap/init.go)      
+>   代码位置 `bootstrap/init.go`：[进入详情](../bootstrap/init.go)      
 ```go  
-    // 摘取主要代码段
+    // 这里主要介绍 init 函数的主要功能，详细的实现请点击上面的 进入详情 查看代码部分
     func init() {
-        // 1. 初始化 项目根路径，参见 variable 常量包，相关路径：app\global\variable\variable.go
-    
-        //2.检查配置文件以及日志目录等非编译性的必要条件
-        checkRequiredFolders()
-    
-        // 3.初始化全局日志句柄，并载入日志钩子处理函数
-        variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
-    
-        //4.初始化表单参数验证器，注册在容器
-        register_validator.RegisterValidator()
-    
-        // 5.websocket Hub中心启动
-        if variable.ConfigYml.GetInt("Websocket.Start") == 1 {
-            // websocket 管理中心hub全局初始化一份
-            variable.WebsocketHub = core.CreateHubFactory()
-            if Wh, ok := variable.WebsocketHub.(*core.Hub); ok {
-                go Wh.Run()
-            }
-        }
-    
+        // 1.初始化 项目根路径
+        // 2.检查配置文件以及日志目录等非编译性的必要条件
+        // 3.初始化表单参数验证器，注册在容器
+        // 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听
+        // 5.初始化全局日志句柄，并载入日志钩子处理函数
+        // 6.根据配置初始化 gorm mysql 全局 *gorm.Db
+        // 7.雪花算法全局变量
+        // 8.websocket Hub中心启动
     }
 
 ```
 
 ###    2.一个 request 到 response 的生命周期    
-#####   2.1.介绍路由之前首先简要介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：app\http\validator\(web|api)\xxx业务模块  
+
+#####   2.1 介绍路由之前首先简要介绍一下表单参数验证器 ，因为是路由“必经之地”。位置：app\http\validator\(web|api)\xxx业务模块  
 ```code
     //1.首先编写参数验证器逻辑，例如：用户注册模块
     // 详情参见：app\http\validator\web\users\register.go
 
     //2.将以上编写好的表单参数验证器进行注册，便于程序启动时自动加载到容器，在路由定义处我们根据注册时的键，就可以直接调用相关的验证器代码段
-    // 例如 我们注册该验证器的键： consts.ValidatorPrefix + "UsersRegister" ，程序启动时会自动加载到容器
+    // 例如 我们注册该验证器的键： consts.ValidatorPrefix + "UsersRegister" ，程序启动时会自动加载到容器,获取的时候按照该键即刻获取相关的代码段
     // 详情参见：app\http\validator\common\register_validator\register_validator.go
 
 ```   
@@ -72,11 +87,10 @@
 			v_users := V_Backend.Group("users/")
 			{
 				// 查询 ，这里的验证器直接从容器获取，是因为程序启动时，将验证器注册在了容器，具体代码位置：app\http\validator\Users\xxx
+                // 第二个参数本质上返回的就是 gin 的回调函数形式： fun(c  *gin.Context){  ....省略代码   }   
 				v_users.GET("index", validatorFactory.Create(Consts.ValidatorPrefix+"UsersShow"))
 			}
-
 		}
-
 	}
 ``` 
 >   分析  
@@ -90,20 +104,23 @@
     type HeaderParams struct {
         authorization string `header:"authorization"`
     }
-    ......
-	return func(context *gin.Context) {
-		//  模拟验证token
-		V_HeaderParams := HeaderParams{}
 
-		//  使用ShouldbindHeader 方式获取头参数
-		context.ShouldBindHeader(&V_HeaderParams)
-        // 对头参数中的token进行验证
-		if len(V_HeaderParams.authorization) >= 20 {
-        ...
-	    context.Next()   // OK 下一步
-        }else{
-        	context.Abort()  // 不 OK 终止已注册代码执行
-        }
+    // 本质上返回的代码段就是 gin 的标准回调函数形式 ：   func(c *gin.Context) {   ... 省略代码  } 
+    func CheckAuth() gin.HandlerFunc {
+        return func(context *gin.Context) {
+            //  模拟验证token
+            V_HeaderParams := HeaderParams{}
+    
+            //  使用ShouldbindHeader 方式获取头参数
+            context.ShouldBindHeader(&V_HeaderParams)
+            // 对头参数中的token进行验证
+            if len(V_HeaderParams.authorization) >= 20 {
+            ...
+            context.Next()   // OK 下一步
+            }else{
+                context.Abort()  // 不 OK 终止已注册代码执行
+            }
+    }
 
 ```
  
@@ -131,7 +148,9 @@ func (r Register) CheckParams(context *gin.Context) {
 	//2.继续验证具有中国特色的参数，例如 身份证号码等，基本语法校验了长度18位，然后可以自行编写正则表达式等更进一步验证每一部分组成
 	// r.CardNo  获取值继续校验，这里省略.....
 
-	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	//  该函数主要是将结构体的成员(字段)获取的数据以 键=>值 绑定在 context 上下文，然后传递给下一步（控制器）
+    //  绑定的键按照  consts.ValidatorPrefix+ json 标签组成，例如用户提交的密码（pass），绑定的键：consts.ValidatorPrefix+"pass" 
+    //  自动绑定以后的结构体字段，在控制器就可以按照相关的键直接获取值，例如：	pass := context.GetString(consts.ValidatorPrefix + "pass")
 	extraAddBindDataContext := data_transfer.DataAddContext(r, consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
 		response.ErrorSystem(context, "UserRegister表单验证器json化失败", "")
@@ -139,7 +158,6 @@ func (r Register) CheckParams(context *gin.Context) {
 		// 验证完成，调用控制器,并将验证器成员(字段)递给控制器，保持上下文数据一致性
 		(&web.Users{}).Register(extraAddBindDataContext)
 	}
-
 }
 
 ``` 

@@ -43,7 +43,7 @@ func init() {
 	//3.初始化表单参数验证器，注册在容器
 	register_validator.RegisterValidator()
 
-	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml、raw_sql.yml)变化的监听， 配置文件操作指针，初始化为全局变量
+	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听， 配置文件操作指针，初始化为全局变量
 	variable.ConfigYml = yml_config.CreateYamlFactory()
 	variable.ConfigYml.ConfigFileChangeListen()
 	// config>gorm_v2.yml 启动文件变化监听事件
@@ -53,7 +53,7 @@ func init() {
 	// 5.初始化全局日志句柄，并载入日志钩子处理函数
 	variable.ZapLog = zap_factory.CreateZapFactory(sys_log_hook.ZapLogHandler)
 
-	// 6.// 根据配置初始化 gorm mysql 全局 *gorm.Db
+	// 6.根据配置初始化 gorm mysql 全局 *gorm.Db
 	if variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGolobalGormMysql") == 1 {
 		if dbMysql, err := gorm_v2.GetOneMysqlClient(); err != nil {
 			log.Fatal(my_errors.ErrorsGormInitFail + err.Error())
