@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
@@ -21,12 +22,21 @@ func useDbConn(sqlType string) *gorm.DB {
 	if sqlType == "" {
 		sqlType = variable.ConfigGormv2Yml.GetString("Gormv2.UseDbType")
 	}
-	switch sqlType {
+	switch strings.ToLower(sqlType) {
 	case "mysql":
+		if variable.GormDbMysql == nil {
+			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+		}
 		db = variable.GormDbMysql
 	case "sqlserver":
+		if variable.GormDbSqlserver == nil {
+			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+		}
 		db = variable.GormDbSqlserver
-	case "postgres":
+	case "postgres", "postgre", "postgresql":
+		if variable.GormDbPostgreSql == nil {
+			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+		}
 		db = variable.GormDbPostgreSql
 	default:
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + sqlType)

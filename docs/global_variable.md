@@ -67,7 +67,7 @@ variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGolobalGormMysql")
 	GetStringSlice(keyName string) []string
 ```
 
-###  6.雪花算法(snowflake)生成分布式场景唯一ID 
+###  5.雪花算法(snowflake)生成分布式场景唯一ID 
 >   1.相关配置 ` config>config.yml` 配置项 `SnowFlakeMachineId` , 如果本项目同时部署在多台机器，并且需要同时使用该算法，请为每一台机器设置不同的ID，区间范围: [0,1023]  
 >   2.随时随地，您可以非常方便的获取一个分布式场景的唯一ID  
 >   3.更多详情参见: [SnowFlake单元测试](../test/snowflake_test.go)  

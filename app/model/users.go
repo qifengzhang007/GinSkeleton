@@ -60,7 +60,7 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
 		"SELECT  ?,'login',? ,FROM_UNIXTIME(?),? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
 	//注意：token的精确度为秒，如果在一秒之内，一个账号多次调用接口生成的token其实是相同的，这样写入数据库，第二次的影响行数为0，知己实际上操作仍然是有效的。
-	//所以这里的判断影响行数>=0 都是正确的，只有 -1 才是执行失败、错误
+	//所以这里只判断无错误即可，判断影响行数的话，>=0 都是ok的
 	if u.Exec(sql, userId, token, expiresAt, clientIp, userId, token).Error == nil {
 		return true
 	}
@@ -84,7 +84,7 @@ func (u *UsersModel) OauthResetToken(userId float64, newPass, clientIp string) b
 		return true
 	} else if userItem != nil {
 		sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
-		if u.Debug().Exec(sql, clientIp, userId).Error == nil {
+		if u.Exec(sql, clientIp, userId).Error == nil {
 			return true
 		}
 	}

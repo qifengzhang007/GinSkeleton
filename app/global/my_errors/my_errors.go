@@ -14,6 +14,7 @@ const (
 	ErrorsBasePath                  string = "初始化项目根目录失败"
 	ErrorsNoAuthorization           string = "token鉴权未通过，请通过token授权接口重新获取token,"
 	ErrorsGormInitFail              string = "Gorm 数据库驱动、连接初始化失败"
+	ErrorsGormNotInitGlobalPointer  string = "%s 数据库全局变量指针没有初始化，请在配置文件 Gormv2.yml 设置 Gormv2.%s.IsInitGolobalGormMysql = 1, 并且保证数据库配置正确 \n"
 	// 数据库部分
 	ErrorsDbDriverNotExists   string = "数据库驱动类型不存在,目前支持的数据库类型：mysql、sqlserver、postgresql，您提交数据库类型："
 	ErrorsDialectorDbInitFail string = "gorm dialector 初始化失败,dbType:"
