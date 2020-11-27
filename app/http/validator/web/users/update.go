@@ -30,7 +30,7 @@ func (u Update) CheckParams(context *gin.Context) {
 		return
 	}
 
-	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	//  该函数主要是将本结构体的字段（成员）按照 consts.ValidatorPrefix+ json标签对应的 键 => 值 形式直接传递给下一步（控制器）
 	extraAddBindDataContext := data_transfer.DataAddContext(u, consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
 		response.ErrorSystem(context, "UserUpdate表单验证器json化失败", "")

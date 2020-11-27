@@ -42,7 +42,7 @@ func (r Register) CheckParams(context *gin.Context) {
 	//2.继续验证具有中国特色的参数，例如 身份证号码等，基本语法校验了长度18位，然后可以自行编写正则表达式等更进一步验证每一部分组成
 	// r.CardNo  获取值继续校验，这里省略.....
 
-	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	//  该函数主要是将本结构体的字段（成员）按照 consts.ValidatorPrefix+ json标签对应的 键 => 值 形式直接传递给下一步（控制器）
 	extraAddBindDataContext := data_transfer.DataAddContext(r, consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
 		response.ErrorSystem(context, "UserRegister表单验证器json化失败", "")
