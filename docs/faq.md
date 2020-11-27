@@ -76,4 +76,18 @@ app/http/validator/common/register_validator/register_validator.go
 
 ```
 
+#####  8.本项目骨架引用的包，如何更新至最新版？  
+> 1.本项目骨架主动引入包全部在 `go.mod` 文件,如果想自己更新至最新版,非常简单，但是必须注意：该包更新的功能兼容现有版本，如果不兼容，可能会导致封装层`app/utils/xxx` 出现错误,功能也无法正常使用.  
+> 2.例如：gormv2 目前在用版本是 `v1.20.5`, 官方最新版本地址：https://github.com/go-gorm/gorm/tags , 最新版 ： v1.20.7   
+```code   
+
+    //  1. go.mod 文件修改以下版本号至最新版
+    gorm.io/gorm v1.20.5   ===>
+    gorm.io/gorm v1.20.7
+
+    // 在goland终端或者 go.mod 同目录执行以下命令即可
+    go  mod  tidy    
+
+```  
+
     
