@@ -89,6 +89,10 @@
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
 
+#### V 1.4.11  2020-11-29    
+* rabbitmq单元测试bug修复 ：  
+1.修复 `test/rabbitmq_test.go` 单元测试文件 import 部分引入包大小写问题导致的bug,详情：https://gitee.com/daitougege/GinSkeleton/issues/I27DPC   
+
 #### V 1.4.10  2020-11-27    
 * 功能完善 ：  
 1.增加主线逻辑解耦文档说明，请按照自己的项目实际做选择：低耦合或者零耦合.           
