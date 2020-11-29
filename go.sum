@@ -558,8 +558,8 @@ gorm.io/driver/sqlserver v1.0.5/go.mod h1:WI/bfZ+s9TigYXe3hb3XjNaUP0TqmTdXl11pEC
 gorm.io/gorm v1.20.2/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v1.20.4 h1:fMFR+3bdgx2/vf6VXFgNcsjUL3kSD7ioOFvby3PYTgE=
 gorm.io/gorm v1.20.4/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
-gorm.io/gorm v1.20.5 h1:g3tpSF9kggASzReK+Z3dYei1IJODLqNUbOjSuCczY8g=
-gorm.io/gorm v1.20.5/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
+gorm.io/gorm v1.20.7 h1:rMS4CL3pNmYq1V5/X+nHHjh1Dx6dnf27+Cai5zabo+M=
+gorm.io/gorm v1.20.7/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/plugin/dbresolver v1.0.1 h1:m5QT0xhP2RgpHI9K3f1es27pN6kqbJUTZGsbDl+nEFA=
 gorm.io/plugin/dbresolver v1.0.1/go.mod h1:6wjaQ00/zh2tkZo88gZbb6Ku0oruBt1x7+hvIszHPZo=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

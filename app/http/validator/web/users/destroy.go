@@ -25,7 +25,7 @@ func (d Destroy) CheckParams(context *gin.Context) {
 		return
 	}
 
-	//  该函数主要是将绑定的数据以 键=>值 形式直接传递给下一步（控制器）
+	//  该函数主要是将本结构体的字段（成员）按照 consts.ValidatorPrefix+ json标签对应的 键 => 值 形式直接传递给下一步（控制器）
 	extraAddBindDataContext := data_transfer.DataAddContext(d, consts.ValidatorPrefix, context)
 	if extraAddBindDataContext == nil {
 		response.ErrorSystem(context, "UserShow表单参数验证器json化失败", "")
