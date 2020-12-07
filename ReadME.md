@@ -92,8 +92,7 @@
 #### V 1.4.12  2020-12-07    
 * gormv2 封装层增强 ：
 1.gormv2 包查询没有数据，则会爆出错误（涉及到函数主要有：first、last、take），本次更新屏蔽此错误，我们认为查询无数据又不是代码执行错误，这里不应该是错误.  
-2.涉及到的问题详情：https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次更新解决掉的.  
-
+2.涉及到的问题详情：https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次更新解决掉的.
 
 #### V 1.4.11  2020-11-29    
 * rabbitmq单元测试bug修复 ：  
