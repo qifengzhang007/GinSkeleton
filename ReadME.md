@@ -89,6 +89,12 @@
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
 
+#### V 1.4.12  2020-12-07    
+* gormv2 封装层增强 ：
+1.gormv2 包查询没有数据，则会爆出错误（涉及到函数主要有：first、last、take），本次更新屏蔽此错误，我们认为查询无数据又不是代码执行错误，这里不应该是错误.  
+2.涉及到的问题详情：https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次更新解决掉的.  
+
+
 #### V 1.4.11  2020-11-29    
 * rabbitmq单元测试bug修复 ：  
 1.修复 `test/rabbitmq_test.go` 单元测试文件 import 部分引入包大小写问题导致的bug,详情：https://gitee.com/daitougege/GinSkeleton/issues/I27DPC   
