@@ -71,7 +71,7 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 	}
 
 	// 查询没有数据，屏蔽 gorm v2 包中会爆出的错误
-	// https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次解决的方案
+	// https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次解决掉的
 	gormDb.Callback().Query().Before("gorm:query").Register("disable_raise_record_not_found", func(d *gorm.DB) {
 		d.Statement.RaiseErrorOnNotFound = false
 	})
