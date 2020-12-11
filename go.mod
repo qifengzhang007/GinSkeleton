@@ -29,9 +29,9 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/ini.v1 v1.56.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gorm.io/driver/mysql v1.0.2
+	gorm.io/driver/mysql v1.0.3
 	gorm.io/driver/postgres v1.0.4
 	gorm.io/driver/sqlserver v1.0.5
-	gorm.io/gorm v1.20.7
-	gorm.io/plugin/dbresolver v1.0.1
+	gorm.io/gorm v1.20.8
+	gorm.io/plugin/dbresolver v1.0.2-0.20201206014622-35dbe8dd02e0
 )
