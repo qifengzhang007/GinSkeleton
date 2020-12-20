@@ -89,6 +89,11 @@
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
 
+#### V 1.4.14  2020-12-21    
+* goCurl 包升级 ：  
+1.修复下载命令(Down)一个bug,该bug主要由被下载的文件没有具体后缀引发,详情：https://gitee.com/daitougege/GinSkeleton/issues/I2A2Q0  
+2.goland 终端执行 go  mod  tidy ,自动更新相关依赖包，解决此bug.
+
 #### V 1.4.13  2020-12-11    
 * gormv2 包升级 ：  
 1.相关的依赖包修复了使用复合主键创建关联记录的问题.    
