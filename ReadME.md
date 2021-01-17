@@ -16,6 +16,9 @@
 >   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
 >![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
 
+###    项目目录结构介绍   
+>[核心结构](./docs/project_struct.md)    
+
 ###  交叉编译(windows直接编译出linux可执行文件)    
 >   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0` , 特别说明：以上命令执行时后面不要有空格，否则报错!    
 >   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
@@ -91,11 +94,13 @@
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
 #### V 1.4.15  2021-01-17    
 * 相关依赖包更新 ：   
-1.gormv2系列依赖包更新至最新版.  
-2.表单参数验证器更新至最新版.  
-* 数据库功能升级,支持多类型（mysql、sqlserver、postgresql）数据库同时连接到多个不同服务器的数据库 ：    
-1.解决复杂场景同时连接到多个部署在不同服务器数据库的需求，详情参见单元测试,`TestCustomeParamsConnMysql` 函数代码段 [gormv2单元测试](./test/gormv2_test.go).  
+1.gormv2 系列依赖包更新至最新版.   
+2.表单参数验证器更新至最新版.    
 
+* 数据库功能升级,支持多类型（mysql、sqlserver、postgresql）数据库同时连接到多个不同服务器的数据库 ：    
+1.解决复杂场景不同类型数据库有多个不同源的连接，详情参见单元测试,`TestCustomeParamsConnMysql 函数代码段`  [gormv2单元测试](./test/gormv2_test.go).  
+
+* 增加项目目录结构介绍  
 
 #### V 1.4.14  2020-12-21    
 * goCurl 包升级 ：  
