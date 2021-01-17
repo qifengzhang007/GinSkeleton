@@ -18,24 +18,30 @@ import (
 
 // 获取一个 mysql 客户端
 func GetOneMysqlClient() (*gorm.DB, error) {
-	return getSqlDriver("Mysql")
+	sqlType := "Mysql"
+	readDbIsOpen := variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + ".IsOpenReadDb")
+	return GetSqlDriver(sqlType, readDbIsOpen)
 }
 
 // 获取一个 sqlserver 客户端
 func GetOneSqlserverClient() (*gorm.DB, error) {
-	return getSqlDriver("SqlServer")
+	sqlType := "SqlServer"
+	readDbIsOpen := variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + ".IsOpenReadDb")
+	return GetSqlDriver(sqlType, readDbIsOpen)
 }
 
 // 获取一个 postgresql 客户端
 func GetOnePostgreSqlClient() (*gorm.DB, error) {
-	return getSqlDriver("Postgresql")
+	sqlType := "Postgresql"
+	readDbIsOpen := variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + ".IsOpenReadDb")
+	return GetSqlDriver(sqlType, readDbIsOpen)
 }
 
-// 获取数据库驱动
-func getSqlDriver(sqlType string) (*gorm.DB, error) {
+// 获取数据库驱动, 可以通过options 动态参数连接任意多个数据库
+func GetSqlDriver(sqlType string, readDbIsOpen int, dbConf ...ConfigParams) (*gorm.DB, error) {
 
 	var dbDialector gorm.Dialector
-	if val, err := getDbDialector(sqlType, "Write"); err != nil {
+	if val, err := getDbDialector(sqlType, "Write", dbConf...); err != nil {
 		variable.ZapLog.Error(my_errors.ErrorsDialectorDbInitFail+sqlType, zap.Error(err))
 	} else {
 		dbDialector = val
@@ -51,8 +57,9 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 	}
 
 	// 如果开启了读写分离，配置读数据库（resource、read、replicas）
-	if variable.ConfigGormv2Yml.GetInt("Gormv2."+sqlType+".IsOpenReadDb") == 1 {
-		if val, err := getDbDialector(sqlType, "Read"); err != nil {
+	// 读写分离配置只
+	if readDbIsOpen == 1 {
+		if val, err := getDbDialector(sqlType, "Read", dbConf...); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsDialectorDbInitFail+sqlType, zap.Error(err))
 		} else {
 			dbDialector = val
@@ -72,7 +79,7 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 
 	// 查询没有数据，屏蔽 gorm v2 包中会爆出的错误
 	// https://github.com/go-gorm/gorm/issues/3789  此 issue 所反映的问题就是我们本次解决掉的
-	gormDb.Callback().Query().Before("gorm:query").Register("disable_raise_record_not_found", func(d *gorm.DB) {
+	_ = gormDb.Callback().Query().Before("gorm:query").Register("disable_raise_record_not_found", func(d *gorm.DB) {
 		d.Statement.RaiseErrorOnNotFound = false
 	})
 
@@ -89,9 +96,9 @@ func getSqlDriver(sqlType string) (*gorm.DB, error) {
 }
 
 // 获取一个数据库方言(Dialector),通俗的说就是根据不同的连接参数，获取具体的一类数据库的连接指针
-func getDbDialector(sqlType, readWrite string) (gorm.Dialector, error) {
+func getDbDialector(sqlType, readWrite string, dbConf ...ConfigParams) (gorm.Dialector, error) {
 	var dbDialector gorm.Dialector
-	dsn := getDsn(sqlType, readWrite)
+	dsn := getDsn(sqlType, readWrite, dbConf...)
 	switch strings.ToLower(sqlType) {
 	case "mysql":
 		dbDialector = mysql.Open(dsn)
@@ -106,13 +113,56 @@ func getDbDialector(sqlType, readWrite string) (gorm.Dialector, error) {
 }
 
 //  根据配置参数生成数据库驱动 dsn
-func getDsn(sqlType, readWrite string) string {
+func getDsn(sqlType, readWrite string, dbConf ...ConfigParams) string {
 	Host := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Host")
 	DataBase := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".DataBase")
 	Port := variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + "." + readWrite + ".Port")
 	User := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".User")
 	Pass := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Pass")
 	Charset := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Charset")
+
+	if len(dbConf) > 0 {
+		if strings.ToLower(readWrite) == "write" {
+			if len(dbConf[0].Write.Host) > 0 {
+				Host = dbConf[0].Write.Host
+			}
+			if len(dbConf[0].Write.DataBase) > 0 {
+				DataBase = dbConf[0].Write.DataBase
+			}
+			if dbConf[0].Write.Port > 0 {
+				Port = dbConf[0].Write.Port
+			}
+			if len(dbConf[0].Write.User) > 0 {
+				User = dbConf[0].Write.User
+			}
+			if len(dbConf[0].Write.Pass) > 0 {
+				Pass = dbConf[0].Write.Pass
+			}
+			if len(dbConf[0].Write.Charset) > 0 {
+				Charset = dbConf[0].Write.Charset
+			}
+		} else {
+			if len(dbConf[0].Read.Host) > 0 {
+				Host = dbConf[0].Read.Host
+			}
+			if len(dbConf[0].Read.DataBase) > 0 {
+				DataBase = dbConf[0].Read.DataBase
+			}
+			if dbConf[0].Read.Port > 0 {
+				Port = dbConf[0].Read.Port
+			}
+			if len(dbConf[0].Read.User) > 0 {
+				User = dbConf[0].Read.User
+			}
+			if len(dbConf[0].Read.Pass) > 0 {
+				Pass = dbConf[0].Read.Pass
+			}
+			if len(dbConf[0].Read.Charset) > 0 {
+				Charset = dbConf[0].Read.Charset
+			}
+		}
+	}
+
 	switch strings.ToLower(sqlType) {
 	case "mysql":
 		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", User, Pass, Host, Port, DataBase, Charset)
