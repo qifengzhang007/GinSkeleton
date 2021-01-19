@@ -74,7 +74,7 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 	for onlineClient := range w.WsClient.Hub.Clients {
 
 		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
-		if err := onlineClient.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline * time.Second)); err != nil {
+		if err := onlineClient.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline)); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		//获取每一个在线的客户端，向远端发送消息
