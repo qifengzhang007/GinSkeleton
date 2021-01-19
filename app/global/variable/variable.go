@@ -32,7 +32,7 @@ var (
 
 	//websocket
 	WebsocketHub              interface{}
-	WebsocketHandshakeSuccess = `{"code":2000,"msg":"ws连接成功","data":""}`
+	WebsocketHandshakeSuccess = `{"code":200,"msg":"ws连接成功","data":""}`
 	WebsocketServerPingMsg    = "Server->Ping->Client"
 	//  用户自行定义其他全局变量 ↓
 
