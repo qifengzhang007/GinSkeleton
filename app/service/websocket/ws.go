@@ -59,7 +59,7 @@ func (w *Ws) OnError(err error) {
 // OnClose 客户端关闭回调，发生onError回调以后会继续回调该函数
 func (w *Ws) OnClose() {
 
-	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub管道投递一条注销消息，有hub中心负责关闭连接、删除在线数据
+	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub管道投递一条注销消息，由hub中心负责关闭连接、删除在线数据
 }
 
 //获取在线的全部客户端

@@ -280,7 +280,7 @@ func TestCustomeParamsConnMysql(t *testing.T) {
 	// sqlType ： mysql 、sqlserver、postgresql 等数据库库类型
 	// readDbIsOpen ： 是否开启读写分离，1表示开启读数据库的配置，那么 confPrams.Read 参数部分才会生效； 0 则表示 confPrams.Read 部分参数直接忽略（即 读、写同库）
 	// confPrams 动态配置的数据库参数
-	// 此外，其他参数，例如数据库连接池等，则直接调用配置项数据库连接池参数，动态不需要配置，这部分对实际操作影响不大
+	// 此外，其他参数，例如数据库连接池参数等，则直接调用配置项数据库连接池参数，基本不需要配置，这部分对实际操作影响不大
 	if gormDbMysql, err := gorm_v2.GetSqlDriver("mysql", 0, confPrams); err == nil {
 		gormDbMysql.Raw("select id,username,status,last_login_ip from tb_users").Find(&vDataList)
 		fmt.Printf("Read 数据库查询结果：%v\n", vDataList)
