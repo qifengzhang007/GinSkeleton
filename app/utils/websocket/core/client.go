@@ -18,6 +18,7 @@ type Client struct {
 	ReadDeadline       time.Duration
 	WriteDeadline      time.Duration
 	HeartbeatFailTimes int
+	State              uint8 // ws状态，1=ok；0=出错、掉线等
 }
 
 // 处理握手+协议升级
@@ -60,6 +61,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		}
 		c.Conn.SetReadLimit(variable.ConfigYml.GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
 		c.Hub.Register <- c
+		c.State = 1
 		return c, true
 	}
 
@@ -95,7 +97,7 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 }
 
 // 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包,浏览器收到ping标准格式，自动将消息原路返回给服务器
-func (c *Client) Heartbeat(callbackClose func()) {
+func (c *Client) Heartbeat() {
 	//  1. 设置一个时钟，周期性的向client远端发送心跳数据包
 	ticker := time.NewTicker(c.PingPeriod)
 	defer func() {
@@ -105,8 +107,7 @@ func (c *Client) Heartbeat(callbackClose func()) {
 				variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartFail, zap.Error(val))
 			}
 		}
-		ticker.Stop()   // 停止该client的心跳检测
-		callbackClose() // 注销 client
+		ticker.Stop() // 停止该client的心跳检测
 	}()
 	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	if c.ReadDeadline == 0 {
@@ -125,18 +126,23 @@ func (c *Client) Heartbeat(callbackClose func()) {
 	for {
 		select {
 		case <-ticker.C:
-			_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
-			if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
-				c.HeartbeatFailTimes++
-				if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
-					variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))
-					return
+			if c.State == 1 {
+				_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
+				if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
+					c.HeartbeatFailTimes++
+					if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
+						variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))
+						return
+					}
+				} else {
+					if c.HeartbeatFailTimes > 0 {
+						c.HeartbeatFailTimes--
+					}
 				}
 			} else {
-				if c.HeartbeatFailTimes > 0 {
-					c.HeartbeatFailTimes--
-				}
+				return
 			}
+
 		}
 	}
 }
