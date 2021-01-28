@@ -2,7 +2,7 @@
 > 1.`ELK` 全称为 `Elasticsearch`、`Logstash`、`Kibana`, 该产品近年在提供快速搜索领域异军突起,但是今天我们要介绍的是该套产品的另一杀手锏：日志统一管理、统计、分析.    
 > 2.`ELK` 支持分布式管理日志，您只需要搭建 `elk` 服务器，所有项目的日志(例如：`nginx` 的 `access` 日志、`error` 日志、应用项目运行日志)都可以对接到 `elk` 服务器，由专门的人员负责数据监控，统计、分析.     
 > 3.`ELK` 日志推送结构图：
->![elk日志推送结构图](http://139.196.101.31:2080/images/elk_struct.png)   
+>![elk日志推送结构图](https://www.ginskeleton.com/images/elk_struct.png)   
     
 ###  2.三个核心角色介绍    
 > **elasticsearch**：  
@@ -260,20 +260,20 @@ docker  logs  --since  3m logstash7
 
 > 4.4.3 现在我们可以访问kibana地址：`http://172.21.0.13:5601` , 如果是云服务器就使用外网地址访问即可.  
 > 以下操作基本都是可视化界面，通过鼠标点击等操作完成，我就以截图展示一个完整的主线操作流程, 其他知识请自行查询官网或者加我们的项目群咨询讨论.  
-![步骤1](http://139.196.101.31:2080/images/elk001.png)     
-![步骤2](http://139.196.101.31:2080/images/elk002.png)      
-![步骤3](http://139.196.101.31:2080/images/elk003.png)      
-![步骤4](http://139.196.101.31:2080/images/elk004.png)      
+![步骤1](https://www.ginskeleton.com/images/elk001.png)     
+![步骤2](https://www.ginskeleton.com/images/elk002.png)      
+![步骤3](https://www.ginskeleton.com/images/elk003.png)      
+![步骤4](https://www.ginskeleton.com/images/elk004.png)      
 
 > 特别说明：以下数据是基于测试环境, 有一些数据是直接把老项目的日志文件覆盖到指定位置，所以界面的查询日期跨度比较大.  
 > nginx access 的日志  
-![nginx_access日志](http://139.196.101.31:2080/images/elk005.png)        
+![nginx_access日志](https://www.ginskeleton.com/images/elk005.png)        
 
 >> goskeleton 的日志  
-![goskeleton的elk日志](http://139.196.101.31:2080/images/elk006.png)   
+![goskeleton的elk日志](https://www.ginskeleton.com/images/elk006.png)   
 
 > nginx error 的日志  
-![nginx_access日志](http://139.196.101.31:2080/images/elk007.png)      
+![nginx_access日志](https://www.ginskeleton.com/images/elk007.png)      
 
    
 #### 5.更炫酷未来  

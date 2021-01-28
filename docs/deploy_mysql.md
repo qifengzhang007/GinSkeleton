@@ -25,5 +25,5 @@ https://grafana.com/grafana/dashboards  // grafana 搜索模板地址，找到�
 ```
 
 #### mysql 最终监控效果图  
-![mysql监控效果图](http://139.196.101.31:2080/images/mysql.png) 
+![mysql监控效果图](https://www.ginskeleton.com/images/mysql.png) 
 

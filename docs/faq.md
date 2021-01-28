@@ -4,8 +4,8 @@
 ##### golang.org 官方依赖可能无法下载手动解决方案  
 >   1.手动下载：https://wwa.lanzous.com/iqPH5fw11va  
 >   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录之外的任意目录），复制在以下目录解压即可：  
->   ![操作图](http://139.196.101.31:2080/golang.org.png)   
->   ![操作图](http://139.196.101.31:2080/golang.org2.png)   
+>   ![操作图](https://www.ginskeleton.com/golang.org.png)   
+>   ![操作图](https://www.ginskeleton.com/golang.org2.png)   
 
 #####  2.为什么该项目 go.mod 中的模块名是 goskeleton ,但是下载下来的文件名却是 GinSkeleton ?
 >   本项目一开始我们命名为 ginskeleton , 包名也是这个，但是后来感觉 goskeleton 好听一点（现在看来未必）,

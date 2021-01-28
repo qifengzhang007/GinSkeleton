@@ -96,4 +96,4 @@ func (t *Test) SelectDataMultiple() bool {
 >  3.我们已经得到了 `heap-delta` 文件,那么就在同目录打开cmd窗口,执行 `go  tool  pprof  -inuse_space  heap-delta`, 然后输入 `web` 回车就会自动打开浏览器，展示给您如下结果图：     
 
 ###  报告详情参见如下图  
-![内存占用分析](http://139.196.101.31:2080/images/sql_memory.png)  
+![内存占用分析](https://www.ginskeleton.com/images/sql_memory.png)  

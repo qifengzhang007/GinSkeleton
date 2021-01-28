@@ -37,4 +37,4 @@ firewall-cmd --complete-reload
 ```
 
 ####    最终效果图  
-![redis最终效果](http://139.196.101.31:2080/images/redis.png)   
+![redis最终效果](https://www.ginskeleton.com/images/redis.png)   

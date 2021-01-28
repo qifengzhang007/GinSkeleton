@@ -44,4 +44,4 @@ firewall-cmd --complete-reload
 
 ```
 ####    最终效果图  
-![点击查看](http://139.196.101.31:2080/images/nginx_vts.png)   
+![点击查看](https://www.ginskeleton.com/images/nginx_vts.png)   

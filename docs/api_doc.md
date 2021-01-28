@@ -228,4 +228,4 @@ files|form-data|string|必填|(注意表单键名为files，如果需要修改�
 }
 ```  
 > postman 直接上传文件相关参数  
-![文件上传](http://139.196.101.31:2080/images/upload.png)    
+![文件上传](https://www.ginskeleton.com/images/upload.png)    

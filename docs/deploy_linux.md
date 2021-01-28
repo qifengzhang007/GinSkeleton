@@ -92,7 +92,7 @@ firewall-cmd --list-ports
 #### 通过chrome浏览器访问 ip:3000  登录，一般都能成功登陆，默认账号密码：admin/admin
 
 ##### 如果您登陆遇到了如下错误，那么请继续向下看：
-![登录报错](http://139.196.101.31:2080/images/login_err.jpg)    
+![登录报错](https://www.ginskeleton.com/images/login_err.jpg)    
 > 谷歌浏览器登录可能一次性会成功，搜狗浏览器登录是会报错的。
 > 如果您的浏览器在登录时也报错，导致无法登陆成功，解决方案
 ```code   
@@ -106,25 +106,25 @@ docker  exec  -it  grafana   /bin/bash
 
 #### 登录成功以后首先配置数据源
 > step1:    
-![添加数据源step1](http://139.196.101.31:2080/images/add_source1.png)     
+![添加数据源step1](https://www.ginskeleton.com/images/add_source1.png)     
 > step2:    
-![添加数据源step2](http://139.196.101.31:2080/images/add_source2.jpg)     
+![添加数据源step2](https://www.ginskeleton.com/images/add_source2.jpg)     
 > step3: 点击 selected     
-![添加数据源step2](http://139.196.101.31:2080/images/add_source3.jpg)     
+![添加数据源step2](https://www.ginskeleton.com/images/add_source3.jpg)     
 > step4: 点击  save&test 显示一切ok    
-![添加数据源step2](http://139.196.101.31:2080/images/add_source4.jpg)      
-![添加数据源step2](http://139.196.101.31:2080/images/add_source5.jpg)   
+![添加数据源step2](https://www.ginskeleton.com/images/add_source4.jpg)      
+![添加数据源step2](https://www.ginskeleton.com/images/add_source5.jpg)   
 
 #### 导入监控服务器状态的模板     
-![导入模板step2](http://139.196.101.31:2080/images/import1.jpg)  
+![导入模板step2](https://www.ginskeleton.com/images/import1.jpg)  
 > step2: 这里的8919 是监控系统运行状态的模板id
 > 相关模板地址： https://grafana.com/grafana/dashboards/8919    
 > 更多模板选择地址： https://grafana.com/grafana/dashboards   
-![导入模板step2](http://139.196.101.31:2080/images/import2.jpg)  
+![导入模板step2](https://www.ginskeleton.com/images/import2.jpg)  
 
 #### 最终效果：
-![最后查看step1](http://139.196.101.31:2080/images/finnal1.jpg)  
-![最后查看step2](http://139.196.101.31:2080/images/finnal2.jpg)  
-![最后查看step3](http://139.196.101.31:2080/images/linux1.png)  
-![最后查看step3](http://139.196.101.31:2080/images/linux2.png)  
+![最后查看step1](https://www.ginskeleton.com/images/finnal1.jpg)  
+![最后查看step2](https://www.ginskeleton.com/images/finnal2.jpg)  
+![最后查看step3](https://www.ginskeleton.com/images/linux1.png)  
+![最后查看step3](https://www.ginskeleton.com/images/linux2.png)  
 

@@ -55,7 +55,7 @@ func (t *Test) SelectDataMultiple() bool {
  ```  
 ###  cpu 底层数据采集步骤  
 >   1.浏览器访问pprof接口：`http://127.0.0.1:20191/debug/pprof/`, 点击 `profile` 选项,程序会对本项目进程, 进行 cpu 使用情况底层数据采集, 该过程会持续 30 秒.     
-![pprof地址](http://139.196.101.31:2080/images/pprof_menue.jpg)   
+![pprof地址](https://www.ginskeleton.com/images/pprof_menue.jpg)   
 >   2.新开浏览器窗口,输入 `http://127.0.0.1:20191/` 刷新,触发路由中的数据库操作代码, 等待被 pprof 采集数据.      
 >   3.稍等片刻，30秒之后，您点击过的步骤1就会提示下载文件：`profile`, 请保存在您能记住的路径中，稍后马上使用该文件(profile), 至此cpu数据已经采集完毕.         
 
@@ -65,4 +65,4 @@ func (t *Test) SelectDataMultiple() bool {
 >  3.在cpu数据采集环节第三步,您已经得到了 `profile` 文件,那么就在同目录打开cmd窗口,执行 `go  tool  pprof  profile`, 然后输入 `web` 回车就会自动打开浏览器，展示给您如下结果图：     
 
 ###  报告详情参见如下图  
-![cpu分析_上](http://139.196.101.31:2080/images/cpu_sql.png)  
+![cpu分析_上](https://www.ginskeleton.com/images/cpu_sql.png)  

@@ -14,7 +14,7 @@
 >   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
 >   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
 >   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
->![业务主线图](http://139.196.101.31:2080/GinSkeleton.jpg)  
+>![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)  
 
 ###    项目目录结构介绍   
 >[核心结构](./docs/project_struct.md)    
@@ -191,4 +191,4 @@
 >   1.[历史日志](docs/history_log.md)  
   
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
-![https://www.jetbrains.com/](http://139.196.101.31:2080/images/jetbrains.jpg)
+![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)

@@ -313,4 +313,4 @@ func init() {
  >   3.控制器位置：app\http\controller\websocket\ws.go  
  >   4.事件监听、处理位置：app\service\websocket\ws.go,[查看详情](../app/service/websocket/ws.go)     
  >   5.关于隐式自动维护心跳抓包图,其中`Server_ping` 为服务器端向浏览器发送的`ping`格式数据包，`F12` 不可见，只有抓包可见。      
- >![业务主线图](http://139.196.101.31:2080/pingpong.png)  
+ >![业务主线图](https://www.ginskeleton.com/pingpong.png)  
