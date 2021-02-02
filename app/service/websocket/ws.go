@@ -22,7 +22,7 @@ websocket模块相关事件执行顺序：
 
 type Ws struct {
 	WsClient *core.Client
-	Mux      sync.RWMutex
+	mux      sync.RWMutex
 }
 
 // onOpen 基本不需要做什么
@@ -72,8 +72,9 @@ func (w *Ws) GetOnlineClients() {
 }
 
 // 向全部在线客户端广播消息
+// 广播函数可能被不同的逻辑同时调用，由于操作的都是 Conn ，因此为了保证并发安全，加互斥锁
 func (w *Ws) BroadcastMsg(sendMsg string) {
-	w.Mux.Lock()
+	w.mux.Lock()
 	for onlineClient := range w.WsClient.Hub.Clients {
 
 		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
@@ -85,5 +86,5 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 	}
-	w.Mux.Unlock()
+	w.mux.Unlock()
 }
