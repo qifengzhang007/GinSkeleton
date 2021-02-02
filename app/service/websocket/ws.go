@@ -8,6 +8,7 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/websocket/core"
+	"sync"
 	"time"
 )
 
@@ -21,6 +22,7 @@ websocket模块相关事件执行顺序：
 
 type Ws struct {
 	WsClient *core.Client
+	Mux      sync.RWMutex
 }
 
 // onOpen 基本不需要做什么
@@ -71,7 +73,7 @@ func (w *Ws) GetOnlineClients() {
 
 // 向全部在线客户端广播消息
 func (w *Ws) BroadcastMsg(sendMsg string) {
-
+	w.Mux.Lock()
 	for onlineClient := range w.WsClient.Hub.Clients {
 
 		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
@@ -83,4 +85,5 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 	}
+	w.Mux.Unlock()
 }
