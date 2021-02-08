@@ -98,8 +98,9 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 	}
 }
 
-// 发送消息
+// 发送消息，请统一调用本函数进行发送
 // 消息发送时增加互斥锁，加强并发情况下程序稳定性
+// 提醒：开发者发送消息时，不要调用 c.Conn.WriteMessage(messageType, []byte(message)) 直接发送消息
 func (c *Client) SendMessage(messageType int, message string) error {
 	c.Lock()
 	defer func() {
