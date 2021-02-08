@@ -7,6 +7,7 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -19,6 +20,7 @@ type Client struct {
 	WriteDeadline      time.Duration
 	HeartbeatFailTimes int
 	State              uint8 // ws状态，1=ok；0=出错、掉线等
+	sync.RWMutex
 }
 
 // 处理握手+协议升级
@@ -56,7 +58,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		if err := c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second)); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
-		if err := c.Conn.WriteMessage(websocket.TextMessage, []byte(variable.WebsocketHandshakeSuccess)); err != nil {
+		if err := c.SendMessage(websocket.TextMessage, variable.WebsocketHandshakeSuccess); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 		c.Conn.SetReadLimit(variable.ConfigYml.GetInt64("Websocket.MaxMessageSize")) // 设置最大读取长度
@@ -96,6 +98,20 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 	}
 }
 
+// 发送消息
+// 消息发送时增加互斥锁，加强并发情况下程序稳定性
+func (c *Client) SendMessage(messageType int, message string) error {
+	c.Lock()
+	defer func() {
+		c.Unlock()
+	}()
+	if err := c.Conn.WriteMessage(messageType, []byte(message)); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
 // 按照websocket标准协议实现隐式心跳,Server端向Client远端发送ping格式数据包,浏览器收到ping标准格式，自动将消息原路返回给服务器
 func (c *Client) Heartbeat() {
 	//  1. 设置一个时钟，周期性的向client远端发送心跳数据包
@@ -128,7 +144,7 @@ func (c *Client) Heartbeat() {
 		case <-ticker.C:
 			if c.State == 1 {
 				_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
-				if err := c.Conn.WriteMessage(websocket.PingMessage, []byte(variable.WebsocketServerPingMsg)); err != nil {
+				if err := c.SendMessage(websocket.PingMessage, variable.WebsocketServerPingMsg); err != nil {
 					c.HeartbeatFailTimes++
 					if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
 						variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))

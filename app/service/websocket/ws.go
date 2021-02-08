@@ -8,7 +8,6 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/websocket/core"
-	"sync"
 	"time"
 )
 
@@ -22,7 +21,6 @@ websocket模块相关事件执行顺序：
 
 type Ws struct {
 	WsClient *core.Client
-	mux      sync.RWMutex
 }
 
 // onOpen 基本不需要做什么
@@ -45,7 +43,7 @@ func (w *Ws) OnMessage(context *gin.Context) {
 
 		tempMsg := "服务器已经收到了你的消息==>" + string(receivedData)
 		// 回复客户端已经收到消息;
-		if err := w.WsClient.Conn.WriteMessage(messageType, []byte(tempMsg)); err != nil {
+		if err := w.WsClient.SendMessage(messageType, tempMsg); err != nil {
 			variable.ZapLog.Error("消息发送出现错误", zap.Error(err))
 		}
 
@@ -74,17 +72,15 @@ func (w *Ws) GetOnlineClients() {
 // 向全部在线客户端广播消息
 // 广播函数可能被不同的逻辑同时调用，由于操作的都是 Conn ，因此为了保证并发安全，加互斥锁
 func (w *Ws) BroadcastMsg(sendMsg string) {
-	w.mux.Lock()
 	for onlineClient := range w.WsClient.Hub.Clients {
 
-		// 每次向客户端写入消息命令（WriteMessage）之前必须设置超时时间
+		// 每次向客户端写入消息命令（SendMessage）之前必须设置超时时间
 		if err := onlineClient.Conn.SetWriteDeadline(time.Now().Add(w.WsClient.WriteDeadline)); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
 		}
 		//获取每一个在线的客户端，向远端发送消息
-		if err := onlineClient.Conn.WriteMessage(websocket.TextMessage, []byte(sendMsg)); err != nil {
+		if err := onlineClient.SendMessage(websocket.TextMessage, sendMsg); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
 	}
-	w.mux.Unlock()
 }
