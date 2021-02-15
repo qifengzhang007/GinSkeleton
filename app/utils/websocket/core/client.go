@@ -55,9 +55,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		c.PingPeriod = time.Second * variable.ConfigYml.GetDuration("Websocket.PingPeriod")
 		c.ReadDeadline = time.Second * variable.ConfigYml.GetDuration("Websocket.ReadDeadline")
 		c.WriteDeadline = time.Second * variable.ConfigYml.GetDuration("Websocket.WriteDeadline")
-		if err := c.Conn.SetWriteDeadline(time.Now().Add(2 * time.Second)); err != nil {
-			variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
-		}
+
 		if err := c.SendMessage(websocket.TextMessage, variable.WebsocketHandshakeSuccess); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsWebsocketWriteMgsFail, zap.Error(err))
 		}
@@ -86,9 +84,6 @@ func (c *Client) ReadPump(callbackOnMessage func(messageType int, receivedData [
 	for {
 		mt, bReceivedData, err := c.Conn.ReadMessage()
 		if err == nil {
-			if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline)); err != nil {
-				variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
-			}
 			callbackOnMessage(mt, bReceivedData)
 		} else {
 			// OnError事件
@@ -106,6 +101,11 @@ func (c *Client) SendMessage(messageType int, message string) error {
 	defer func() {
 		c.Unlock()
 	}()
+	// 发送消息时，必须设置本次消息的最大允许时长(秒)
+	if err := c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline)); err != nil {
+		variable.ZapLog.Error(my_errors.ErrorsWebsocketSetWriteDeadlineFail, zap.Error(err))
+		return err
+	}
 	if err := c.Conn.WriteMessage(messageType, []byte(message)); err != nil {
 		return err
 	} else {
@@ -144,7 +144,6 @@ func (c *Client) Heartbeat() {
 		select {
 		case <-ticker.C:
 			if c.State == 1 {
-				_ = c.Conn.SetWriteDeadline(time.Now().Add(c.WriteDeadline))
 				if err := c.SendMessage(websocket.PingMessage, variable.WebsocketServerPingMsg); err != nil {
 					c.HeartbeatFailTimes++
 					if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
