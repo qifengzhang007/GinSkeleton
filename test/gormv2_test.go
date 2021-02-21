@@ -289,6 +289,10 @@ func TestCustomeParamsConnMysql(t *testing.T) {
 	}
 }
 
+// 将sql结果集扫描为树形结构数据
+// 参见相关包附带的使用详情：
+//https://gitee.com/daitougege/sql_res_to_tree
+
 //  sqlserver 数据库测试, 以查询为例，其他操作参见mysql
 // 请在配置项 config > gorm_v2.yml 中，sqlserver 部分，正确配置数据库参数
 // 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量

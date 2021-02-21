@@ -44,12 +44,13 @@
 7|aop切面编程| [Aop切面编程](docs/aop.md) 
 8|redis| [redis使用示例](test/redis_test.go) 
 9|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 测试用例](test/gormv2_test.go) 
-10|日志记录|  [zap高性能日志](docs/zap_log.md) 
-11|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
-12| 验证码|  [验证码](docs/captcha.md)
-13| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
-14|supervisor| [supervisor进程守护](docs/supervisor.md)   
-15|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)   
+10|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
+11|日志记录|  [zap高性能日志](docs/zap_log.md) 
+12|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+13| 验证码|  [验证码](docs/captcha.md)
+14| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md) 
+15|supervisor| [supervisor进程守护](docs/supervisor.md)   
+16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)   
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -92,6 +93,13 @@
 #### 版本
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
+
+#### V 1.4.20  2021-02-21
+* sql结果集无限级、有限级树形化    
+  1.gorm 的 sql 扫描函数 Find、Scan查询结果一键树形化，解决数据需要树形化结果的业务场景.   
+  2.sql结果树形化反射扫描器属全球首款，欢迎使用、提供使用反馈意见,详情参见 **常用开发模块** 附带文档.   
+  3.其他地方部分代码进行了简化.  
+  4.本项目后续将开发附带的 admin系统（基于iview前端框架+ginskeleton）.  
 
 #### V 1.4.19  2021-02-08
 * websocket 增强大并发环境消息发送时的安全性 ：     
