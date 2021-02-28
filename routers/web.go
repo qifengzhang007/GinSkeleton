@@ -71,6 +71,7 @@ func InitWebRouter() *gin.Engine {
 			// 3.按照注册时的键，直接从容器调用即可 ：validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister")
 			noAuth.POST("register", validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister"))
 			noAuth.POST("login", validatorFactory.Create(consts.ValidatorPrefix+"UsersLogin"))
+			noAuth.POST("test", validatorFactory.Create(consts.ValidatorPrefix+"UsersTest"))
 		}
 
 		// 【需要token】中间件验证的路由
