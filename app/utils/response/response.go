@@ -39,7 +39,7 @@ func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
 //token 权限校验失败
 func ErrorTokenAuthFail(c *gin.Context) {
 	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
-	//终止后可能已经被加载的回调函数执行
+	//终止可能已经被加载的其他回调函数的执行
 	c.Abort()
 }
 
