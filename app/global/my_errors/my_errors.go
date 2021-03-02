@@ -29,8 +29,10 @@ const (
 	ErrorsValidatorNotExists      string = "不存在的验证器"
 	ErrorsValidatorBindParamsFail string = "验证器绑定参数失败"
 	//token部分
-	ErrorsTokenInvalid string = "无效的token"
-	//ErrorsTokenExpired string = "过期的token"
+	ErrorsTokenInvalid      string = "无效的token"
+	ErrorsTokenNotActiveYet string = "token 尚未激活"
+	ErrorsTokenMalFormed    string = "token 格式不正确"
+
 	//snowflake
 	ErrorsSnowflakeGetIdFail string = "获取snowflake唯一ID过程发生错误"
 	// websocket

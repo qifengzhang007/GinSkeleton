@@ -42,4 +42,19 @@ CREATE TABLE `tb_oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`fr_user_id`)
 ) ENGINE=MYISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+/* 创建基于casbin控制接口访问的权限表*/
+DROP TABLE IF EXISTS `tb_casbin_rule`;
+CREATE TABLE `tb_casbin_rule` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`ptype` varchar(100) DEFAULT NULL,
+`v0` varchar(100) DEFAULT '',
+`v1` varchar(100) DEFAULT '',
+`v2` varchar(100) DEFAULT '*',
+`v3` varchar(100) DEFAULT '',
+`v4` varchar(100) DEFAULT '',
+`v5` varchar(100) DEFAULT '',
+PRIMARY KEY (`id`),
+UNIQUE KEY `unique_index` (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+
 

@@ -1,6 +1,7 @@
 package authorization
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
@@ -17,6 +18,7 @@ type HeaderParams struct {
 // 检查token权限
 func CheckTokenAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
+		fmt.Printf("开始检查 token了")
 		//  模拟验证token
 		headerParams := HeaderParams{}
 
@@ -33,6 +35,7 @@ func CheckTokenAuth() gin.HandlerFunc {
 				if tokenIsEffective {
 					if customeToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
 						key := variable.ConfigYml.GetString("Token.BindContextKeyName")
+						// token验证通过，同时绑定在请求上下文
 						context.Set(key, customeToken)
 					}
 					context.Next()
@@ -54,7 +57,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 
 		// 模拟请求参数转换后的角色
 		// 这里讲用户的id解析为所拥有的的角色，判断是否具有某个权限即可
-		role := "1" //  1 =user 2=admin
+		role := "2" //  1 =user 2=admin
 
 		isPass, err := variable.Enforcer.Enforce(role, requstUrl, method)
 		if err != nil {
