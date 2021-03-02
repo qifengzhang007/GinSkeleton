@@ -29,7 +29,7 @@ func ShouldBindFormDataToModel(c *gin.Context, modelStruct interface{}) error {
 	for i := 0; i < fieldNum; i++ {
 		if !mtf.Field(i).Anonymous {
 			fieldSetValue(c, mValueOfEle, mtf, i)
-		} else {
+		} else if mtf.Field(i).Type.Kind() == reflect.Struct {
 			//处理匿名结构体
 			mValueOfEle.Field(i).Set(analysisAnonymousStruct(c, mValueOfEle.Field(i)))
 		}
