@@ -13,7 +13,9 @@ const (
 	ErrorsFuncEventNotCall          string = "注册的函数无法正确执行"
 	ErrorsBasePath                  string = "初始化项目根目录失败"
 	ErrorsNoAuthorization           string = "token鉴权未通过，请通过token授权接口重新获取token,"
+	ErrorsParseTokenFail            string = "解析token失败"
 	ErrorsGormInitFail              string = "Gorm 数据库驱动、连接初始化失败"
+	ErrorsCasbinNoAuthorization     string = "Casbin 鉴权未通过，请在后台检查 casbin 设置参数"
 	ErrorsGormNotInitGlobalPointer  string = "%s 数据库全局变量指针没有初始化，请在配置文件 Gormv2.yml 设置 Gormv2.%s.IsInitGolobalGormMysql = 1, 并且保证数据库配置正确 \n"
 	// 数据库部分
 	ErrorsDbDriverNotExists   string = "数据库驱动类型不存在,目前支持的数据库类型：mysql、sqlserver、postgresql，您提交数据库类型："
@@ -45,4 +47,10 @@ const (
 	//文件上传
 	ErrorsFilesUploadOpenFail string = "打开文件失败，详情："
 	ErrorsFilesUploadReadFail string = "读取文件32字节失败，详情："
+
+	// casbin 初始化可能的错误
+	ErrorCasbinCanNotUseDbPtr         string = "casbin 的初始化基于gorm 初始化后的数据库连接指针，程序检测到 gorm 连接指针无效，请检查数据库配置！"
+	ErrorCasbinCreateAdaptFail        string = "casbin NewAdapterByDBUseTableName 发生错误："
+	ErrorCasbinCreateEnforcerFail     string = "casbin NewEnforcer 发生错误："
+	ErrorCasbinNewModelFromStringFail string = "NewModelFromString 调用时出错："
 )

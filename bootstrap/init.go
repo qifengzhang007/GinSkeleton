@@ -6,6 +6,7 @@ import (
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/validator/common/register_validator"
 	"goskeleton/app/service/sys_log_hook"
+	"goskeleton/app/utils/casbin_v2"
 	"goskeleton/app/utils/gorm_v2"
 	"goskeleton/app/utils/snow_flake"
 	"goskeleton/app/utils/websocket/core"
@@ -90,4 +91,11 @@ func init() {
 		}
 	}
 
+	// 9.casbin 依据配置文件设置参数(IsInit=1)初始化
+	if variable.ConfigYml.GetInt("Casbin.IsInit") == 1 {
+		var err error
+		if variable.Enforcer, err = casbin_v2.InitCasbinEnforcer(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
 }

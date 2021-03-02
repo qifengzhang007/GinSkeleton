@@ -74,8 +74,8 @@ func InitWebRouter() *gin.Engine {
 			noAuth.POST("test", validatorFactory.Create(consts.ValidatorPrefix+"UsersTest"))
 		}
 
-		// 【需要token】中间件验证的路由
-		backend.Use(authorization.CheckAuth())
+		// 【需要token+Casbin】中间件验证的路由
+		backend.Use(authorization.CheckTokenAuth(), authorization.CheckCasbinAuth())
 		{
 			// 刷新token，当token过期，用旧token换取新token
 			noAuth.POST("refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))

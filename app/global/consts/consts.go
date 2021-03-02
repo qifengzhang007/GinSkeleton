@@ -14,13 +14,11 @@ const (
 	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误, "
 
 	// token相关
-	JwtTokenSignKey       string = "goskeleton"
 	JwtTokenOK            int    = 200100           //token有效
 	JwtTokenInvalid       int    = -400100          //无效的token
 	JwtTokenExpired       int    = -400101          //过期的token
 	JwtTokenFormatErrCode int    = -400102          //提交的 token 格式错误
 	JwtTokenFormatErrMsg  string = "提交的 token 格式错误" //提交的 token 格式错误
-	JwtTokenOnlineUsers   int    = 10               // 设置一个账号最大允许几个用户同时在线，默认为10
 
 	//SnowFlake 雪花算法
 	StartTimeStamp = int64(1483228800000) //开始时间截 (2017-01-01)
