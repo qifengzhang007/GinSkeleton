@@ -62,10 +62,10 @@ FileUploadSetting:
 
 # casbin 权限控制api接口
 Casbin:
-  IsInit: 1 # 是否随项目启动同步初始化：1=是；0=否,
+  IsInit: 0 # 是否随项目启动同步初始化：1=是；0=否,
   AutoLoadPolicySeconds: 5 # 扫描数据库策略的频率(单位：秒)
   TablePrefix: "tb"
-  TableName: "casbin_rule"  # 程序最终创建的表为： tb_casbin_rule (即在前缀和名称之间自动添加了下划线 _ )
+  TableName: "auth_casbin_rule"  # 程序最终创建的表为： tb_auth_casbin_rule (即在前缀和名称之间自动添加了下划线 _ )
   ModelConfig: |    # 竖线 | 表示以下整段文本保持换行格式
     [request_definition]
     r = sub, obj, act

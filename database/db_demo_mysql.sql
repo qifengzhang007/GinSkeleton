@@ -43,8 +43,8 @@ CREATE TABLE `tb_oauth_access_tokens` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 /* 创建基于casbin控制接口访问的权限表*/
-DROP TABLE IF EXISTS `tb_casbin_rule`;
-CREATE TABLE `tb_casbin_rule` (
+DROP TABLE IF EXISTS `tb_auth_casbin_rule`;
+CREATE TABLE `tb_auth_casbin_rule` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 `ptype` varchar(100) DEFAULT NULL,
 `v0` varchar(100) DEFAULT '',
