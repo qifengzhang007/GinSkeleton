@@ -75,7 +75,7 @@ func InitWebRouter() *gin.Engine {
 		}
 
 		// 【需要token+Casbin】中间件验证的路由
-		backend.Use(authorization.CheckTokenAuth(), authorization.CheckCasbinAuth())
+		backend.Use(authorization.CheckTokenAuth())
 		{
 			// 用户组路由
 			users := backend.Group("users/")
