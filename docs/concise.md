@@ -1,19 +1,37 @@
 ###  本篇将介绍我们集成的 gorm v2 操作非常流畅的增删改查功能    
-> 1.gormv2 功能非常强大，本篇将介绍我们集成后非常简洁、简单，操作流程的 增删改查 功能.    
-> 2.阅读完本篇，gorm v2 操作数据库CURD功能基本已经非常简单了，如果你觉得你不够用，请继续阅读官方文档:https://gorm.io/zh_CN/docs/    
+> 1.gormv2 功能非常强大，本篇将介绍我们 gorm_v2 在 GinSkeleton 中非常简洁、简单的操作流程，以 增删改查 操作介绍.      
+> 2.阅读完本篇，您可以继续阅读官方文档,学习更多功能:https://gorm.io/zh_CN/docs/    
 
 ###  前言  
-> 1.以下功能涉及到增删改查，因此我们默认你的请求数据全部已经了表单参数验证器的校验.  
-> 2.只有满足第1条，程序才能将表单参数验证器的值自动绑定到 gin.Context 上,后续操作方能流畅进行.  
-> 3.复杂sql操作依然推荐使用 原生sql 操作.  
+> 1.一个简单的 CURD 操作,我们的起始点为表单参数验证器，终点为数据写入数据库，接下来流程我们将沿着这个主线展开编写.  
+
+### 用户表单参数验证器  
+```code  
+// 给表单参数验证器设置 form 标签，gin框架会获取用户提交的表单参数绑定在此结构体上
+// 设置 json 标签 GinSkeleton 会将json对应的字段绑定在上下文(gin.Context)
+type UserStore struct {
+	Base
+	Pass     string `form:"pass" json:"pass" binding:"required,min=6"`
+	RealName string `form:"real_name" json:"real_name" binding:"required,min=2"`
+	Phone    string `form:"phone" json:"phone" binding:"required,len=11"`
+	Remark   string `form:"remark" json:"remark" `
+}
+
+// 验证器语法，更详细用法参见常用开发模块列表专项介绍
+func (u UserStore) CheckParams(context *gin.Context) {
+     // 省略代码...
+}
 
 
-###  以下代码都是以 model > users 为核心，假设我们定义了 model > users 模型,接下来介绍的代码都是基于此段代码展开的.     
-```go
+```
 
+###  验证器完成进入控制器，控制器可以直接将 gin.Context 继续传递给 UsersModel
+> 1.以下代码将以 model目录 > users 模型展开
+```code  
 
 // 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
+// 以下函数为固定写法，复制即可，不需要深度研究  
 func CreateUserFactory(sqlType string) *UsersModel {
 	return &UsersModel{BaseModel: model.BaseModel{DB: model.UseDbConn(sqlType)}}
 }
@@ -34,20 +52,23 @@ func (u *UsersModel) TableName() string {
 	return "tb_users"
 }
 
-
 ```
     
 ####  1.新增数据  
-> 以下代码引用了 data_bind.ShouldBindFormDataToModel(c, &tmp) 函数，这个函数是我们对 gin.ShouldBind 函数的精简,加快数据绑定效率.主要是避免了 gin.ShouldBind 函数绑定 usersModel时会进一步解析gorm.Db内部结构. 最终将提交的表单参数直接绑定到 UserModel 模型.
-> 1.参数绑定的原则：model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.  
-> 2.gorm 的数据新增函数 Create 支持单挑、以及批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,u.Create(&tmp)  
+> 以下代码引用了 `data_bind.ShouldBindFormDataToModel(c, &tmp)` 函数，这个函数是我们对 gin.ShouldBind 函数的精简,加快数据绑定效率。 
+> 1.1 参数绑定的原则：model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.  
+> 1.2 gorm 的数据新增函数 Create 支持单条、批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,u.Create(&tmp)  
 
-```go  
+```code  
 //新增数据
 	func (u *UsersModel) InsertData(c *gin.Context) bool {
+    
     // 注意： 必须重新定义一个 userModel 变量
 	var tmp UsersModel
-	// data_bind.ShouldBindFormDataToModel 函数主要按照 UsersModel 结构体指定的json标签去gin.Context上去寻找相同名称的表单数据,绑定到新定义的变量.   
+	
+	// data_bind.ShouldBindFormDataToModel 函数主要按照 UsersModel 结构体指定的json标签去gin.Context上去寻找相同名称的表单数据,绑定到新定义的变量.
+	// 这里不能使用  gin.ShouldBind 函数从上下文绑定数据，因为 UserModel 我们组合了  gorm.DB ，该函数功能太强大，会深入内部持续解析gorm.Db，产生死循环     
+	
 	if err := data_bind.ShouldBindFormDataToModel(c, &tmp); err == nil {
 		// Create 函数会将新插入的数据Id 继续更新到 tmp 结构体的主键ID 字段，这里必须传递 指针. 最终的 tmp 其实就是一条新增加的完整数据
 			if res := u.Create(&tmp); res.Error == nil {
@@ -64,10 +85,10 @@ func (u *UsersModel) TableName() string {
 ```
 
 ####  2.修改数据  
-> 1.gorm 的数据更新有两个函数： updates 不会处理零值字段，save 会全量覆盖式更新字段    
-> 2.u.Updates()  函数会根据 UsersModel 已经绑定的 TableName 函数解析对应的数据表,然后根据 tmp 结构体定义的主键Id，去更新其他字段值.    
+> 2.1 gorm 的数据更新有两个函数： updates 不会处理零值字段，save 会全量覆盖式更新字段    
+> 2.2 u.Updates()  函数会根据 UsersModel 已经绑定的 TableName 函数解析对应的数据表,然后根据 tmp 结构体定义的主键Id，去更新其他字段值.    
 
-```go
+```code
 
 //更新
 func (u *UsersModel) UpdateData(c *gin.Context) bool {
@@ -84,13 +105,12 @@ func (u *UsersModel) UpdateData(c *gin.Context) bool {
 	return false
 }
 
-
 ```
 
 ####  3.删除数据  
 > UsersModel 已经绑定了函数 TableName ,所以 u.Delete(u,id)  会自动解析出需要删除的表，然后根据Id删除数据.  
 
-```go
+```code
 //删除，我们根据Id删除
 func (u *UsersModel) DeleteData(id int) bool {
     if u.Delete(u, id).Error == nil {
@@ -102,21 +122,21 @@ return false
 ```
 
 ####  4.查询 
-> 1.查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
-```go
+> 4.1 查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
+```code
     // 查询类 sql 语句
     u.Raw(sql语句,参数1,参数2... ... )
 
     // 执行类 sql 语句
     u.Exec(sql语句,参数1,参数2... ... )
 ```
-> 2.接下来我们演示gorm自带查询     
-```go
+> 4.2 接下来我们演示gorm自带查询     
+```code
     // 第一种情况   
 
-    // 如果 UsersModel 已经绑定 TableName 函数，那么查询语句对应的数据表就会由 tableName 的返回指定； 
+    // 如果 UsersModel 已经绑定 TableName 函数，那么查询语句对应的数据表明就是 tableName 的返回值； 
     var  tmp  []UsersModel
-    //  Where  关键词前面没有指定表名,那么查询的数据库表将由  UsersModel 结构体绑定的 TableName 返回值决定
+    //  Where  关键词前面没有指定表名,那么查询的数据库表名就是 tmp 对应的结构体 UsersModel 结构体绑定的 TableName 的返回值
     u.Where("ID = ?", user_id).Find(&tmp)
 
     // 第二种情况  
@@ -124,7 +144,9 @@ return false
 	//  假设 UsersList 是自定义数据类型，没有绑定 TbaleName ，那么在where 关键词开始时就必须指定表名
 	
 	//指定表名 有以下两种方式：
-        u.Model(u).Where("ID = ?", user_id).Find(&tmp)  //  u.Model(u)  表示从 u 结构体绑定的 tableName 函数获取对应的表名
+	
+	//  u.Model(u)  表示从 u 结构体绑定的 tableName 函数获取对应的表名，如果 u 对应的结构体和 tmp 对应的结构体 UsersList 都没有绑定 TableName ，就会发生错误  
+        u.Model(u).Where("ID = ?", user_id).Find(&tmp)  
     // u.Tbale(u.TableName()).Where("ID = ?", user_id).Find(&tmp)
 
 ```

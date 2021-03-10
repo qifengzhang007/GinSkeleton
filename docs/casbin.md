@@ -4,12 +4,12 @@
 
 
 ###  前言  
-> 1.`Casbin` 在主线版本默认没有开启，请参照配置文件(config/config.yml)文件中 `casbin` 部分,自行决定是都开启，默认的配置项属于标准配置项，基本不需要改动.  
-> 2.配置文件开启casbin模块后，默认会在连接的数据库创建一张表，具体表名参见配置文件注释.  
+> 1.`Casbin` 的初始化在 GinSkeleton 主线版本默认没有开启，请参照配置文件(config/config.yml)文件中 `casbin` 部分,自行决定是否开启，默认的配置项属于标准配置，基本不需要改动.    
+> 2.配置文件开启 Casbin 模块后，默认会在连接的数据库创建一张表，具体表名参见配置文件说明.  
 
-### Casbin 使用之前你需要知道的一件事
+### 根据用户请求接口时头部附带的token解析用户id等信息  
 > 每个用户带有token的请求，在验证ok之后自动会将token绑定在上线文(gin.Context) ,绑定的键名默认为: userToken（配置文件可自行设置键名）
-> 具体用法参见以下代码段     
+> 通过token解析出用户id等信息的代码如下：       
 ```code   
 currentUser, exist := context.MustGet("userToken").(my_jwt.CustomClaims)
 
@@ -18,7 +18,6 @@ currentUser, exist := context.MustGet("userToken").(my_jwt.CustomClaims)
 	}
 
 ```
-
 
 ###  Casbin 相关的几个功能介绍  
 >   1.Casbin 中间件，相关位置: app/http/middleware/authorization/auth.go, 中间件的作用介绍:  
@@ -32,10 +31,11 @@ func CheckCasbinAuth() gin.HandlerFunc {
 		method := c.Request.Method
 		
 		// 这里根据用户请求时头部的 token 解析出用户id，根据用户id查询出该用户所拥有的角色id(roleId)
+		// 主线版本的程序中 角色表需要开发者自行创建、管理，Ginskeleton-Admin 系统则集成了所有的基础功能
 		// 根据角色（roleId）判断是否具有某个接口的权限
-		// 请在这里自行将 token 获取解析为 角色id传入相关的函数即可  
-		roleId := "2" //  1 =user 2=admin
+		roleId := "2" // 模拟最终解析出用户对应的角色为 2 
 
+        // 使用casbin自带的函数执行策略(规则)验证
 		isPass, err := variable.Enforcer.Enforce(role, requstUrl, method)
 		if err != nil {
 			response.ErrorCasbinAuthFail(c, err.Error())
