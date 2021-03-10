@@ -98,12 +98,11 @@
 
 #### V 1.5.00  2021-03-10
 * 新增  
- 1.为即将发布的 GinSkeleton-Admin 系统增加了基础支撑模块：casbin模块、ShouldBind函数的精简版.  
- 2.token模块引用的部分常量值调整到配置文件.        
- 3.新增 gorm v2 的CURD操作精华版示例代码：[gorm_v2 精华版](docs/concise.md)       
- 3.新增 casbin 接口访问权限控制使用文档 [casbin使用示例](docs/casbin.md)         
+ 1.为即将发布的 GinSkeleton-Admin 系统增加了基础支撑模块：casbin模块、gorm_v2 操作精华版文档，参见常用开发模块列表.    
+ 2.token模块引用的部分常量值调整到配置文件.
+ 3.调整token校验中间件和casbin中间件名称.  
  4.主线版本本次更新并不是很多,今后主线版本将依然保持简洁，后续的新功能模块都将以包的形式引入和调用.  
- 5.更多企业级的功能将在后续退出的   GinSkeleton-Admin 展现,欢迎关注本项目，反馈使用意见.  
+ 5.更多企业级的功能将在后续推出的   GinSkeleton-Admin 展现,欢迎关注本项目，反馈使用意见.  
 
 V 1.1.xx - 1.3.xx  版本日志  
 >   1.[历史日志](docs/history_log.md)  
