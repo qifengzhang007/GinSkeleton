@@ -46,7 +46,7 @@ CREATE TABLE `tb_oauth_access_tokens` (
 DROP TABLE IF EXISTS `tb_auth_casbin_rule`;
 CREATE TABLE `tb_auth_casbin_rule` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-`ptype` varchar(100) DEFAULT NULL,
+`ptype` varchar(100) DEFAULT '',
 `v0` varchar(100) DEFAULT '',
 `v1` varchar(100) DEFAULT '',
 `v2` varchar(100) DEFAULT '*',

@@ -11,7 +11,7 @@ const (
 	modelStructMustPtr = "modelStruct 必须传递一个指针"
 )
 
-// 绑定form表单验证器已经验证完成的参数到 model 结构体,绑定的依据为表单参数验证器和model拥有想用的字段名、数据类型，并且设置了相同的 json 标签
+// 绑定form表单验证器已经验证完成的参数到 model 结构体,
 // mode 结构体支持匿名嵌套
 // 数据绑定原则： model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定
 
@@ -27,7 +27,7 @@ func ShouldBindFormDataToModel(c *gin.Context, modelStruct interface{}) error {
 	mtf := mValueOf.Elem().Type()
 	fieldNum := mtf.NumField()
 	for i := 0; i < fieldNum; i++ {
-		if !mtf.Field(i).Anonymous {
+		if !mtf.Field(i).Anonymous && mtf.Field(i).Type.Kind() != reflect.Struct {
 			fieldSetValue(c, mValueOfEle, mtf, i)
 		} else if mtf.Field(i).Type.Kind() == reflect.Struct {
 			//处理结构体(有名+匿名)

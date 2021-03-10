@@ -22,7 +22,7 @@ func InitCasbinEnforcer() (*casbin.SyncedEnforcer, error) {
 			return nil, errors.New(my_errors.ErrorCasbinCanNotUseDbPtr)
 		}
 		tmpDbConn = variable.GormDbMysql
-	case "sqlserver", ",mssql":
+	case "sqlserver", "mssql":
 		if variable.GormDbSqlserver == nil {
 			return nil, errors.New(my_errors.ErrorCasbinCanNotUseDbPtr)
 		}
