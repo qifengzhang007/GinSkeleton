@@ -20,8 +20,17 @@
 >[核心结构](./docs/project_struct.md)    
 
 ###  交叉编译(windows直接编译出linux可执行文件)    
->   1 `goland` 终端底栏打开`terminal`, 依次执行 `set GOARCH=amd64` 、`set GOOS=linux` 、`set CGO_ENABLED=0` , 特别说明：以上命令执行时后面不要有空格，否则报错!    
->   2 进入根目录（GinSkeleton所在目录）：`go build -o demo_goskeleton cmd/(web|api|cli)/main.go` 可交叉编译出（web|api|cli）对应的二进制文件。     
+```code  
+  // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译钱的参数  
+  set GOARCH=amd64
+  set GOOS=linux
+  set CGO_ENABLED=0   // windows不支持Cgo模块，设置为关闭，如果引用了c语言库，那么请在linux环境开发、编译  
+  
+  // 编译出最终可执行文件，进入根目录（GinSkeleton所在目录，也就是 go.mod 所在的目录）
+  // -o 指定最终编译出的文件名， cmd/(web|api|cli)/main.go 表示编译的入口文件，web|api|cli 三个目录选择其一即可  
+  go build -o demo_goskeleton cmd/(web|api|cli)/main.go
+  
+```
 
 ###    <font color="red">项目骨架主线、核心逻辑</font>  
 >   1.这部分主要介绍了`项目初始化流程`、`路由`、`表单参数验证器`、`控制器`、`model`、`service` 以及 `websocket` 为核心的主线逻辑.   
@@ -31,7 +40,8 @@
 [进入Api接口测试用例文档](docs/api_doc.md)      
 
 ###    开发常用模块  
->   随着项目不断完善以下列表模块会陆续增加, 各个模块被贯穿在本项目骨架的主线中, 因此只要掌握主线核心逻辑, 其余在为主线提供服务.  
+>   随着项目不断完善以下列表模块会陆续增加, 各个模块被贯穿在本项目骨架的主线中.  
+>   以下模块都是主线的服务提供者,只要掌握主线逻辑，结合以下模块，会让整个项目的操作更加流畅、简洁.  
 
 序号|功能模块 | 文档地址  
 ---|---|---
