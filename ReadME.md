@@ -24,7 +24,7 @@
   // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译钱的参数  
   set GOARCH=amd64
   set GOOS=linux
-  set CGO_ENABLED=0   // windows不支持Cgo模块，设置为关闭，如果引用了c语言库，那么请在linux环境开发、编译  
+  set CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
   
   // 编译出最终可执行文件，进入根目录（GinSkeleton所在目录，也就是 go.mod 所在的目录）
   // -o 指定最终编译出的文件名， cmd/(web|api|cli)/main.go 表示编译的入口文件，web|api|cli 三个目录选择其一即可  
