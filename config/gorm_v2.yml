@@ -6,10 +6,10 @@ Gormv2: # 只针对 gorm  操作数据库有效
     Write:
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
-      Port: 3308                        #注意，非3306，请自行调整
+      Port: 3306                        #注意，非3306，请自行调整
       Prefix: "tb_"
       User: "root"
-      Pass: "yourPassword"
+      Pass: "DRsXT5ZJ6Oi55LPQ"
       Charset: "utf8"
       SetMaxIdleConns: 10
       SetMaxOpenConns: 128

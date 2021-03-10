@@ -1,6 +1,7 @@
 package variable
 
 import (
+	"github.com/casbin/casbin/v2"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"goskeleton/app/global/my_errors"
@@ -10,6 +11,9 @@ import (
 	"os"
 	"strings"
 )
+
+// ginskeleton 封装的全局变量全部支持并发安全，请放心使用即可
+// 开发者自行封装的全局变量，请做好并发安全检查与确认
 
 var (
 	BasePath           string       // 定义项目的根目录
@@ -34,6 +38,10 @@ var (
 	WebsocketHub              interface{}
 	WebsocketHandshakeSuccess = `{"code":200,"msg":"ws连接成功","data":""}`
 	WebsocketServerPingMsg    = "Server->Ping->Client"
+
+	//casbin 全局操作指针
+	Enforcer *casbin.SyncedEnforcer
+
 	//  用户自行定义其他全局变量 ↓
 
 )

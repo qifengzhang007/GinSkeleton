@@ -21,7 +21,7 @@ CREATE TABLE `tb_users` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MYISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 /* oauth 表，主要控制一个用户可以同时拥有几个有效的token，通俗地说就是允许一个账号同时有几个人登录，超过将会导致最前面的人的token失效，而退出登录*/
 DROP TABLE IF EXISTS `tb_oauth_access_tokens`;
@@ -40,6 +40,21 @@ CREATE TABLE `tb_oauth_access_tokens` (
   `expires_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `oauth_access_tokens_user_id_index` (`fr_user_id`)
-) ENGINE=MYISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+/* 创建基于casbin控制接口访问的权限表*/
+DROP TABLE IF EXISTS `tb_auth_casbin_rule`;
+CREATE TABLE `tb_auth_casbin_rule` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`ptype` varchar(100) DEFAULT '',
+`v0` varchar(100) DEFAULT '',
+`v1` varchar(100) DEFAULT '',
+`v2` varchar(100) DEFAULT '*',
+`v3` varchar(100) DEFAULT '',
+`v4` varchar(100) DEFAULT '',
+`v5` varchar(100) DEFAULT '',
+PRIMARY KEY (`id`),
+UNIQUE KEY `unique_index` (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
 

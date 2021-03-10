@@ -3,38 +3,17 @@ package my_jwt
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"goskeleton/app/global/my_errors"
 	"time"
 )
 
-// --------------------  JWT   ----------------准备阶段  ↓
-// 常量类型不支持  error 所以该部分错误常量没有全局统一定义
-var (
-	tokenNotValidYet = errors.New("token not active yet")
-	tokenMalformed   = errors.New("that's not even a token")
-	tokenInvalid     = errors.New("couldn't handle this token")
-	signKey          = "go-skeleton"
-)
-
-// 获取signKey
-func GetSignKey() string {
-	return signKey
-}
-
-// 设置signKey（类似秘钥）
-func SetSignKey(key string) string {
-	signKey = key
-	return signKey
-}
-
-// --------------------  JWT   ----------------正式阶段  ↓
-
 // 使用工厂创建一个 JWT 结构体
 func CreateMyJWT(signKey string) *JwtSign {
-	if len(signKey) > 0 {
-		SetSignKey(signKey)
+	if len(signKey) <= 0 {
+		signKey = "goskeleton"
 	}
 	return &JwtSign{
-		[]byte(GetSignKey()),
+		[]byte(signKey),
 	}
 }
 
@@ -57,20 +36,20 @@ func (j *JwtSign) ParseToken(tokenString string) (*CustomClaims, error) {
 		return j.SigningKey, nil
 	})
 	if token == nil {
-		return nil, tokenInvalid
+		return nil, errors.New(my_errors.ErrorsTokenInvalid)
 	}
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, tokenMalformed
+				return nil, errors.New(my_errors.ErrorsTokenMalFormed)
 			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, tokenNotValidYet
+				return nil, errors.New(my_errors.ErrorsTokenNotActiveYet)
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
 				// 如果 TokenExpired ,只是过期（格式都正确），我们认为他是有效的，接下可以允许刷新操作
 				token.Valid = true
 				goto labelHere
 			} else {
-				return nil, tokenInvalid
+				return nil, errors.New(my_errors.ErrorsTokenInvalid)
 			}
 		}
 	}
@@ -78,7 +57,7 @@ labelHere:
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
 	} else {
-		return nil, tokenInvalid
+		return nil, errors.New(my_errors.ErrorsTokenInvalid)
 	}
 }
 

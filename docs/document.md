@@ -268,7 +268,7 @@ func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
 }
 
 //权限校验失败
-func ErrorAuthFail(c *gin.Context) {
+func ErrorTokenAuthFail(c *gin.Context) {
 	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
 	//暂停执行
 	c.Abort()

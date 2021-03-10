@@ -3,6 +3,8 @@ module goskeleton
 go 1.15
 
 require (
+	github.com/casbin/casbin/v2 v2.24.0
+	github.com/casbin/gorm-adapter/v3 v3.2.0
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -18,7 +20,7 @@ require (
 	github.com/mitchellh/mapstructure v1.3.1 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/pelletier/go-toml v1.8.0 // indirect
-	github.com/qifengzhang007/goCurl v1.2.6
+	github.com/qifengzhang007/goCurl v1.2.7
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/cobra v1.1.0

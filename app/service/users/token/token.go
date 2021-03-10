@@ -1,6 +1,7 @@
 package token
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/my_errors"
@@ -14,7 +15,7 @@ import (
 
 func CreateUserFactory() *userToken {
 	return &userToken{
-		userJwt: my_jwt.CreateMyJWT(consts.JwtTokenSignKey),
+		userJwt: my_jwt.CreateMyJWT(variable.ConfigYml.GetString("Token.JwtTokenSignKey")),
 	}
 }
 
@@ -106,4 +107,13 @@ func (u *userToken) IsEffective(token string) bool {
 		}
 	}
 	return false
+}
+
+// 将 token 解析为绑定时传递的参数
+func (u *userToken) ParseToken(tokenStr string) (CustomClaims my_jwt.CustomClaims, err error) {
+	if customClaims, err := u.userJwt.ParseToken(tokenStr); err == nil {
+		return *customClaims, nil
+	} else {
+		return my_jwt.CustomClaims{}, errors.New(my_errors.ErrorsParseTokenFail)
+	}
 }

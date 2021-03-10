@@ -36,10 +36,16 @@ func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
 	c.Abort()
 }
 
-//权限校验失败
-func ErrorAuthFail(c *gin.Context) {
+//token 权限校验失败
+func ErrorTokenAuthFail(c *gin.Context) {
 	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
-	//暂停执行
+	//终止可能已经被加载的其他回调函数的执行
+	c.Abort()
+}
+
+// casbin 鉴权失败，返回 405 方法不允许访问
+func ErrorCasbinAuthFail(c *gin.Context, msg interface{}) {
+	ReturnJson(c, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed, my_errors.ErrorsCasbinNoAuthorization, msg)
 	c.Abort()
 }
 

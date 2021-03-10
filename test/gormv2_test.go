@@ -89,6 +89,12 @@ func TestGormSelect(t *testing.T) {
 	fmt.Printf("tb_roles表数据：%v\n", roles)
 }
 
+// gorm sql查询结果树形化
+// 详细使用语法参见地址：https://gitee.com/daitougege/sql_res_to_tree
+func TestGormResToTree(t *testing.T) {
+
+}
+
 // 新增
 func TestGormInsert(t *testing.T) {
 	var usr_log = &tb_user_log{
