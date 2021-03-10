@@ -53,7 +53,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 		requstUrl := c.Request.URL.Path
 		method := c.Request.Method
 		// 模拟请求参数转换后的角色
-		// 这里讲用户的id解析为所拥有的的角色，判断是否具有某个权限即可
+		// 这里将用户的id解析为所拥有的的角色，判断是否具有某个权限即可
 		role := "2" //  1 =user 2=admin
 
 		isPass, err := variable.Enforcer.Enforce(role, requstUrl, method)

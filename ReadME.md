@@ -49,8 +49,9 @@
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 
 13|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
 14| 验证码|  [验证码](docs/captcha.md)
-15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)
-16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)   
+15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
+16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
+17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)  
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -97,10 +98,12 @@
 
 #### V 1.5.00  2021-03-10
 * 新增  
- 1.为即将发布的 GinSkeleton-admin 系统增加了基础支撑模块：casbin模块、ShouldBind函数的精简版.  
- 2.程序token常量部分设置调整到配置文件.    
- 3.新增 gorm v2 操作精华版示例代码：[gorm_v2 精华版](docs/concise.md)     
- 4.主线版本本身的更新并不是很多,今后主线版本将保持简洁，后续的新功能模块都将以包的形式引入和调用.
+ 1.为即将发布的 GinSkeleton-Admin 系统增加了基础支撑模块：casbin模块、ShouldBind函数的精简版.  
+ 2.token模块引用的部分常量值调整到配置文件.        
+ 3.新增 gorm v2 的CURD操作精华版示例代码：[gorm_v2 精华版](docs/concise.md)       
+ 3.新增 casbin 接口访问权限控制使用文档 [casbin使用示例](docs/casbin.md)         
+ 4.主线版本本次更新并不是很多,今后主线版本将依然保持简洁，后续的新功能模块都将以包的形式引入和调用.  
+ 5.更多企业级的功能将在后续退出的   GinSkeleton-Admin 展现,欢迎关注本项目，反馈使用意见.  
 
 V 1.1.xx - 1.3.xx  版本日志  
 >   1.[历史日志](docs/history_log.md)  
