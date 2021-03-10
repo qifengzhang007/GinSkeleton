@@ -29,7 +29,7 @@ func checkRequiredFolders() {
 	if _, err := os.Stat(variable.BasePath + "/public/"); err != nil {
 		log.Fatal(my_errors.ErrorsPublicNotExists + err.Error())
 	}
-	//3.检查Storage/logs 目录是否存在
+	//3.检查storage/logs 目录是否存在
 	if _, err := os.Stat(variable.BasePath + "/storage/logs/"); err != nil {
 		log.Fatal(my_errors.ErrorsStorageLogsNotExists + err.Error())
 	}
