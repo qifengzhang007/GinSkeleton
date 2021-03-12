@@ -6,8 +6,7 @@
 
 ### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
->   2.本项目优先关注 `https://gitee.com/daitougege/GinSkeleton` 仓库的所有问题, github 太卡严重影响效率。  
->   3.从 `v1.2.26` 版本之后开启qq群答疑, QQ群：273078549 欢迎喜欢gin框架go开发者一期参与讨论.  
+>   2.本项目优先关注 [gitee issue](https://gitee.com/daitougege/GinSkeleton/issues) 仓库的所有问题, github 太卡严重影响效率。
 
 ###    快速上手
 >   1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
@@ -21,7 +20,7 @@
 
 ###  交叉编译(windows直接编译出linux可执行文件)    
 ```code  
-  // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译钱的参数  
+  // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译前的参数  
   set GOARCH=amd64
   set GOOS=linux
   set CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
@@ -53,7 +52,7 @@
 6|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](app/service/websocket/ws.go)  
 7|aop切面编程| [Aop切面编程](docs/aop.md) 
 8|redis| [redis使用示例](test/redis_test.go) 
-9|gorm_v2 CURD 操作精华版| [进入详情](docs/concise.md) 
+9|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 精华](docs/concise.md) 
 10|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
 11|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 

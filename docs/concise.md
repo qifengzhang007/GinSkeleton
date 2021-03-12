@@ -1,5 +1,5 @@
 ###  本篇将介绍我们集成的 gorm v2 操作非常流畅的增删改查功能    
-> 1.gormv2 功能非常强大，本篇将介绍我们 gorm_v2 在 GinSkeleton 中非常简洁、简单的操作流程，以 增删改查 操作介绍.      
+> 1.gormv2 功能非常强大，本篇将介绍 gorm_v2 在 GinSkeleton 中非常简洁、简单的操作流程，以 增删改查 操作为例介绍.      
 > 2.阅读完本篇，您可以继续阅读官方文档,学习更多功能:https://gorm.io/zh_CN/docs/    
 
 ###  前言  
@@ -10,7 +10,7 @@
 // 给表单参数验证器设置 form 标签，gin框架会获取用户提交的表单参数绑定在此结构体上
 // 设置 json 标签 GinSkeleton 会将json对应的字段绑定在上下文(gin.Context)
 type UserStore struct {
-	Base
+	Base        //  Base 表示你可以继续组合其他结构体
 	Pass     string `form:"pass" json:"pass" binding:"required,min=6"`
 	RealName string `form:"real_name" json:"real_name" binding:"required,min=2"`
 	Phone    string `form:"phone" json:"phone" binding:"required,len=11"`
