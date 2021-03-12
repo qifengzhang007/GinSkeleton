@@ -37,7 +37,7 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-	model.BaseModel // BaseModel 主要有Id 、 CreateAt 、UpdatedAt 字段，这里主要是演示UsersModel支持结构体的组合
+	model.BaseModel // BaseModel 主要有Id 、 CreatedAt 、UpdatedAt 字段，这里主要是演示UsersModel支持结构体的组合
 	UserName         string `gorm:"column:user_name" json:"user_name"`
 	Pass             string `json:"pass"`
 	Phone            string `json:"phone"`
