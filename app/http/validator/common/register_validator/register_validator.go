@@ -21,8 +21,6 @@ func RegisterValidator() {
 	containers.Set(key, users.Register{})
 	key = consts.ValidatorPrefix + "UsersLogin"
 	containers.Set(key, users.Login{})
-	key = consts.ValidatorPrefix + "UsersTest"
-	containers.Set(key, users.Test{})
 	key = consts.ValidatorPrefix + "RefreshToken"
 	containers.Set(key, users.RefreshToken{})
 
