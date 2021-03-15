@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/md5_encrypt"
+	"time"
 )
 
 // 创建 userFactory
@@ -70,6 +71,8 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=FROM_UNIXTIME(?),client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, expiresAt, clientIp, userId, oldToken).Error == nil {
+		sql = "UPDATE  tb_users   SET  login_times=IFNULL(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
+		_ = u.Exec(sql, clientIp, time.Now().Format("2006-01-02 15:04:05"), userId)
 		return true
 	}
 	return false
