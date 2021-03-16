@@ -64,6 +64,8 @@ func fieldSetValue(c *gin.Context, valueOf reflect.Value, typeOf reflect.Type, c
 			valueOf.Field(colIndex).SetString(c.GetString(relaKey))
 		case reflect.Bool:
 			valueOf.Field(colIndex).SetBool(c.GetBool(relaKey))
+		default:
+			// model 如果有日期时间字段，请统一设置为字符串即可
 		}
 	}
 }
