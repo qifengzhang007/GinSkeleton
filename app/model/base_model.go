@@ -6,14 +6,13 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"strings"
-	"time"
 )
 
 type BaseModel struct {
 	*gorm.DB  `gorm:"-" json:"-"`
-	Id        int64     `gorm:"primarykey" json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Id        int64  `gorm:"primarykey" json:"id"`
+	CreatedAt string `json:"created_at"` //日期时间字段统一设置为字符串即可
+	UpdatedAt string `json:"updated_at"`
 }
 
 func useDbConn(sqlType string) *gorm.DB {

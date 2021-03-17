@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/http/validator/core/interf"
+	"time"
 )
 
 // 将验证器成员(字段)绑定到数据传输到上下文，方便控制器获取
@@ -21,6 +22,11 @@ func DataAddContext(validatorInterface interf.ValidatorInterface, extraAddDataPr
 				for k, v := range value {
 					context.Set(extraAddDataPrefix+k, v)
 				}
+				// 此外给上下文追加三个键：created_at  、 updated_at  、 deleted_at ，实际根据需要自己选择获取相关键值
+				curDateTime := time.Now().Format("2006-01-02 15:04:05")
+				context.Set(extraAddDataPrefix+"created_at", curDateTime)
+				context.Set(extraAddDataPrefix+"updated_at", curDateTime)
+				context.Set(extraAddDataPrefix+"deleted_at", curDateTime)
 				return context
 			}
 		}

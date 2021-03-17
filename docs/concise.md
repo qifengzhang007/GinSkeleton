@@ -32,6 +32,7 @@ func (u UserStore) CheckParams(context *gin.Context) {
 // 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 // 以下函数为固定写法，复制即可，不需要深度研究  
+
 func CreateUserFactory(sqlType string) *UsersModel {
 	return &UsersModel{BaseModel: model.BaseModel{DB: model.UseDbConn(sqlType)}}
 }
@@ -51,6 +52,9 @@ type UsersModel struct {
 func (u *UsersModel) TableName() string {
 	return "tb_users"
 }
+
+// UsersModel 结构体组合了  *gorm.DB 的所有功能，您可以通过 u.(xxx)  直接调用 gorm.DB 的所有功能
+
 
 ```
     
