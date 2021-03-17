@@ -53,7 +53,7 @@
                            '"user_agent": "$http_user_agent"'
                '}';
 
-        #由于我的nginx是docker启动，一个容器一个站点，所以以下配置我直接放置在了http代码段，如果物理机器，建议放置在server段，一个项目一份日志
+        # 设置日志存储路径，一个项目一个文件
         access_log /usr/local/nginx/logs/nginx001_access.log json;
         error_log /usr/local/nginx/logs/nginx001_error.log;
     
