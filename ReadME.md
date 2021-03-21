@@ -12,13 +12,18 @@
 ```code  
 // 1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
 
-// 2.配置go包的代理，打开你的终端并执行以下命令（windwos系统）,其他操作系统自行参见：https://goproxy.cn 
+// 2.配置go包的代理，打开你的终端并执行以下命令（windwos系统）
+    // 其他操作系统自行参见：https://goproxy.cn  
     go env -w GO111MODULE=on
     go env -w GOPROXY=https://goproxy.cn,direct
 
-// 3.使用 goland(>=2019.3版本) 打开本项目，找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
+// 3.下载本项目依赖库  
+    使用 goland(>=2019.3版本) 打开本项目，打开 goland 底部的 Terminal ,执行  go mod tidy 下载本项目依赖库  
 
-// 4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
+// 4.还原自带数据库   
+    找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
+
+// 5.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
 
 ```  
 
