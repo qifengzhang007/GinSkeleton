@@ -6,13 +6,22 @@
 
 ### 问题反馈  
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
->   2.本项目优先关注 [gitee issue](https://gitee.com/daitougege/GinSkeleton/issues) 仓库的所有问题, github 太卡严重影响效率。
+>   2.本项目优先关注 [Gitee Issue](https://gitee.com/daitougege/GinSkeleton/issues) 仓库的所有问题, github 太卡严重影响效率。
 
-###    快速上手
->   1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
->   2.配置go包的代理，参见`https://goproxy.cn`,有详细设置教程.    
->   3.使用 `goland(>=2019.3版本)` 打开本项目，找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
->   4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.    
+###    快速上手 
+```code  
+// 1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
+
+// 2.配置go包的代理，打开你的终端并执行以下命令（windwos系统）,其他操作系统自行参见：https://goproxy.cn 
+    go env -w GO111MODULE=on
+    go env -w GOPROXY=https://goproxy.cn,direct
+
+// 3.使用 goland(>=2019.3版本) 打开本项目，找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
+
+// 4.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
+
+```  
+
 >![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)  
 
 ###    项目目录结构介绍   
@@ -95,11 +104,12 @@
 > 疑难杂症，例如：`golang.org` 官方依赖可能无法下载解决办法, 项目相关的疑问等等都可以在这里找到答案.  
 [点击查看详情](./docs/faq.md)  
 
-##    招募共同开发者        
-> 1.请先看这位开发者发布的文章："7天用go开发一个docker"， 地址：`https://learnku.com/articles/46878` ,在这篇文章的留言处有作者的一句话：`很多东西不是会了才能做，而是做了才能学会` .  
-> 2.基于第一条“真理”, 只要你会go基础的东西，有时间，就可以一起参与开发本项目.  
-> 3.参与方式：简单的东西直接提交PR,如果想法比较多，需要改动大段代码，你也可以直接加我 `qq：1990850157` ，直接添加至开发组，共同商讨开发的功能，约定规范，提交代码。  
-> 4.成为共同开发者，你可以获得 `goland` 官方提供的激活码，通用全部的 `Jetbrains` 全家桶项目.  
+##  GinSkeleton-Admin 后台系统
+>   1.本系统是基于 GinSkeleton(v1.5.10) + Iview(v4.5.0) 开发而成的企业级项目后台骨架. 
+>   2.在线演示系统相比本地运行的版本收缩了修改、删除 数据的权限.  
+### [在线演示系统: GinSkeleton-Admin](http://139.196.101.31:20202/)  
+### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)  
+### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)  
 
 #### 版本
 **开发计划预告**  
