@@ -110,15 +110,13 @@
 [点击查看详情](./docs/faq.md)  
 
 ##  GinSkeleton-Admin 后台系统
->   1.本系统是基于 GinSkeleton(v1.5.10) + Iview(v4.5.0) 开发而成的企业级项目后台骨架. 
+>   1.本系统是基于 GinSkeleton(v1.5.10) + Iview(v4.5.0) 开发而成的企业级项目后台骨架.   
 >   2.在线演示系统相比本地运行的版本收缩了修改、删除 数据的权限.  
 ### [在线演示系统: GinSkeleton-Admin](http://139.196.101.31:20202/)  
 ### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)  
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)  
 
-#### 版本
-**开发计划预告**  
->   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
+#### 版本更新日志  
 
 #### V 1.5.10  2021-03-22  
 * 完善  
