@@ -105,6 +105,16 @@
 **开发计划预告**  
 >   1.所有的开发计划统一在 issue 部分（issue的列表、看板、里程碑三个分类进行）,任何问题、新功能、bug等均可在 issue 提交，欢迎关注 issue .    
 
+#### V 1.5.10  2021-03-22  
+* 完善  
+  1.表参参数验证器完成验证后, 自动为上下文绑定三个键：created_at、updated_at、deleted_at  
+  2.baseModel 中  created_at、updated_at 修改为 string 类型,方便精简版 shouldbind 函数直接从上下文自动绑定值.  
+  3.用户登录后，更新登陆次数+1 .  
+  4.nginx 部署文档修正一处缺少单引号的错误.  
+  5.gorm 操作数据库精华版文档更新.  
+  6.删除其他小部分无关代码.  
+  7.GinSkeleton-Admin 系统同步发布.  
+  
 #### V 1.5.00  2021-03-10
 * 新增  
  1.为即将发布的 GinSkeleton-Admin 系统增加了基础支撑模块：casbin模块、gorm_v2 操作精华版文档，参见**常用开发模块**列表.    
