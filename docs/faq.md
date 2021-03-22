@@ -1,20 +1,13 @@
-##    常见问题汇总      
-> 1.本篇我们将汇总使用过程中最常见的问题, 很多细小的问题或许在这里你能找到答案.  
-
-##### golang.org 官方依赖可能无法下载手动解决方案  
->   1.手动下载：https://wwa.lanzous.com/iqPH5fw11va  
->   2.打开`goland`---`file`---`setting`---`gopath`   查看gopath路径（gopath主要用于存放所有项目的公用依赖，本项目是基于go mod 创建的，和gopath无关，建议存放在非gopath目录之外的任意目录），复制在以下目录解压即可：  
->   ![操作图](https://www.ginskeleton.com/golang.org.png)   
->   ![操作图](https://www.ginskeleton.com/golang.org2.png)   
+##  常见问题汇总
+> 1.本篇我们将汇总使用过程中最常见的问题, 很多细小的问题或许在这里你能找到答案.
 
 #####  2.为什么该项目 go.mod 中的模块名是 goskeleton ,但是下载下来的文件名却是 GinSkeleton ?
->   本项目一开始我们命名为 ginskeleton , 包名也是这个，但是后来感觉 goskeleton 好听一点（现在看来未必）,
->基于更易理解的角度出发，你在下载或者pull本项目之后，可以将最外层文件夹名重新命名为 goskeleton , 这样就会让整个项目显得统一,代码内部引用包的时候，类似从文件夹（goskeleton）开始，按照路径在引用包，理解起来更直观.       
+>   本项目一开始我们命名为 ginskeleton , 包名也是这个，但是后来感觉 goskeleton 好听一点,因此改名（现在看是错了）,由于版本已经更新较多，同时不影响使用,此次失误请忽略即可.  
 
 #####  3.为什么编译后的文件提示 config.yml 文件不存在 ?  
 >   项目的编译仅限于代码部分，不包括资源部分：config 目录、public 目录、storage 目录，因此编译后的文件使用时，需要带上这个三个目录，否则程序无法正常运行.    
 
-#####  4.表单参数验证器代码部分的疑问    
+#####  <font color='red'>4.表单参数验证器代码部分的疑问</font>      
 >   示例代码位置：`app/http/validator/web/users/register.go`  ,如下代码段  
 ```code 
 type Register struct {

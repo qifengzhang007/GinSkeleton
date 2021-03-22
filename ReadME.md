@@ -106,8 +106,7 @@
 ---|---|---
 1| 操作数据库代码段| [操作数据库代码段](./docs/project_analysis_3.md) 
  
-### FAQ 常见问题汇总  
-> 疑难杂症，例如：`golang.org` 官方依赖可能无法下载解决办法, 项目相关的疑问等等都可以在这里找到答案.  
+###  <font color='red'>FAQ 常见问题汇总 </font>
 [点击查看详情](./docs/faq.md)  
 
 ##  GinSkeleton-Admin 后台系统
