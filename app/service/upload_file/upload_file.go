@@ -29,7 +29,7 @@ func Upload(context *gin.Context, savePath string) (r bool, finnalSavePath inter
 		if saveErr = context.SaveUploadedFile(file, newSavePath+saveFileName); saveErr == nil {
 			//  上传成功,返回资源的相对路径，这里请根据实际返回绝对路径或者相对路径
 			finnalSavePath = gin.H{
-				"path": "/public" + strings.ReplaceAll(newReturnPath+saveFileName, variable.BasePath, ""),
+				"path": strings.ReplaceAll(newReturnPath+saveFileName, variable.BasePath, ""),
 			}
 			return true, finnalSavePath
 		}
