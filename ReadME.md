@@ -34,7 +34,8 @@
 
 ###  交叉编译(windows直接编译出linux可执行文件)    
 ```code  
-  // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译前的参数  
+  // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译前的参数   
+  // 特别注意： 以下三个命令执行时,前后不要有空格，否则最后编译可能会报错，无法编译出最终可执行文件  
   set GOARCH=amd64
   set GOOS=linux
   set CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
