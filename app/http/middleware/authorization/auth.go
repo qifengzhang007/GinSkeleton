@@ -17,7 +17,7 @@ type HeaderParams struct {
 // 检查token权限
 func CheckTokenAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		//  模拟验证token
+		
 		headerParams := HeaderParams{}
 
 		//  推荐使用 ShouldBindHeader 方式获取头参数
@@ -54,6 +54,8 @@ func CheckCasbinAuth() gin.HandlerFunc {
 		method := c.Request.Method
 
 		// 模拟请求参数转换后的角色（roleId=2）
+		// 主线版本没有深度集成casbin的使用逻辑
+		// GinSkeleton-Admin 系统则深度集成了casbin接口权限管控
 		role := "2" // 这里模拟某个用户的roleId=2
 
 		// 这里将用户的id解析为所拥有的的角色，判断是否具有某个权限即可
