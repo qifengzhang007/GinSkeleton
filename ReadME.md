@@ -120,15 +120,17 @@
 
 #### 主线版本更新日志  
 
-#### V 1.5.10  2021-03-22  
+#### V 1.5.10  2021-03-23
 * 完善  
-  1.表参参数验证器完成验证后, 自动为上下文绑定三个键：created_at、updated_at、deleted_at  
-  2.baseModel 中  created_at、updated_at 修改为 string 类型,方便精简版 shouldbind 函数直接从上下文自动绑定值.  
-  3.用户登录后，更新登陆次数+1 .  
+  1.form表单参数验证器完成验证后, 自动为上下文绑定三个键：created_at、updated_at、deleted_at ,相关值均为请求时的日期时间.  
+  2.baseModel 中  created_at、updated_at 修改为 string 类型,方便从上下文自动绑定对应的键值到 model .  
+  3.用户每次登录后，tb_users 表,登陆次数字段+1 .  
   4.nginx 部署文档修正一处缺少单引号的错误.  
   5.gorm 操作数据库精华版文档更新.  
   6.删除其他小部分无关代码.  
-  7.GinSkeleton-Admin 系统同步发布.  
+  7.增加自动创建连接功能,只为更好地处理静态资源.  
+  8.文件上传代码配置项增加部分参数,代码同步升级.  
+  9.GinSkeleton-Admin 系统同步发布.
   
 #### V 1.5.00  2021-03-10
 * 新增  
