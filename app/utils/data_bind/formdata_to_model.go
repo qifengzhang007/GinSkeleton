@@ -58,6 +58,8 @@ func fieldSetValue(c *gin.Context, valueOf reflect.Value, typeOf reflect.Type, c
 		switch typeOf.Field(colIndex).Type.Kind() {
 		case reflect.Int, reflect.Int16, reflect.Int32, reflect.Int64:
 			valueOf.Field(colIndex).SetInt(int64(c.GetFloat64(relaKey)))
+		case reflect.Float32, reflect.Float64:
+			valueOf.Field(colIndex).SetFloat(c.GetFloat64(relaKey))
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 			valueOf.Field(colIndex).SetUint(uint64(c.GetFloat64(relaKey)))
 		case reflect.String:

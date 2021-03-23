@@ -49,8 +49,9 @@ SnowFlake:
 
 FileUploadSetting:
   Size: 32                            #设置上传文件的最大值，单位：M，注意： 如果go前置nginx服务器，nginx 默认限制文件上传大小为 50 M ,用户上传文件限制还需要继续修改 nginx 配置
-  UploadFileField: "files"            #post上传文件时，表单的键名
+  UploadFileField: "file"            #post上传文件时，表单的键名
   UploadFileSavePath: "/storage/app/uploaded/" #上传文件保存在路径, 该路径与 BasePath 进行拼接使用
+  UploadFileReturnPath: "/public/storage/uploaded/"  # 文件上后返回的路径，由于程序会自动创建软连接，自动将资源定位到实际路径，所有资源的访问入口建议都从public开始
   AllowMimeType: #允许的文件mime类型列表
     - "image/jpeg"                    #jpg、jpeg图片格式
     - "image/png"                     #png图片格式

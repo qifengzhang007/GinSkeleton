@@ -33,6 +33,15 @@ func checkRequiredFolders() {
 	if _, err := os.Stat(variable.BasePath + "/storage/logs/"); err != nil {
 		log.Fatal(my_errors.ErrorsStorageLogsNotExists + err.Error())
 	}
+	// 4.自动创建软连接、更好的管理静态资源
+	if _, err := os.Stat(variable.BasePath + "/public/storage"); err == nil {
+		if err = os.Remove(variable.BasePath + "/public/storage"); err != nil {
+			log.Fatal(my_errors.ErrorsSoftLinkDeleteFail + err.Error())
+		}
+	}
+	if err := os.Symlink(variable.BasePath+"/storage/app", variable.BasePath+"/public/storage"); err != nil {
+		log.Fatal(my_errors.ErrorsSoftLinkCreateFail + err.Error())
+	}
 }
 
 func init() {

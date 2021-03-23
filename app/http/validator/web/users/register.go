@@ -29,6 +29,9 @@ type Register struct {
 	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
 
+// 特别注意: 表单参数验证器结构体的函数，绝对不能绑定在指针上
+// 我们这部分代码项目启动后会加载到容器，如果绑定在指针，一次请求之后，会造成容器中的代码段被污染
+
 func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(&r); err != nil {
