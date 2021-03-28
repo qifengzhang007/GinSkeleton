@@ -91,7 +91,7 @@ func (u *UsersModel) TableName() string {
 ####  2.修改数据  
 > 2.1 gorm 的数据更新有两个函数： updates 不会处理零值字段，save 会全量覆盖式更新字段    
 > 2.2 u.Updates()  函数会根据 UsersModel 已经绑定的 TableName 函数解析对应的数据表,然后根据 tmp 结构体定义的主键Id，去更新其他字段值.    
-
+> 2.3 更新时可以搭配 gorm_v2 提供的 Select() 指定字段更新，例如：gorm.Db.Select(字段1,字段2,字段3..) ,也可以设置忽略特定字段更新数据，例如： gorm.Db.Omit(字段1,字段2,字段3..)  
 ```code
 
 //更新
