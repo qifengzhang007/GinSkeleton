@@ -15,7 +15,7 @@ type BaseModel struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-func useDbConn(sqlType string) *gorm.DB {
+func UseDbConn(sqlType string) *gorm.DB {
 	var db *gorm.DB
 	sqlType = strings.Trim(sqlType, " ")
 	if sqlType == "" {
