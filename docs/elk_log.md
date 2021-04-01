@@ -209,6 +209,15 @@ filter {
       
        # 注意：索引模式 以 logstash- 开头，表示使用系统默认json解析模板，否则又要自己定义解析模板，此外，注意全程小写.  
 	   mutate { add_field => { "[@metadata][target_index]" => "logstash-nginx001-%{+YYYY.MM.dd}" } }
+	   
+	   # 建议同时开启 ip 位置转换功能，这样在 logstash 就能自动统计访问者的地理位置分布
+	       geoip {
+                source => "remote_addr"
+                target => "geoip"
+                # ip 与经纬度转换城市数据库下载地址：https://dev.maxmind.com/geoip/geoip2/downloadable/  （需要注册账号才能有下载地址）
+                # 数据库文件放置在logstash容器映射的日志目录，不要放在配置文件目录，会报错。  
+                database => "/usr/share/data/testlog/GeoLite2-City.mmdb"
+            }
 
 	}else if [type] == "goskeleton" {
 
@@ -279,6 +288,7 @@ docker  logs  --since  3m logstash7
 #### 5.更炫酷未来  
 > 基于以上数据我们可以在 elk 做数据统计、分析，例如：可视化展示网站访问量. 哪些接口访问最多、哪些接口访问最耗时，就需要优先优化。
 > elk 能做的事情超乎你的想象(机器学习、数据关联性分析、地理位置分布分析、各种图形化等等), 请参考官方提供的可视化模板，自己做数据展示设计即可。  
-> 在后续，我们也会慢慢补充这块知识，确保我们我们项目产生的数据尽量有一套模板可以直接使用。      
+> 比较遗憾的是我们做的模板无法直接分享给其他人,只能分享最终的效果，其他开发者可自行参考制作自己的展示模板.          
+![logstash样图](https://www.ginskeleton.com/images/logstash1.png)  
 
 
