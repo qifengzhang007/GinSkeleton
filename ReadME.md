@@ -12,7 +12,7 @@
 ```code  
 // 1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
 
-// 2.配置go包的代理，打开你的终端并执行以下命令（windwos系统）
+// 2.配置go包的代理，打开你的 goland 终端并执行以下命令（windwos系统）
     // 其他操作系统自行参见：https://goproxy.cn  
     go env -w GO111MODULE=on
     go env -w GOPROXY=https://goproxy.cn,direct
