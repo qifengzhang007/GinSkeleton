@@ -30,7 +30,7 @@ CREATE TABLE `tb_oauth_access_tokens` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `fr_user_id` INT(11) DEFAULT 0 COMMENT '外键:tb_users表id',
   `client_id` INT(10) UNSIGNED DEFAULT 1 COMMENT '普通用户的授权，默认为1',
-  `token` VARCHAR(300) DEFAULT NULL,
+  `token` VARCHAR(600) DEFAULT NULL,
   `action_name` VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'login|refresh|reset表示token生成动作',
   `scopes` VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '[*]' COMMENT '暂时预留,未启用',
   `revoked` TINYINT(1) DEFAULT 0 COMMENT '是否撤销',
