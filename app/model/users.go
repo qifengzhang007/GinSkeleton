@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+// 操作数据库喜欢使用gorm自带语法的开发者可以参考 GinSkeleton-Admin 系统相关代码
+// Admin 项目地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/
+// gorm_v2 提供的语法+ ginskeleton 实践 ：  http://gitee.com/daitougege/gin-skeleton-admin-backend/blob/master/app/model/button_cn_en.go
+
 // 创建 userFactory
 // 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *UsersModel {
@@ -150,7 +154,7 @@ func (u *UsersModel) ShowOneItem(userId float64) (*UsersModel, error) {
 }
 
 // 查询（根据关键词模糊查询）
-func (u *UsersModel) Show(userName string, limitStart float64, limitItems float64) []UsersModel {
+func (u *UsersModel) Show(userName string, limitStart, limitItems int) []UsersModel {
 	var temp []UsersModel
 	sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
 	if res := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Find(&temp); res.RowsAffected > 0 {

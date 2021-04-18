@@ -74,7 +74,7 @@ func (u *Users) Show(context *gin.Context) {
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
 	limits := context.GetFloat64(consts.ValidatorPrefix + "limits")
 	limitStart := (page - 1) * limits
-	showlist := model.CreateUserFactory("").Show(userName, limitStart, limits)
+	showlist := model.CreateUserFactory("").Show(userName, int(limitStart), int(limits))
 	if showlist != nil {
 		response.Success(context, consts.CurdStatusOkMsg, showlist)
 	} else {
