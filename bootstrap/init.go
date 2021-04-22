@@ -51,7 +51,8 @@ func init() {
 	checkRequiredFolders()
 
 	//3.初始化表单参数验证器，注册在容器
-	register_validator.RegisterValidator()
+	register_validator.WebRegisterValidator()
+	register_validator.ApiRegisterValidator()
 
 	// 4.启动针对配置文件(confgi.yml、gorm_v2.yml)变化的监听， 配置文件操作指针，初始化为全局变量
 	variable.ConfigYml = yml_config.CreateYamlFactory()
