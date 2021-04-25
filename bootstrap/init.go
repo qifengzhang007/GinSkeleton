@@ -50,7 +50,7 @@ func init() {
 	//2.检查配置文件以及日志目录等非编译性的必要条件
 	checkRequiredFolders()
 
-	//3.初始化表单参数验证器，注册在容器
+	//3.初始化表单参数验证器，注册在容器（Web、Api共用容器）
 	register_validator.WebRegisterValidator()
 	register_validator.ApiRegisterValidator()
 

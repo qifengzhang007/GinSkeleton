@@ -3,7 +3,6 @@ package register_validator
 import (
 	"goskeleton/app/core/container"
 	"goskeleton/app/global/consts"
-	"goskeleton/app/http/validator/api/home"
 	"goskeleton/app/http/validator/common/upload_files"
 	"goskeleton/app/http/validator/common/websocket"
 	"goskeleton/app/http/validator/web/users"
@@ -41,8 +40,4 @@ func WebRegisterValidator() {
 	// Websocket 连接验证器
 	key = consts.ValidatorPrefix + "WebsocketConnect"
 	containers.Set(key, websocket.Connect{})
-
-	// 注册门户类表单参数验证器
-	key = consts.ValidatorPrefix + "HomeNews"
-	containers.Set(key, home.News{})
 }
