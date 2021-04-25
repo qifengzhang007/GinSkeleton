@@ -62,10 +62,10 @@ func (u *UsersModel) Login(userName string, pass string) *UsersModel {
 //记录用户登陆（login）生成的token，每次登陆记录一次token
 func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64, clientIp string) bool {
 	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
-		"SELECT  ?,'login',? ,FROM_UNIXTIME(?),? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
+		"SELECT  ?,'login',? ,?,? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
 	//注意：token的精确度为秒，如果在一秒之内，一个账号多次调用接口生成的token其实是相同的，这样写入数据库，第二次的影响行数为0，知己实际上操作仍然是有效的。
 	//所以这里只判断无错误即可，判断影响行数的话，>=0 都是ok的
-	if u.Exec(sql, userId, token, expiresAt, clientIp, userId, token).Error == nil {
+	if u.Exec(sql, userId, token, time.Unix(expiresAt, 0).Format(variable.DateFormart), clientIp, userId, token).Error == nil {
 		return true
 	}
 	return false
@@ -73,10 +73,10 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 
 //用户刷新token
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
-	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=FROM_UNIXTIME(?),client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
-	if u.Exec(sql, newToken, expiresAt, clientIp, userId, oldToken).Error == nil {
+	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
+	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormart), clientIp, userId, oldToken).Error == nil {
 		sql = "UPDATE  tb_users   SET  login_times=IFNULL(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
-		_ = u.Exec(sql, clientIp, time.Now().Format("2006-01-02 15:04:05"), userId)
+		_ = u.Exec(sql, clientIp, time.Now().Format(variable.DateFormart), userId)
 		return true
 	}
 	return false
