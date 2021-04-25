@@ -3,6 +3,7 @@ package data_transfer
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"goskeleton/app/global/variable"
 	"goskeleton/app/http/validator/core/interf"
 	"time"
 )
@@ -23,7 +24,7 @@ func DataAddContext(validatorInterface interf.ValidatorInterface, extraAddDataPr
 					context.Set(extraAddDataPrefix+k, v)
 				}
 				// 此外给上下文追加三个键：created_at  、 updated_at  、 deleted_at ，实际根据需要自己选择获取相关键值
-				curDateTime := time.Now().Format("2006-01-02 15:04:05")
+				curDateTime := time.Now().Format(variable.DateFormart)
 				context.Set(extraAddDataPrefix+"created_at", curDateTime)
 				context.Set(extraAddDataPrefix+"updated_at", curDateTime)
 				context.Set(extraAddDataPrefix+"deleted_at", curDateTime)
