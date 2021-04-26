@@ -27,15 +27,15 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.0
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
-	go.uber.org/zap v1.15.0
+	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/ini.v1 v1.56.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gorm.io/driver/mysql v1.0.3
-	gorm.io/driver/postgres v1.0.6
-	gorm.io/driver/sqlserver v1.0.6-0.20210113050835-e95bfce0118a
-	gorm.io/gorm v1.20.11
-	gorm.io/plugin/dbresolver v1.1.0
+	gorm.io/driver/mysql v1.0.5
+	gorm.io/driver/postgres v1.0.4
+	gorm.io/driver/sqlserver v1.0.5
+	gorm.io/gorm v1.21.8
+	gorm.io/plugin/dbresolver v1.1.1-0.20210422053029-0a33f92e93ec
 )
