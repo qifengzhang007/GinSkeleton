@@ -5,6 +5,7 @@ import (
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
 	controllerWs "goskeleton/app/http/controller/websocket"
+	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
 )
 
@@ -30,10 +31,16 @@ func (c Connect) CheckParams(context *gin.Context) {
 		response.ErrorParam(context, errs)
 		return
 	}
-
-	if serviceWs, ok := (&controllerWs.Ws{}).OnOpen(context); ok == false {
-		response.Fail(context, consts.WsOpenFailCode, consts.WsOpenFailMsg, "")
+	extraAddBindDataContext := data_transfer.DataAddContext(c, consts.ValidatorPrefix, context)
+	if extraAddBindDataContext == nil {
+		response.ErrorSystem(context, "websocket-Connect 表单验证器json化失败", "")
+		context.Abort()
+		return
 	} else {
-		(&controllerWs.Ws{}).OnMessage(serviceWs, context) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
+		if serviceWs, ok := (&controllerWs.Ws{}).OnOpen(extraAddBindDataContext); ok == false {
+			response.Fail(context, consts.WsOpenFailCode, consts.WsOpenFailMsg, "")
+		} else {
+			(&controllerWs.Ws{}).OnMessage(serviceWs, extraAddBindDataContext) // 注意这里传递的service_ws必须是调用open返回的，必须保证的ws对象的一致性
+		}
 	}
 }
