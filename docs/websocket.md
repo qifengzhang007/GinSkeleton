@@ -94,6 +94,7 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 ```code   
 
 if WsHub, ok := variable.WebsocketHub.(*core.Hub); ok {
+    // serviceWs 为 app/service/websocket 的别名
    ws := serviceWs.Ws{WsClient: &core.Client{Hub: WsHub}}
    ws.BroadcastMsg("本项目骨架任意位置，使用本段代码对在线的 ws 客户端广播消息")
 }
