@@ -149,4 +149,7 @@ Run函数子命令的前置方法，位置参数：子命令参数 ，flag参数
 Run函数子命令的后置方法，位置参数：子命令参数 ，flag参数：baidu, img, 关键词
  
 ```     
+
+####  如果文件分布在子目录，创建方式
+[创建子目录命令](https://gitee.com/daitougege/gin-skeleton-admin-backend/tree/master/command/cmd)
  
