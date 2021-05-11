@@ -49,7 +49,7 @@ func generateYearMonthPath(savePathPre string) (string, string) {
 	newReturnPathPre := returnPath + curYearMonth
 	// 相关路径不存在，创建目录
 	if _, err := os.Stat(newSavePathPre); err != nil {
-		if err = os.MkdirAll(newSavePathPre, 0666); err != nil {
+		if err = os.MkdirAll(newSavePathPre, os.ModePerm); err != nil {
 			variable.ZapLog.Error("文件上传创建目录出错" + err.Error())
 			return "", ""
 		}
