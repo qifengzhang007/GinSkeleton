@@ -119,10 +119,15 @@
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)  
 
 #### 主线版本更新日志  
+#### V 1.5.15  2021-05-11
+* 完善  
+  1.文件上传后自动创建目录时,目录权限由(0666)调整为：os.ModePerm(0777),解决可能遇到的权限问题 .  
+  2.cobra 文档增加创建子命令的示例链接.
+
 #### V 1.5.14  2021-04-28
 * 完善  
   1.更新 rabbitMq  排版  
-  2.更新 websocket 文档  
+  2.更新 websocket 文档
   
 #### V 1.5.13  2021-04-27
 * 完善  
