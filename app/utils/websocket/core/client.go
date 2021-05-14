@@ -1,14 +1,15 @@
 package core
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
-	"go.uber.org/zap"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 )
 
 type Client struct {
@@ -129,6 +130,8 @@ func (c *Client) Heartbeat() {
 	//2.浏览器收到服务器的ping格式消息，会自动响应pong消息，将服务器消息原路返回过来
 	if c.ReadDeadline == 0 {
 		_ = c.Conn.SetReadDeadline(time.Time{})
+	} else {
+		_ = c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline))
 	}
 	c.Conn.SetPongHandler(func(receivedPong string) error {
 		if c.ReadDeadline > time.Nanosecond {
@@ -152,7 +155,7 @@ func (c *Client) Heartbeat() {
 					}
 				} else {
 					if c.HeartbeatFailTimes > 0 {
-						c.HeartbeatFailTimes--
+						c.HeartbeatFailTimes = 0
 					}
 				}
 			} else {
