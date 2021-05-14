@@ -158,6 +158,7 @@ func (c *Client) Heartbeat() {
 				if err := c.SendMessage(websocket.PingMessage, variable.WebsocketServerPingMsg); err != nil {
 					c.HeartbeatFailTimes++
 					if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("Websocket.HeartbeatFailMaxTimes") {
+						c.State = 0
 						variable.ZapLog.Error(my_errors.ErrorsWebsocketBeatHeartsMoreThanMaxTimes, zap.Error(err))
 						return
 					}
