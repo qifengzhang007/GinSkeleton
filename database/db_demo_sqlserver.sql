@@ -6,53 +6,34 @@ CREATE DATABASE db_goskeleton
 END
 GO
 use db_goskeleton ;
---  创建表  tb_users 以及 写入模拟数据
-CREATE TABLE   tb_users (
-	id int   IDENTITY(1,1) NOT NULL  primary  key,
-	user_name nvarchar(60) DEFAULT(''),
-	pass varchar(60) DEFAULT(''),
-	age int DEFAULT(0),
-	sex int DEFAULT(1),
-	remark nvarchar(120) DEFAULT(''),
-	created_at datetime ,
-	updated_at datetime DEFAULT (getdate())
-) ;
+--  创建用户表
+CREATE TABLE [dbo].[tb_users](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [user_name] [nvarchar](50) NOT NULL ,
+    [pass] [varchar](128) NOT NULL ,
+    [real_name] [nvarchar](30) NOT NULL,
+    [phone] [char](11)    DEFAULT (''),
+    [status] [tinyint]   DEFAULT (1),
+    [remark] [nvarchar](120)    DEFAULT (''),
+    [last_login_time] [datetime] DEFAULT (getdate()),
+    [last_login_ip] [varchar](128) DEFAULT (''),
+    [login_times] [int] DEFAULT ((0)),
+    [created_at] [datetime]   DEFAULT (getdate()),
+    [updated_at] [datetime]  DEFAULT (getdate())
+    );
+-- --  创建token表
 
-
--- 模拟插入数据
-
-insert   into tb_users (
-user_name,
-pass,
-sex,
-age,
-remark,
-created_at,
-updated_at
-)
-values
-('goskeleton1','123456789',1,18,'备注信息，测试！',getdate(),getdate())  ;
-
-insert   into tb_users (
-user_name,
-pass,
-sex,
-age,
-remark,
-created_at,
-updated_at
-)
-values
-('goskeleton2','123456789',1,18,'备注信息，测试！',getdate(),getdate())  ;
-
-insert   into tb_users (
-user_name,
-pass,
-sex,
-age,
-remark,
-created_at,
-updated_at
-)
-values
-('goskeleton3','123456789',1,18,'备注信息，测试！',getdate(),getdate())  ;
+CREATE TABLE [dbo].[tb_oauth_access_tokens](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [fr_user_id] [int]  DEFAULT ((0)),
+    [client_id] [int]  DEFAULT ((0)),
+    [token] [varchar](600)  DEFAULT (''),
+    [action_name] [varchar](50)   DEFAULT ('login') ,
+    [scopes] [varchar](128) DEFAULT ('*') ,
+    [revoked] [tinyint] DEFAULT ((0)),
+    [client_ip] [varchar](128) DEFAULT (''),
+    [created_at] [datetime]  DEFAULT (getdate()) ,
+    [updated_at] [datetime]  DEFAULT (getdate()) ,
+    [expires_at] [datetime]  DEFAULT (getdate()) ,
+    [remark] [nchar](120) DEFAULT ('')
+    ) ;
