@@ -216,7 +216,7 @@ Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
 Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A
-files|form-data|string|必填|(注意表单键名为files，如果需要修改成别的键名，参见：App\Global\Variable\Variable.go ，UploadFileField=files)
+file|form-data|string|必填|(注意表单键名为files，如果需要修改成别的键名，参见：App\Global\Variable\Variable.go ，UploadFileField=files)
 > 返回示例：
 ```json
 {

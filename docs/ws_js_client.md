@@ -40,7 +40,7 @@
 </div>
 
 <script>
-    var wsServer_ip = 'ws://127.0.0.1:20201/Admin/ws?token=sdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd';
+    var wsServer_ip = 'ws://127.0.0.1:20201/admin/ws?token=sdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd';
     var websocket = new WebSocket(wsServer_ip);
     websocket.onopen = function (evt) {
         console.log("Connected to WebSocket server.");
