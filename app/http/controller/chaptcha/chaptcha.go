@@ -5,6 +5,7 @@ import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
+	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/response"
 	"net/http"
 	"path"
@@ -21,7 +22,7 @@ type Captcha struct {
 // 生成验证码ID
 func (c *Captcha) GenerateId(context *gin.Context) {
 	// 设置验证码的数字长度（个数）
-	var length = 4
+	var length = variable.ConfigYml.GetInt("Captcha.length")
 	captchaId := captcha.NewLen(length)
 	c.Id = captchaId
 	c.ImgUrl = "/captcha/" + captchaId + ".png"
@@ -60,8 +61,12 @@ func (c *Captcha) GetImg(context *gin.Context) {
 
 // 校验验证码
 func (c *Captcha) CheckCode(context *gin.Context) {
-	captchaId := context.Param("captchaId")
-	value := context.Param("value")
+	captchaIdKey := variable.ConfigYml.GetString("Captcha.captchaId")
+	captchaValueKey := variable.ConfigYml.GetString("Captcha.captchaValue")
+
+	captchaId := context.Param(captchaIdKey)
+	value := context.Param(captchaValueKey)
+
 	if captchaId == "" || value == "" {
 		response.Fail(context, consts.CaptchaCheckParamsInvalidCode, consts.CaptchaCheckParamsInvalidMsg, "")
 		return

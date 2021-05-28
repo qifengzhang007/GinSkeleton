@@ -70,7 +70,12 @@ func InitWebRouter() *gin.Engine {
 			// 2.将以上表单参数验证器注册，遵守 键 =》值 格式注册即可 ，app/http/validator/common/register_validator/web_register_validator.go  20行就是注册时候的键 consts.ValidatorPrefix+"UsersRegister"
 			// 3.按照注册时的键，直接从容器调用即可 ：validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister")
 			noAuth.POST("register", validatorFactory.Create(consts.ValidatorPrefix+"UsersRegister"))
+			// 不需要验证码即可登陆
 			noAuth.POST("login", validatorFactory.Create(consts.ValidatorPrefix+"UsersLogin"))
+
+			// 如果加载了验证码中间件，那么就需要提交验证码才可以登陆（本质上就是给登陆接口增加了2个参数：验证码id提交时的键：captcha_id 和 验证码值提交时的键 captcha_value，具体参见配置文件）
+			//noAuth.Use(authorization.CheckCaptchaAuth()).POST("login", validatorFactory.Create(consts.ValidatorPrefix+"UsersLogin"))
+
 		}
 
 		// 【需要token+Casbin】中间件验证的路由

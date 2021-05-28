@@ -72,10 +72,10 @@
 11|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 
 13|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
-14| 验证码|  [验证码](docs/captcha.md)
+14| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
-17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)  
+17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -119,6 +119,11 @@
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)  
 
 #### 主线版本更新日志  
+
+#### V 1.5.16  2021-05-28
+* 新增  
+    1.增加验证码中间件以及使用介绍.  
+  
 #### V 1.5.15  2021-05-11
 * 完善  
   1.文件上传后自动创建目录时,目录权限由(0666)调整为：os.ModePerm(0777),解决可能遇到的权限问题 .  

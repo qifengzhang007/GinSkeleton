@@ -122,3 +122,9 @@ RabbitMq:
     QueueName: ""
     OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
+
+#验证码(包括中间件)配置信息
+Captcha:
+  captchaId: "captcha_id"  # 验证码id提交时的键名
+  captchaValue: "captcha_value"   #验证码值提交时的键名
+  length: 4   # 验证码生成时的长度
