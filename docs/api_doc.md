@@ -76,8 +76,10 @@ pass|form-data|string|必填|goskeleton1.4
 ---|---|---|---|---
 user_name|form-data|string|必填|goskeleton1.4
 pass|form-data|string|必填|goskeleton1.4
-captcha|form-data|string|非必填|1360177xxxx
-> 返回示例：
+captcha_id|form-data|string|如果登录接口使用了验证码中间件，则必填|uY26gnHcHNnhot0lYkG8
+captcha_value|form-data|string|如果登录接口使用了验证码中间件，则必填|1234
+
+> 返回示例，关于登陆时是否提交验证码取决于登陆路由(接口)是否加载了验证码中间件.  
 ```json
 {
     "code": 200,
