@@ -11,7 +11,7 @@
 ### 快速安装步骤(基于docker)  
 > 1.比较详细的安装的参考地址：http://note.youdao.com/noteshare?id=3d8850a96ed288a0ae5c5421206b0f4e&sub=62EAE38FE217410E8D70859A152BCF8F  
 > 2.安装rabbitMq可以理解为安装一个mysql,默认创建的账号可以理解为 root，可以直接操作rabbitmq.  
-> 3.为了项目更安全，可以登录后台地址(http://IP:15672),自行为项目创建虚拟主机(类似mysql的数据库)、账号，最后将账号允许的操作虚拟进行绑定即可.  
+> 3.为了项目更安全，可以登录后台地址(`http://IP:15672`),自行为项目创建虚拟主机(类似mysql的数据库)、账号，最后将账号允许的操作虚拟进行绑定即可.  
 
 ### RabbitMq常用的几种模式    
 ![全场景图](https://www.ginskeleton.com/images/rabbitmq.jpg)   
