@@ -177,7 +177,7 @@ remark|form-data|string|非必填|备注信息
 ```  
 ####    6.删除用户  
 > 表单参数验证器: [delete](../app/http/validator/web/users/destroy.go)  
->    <font color=#FF4500>*get*，/admin/users/delete  </font> ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个是行业标准，网页端显示换行，不要被误导!  
+>    <font color=#FF4500>*post*，/admin/users/delete  </font> ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个是行业标准，网页端显示换行，不要被误导!  
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
