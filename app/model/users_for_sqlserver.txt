@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// 本文件针对 sqlserver 数据库有效，需要手动将本文件的所有代码替换 users.go 中的代码即可
+// 本文件针对 sqlserver 数据库有效，请手动使用本文件的所有代码替换 users.go 中的所有代码即可
 // 针对数据库选型为sqlserver的开发者使用
 
 func CreateUserFactory(sqlType string) *UsersModel {
