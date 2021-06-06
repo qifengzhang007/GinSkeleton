@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[tb_users](
     [id] [int] IDENTITY(1,1) NOT NULL,
     [user_name] [nvarchar](50) NOT NULL ,
     [pass] [varchar](128) NOT NULL ,
-    [real_name] [nvarchar](30) NOT NULL,
+    [real_name] [nvarchar](30)   DEFAULT (''),
     [phone] [char](11)    DEFAULT (''),
     [status] [tinyint]   DEFAULT (1),
     [remark] [nvarchar](120)    DEFAULT (''),

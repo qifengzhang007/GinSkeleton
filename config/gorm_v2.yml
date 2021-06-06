@@ -32,7 +32,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
   SqlServer:
     # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
     # 此外，开启 sqlserver 数据库时，请在 app/model/users_for_sqlserver.txt  文件中，按照说明手动替换一下代码
-    IsInitGolobalGormSqlserver: 0 
+    IsInitGolobalGormSqlserver: 0
     SlowThreshold: 30
     Write:
       Host: "127.0.0.1"
