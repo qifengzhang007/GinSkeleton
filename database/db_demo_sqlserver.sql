@@ -37,3 +37,16 @@ CREATE TABLE [dbo].[tb_oauth_access_tokens](
     [expires_at] [datetime]  DEFAULT (getdate()) ,
     [remark] [nchar](120) DEFAULT ('')
     ) ;
+
+-- -- 创建  tb_casbin 接口鉴权表
+CREATE TABLE [dbo].[tb_auth_casbin_rule](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [ptype] [varchar](100)  DEFAULT (''),
+    [v0] [varchar](100)  DEFAULT (''),
+    [v1] [varchar](100)  DEFAULT (''),
+    [v2] [varchar](100)  DEFAULT (''),
+    [v3] [varchar](100)  DEFAULT (''),
+    [v4] [varchar](100)  DEFAULT (''),
+    [v5] [varchar](100)  DEFAULT (''),
+    [remark] [nchar](120) DEFAULT ('')
+    ) ;
