@@ -26,6 +26,7 @@ func CheckTokenAuth() gin.HandlerFunc {
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
 			context.Abort()
+			return
 		}
 
 		if len(headerParams.Authorization) >= 20 {
@@ -41,10 +42,12 @@ func CheckTokenAuth() gin.HandlerFunc {
 					context.Next()
 				} else {
 					response.ErrorTokenAuthFail(context)
+					return
 				}
 			}
 		} else {
 			response.ErrorTokenAuthFail(context)
+			return
 		}
 	}
 }
@@ -67,6 +70,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 			return
 		} else if !isPass {
 			response.ErrorCasbinAuthFail(c, "")
+			return
 		} else {
 			c.Next()
 		}
