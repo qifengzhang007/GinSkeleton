@@ -9,7 +9,7 @@ import (
 )
 
 type Destroy struct {
-	Id float64 `form:"id"  json:"id" binding:"required,min=1"`
+	Id float64 `form:"id" binding:"required,min=1"`
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明

@@ -10,8 +10,8 @@ import (
 
 type Show struct {
 	Base
-	Page   float64 `form:"page" json:"page" binding:"required,gt=0"`     // 必填，页面值>0
-	Limits float64 `form:"limits" json:"limits" binding:"required,gt=0"` // 必填，每页条数值>0
+	Page   float64 `form:"page" binding:"required,gt=0"`    // 必填，页面值>0
+	Limits float64 `form:"limits"  binding:"required,gt=0"` // 必填，每页条数值>0
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明

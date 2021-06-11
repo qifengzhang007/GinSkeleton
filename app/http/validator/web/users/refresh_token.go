@@ -9,7 +9,7 @@ import (
 )
 
 type RefreshToken struct {
-	Authorization string `json:"token" header:"Authorization" binding:"required,min=20"`
+	Authorization string `form:"token" header:"Authorization" binding:"required,min=20"`
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明

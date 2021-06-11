@@ -10,11 +10,11 @@ import (
 
 type Update struct {
 	Base
-	Id       float64 `form:"id" json:"id" binding:"required,min=1"` // 注意：gin框架数字的存储形式都是 float64
-	Pass     string  `form:"pass" json:"pass" binding:"required,min=6"`
-	RealName string  `form:"real_name" json:"real_name" binding:"required,min=2"`
-	Phone    string  `form:"phone" json:"phone" binding:"required,len=11"`
-	Remark   string  `form:"remark" json:"remark"`
+	Id       float64 `form:"id" binding:"required,min=1"` // 注意：gin框架数字的存储形式都是 float64
+	Pass     string  `form:"pass" binding:"required,min=6"`
+	RealName string  `form:"real_name" binding:"required,min=2"`
+	Phone    string  `form:"phone" binding:"required,len=11"`
+	Remark   string  `form:"remark"`
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
