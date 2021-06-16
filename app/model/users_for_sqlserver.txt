@@ -110,7 +110,7 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	sql := `
 		SELECT  token  FROM  tb_oauth_access_tokens  
 		WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>GETDATE()  
-		ORDER  BY  updated_at  DESC 
+		ORDER  BY   expires_at  DESC , updated_at  DESC
 		OFFSET 0 ROW FETCH NEXT ? ROWS ONLY
 	`
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
