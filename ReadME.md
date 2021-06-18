@@ -129,10 +129,10 @@
   5.自带的 mysql 数据库创建脚本字段 last_login_ip , 设置默认值为 '' ,不在是 NULL.  
 
 #### V 1.5.17  2021-06-06
-* 新增、更新
-    1.sqlserver 数据库对应的用户模型，参见 app/model/users_for_sqlserver.txt.
-    2.更新 database/db_demo_sqlserver.sql 数据库、表创建命令.
-    修复
+* 新增、更新  
+    1.sqlserver 数据库对应的用户模型，参见 app/model/users_for_sqlserver.txt.  
+    2.更新 database/db_demo_sqlserver.sql 数据库、表创建命令.  
+    修复  
     1.修正常量定义处日期格式单词书写错误问题.
   
 
