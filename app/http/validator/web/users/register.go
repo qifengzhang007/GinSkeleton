@@ -22,11 +22,10 @@ import (
 //lt=6  对于文本就是长度<=6
 
 type Register struct {
-	Base
-	Pass string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //必填，密码长度范围：【6,20】闭区间
-	//Captcha string `form:"captcha" json:"captcha" binding:"required,len=4"` //  验证码，必填，长度为：4
-	//Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
-	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
+	BaseField
+	// 表单参数验证结构体支持匿名结构体嵌套、以及匿名结构体与普通字段组合
+	Phone  string `form:"phone" json:"phone"`     // 手机号， 非必填
+	CardNo string `form:"card_no" json:"card_no"` //身份证号码，非必填
 }
 
 // 特别注意: 表单参数验证器结构体的函数，绝对不能绑定在指针上

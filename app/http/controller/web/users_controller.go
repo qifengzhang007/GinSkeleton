@@ -72,9 +72,9 @@ func (u *Users) RefreshToken(context *gin.Context) {
 func (u *Users) Show(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
-	limits := context.GetFloat64(consts.ValidatorPrefix + "limits")
-	limitStart := (page - 1) * limits
-	counts, showlist := model.CreateUserFactory("").Show(userName, int(limitStart), int(limits))
+	limit := context.GetFloat64(consts.ValidatorPrefix + "limit")
+	limitStart := (page - 1) * limit
+	counts, showlist := model.CreateUserFactory("").Show(userName, int(limitStart), int(limit))
 	if counts > 0 && showlist != nil {
 		response.Success(context, consts.CurdStatusOkMsg, gin.H{"counts": counts, "list": showlist})
 	} else {

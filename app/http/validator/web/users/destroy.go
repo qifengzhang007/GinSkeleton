@@ -9,7 +9,8 @@ import (
 )
 
 type Destroy struct {
-	Id float64 `form:"id"  json:"id" binding:"required,min=1"`
+	// 表单参数验证结构体支持匿名结构体嵌套、以及匿名结构体与普通字段组合
+	Id
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明

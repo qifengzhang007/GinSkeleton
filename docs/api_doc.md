@@ -105,7 +105,7 @@ captcha_value|form-data|string|如果登录接口使用了验证码中间件，�
 Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A
 user_name|form-data|string|必填|g
 page|form-data|int|必填|1
-limits|form-data|int|必填|20
+limit|form-data|int|必填|20
 
 > 返回示例：
 ```json

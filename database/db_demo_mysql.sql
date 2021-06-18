@@ -16,7 +16,7 @@ CREATE TABLE `tb_users` (
   `status` TINYINT(4) DEFAULT 1 COMMENT '状态',
   `remark` VARCHAR(300) DEFAULT '' COMMENT '备注',
   `last_login_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `last_login_ip` CHAR(30) DEFAULT NULL COMMENT '最近一次登录ip',
+  `last_login_ip` CHAR(30) DEFAULT '' COMMENT '最近一次登录ip',
   `login_times` INT(11) DEFAULT 0 COMMENT '累计登录次数',
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP,

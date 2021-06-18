@@ -9,12 +9,12 @@ import (
 )
 
 type Update struct {
-	Base
-	Id       float64 `form:"id" json:"id" binding:"required,min=1"` // 注意：gin框架数字的存储形式都是 float64
-	Pass     string  `form:"pass" json:"pass" binding:"required,min=6"`
-	RealName string  `form:"real_name" json:"real_name" binding:"required,min=2"`
-	Phone    string  `form:"phone" json:"phone" binding:"required,len=11"`
-	Remark   string  `form:"remark" json:"remark"`
+	BaseField
+	Id
+	// 表单参数验证结构体支持匿名结构体嵌套、以及匿名结构体与普通字段组合
+	RealName string `form:"real_name" json:"real_name" binding:"required,min=2"`
+	Phone    string `form:"phone" json:"phone" binding:"required,len=11"`
+	Remark   string `form:"remark" json:"remark"`
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明

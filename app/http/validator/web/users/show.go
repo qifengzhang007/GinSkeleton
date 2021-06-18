@@ -4,14 +4,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/http/controller/web"
+	common_data_type "goskeleton/app/http/validator/common/data_type"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
 )
 
 type Show struct {
-	Base
-	Page   float64 `form:"page" json:"page" binding:"required,gt=0"`     // 必填，页面值>0
-	Limits float64 `form:"limits" json:"limits" binding:"required,gt=0"` // 必填，每页条数值>0
+	// 表单参数验证结构体支持匿名结构体嵌套
+	UserName string `form:"user_name" json:"user_name"  binding:"required,min=1"` // 必填、对于文本,表示它的长度>=1
+	common_data_type.Page
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
