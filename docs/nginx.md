@@ -19,14 +19,16 @@ server{
     root            /home/wwwroot/goproject2020/goskeleton/public ;
     index           index.htm  index.html ;   
     charset         utf-8 ;
-   
-    # 如果对跨域允许的ip管控不是很严格（对所有ip允许跨域），nginx 配置允许跨域即可
-    # goskeleton 项目的跨域需要屏蔽，详情参见 routes/(web.go|api.go) 相关注释说明   
-    add_header Access-Control-Allow-Origin *;
-    add_header Access-Control-Allow-Headers 'Authorization, User-Agent, Keep-Alive, Content-Type, X-Requested-With';
-    add_header Access-Control-Allow-Methods 'OPTIONS, GET, POST, DELETE, PUT, PATCH' ;
     
-     location / {
+    # 使用 nginx 直接接管静态资源目录
+    # 由于 ginskeleton 把路由(public)地址绑定到了同名称的目录 public ，所以我们就用 nginx 接管这个资源路由
+    location ~  /public/(.*)  {
+        # 使用我们已经定义好的 root 目录，然后截取用户请求时，public 后面的所有地址，直接响应资源，不存在就返回404
+        try_files  /$1   =404;
+     }
+
+    
+     location ~ / {
          # 静态资源、目录交给ngixn本身处理，动态路由请求执行后续的代理代码
          try_files $uri $uri/  @goskeleton;
      }
@@ -149,19 +151,15 @@ server{
           ssl_protocols TLSv1 TLSv1.1 TLSv1.2 SSLv2 SSLv3;
           ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
           ssl_prefer_server_ciphers on;
-   
-    # 如果对跨域允许的ip管控不是很严格（对所有ip允许跨域），nginx 配置允许跨域即可
-    # goskeleton 项目的跨域需要屏蔽，详情参见 routes/(web.go|api.go) 先关注释说明   
-    add_header Access-Control-Allow-Origin *;
-    add_header Access-Control-Allow-Headers 'Authorization, User-Agent, Keep-Alive, Content-Type, X-Requested-With';
-    add_header Access-Control-Allow-Methods OPTIONS, GET, POST, DELETE, PUT, PATCH ;
-            
-    if ($request_method = 'OPTIONS') {
-        # 针对浏览器第一次OPTIONS请求响应状态码：200，消息：hello options（可随意填写，避免中文）
-        return 200 "hello options";
-    }
     
-     location / {
+    # 使用 nginx 直接接管静态资源目录
+    # 由于 ginskeleton 把路由(public)地址绑定到了同名称的目录 public ，所以我们就用 nginx 接管这个资源路由
+    location ~  /public/(.*)  {
+        # 使用我们已经定义好的 root 目录，然后截取用户请求时，public 后面的所有地址，直接响应资源，不存在就返回404
+        try_files  /$1   =404;
+     }
+     
+     location ~ / {
          # 静态资源、目录交给ngixn本身处理，动态路由请求执行后续的代理代码
          try_files $uri $uri/  @goskeleton;
      }
