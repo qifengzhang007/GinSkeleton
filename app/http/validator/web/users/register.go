@@ -23,9 +23,10 @@ import (
 
 type Register struct {
 	Base
-	Pass string `form:"pass" binding:"required,min=6,max=20"` //必填，密码长度范围：【6,20】闭区间
-	//Phone string `form:"phone" binding:"required,len=11"`    //  验证规则：必填，长度必须=11
-	//CardNo  string `form:"card_no"  binding:"required,len=18"`	//身份证号码，必填，长度=18
+	Pass string `form:"pass" json:"pass" binding:"required,min=6,max=20"` //必填，密码长度范围：【6,20】闭区间
+	//Captcha string `form:"captcha" json:"captcha" binding:"required,len=4"` //  验证码，必填，长度为：4
+	//Phone string `form:"phone" json:"phone"  binding:"required,len=11"`    //  验证规则：必填，长度必须=11
+	//CardNo  string `form:"card_no" json:"card_no" binding:"required,len=18"`	//身份证号码，必填，长度=18
 }
 
 // 特别注意: 表单参数验证器结构体的函数，绝对不能绑定在指针上
