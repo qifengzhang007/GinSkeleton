@@ -76,8 +76,10 @@ pass|form-data|string|必填|goskeleton1.4
 ---|---|---|---|---
 user_name|form-data|string|必填|goskeleton1.4
 pass|form-data|string|必填|goskeleton1.4
-captcha|form-data|string|非必填|1360177xxxx
-> 返回示例：
+captcha_id|form-data|string|如果登录接口使用了验证码中间件，则必填|uY26gnHcHNnhot0lYkG8
+captcha_value|form-data|string|如果登录接口使用了验证码中间件，则必填|1234
+
+> 返回示例，关于登陆时是否提交验证码取决于登陆路由(接口)是否加载了验证码中间件.  
 ```json
 {
     "code": 200,
@@ -103,7 +105,7 @@ captcha|form-data|string|非必填|1360177xxxx
 Authorization|Headers|string|必填|Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A
 user_name|form-data|string|必填|g
 page|form-data|int|必填|1
-limits|form-data|int|必填|20
+limit|form-data|int|必填|20
 
 > 返回示例：
 ```json
@@ -175,7 +177,7 @@ remark|form-data|string|非必填|备注信息
 ```  
 ####    6.删除用户  
 > 表单参数验证器: [delete](../app/http/validator/web/users/destroy.go)  
->    <font color=#FF4500>*get*，/admin/users/delete  </font> ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个是行业标准，网页端显示换行，不要被误导!  
+>    <font color=#FF4500>*post*，/admin/users/delete  </font> ，注意该接口需要token鉴权，请在 `header` 头添加 `Authorization` 字段值，注意：该字段的值格式：Bearer (token)之间有一个空格, 这个是行业标准，网页端显示换行，不要被误导!  
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---

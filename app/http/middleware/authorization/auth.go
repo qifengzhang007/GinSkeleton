@@ -1,8 +1,10 @@
 package authorization
 
 import (
+	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"goskeleton/app/global/consts"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	userstoken "goskeleton/app/service/users/token"
@@ -17,13 +19,14 @@ type HeaderParams struct {
 // 检查token权限
 func CheckTokenAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		
+
 		headerParams := HeaderParams{}
 
 		//  推荐使用 ShouldBindHeader 方式获取头参数
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
 			context.Abort()
+			return
 		}
 
 		if len(headerParams.Authorization) >= 20 {
@@ -39,10 +42,12 @@ func CheckTokenAuth() gin.HandlerFunc {
 					context.Next()
 				} else {
 					response.ErrorTokenAuthFail(context)
+					return
 				}
 			}
 		} else {
 			response.ErrorTokenAuthFail(context)
+			return
 		}
 	}
 }
@@ -65,8 +70,29 @@ func CheckCasbinAuth() gin.HandlerFunc {
 			return
 		} else if !isPass {
 			response.ErrorCasbinAuthFail(c, "")
+			return
 		} else {
 			c.Next()
+		}
+	}
+}
+
+// 验证码中间件
+func CheckCaptchaAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		captchaIdKey := variable.ConfigYml.GetString("Captcha.captchaId")
+		captchaValueKey := variable.ConfigYml.GetString("Captcha.captchaValue")
+		captchaId := c.PostForm(captchaIdKey)
+		value := c.PostForm(captchaValueKey)
+		if captchaId == "" || value == "" {
+			response.Fail(c, consts.CaptchaCheckParamsInvalidCode, consts.CaptchaCheckParamsInvalidMsg, "")
+			return
+		}
+		if captcha.VerifyString(captchaId, value) {
+			c.Next()
+		} else {
+			response.Fail(c, consts.CaptchaCheckFailCode, consts.CaptchaCheckFailMsg, "")
+			return
 		}
 	}
 }

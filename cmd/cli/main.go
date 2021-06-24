@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "goskeleton/bootstrap"
-	"goskeleton/command/cmd"
+	cmd "goskeleton/command"
 )
 
 // 开发非http接口类服务入口

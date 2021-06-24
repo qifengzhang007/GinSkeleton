@@ -64,7 +64,7 @@ const (
 	//验证码
 	CaptchaGetParamsInvalidMsg    string = "获取验证码：提交的验证码参数无效,请检查验证码ID以及文件名后缀是否完整"
 	CaptchaGetParamsInvalidCode   int    = -400350
-	CaptchaCheckParamsInvalidMsg  string = "校验验证码：提交的参数无效，请确保提交的验证码ID和值有效"
+	CaptchaCheckParamsInvalidMsg  string = "校验验证码：提交的参数无效，请检查 【验证码ID、验证码值】 提交时的键名是否与配置项一致"
 	CaptchaCheckParamsInvalidCode int    = -400351
 	CaptchaCheckOkMsg             string = "验证码校验通过"
 	//CaptchaCheckOkCode            int    = 200

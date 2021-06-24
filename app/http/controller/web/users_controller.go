@@ -45,7 +45,7 @@ func (u *Users) Login(context *gin.Context) {
 					"realName":   userModel.RealName,
 					"phone":      phone,
 					"token":      userToken,
-					"updated_at": time.Now().Format(variable.DateFormart),
+					"updated_at": time.Now().Format(variable.DateFormat),
 				}
 				response.Success(context, consts.CurdStatusOkMsg, data)
 				return
@@ -72,11 +72,11 @@ func (u *Users) RefreshToken(context *gin.Context) {
 func (u *Users) Show(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
-	limits := context.GetFloat64(consts.ValidatorPrefix + "limits")
-	limitStart := (page - 1) * limits
-	showlist := model.CreateUserFactory("").Show(userName, int(limitStart), int(limits))
-	if showlist != nil {
-		response.Success(context, consts.CurdStatusOkMsg, showlist)
+	limit := context.GetFloat64(consts.ValidatorPrefix + "limit")
+	limitStart := (page - 1) * limit
+	counts, showlist := model.CreateUserFactory("").Show(userName, int(limitStart), int(limit))
+	if counts > 0 && showlist != nil {
+		response.Success(context, consts.CurdStatusOkMsg, gin.H{"counts": counts, "list": showlist})
 	} else {
 		response.Fail(context, consts.CurdSelectFailCode, consts.CurdSelectFailMsg, "")
 	}

@@ -72,10 +72,10 @@
 11|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 
 13|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
-14| 验证码|  [验证码](docs/captcha.md)
+14| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
-17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)  
+17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
 
 
 ###    项目上线后，运维方案(基于docker)    
@@ -119,9 +119,30 @@
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)  
 
 #### 主线版本更新日志  
+
+#### V 1.5.20  2021-06-18
+* 更新  
+  1.表单参数验证器示例代码更新，提供了更加紧凑的书写示例代码,相关示例文档同步更新.    
+  2.一个用户同时允许最大在线的token, 查询时优先按照 expires_at 倒序排列,便于不同系统间对接时,那种长久有效的token不会被"踢"下线.  
+  3.command 命令示例 demo 调整为按照子目录创建 cli 命令，方便更清晰地组织更多的 command 命令代码.  
+  4.nginx 部署文档优化，在nginx处理请求时,相关的静态资源直接由nginx拦截响应，提升响应速度,这样 go 程序将更专注于处于api接口请求.  
+  5.自带的 mysql 数据库创建脚本字段 last_login_ip , 设置默认值为 '' .  
+
+#### V 1.5.17  2021-06-06
+* 新增、更新  
+    1.sqlserver 数据库对应的用户模型，参见 app/model/users_for_sqlserver.txt.  
+    2.更新 database/db_demo_sqlserver.sql 数据库、表创建命令.  
+    修复  
+    1.修正常量定义处日期格式单词书写错误问题.
+  
+
+#### V 1.5.16  2021-05-28
+* 新增  
+    1.增加验证码中间件以及使用介绍.  
+  
 #### V 1.5.15  2021-05-11
 * 完善  
-  1.文件上传后自动创建目录时,目录权限由(0666)调整为：os.ModePerm(0777),解决可能遇到的权限问题 .  
+  1.文件上传后自动创建目录时,目录权限由(0666)调整为：os.ModePerm,解决可能遇到的权限问题 .    
   2.cobra 文档增加创建子命令的示例链接.
 
 #### V 1.5.14  2021-04-28

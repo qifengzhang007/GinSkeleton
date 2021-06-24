@@ -9,9 +9,8 @@ import (
 )
 
 type Store struct {
-	Base
-	//Created_at time.Time `form:"Stored_at" binding:"required" time_format:"2006-01-02"`
-	Pass     string `form:"pass" json:"pass" binding:"required,min=6"`
+	BaseField
+	// 表单参数验证结构体支持匿名结构体嵌套、以及匿名结构体与普通字段组合
 	RealName string `form:"real_name" json:"real_name" binding:"required,min=2"`
 	Phone    string `form:"phone" json:"phone" binding:"required,len=11"`
 	Remark   string `form:"remark" json:"remark" `

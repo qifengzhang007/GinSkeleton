@@ -1,4 +1,4 @@
-package cmd
+package demo
 
 import (
 	"fmt"
@@ -18,6 +18,6 @@ var subCmd = &cobra.Command{
 
 //注册子命令
 func init() {
-	demo.AddCommand(subCmd)
+	Demo1.AddCommand(subCmd)
 	// 子命令仍然可以定义 flag 参数，相关语法参见 demo.go 文件
 }

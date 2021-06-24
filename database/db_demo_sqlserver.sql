@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[tb_users](
     [id] [int] IDENTITY(1,1) NOT NULL,
     [user_name] [nvarchar](50) NOT NULL ,
     [pass] [varchar](128) NOT NULL ,
-    [real_name] [nvarchar](30) NOT NULL,
+    [real_name] [nvarchar](30)   DEFAULT (''),
     [phone] [char](11)    DEFAULT (''),
     [status] [tinyint]   DEFAULT (1),
     [remark] [nvarchar](120)    DEFAULT (''),
@@ -35,5 +35,18 @@ CREATE TABLE [dbo].[tb_oauth_access_tokens](
     [created_at] [datetime]  DEFAULT (getdate()) ,
     [updated_at] [datetime]  DEFAULT (getdate()) ,
     [expires_at] [datetime]  DEFAULT (getdate()) ,
+    [remark] [nchar](120) DEFAULT ('')
+    ) ;
+
+-- -- 创建  tb_casbin 接口鉴权表
+CREATE TABLE [dbo].[tb_auth_casbin_rule](
+    [id] [int] IDENTITY(1,1) NOT NULL,
+    [ptype] [varchar](100)  DEFAULT (''),
+    [v0] [varchar](100)  DEFAULT (''),
+    [v1] [varchar](100)  DEFAULT (''),
+    [v2] [varchar](100)  DEFAULT (''),
+    [v3] [varchar](100)  DEFAULT (''),
+    [v4] [varchar](100)  DEFAULT (''),
+    [v5] [varchar](100)  DEFAULT (''),
     [remark] [nchar](120) DEFAULT ('')
     ) ;
