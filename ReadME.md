@@ -71,7 +71,7 @@
 10|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
 11|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 
-13|项目日志对接到 elk 服务器|  [elk 日志顶级解决方案](docs/elk_log.md) 
+13|ELK 项目日志顶级解决方案|  [elk 7.13.3 -2021-07-08发布](https://gitee.com/daitougege/elk-docker-compose)  <br/> [elk 7.9.1 -2020-09-05发布](docs/elk_log.md)
 14| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
