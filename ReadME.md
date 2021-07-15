@@ -81,7 +81,7 @@
 ###    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
-1 | linux服务器| [推荐使用](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>    
+1 | linux服务器| [性能指标监控](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>    
 2 | mysql| [详情](docs/deploy_mysql.md)  
 3 | redis| [详情](docs/deploy_redis.md)    
 4 | nginx| [详情](docs/deploy_nginx.md)   
