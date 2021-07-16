@@ -78,15 +78,20 @@
 17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
 
 
+###    项目部署方案
+序号|部署办法 | 文档地址
+---|---|---
+1 | 开发、调试环境| [最简单的 nohup](docs/deploy_nohup.md)
+2 | 生产环境之supervisor进程守护 | [稳定可靠的进程守护方案](docs/supervisor.md)
+3 | 生产环境之docker部署方案 | [版本回滚、扩容非常灵活的方案](docs/deploy_docker.md)
+
+
 ###    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
 1 | linux服务器| [性能指标监控](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>    
-2 | mysql| [详情](docs/deploy_mysql.md)  
-3 | redis| [详情](docs/deploy_redis.md)    
-4 | nginx| [详情](docs/deploy_nginx.md)   
-5 | go应用程序| [详情](docs/deploy_go.md)  
-6|supervisor进程守护| [详情](docs/supervisor.md)
+2 | 其他指标(作为了解即可)| [mysql监控](docs/deploy_mysql.md)  <br />  [redis指标](docs/deploy_redis.md)  <br /> [nginx指标](docs/deploy_nginx.md) <br /> [go应用程序指标](docs/deploy_go.md)
+
 
 ### 并发测试
 [点击查看详情](docs/bench_cpu_memory.md)
