@@ -61,6 +61,8 @@ server{
      {
          deny all;
      }
+}
+
 
 ```
 
@@ -193,6 +195,8 @@ server{
      {
          deny all;
      }
+}
+
 
 ```   
 
