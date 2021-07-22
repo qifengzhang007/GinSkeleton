@@ -71,22 +71,27 @@
 10|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
 11|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 12|日志记录|  [zap高性能日志](docs/zap_log.md) 
-13|ELK 项目日志顶级解决方案|  [elk 7.13.3 推荐使用](https://gitee.com/daitougege/elk-docker-compose)  <br/> [elk 7.9.1 旧版本](docs/elk_log.md)
+13|ELK 项目日志顶级解决方案|  [elk 7.13.3 推荐使用](https://gitee.com/daitougege/elk-docker-compose)  <br/> <s>[elk 7.9.1 旧版本](docs/elk_log.md)</s>  
 14| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
 17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
 
 
+###    项目部署方案
+序号|部署办法 | 文档地址
+---|---|---
+1 | 开发、调试环境| [最简单的 nohup](docs/deploy_nohup.md)
+2 | 生产环境之supervisor进程守护 | [稳定可靠的进程守护方案](docs/supervisor.md)
+3 | 生产环境之docker部署方案 | [版本回滚、扩容非常灵活的方案](docs/deploy_docker.md)
+
+
 ###    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
-1 | linux服务器| [详情](docs/deploy_linux.md)   
-2 | mysql| [详情](docs/deploy_mysql.md)  
-3 | redis| [详情](docs/deploy_redis.md)    
-4 | nginx| [详情](docs/deploy_nginx.md)   
-5 | go应用程序| [详情](docs/deploy_go.md)  
-6|supervisor进程守护| [详情](docs/supervisor.md)
+1 | linux服务器| [性能指标监控](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>    
+2 | 其他指标(作为了解即可)| [mysql监控](docs/deploy_mysql.md)  <br />  [redis指标](docs/deploy_redis.md)  <br /> [nginx指标](docs/deploy_nginx.md) <br /> [go应用程序指标](docs/deploy_go.md)
+
 
 ### 并发测试
 [点击查看详情](docs/bench_cpu_memory.md)
@@ -120,10 +125,11 @@
 
 #### 主线版本更新日志  
 
-#### V 1.5.21  2021-07-14  
+#### V 1.5.21  2021-07-16  
 * 更新  
   1.项目依赖的所有包更新至最新版.   
   2.项目日志对接到 elk 日志管理中心，增加 `docker-compose.yml` 集成环境快速部署脚本,详情参见常用开发模块第 13 项.      
+  3.增加项目部署文档.      
 
 #### V 1.5.20  2021-06-18
 * 更新  

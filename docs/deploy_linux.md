@@ -113,6 +113,7 @@ docker  exec  -it  grafana   /bin/bash
 ![添加数据源step2](https://www.ginskeleton.com/images/add_source3.jpg)     
 > step4: 点击  save&test 显示一切ok    
 ![添加数据源step2](https://www.ginskeleton.com/images/add_source4.jpg)      
+![添加数据源step2](https://www.ginskeleton.com/images/grafana-prometheus.png)      
 ![添加数据源step2](https://www.ginskeleton.com/images/add_source5.jpg)   
 
 #### 导入监控服务器状态的模板     
