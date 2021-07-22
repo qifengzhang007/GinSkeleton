@@ -76,6 +76,7 @@
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
 17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
+18|Mysql主从同步(旨在实现读写分离)| [快速搭建docker-compose](https://gitee.com/daitougege/mysql-master-slave-docker-compose)
 
 
 ###    项目部署方案
