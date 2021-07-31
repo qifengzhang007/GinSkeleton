@@ -41,6 +41,8 @@
 
         # 将日志格式修改为 json 格式，方便对接到 elk ，修改日志格式对 nginx 没有任何影响,只会使日志阅读更加人性化
         log_format json '{"created_at":"$time_iso8601",'
+                           '"url":"$uri",'
+                           '"args":"$args",'
                            '"remote_addr":"$remote_addr",'
                            '"method":"$request_method",'
                            '"request":"$request",'
