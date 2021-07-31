@@ -94,4 +94,24 @@ func TestRedisReConn(t *testing.T) {
 	redisClient.ReleaseOneRedisClient()
 }
 
+//  测试返回值为多值的情况
+func TestRedisMulti(t *testing.T) {
+	redisClient := redis_factory.GetOneRedisClient()
+
+	if _, err := redisClient.String(redisClient.Execute("multi")); err == nil {
+		redisClient.Execute("hset", "mobile", "xiaomi", "1999")
+		redisClient.Execute("hset", "mobile", "oppo", "2999")
+		redisClient.Execute("hset", "mobile", "iphone", "3999")
+
+		if strs, err := redisClient.Int64s(redisClient.Execute("exec")); err == nil {
+			t.Logf("直接输出切片：%#+v\n", strs)
+		} else {
+			t.Errorf(err.Error())
+		}
+	} else {
+		t.Errorf(err.Error())
+	}
+	redisClient.ReleaseOneRedisClient()
+}
+
 //  其他请参照以上示例即可

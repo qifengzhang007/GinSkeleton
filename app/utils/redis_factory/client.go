@@ -97,6 +97,11 @@ func (r *RedisClient) String(reply interface{}, err error) (string, error) {
 	return redis.String(reply, err)
 }
 
+//string map 类型转换
+func (r *RedisClient) StringMap(reply interface{}, err error) (map[string]string, error) {
+	return redis.StringMap(reply, err)
+}
+
 //strings 类型转换
 func (r *RedisClient) Strings(reply interface{}, err error) ([]string, error) {
 	return redis.Strings(reply, err)
@@ -117,6 +122,21 @@ func (r *RedisClient) Int64(reply interface{}, err error) (int64, error) {
 	return redis.Int64(reply, err)
 }
 
+//int map 类型转换
+func (r *RedisClient) IntMap(reply interface{}, err error) (map[string]int, error) {
+	return redis.IntMap(reply, err)
+}
+
+//Int64Map 类型转换
+func (r *RedisClient) Int64Map(reply interface{}, err error) (map[string]int64, error) {
+	return redis.Int64Map(reply, err)
+}
+
+//int64s 类型转换
+func (r *RedisClient) Int64s(reply interface{}, err error) ([]int64, error) {
+	return redis.Int64s(reply, err)
+}
+
 //uint64 类型转换
 func (r *RedisClient) Uint64(reply interface{}, err error) (uint64, error) {
 	return redis.Uint64(reply, err)
@@ -126,3 +146,5 @@ func (r *RedisClient) Uint64(reply interface{}, err error) (uint64, error) {
 func (r *RedisClient) Bytes(reply interface{}, err error) ([]byte, error) {
 	return redis.Bytes(reply, err)
 }
+
+// 以上封装了很多最常见类型转换函数，其他您可以参考以上格式自行封装
