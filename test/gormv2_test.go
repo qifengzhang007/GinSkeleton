@@ -17,11 +17,11 @@ import (
 
 // 模拟创建 3 个数据表，请在数据库按照结构体字段自行创建，字段全部使用小写
 type tb_users struct {
-	ID         uint   `json:"id"  gorm:"primaryKey" `
-	Name       string `json:"name"`
-	Age        uint8  `json:"age"`
-	Addr       string `json:"addr"`
-	Email      string `json:"email"`
+	ID uint `json:"id"  gorm:"primaryKey" `
+	//Name       string `json:"name"`
+	//Age        uint8  `json:"age"`
+	//Addr       string `json:"addr"`
+	//Email      string `json:"email"`
 	Phone      string `json:"phone"`
 	Remark     string `json:"remark"`
 	Created_at string `json:"created_at"`
@@ -326,12 +326,12 @@ func TestPostgreSql(t *testing.T) {
 	var users []tb_users
 
 	// 执行类sql，如果配置了读写分离，该命令会在 write 数据库执行
-	result := variable.GormDbPostgreSql.Exec("update   web.tb_users  set  remark='update 操作 write数据库' where   id=?", 1)
-	if result.Error != nil {
-		t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
-	}
+	//result := variable.GormDbPostgreSql.Exec("update   web.tb_users  set  remark='update 操作 write数据库' where   id=?", 1)
+	//if result.Error != nil {
+	//	t.Errorf("单元测试失败，错误明细:%s\n", result.Error.Error())
+	//}
 	// 查询类，如果配置了读写分离，该命令会在 read 数据库执行
-	result = variable.GormDbPostgreSql.Table("web.tb_users").Select("").Select("id", "user_name", "age", "addr", "remark").Where("id > ?", 0).Find(&users)
+	result := variable.GormDbPostgreSql.Table("web.tb_users").Debug().Select("id", "user_name", "phone", "remark").Where("id > ?", 0).Find(&users)
 	if result.Error != nil {
 		t.Errorf("单元测试失败，错误明细：%s\n", result.Error.Error())
 	}
