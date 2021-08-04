@@ -66,9 +66,9 @@ Casbin:
   # Casbin打开以后注意事项：Mysql/MariDb 低版本数据库如果数据库表的引擎默认是 Myisam，
   # 程序会报错：Specified key was too long; max key length is 1000 bytes
   # 请手动复制 db_demo_mysql 中创建 tb_auth_casbin_rule 的代码自行创建InnoDb引擎的表，重新启动本项目即可
-  IsInit: 1 # 是否随项目启动同步初始化：1=是；0=否, 开启 Casbin 前请确保数据库连接配置正确
+  IsInit: 0 # 是否随项目启动同步初始化：1=是；0=否, 开启 Casbin 前请确保数据库连接配置正确
   AutoLoadPolicySeconds: 5 # 扫描数据库策略的频率(单位：秒)
-  TablePrefix: "web.tb" # mysql、sqlserver 前缀为 tb ；postgres 数据库前缀请设置为 web.tb，web 是我们默认的模式
+  TablePrefix: "tb" # mysql、sqlserver 前缀为 tb ；postgres 数据库前缀请设置为 web.tb，其中 web 是本项目创建的的模式
   TableName: "auth_casbin_rule"  # 程序最终创建的表为： tb_auth_casbin_rule (即在前缀和名称之间自动添加了下划线 _ )
   ModelConfig: |    # 竖线 | 表示以下整段文本保持换行格式
     [request_definition]

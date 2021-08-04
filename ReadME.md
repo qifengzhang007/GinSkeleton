@@ -9,6 +9,7 @@
 >   2.本项目优先关注 [Gitee Issue](https://gitee.com/daitougege/GinSkeleton/issues) 仓库的所有问题, github 太卡严重影响效率。
 
 ###    快速上手 
+- 1.go语言环境配置
 ```code  
 // 1.安装的go语言版本最好>=1.15,只为更好的支持 `go module` 包管理.  
 
@@ -20,12 +21,38 @@
 // 3.下载本项目依赖库  
     使用 goland(>=2019.3版本) 打开本项目，打开 goland 底部的 Terminal ,执行  go mod tidy 下载本项目依赖库  
 
-// 4.还原自带数据库   
-    找到`database/db_demo_mysql.sql`导入数据库，自行配置账号、密码、端口等。    
-
-// 5.双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，首次会自动下载依赖， 片刻后即可启动.  
-
 ```  
+
+- 2.选择自己正在使用的数据库进行配置操作
+```code
+// 1.Mysql 数据库用户
+    // mysql数据库是默认数据库，使用相关的客户端还原即可
+    找到`database/db_demo_mysql.sql`导入数据库，
+  
+  
+// 2.SqlServer 数据库用户
+    1.找到`database/db_demo_sqlserver.sql`，复制内容，在相关的客户端窗口界面一次性执行即可，
+    2.在 app/model 目录内，使用 users_for_sqlserver.txt 的内容覆盖同目录的 users.go 已有内容
+    3.在 config/gorm_v2.yml 中，修改 UseDbType：sqlserver
+    
+ 
+// 3.PostgreSql 数据库用户
+    1.首先使用相关的客户端软件，手动创建数据 db_goskeleton，选择该数据库.
+    2.找到`database/db_demo_postgre.sql`，复制内容，在相关的客户端窗口界面一次性执行即可，
+    3.在 app/model 目录内，使用 users_for_postgres.txt 的内容覆盖同目录的 users.go 已有内容
+    4.在 config/gorm_v2.yml 中，修改 UseDbType：postgresql
+         
+// 4.完成以上三者中的其中一个配置完成后，在 config/gorm_v2.yml 配置账号、密码、端口等。    
+
+```
+- 3.启动项目
+```code 
+
+// 1.启动项目
+    使用goland打开本项目，在根目录手动更新项目依赖，执行命令： go  mod tidy
+    双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，即可启动.  
+ 
+```
 
 >![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)  
 
@@ -76,7 +103,7 @@
 15| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
 16|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
 17|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
-18|Mysql主从同步(旨在实现读写分离)| [快速搭建docker-compose](https://gitee.com/daitougege/mysql-master-slave-docker-compose)
+18|Mysql主从同步(旨在实现读写分离)| [使用docker-compose快速搭建](https://gitee.com/daitougege/mysql-master-slave-docker-compose)
 
 
 ###    项目部署方案

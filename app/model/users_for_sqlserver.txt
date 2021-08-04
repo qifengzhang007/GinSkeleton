@@ -15,7 +15,7 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-    BaseModel `json:""`
+    BaseModel  `json:"-"`
     UserName    string `gorm:"column:user_name" json:"user_name"`
     Pass        string `json:"-"`
     Phone       string `json:"phone"`
