@@ -76,11 +76,16 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
-		sql = "UPDATE  tb_users   SET  login_times=IFNULL(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
-		_ = u.Exec(sql, clientIp, time.Now().Format(variable.DateFormat), userId)
+		go u.UpdateUserloginInfo(clientIp, userId)
 		return true
 	}
 	return false
+}
+
+// 更新用户登陆次数、最近一次登录ip、最近一次登录时间
+func (u *UsersModel) UpdateUserloginInfo(last_login_ip string, userId int64) {
+	sql := "UPDATE  tb_users   SET  login_times=IFNULL(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
+	_ = u.Exec(sql, last_login_ip, time.Now().Format(variable.DateFormat), userId)
 }
 
 //当用户更改密码后，所有的token都失效，必须重新登录

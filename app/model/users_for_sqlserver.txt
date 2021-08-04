@@ -10,6 +10,12 @@ import (
 // 本文件针对 sqlserver 数据库有效，请手动使用本文件的所有代码替换 users.go 中的所有代码即可
 // 针对数据库选型为sqlserver的开发者使用
 
+// 操作数据库喜欢使用gorm自带语法的开发者可以参考 GinSkeleton-Admin 系统相关代码
+// Admin 项目地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/
+// gorm_v2 提供的语法+ ginskeleton 实践 ：  http://gitee.com/daitougege/gin-skeleton-admin-backend/blob/master/app/model/button_cn_en.go
+
+// 创建 userFactory
+// 参数说明： 传递空值，默认使用 配置文件选项：UseDbType（mysql）
 func CreateUserFactory(sqlType string) *UsersModel {
 	return &UsersModel{BaseModel: BaseModel{DB: UseDbConn(sqlType)}}
 }
@@ -72,11 +78,16 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=GETDATE(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
-		sql = "UPDATE  tb_users   SET  login_times=isnull(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
-		_ = u.Exec(sql, clientIp, time.Now().Format(variable.DateFormat), userId)
+       go u.UpdateUserloginInfo(clientIp,userId)
 		return true
 	}
 	return false
+}
+
+// 更新用户登陆次数、最近一次登录ip、最近一次登录时间
+func (u *UsersModel) UpdateUserloginInfo(last_login_ip string,userId int64){
+	sql := "UPDATE  tb_users   SET  login_times=isnull(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
+	_ = u.Exec(sql, last_login_ip, time.Now().Format(variable.DateFormat), userId)
 }
 
 //当用户更改密码后，所有的token都失效，必须重新登录
