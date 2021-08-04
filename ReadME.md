@@ -42,7 +42,7 @@
     3.在 app/model 目录内，使用 users_for_postgres.txt 的内容覆盖同目录的 users.go 已有内容
     4.在 config/gorm_v2.yml 中，修改 UseDbType：postgresql
          
-// 4.完成以上三者中的其中一个配置完成后，在 config/gorm_v2.yml 配置账号、密码、端口等。    
+// 4.完成以上三者中的其中一个之后，在 config/gorm_v2.yml 配置账号、密码、端口等。    
 
 ```
 - 3.启动项目
