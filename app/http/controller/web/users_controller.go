@@ -33,7 +33,8 @@ func (u *Users) Login(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
-	userModel := model.CreateUserFactory("").Login(userName, pass)
+	userModelFact := model.CreateUserFactory("")
+	userModel := userModelFact.Login(userName, pass)
 
 	if userModel != nil {
 		userTokenFactory := userstoken.CreateUserFactory()
@@ -48,6 +49,7 @@ func (u *Users) Login(context *gin.Context) {
 					"updated_at": time.Now().Format(variable.DateFormat),
 				}
 				response.Success(context, consts.CurdStatusOkMsg, data)
+				go userModel.UpdateUserloginInfo(context.ClientIP(), userModel.Id)
 				return
 			}
 		}

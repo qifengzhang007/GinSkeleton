@@ -21,14 +21,14 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-    BaseModel  `json:"-"`
-    UserName    string `gorm:"column:user_name" json:"user_name"`
-    Pass        string `json:"-"`
-    Phone       string `json:"phone"`
-    RealName    string `gorm:"column:real_name" json:"real_name"`
-    Status      int    `json:"status"`
-    Token       string `json:"token"`
-    LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
+	BaseModel  `json:"-"`
+	UserName    string `gorm:"column:user_name" json:"user_name"`
+	Pass        string `json:"-"`
+	Phone       string `json:"phone"`
+	RealName    string `gorm:"column:real_name" json:"real_name"`
+	Status      int    `json:"status"`
+	Token       string `json:"token"`
+	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
 }
 
 // 表名
@@ -78,7 +78,7 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=GETDATE(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
-       go u.UpdateUserloginInfo(clientIp,userId)
+		go u.UpdateUserloginInfo(clientIp,userId)
 		return true
 	}
 	return false
