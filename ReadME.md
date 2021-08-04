@@ -8,6 +8,9 @@
 >   1.提交问题请在项目顶栏的`issue`直接添加问题，基本上都是每天处理当天上报的问题。   
 >   2.本项目优先关注 [Gitee Issue](https://gitee.com/daitougege/GinSkeleton/issues) 仓库的所有问题, github 太卡严重影响效率。
 
+### 本项目主线逻辑图    
+> ![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)
+
 ###    快速上手 
 - 1.go语言环境配置
 ```code  
@@ -53,8 +56,6 @@
     双击`cmd/(web|api|cli)/main.go`，进入代码界面，找到 `main` 函数左侧，鼠标点击 `run`即可启动,此外鼠标右键`run`也可以启动.
  
 ```
-
->![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)  
 
 ###    项目目录结构介绍   
 >[核心结构](./docs/project_struct.md)    
