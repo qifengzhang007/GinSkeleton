@@ -50,7 +50,7 @@
 
 // 1.启动项目
     使用goland打开本项目，在根目录手动更新项目依赖，执行命令： go  mod tidy
-    双击`cmd/(web|api|cli)/main.go`，进入代码界面，鼠标右键`run`运行本项目，即可启动.  
+    双击`cmd/(web|api|cli)/main.go`，进入代码界面，找到 `main` 函数左侧，鼠标点击 `run`即可启动,此外鼠标右键`run`也可以启动.
  
 ```
 
