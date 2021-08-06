@@ -155,8 +155,14 @@
 
 #### 主线版本更新日志  
 
-#### V 1.5.22  2021-08-04
+#### V 1.5.23  2021-08-06
 
+* 修复  
+  1.postgresql文件 `app/model/users_for_postgres.txt` 中一处bug，登陆后，登陆次数+1时sql语句报错.  
+* 更新  
+  1.为 `http://github.com/casbin/gorm-adapter` 依赖包提交pr,由于官方已经合并，此包更新至最新版,解决postgresql创建索引报错的bug.  
+
+#### V 1.5.22  2021-08-04
 * 新增  
     1.项目部署方案.  
     2.mysql主从同步快速部署方案.  
