@@ -87,7 +87,7 @@ func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newTok
 
 // 更新用户登陆次数、最近一次登录ip、最近一次登录时间
 func (u *UsersModel) UpdateUserloginInfo(last_login_ip string,userId int64){
-	sql := "UPDATE  tb_users   SET  login_times=COALESCE(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
+	sql := "UPDATE  web.tb_users   SET  login_times=COALESCE(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
 	_ = u.Exec(sql, last_login_ip, time.Now().Format(variable.DateFormat), userId)
 }
 
