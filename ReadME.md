@@ -16,7 +16,7 @@
 ```code  
 // 1.安装的go语言版本必须>=1.15 .
 
-// 2.配置go包的代理，打开你的 goland 终端并执行以下命令（windwos系统）
+// 2.配置go包的代理，打开你的终端(cmd黑窗口)并执行以下命令（windwos系统）
     // 其他操作系统自行参见：https://goproxy.cn  
     go env -w GO111MODULE=on
     go env -w GOPROXY=https://goproxy.cn,direct
