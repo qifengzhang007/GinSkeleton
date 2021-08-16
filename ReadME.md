@@ -73,6 +73,10 @@
   // -o 指定最终编译出的文件名， cmd/(web|api|cli)/main.go 表示编译的入口文件，web|api|cli 三个目录选择其一即可  
   go build -o demo_goskeleton cmd/(web|api|cli)/main.go
   
+  // 此外你还可以追加参数编译：-ldflags "-w -s"  ，-w 表示禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
+  // 追加参数编译后的程序体积也会比原来所谓16%左右.
+  go build -o demo_goskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go
+  
 ```
 
 ###    <font color="red">项目骨架主线、核心逻辑</font>  
