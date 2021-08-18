@@ -74,7 +74,7 @@
   go build -o demo_goskeleton cmd/(web|api|cli)/main.go
   
   // 此外你还可以追加参数编译：-ldflags "-w -s"  ，-w 表示去除调试信息，禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
-  // 追加参数编译后的程序体积也会比原来减少16%左右.
+  // 追加参数编译后的程序体积也会比原来减少25%左右.
   go build -o demo_goskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go
   
 ```
