@@ -73,12 +73,10 @@
   set env -w CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
   
   // 编译出最终可执行文件，进入根目录（GinSkeleton所在目录，也就是 go.mod 所在的目录）
-  // -o 指定最终编译出的文件名， cmd/(web|api|cli)/main.go 表示编译的入口文件，web|api|cli 三个目录选择其一即可  
-  go build -o demo_goskeleton cmd/(web|api|cli)/main.go
-  
-  // 此外你还可以追加参数编译：-ldflags "-w -s"  ，-w 表示去除调试信息，禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
+  // 编译时建议追加参数：-ldflags "-w -s"  ，-w 表示去除调试信息，禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
   // 追加参数编译后的程序体积也会比原来减少25%左右.
-  go build -o demo_goskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go
+  // web|api|cli 三个目录选择其一即可，表示编译的入口目录  
+  go build -o demo_goskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go   
   
 ```
 
