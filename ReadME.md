@@ -64,10 +64,13 @@
 ###  交叉编译(windows直接编译出linux可执行文件)    
 ```code  
   // goland 终端底栏打开`terminal`, 依次执行以下命令，设置编译前的参数   
+  
   // 特别注意： 以下三个命令执行时,前后不要有空格，否则最后编译可能会报错，无法编译出最终可执行文件  
-  set GOARCH=amd64
-  set GOOS=linux
-  set CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
+  # 追加 env  -w 表示将值写入环境变量，否则每次只是临时生效，
+  # 对于运行在linux服务器的程序后续编译就不需要重复设置编译前的参数，如果程序最终运行在windows，则编译参数  GOOS=windows
+  set env -w GOARCH=amd64  // cpu架构
+  set env -w GOOS=linux  // 程序运行的最终系统，linux、windows、darwin(苹果macos系统)
+  set env -w CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
   
   // 编译出最终可执行文件，进入根目录（GinSkeleton所在目录，也就是 go.mod 所在的目录）
   // -o 指定最终编译出的文件名， cmd/(web|api|cli)/main.go 表示编译的入口文件，web|api|cli 三个目录选择其一即可  
