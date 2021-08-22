@@ -9,7 +9,7 @@ const (
 	ErrorsStorageLogsNotExists      string = "storage/logs 目录不存在"
 	ErrorsConfigInitFail            string = "初始化配置文件发生错误"
 	ErrorsSoftLinkCreateFail        string = "自动创建软连接失败,请以管理员身份运行客户端(开发环境为goland等，生产环境检查命令执行者权限), " +
-		"最后一个可能：如果您是360用户，请退出360相关软件，才能保证 go语言 os.Symlink() 函数正常运行"
+		"最后一个可能：如果您是360用户，请退出360相关软件，才能保证go语言创建软连接函数： os.Symlink() 正常运行"
 	ErrorsSoftLinkDeleteFail string = "删除软软连接失败"
 
 	ErrorsFuncEventAlreadyExists   string = "注册函数类事件失败，键名已经被注册"
