@@ -92,6 +92,11 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 ##### 2.在本项目骨架任意位置，向所有在线的 websocet 客户端广播消息    
 > 核心原理：每一个 websocket 客户端都有一个 Hub 结构体，而这个结构体是本项目骨架设置的全局值,因此在任意位置创建一个 websocket 客户端，只要将 Hub 值赋予全局初始化的：variable.WebsocketHub，就可以在任意位置进行广播消息.  
 ```code   
+package demo1
+
+import (
+    	serviceWs   "goskeleton/app/service/websocket"
+)
 
 if WsHub, ok := variable.WebsocketHub.(*core.Hub); ok {
     // serviceWs 为 app/service/websocket 的别名
