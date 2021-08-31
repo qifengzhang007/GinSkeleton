@@ -98,6 +98,8 @@ import (
     	serviceWs   "goskeleton/app/service/websocket"
 )
 
+// 省略其他无关代码，相关的核心代码如下
+
 if WsHub, ok := variable.WebsocketHub.(*core.Hub); ok {
     // serviceWs 为 app/service/websocket 的别名
    ws := serviceWs.Ws{WsClient: &core.Client{Hub: WsHub}}
