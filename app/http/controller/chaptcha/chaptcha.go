@@ -33,7 +33,8 @@ func (c *Captcha) GenerateId(context *gin.Context) {
 
 // 获取验证码图像
 func (c *Captcha) GetImg(context *gin.Context) {
-	captchaId := context.Param("captchaId")
+	captchaIdKey := variable.ConfigYml.GetString("Captcha.captchaId")
+	captchaId := context.Param(captchaIdKey)
 	_, file := path.Split(context.Request.URL.Path)
 	ext := path.Ext(file)
 	id := file[:len(file)-len(ext)]
