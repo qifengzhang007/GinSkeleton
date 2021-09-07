@@ -99,7 +99,7 @@
 4 | cli命令| [cobra文档](docs/cobra.md) 
 5 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
 6|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](./docs/websocket.md)  
-7|aop切面编程| [Aop切面编程](docs/aop.md) 
+7|控制器aop切面编程| [Aop切面编程](docs/aop.md) 
 8|redis| [redis使用示例](test/redis_test.go) 
 9|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 精华](docs/concise.md) 
 10|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
