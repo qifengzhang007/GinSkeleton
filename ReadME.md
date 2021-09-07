@@ -68,9 +68,9 @@
   // 特别注意： 以下三个命令执行时,前后不要有空格，否则最后编译可能会报错，无法编译出最终可执行文件  
   # 追加 env  -w 表示将值写入环境变量，否则每次只是临时生效，
   # 对于运行在linux服务器的程序后续编译就不需要重复设置编译前的参数，如果程序最终运行在windows，则编译参数  GOOS=windows
-  set env -w GOARCH=amd64  // cpu架构
-  set env -w GOOS=linux  // 程序运行的最终系统，linux、windows、darwin(苹果macos系统)
-  set env -w CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
+  go env -w GOARCH=amd64  // cpu架构
+  go env -w GOOS=linux  // 程序运行的最终系统，linux、windows、darwin(苹果macos系统)
+  go env -w CGO_ENABLED=0   // window编译设置Cgo模块关闭，因为windows上做cgo开发太麻烦，如果引用了Cgo库库，那么请在linux环境开发、编译  
   
   // 编译出最终可执行文件，进入根目录（GinSkeleton所在目录，也就是 go.mod 所在的目录）
   // 编译时建议追加参数：-ldflags "-w -s"  ，-w 表示去除调试信息，禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
