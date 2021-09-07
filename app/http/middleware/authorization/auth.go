@@ -61,6 +61,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 		// 模拟请求参数转换后的角色（roleId=2）
 		// 主线版本没有深度集成casbin的使用逻辑
 		// GinSkeleton-Admin 系统则深度集成了casbin接口权限管控
+		// 详细实现参考地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/blob/master/app/http/middleware/authorization/auth.go
 		role := "2" // 这里模拟某个用户的roleId=2
 
 		// 这里将用户的id解析为所拥有的的角色，判断是否具有某个权限即可
