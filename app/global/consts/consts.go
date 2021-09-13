@@ -14,11 +14,12 @@ const (
 	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误, "
 
 	// token相关
-	JwtTokenOK            int    = 200100           //token有效
-	JwtTokenInvalid       int    = -400100          //无效的token
-	JwtTokenExpired       int    = -400101          //过期的token
-	JwtTokenFormatErrCode int    = -400102          //提交的 token 格式错误
-	JwtTokenFormatErrMsg  string = "提交的 token 格式错误" //提交的 token 格式错误
+	JwtTokenOK            int    = 200100                      //token有效
+	JwtTokenInvalid       int    = -400100                     //无效的token
+	JwtTokenExpired       int    = -400101                     //过期的token
+	JwtTokenFormatErrCode int    = -400102                     //提交的 token 格式错误
+	JwtTokenFormatErrMsg  string = "提交的 token 格式错误"            //提交的 token 格式错误
+	JwtTokenMustValid     string = "token为必填项,请在请求header部分提交!" //提交的 token 格式错误
 
 	//SnowFlake 雪花算法
 	StartTimeStamp = int64(1483228800000) //开始时间截 (2017-01-01)

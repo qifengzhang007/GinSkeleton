@@ -36,9 +36,23 @@ func Fail(c *gin.Context, dataCode int, msg string, data interface{}) {
 	c.Abort()
 }
 
+// token 基本的格式错误
+func ErrorTokenBaseInfo(c *gin.Context) {
+	ReturnJson(c, http.StatusBadRequest, http.StatusBadRequest, my_errors.ErrorsTokenBaseInfo, "")
+	//终止可能已经被加载的其他回调函数的执行
+	c.Abort()
+}
+
 //token 权限校验失败
 func ErrorTokenAuthFail(c *gin.Context) {
 	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsNoAuthorization, "")
+	//终止可能已经被加载的其他回调函数的执行
+	c.Abort()
+}
+
+//token 不符合刷新条件
+func ErrorTokenRefreshFail(c *gin.Context) {
+	ReturnJson(c, http.StatusBadRequest, http.StatusBadRequest, my_errors.ErrorsRefreshTokenFail, "")
 	//终止可能已经被加载的其他回调函数的执行
 	c.Abort()
 }

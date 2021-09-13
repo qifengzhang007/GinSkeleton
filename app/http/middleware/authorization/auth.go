@@ -13,10 +13,10 @@ import (
 )
 
 type HeaderParams struct {
-	Authorization string `header:"Authorization"`
+	Authorization string `header:"Authorization" binding:"required,min=20"`
 }
 
-// 检查token权限
+// 检查token完整性、有效性中间件
 func CheckTokenAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 
@@ -26,28 +26,49 @@ func CheckTokenAuth() gin.HandlerFunc {
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
 			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
 			context.Abort()
+			response.ErrorParam(context, consts.JwtTokenMustValid)
 			return
 		}
-
-		if len(headerParams.Authorization) >= 20 {
-			token := strings.Split(headerParams.Authorization, " ")
-			if len(token) == 2 && len(token[1]) >= 20 {
-				tokenIsEffective := userstoken.CreateUserFactory().IsEffective(token[1])
-				if tokenIsEffective {
-					if customeToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
-						key := variable.ConfigYml.GetString("Token.BindContextKeyName")
-						// token验证通过，同时绑定在请求上下文
-						context.Set(key, customeToken)
-					}
-					context.Next()
-				} else {
-					response.ErrorTokenAuthFail(context)
-					return
+		token := strings.Split(headerParams.Authorization, " ")
+		if len(token) == 2 && len(token[1]) >= 20 {
+			tokenIsEffective := userstoken.CreateUserFactory().IsEffective(token[1])
+			if tokenIsEffective {
+				if customeToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
+					key := variable.ConfigYml.GetString("Token.BindContextKeyName")
+					// token验证通过，同时绑定在请求上下文
+					context.Set(key, customeToken)
 				}
+				context.Next()
+			} else {
+				response.ErrorTokenAuthFail(context)
 			}
 		} else {
-			response.ErrorTokenAuthFail(context)
+			response.ErrorTokenBaseInfo(context)
+		}
+	}
+}
+
+// 刷新token条件检查中间件，针对已经过期的token，要求是token格式以及携带的信息满足配置参数即可
+func RefreshTokenConditionCheck() gin.HandlerFunc {
+	return func(context *gin.Context) {
+
+		headerParams := HeaderParams{}
+		if err := context.ShouldBindHeader(&headerParams); err != nil {
+			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
+			context.Abort()
+			response.ErrorParam(context, consts.JwtTokenMustValid)
 			return
+		}
+		token := strings.Split(headerParams.Authorization, " ")
+		if len(token) == 2 && len(token[1]) >= 20 {
+			// 判断token是否满足刷新条件
+			if userstoken.CreateUserFactory().TokenIsMeetRefreshCondition(token[1]) {
+				context.Next()
+			} else {
+				response.ErrorTokenRefreshFail(context)
+			}
+		} else {
+			response.ErrorTokenBaseInfo(context)
 		}
 	}
 }
@@ -93,7 +114,6 @@ func CheckCaptchaAuth() gin.HandlerFunc {
 			c.Next()
 		} else {
 			response.Fail(c, consts.CaptchaCheckFailCode, consts.CaptchaCheckFailMsg, "")
-			return
 		}
 	}
 }
