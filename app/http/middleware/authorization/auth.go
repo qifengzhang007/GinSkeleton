@@ -3,9 +3,7 @@ package authorization
 import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"goskeleton/app/global/consts"
-	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	userstoken "goskeleton/app/service/users/token"
 	"goskeleton/app/utils/response"
@@ -24,9 +22,8 @@ func CheckTokenAuth() gin.HandlerFunc {
 
 		//  推荐使用 ShouldBindHeader 方式获取头参数
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
-			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
 			context.Abort()
-			response.ErrorParam(context, consts.JwtTokenMustValid)
+			response.ErrorParam(context, consts.JwtTokenMustValid+err.Error())
 			return
 		}
 		token := strings.Split(headerParams.Authorization, " ")
@@ -54,9 +51,8 @@ func RefreshTokenConditionCheck() gin.HandlerFunc {
 
 		headerParams := HeaderParams{}
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
-			variable.ZapLog.Error(my_errors.ErrorsValidatorBindParamsFail, zap.Error(err))
 			context.Abort()
-			response.ErrorParam(context, consts.JwtTokenMustValid)
+			response.ErrorParam(context, consts.JwtTokenMustValid+err.Error())
 			return
 		}
 		token := strings.Split(headerParams.Authorization, " ")
