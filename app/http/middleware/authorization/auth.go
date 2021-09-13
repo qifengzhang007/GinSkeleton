@@ -16,7 +16,7 @@ type HeaderParams struct {
 	Authorization string `header:"Authorization" binding:"required,min=20"`
 }
 
-// 检查token完整性、有效性中间件
+// CheckTokenAuth 检查token完整性、有效性中间件
 func CheckTokenAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 
@@ -48,7 +48,7 @@ func CheckTokenAuth() gin.HandlerFunc {
 	}
 }
 
-// 刷新token条件检查中间件，针对已经过期的token，要求是token格式以及携带的信息满足配置参数即可
+// RefreshTokenConditionCheck 刷新token条件检查中间件，针对已经过期的token，要求是token格式以及携带的信息满足配置参数即可
 func RefreshTokenConditionCheck() gin.HandlerFunc {
 	return func(context *gin.Context) {
 
@@ -73,7 +73,7 @@ func RefreshTokenConditionCheck() gin.HandlerFunc {
 	}
 }
 
-// casbin检查用户对应的角色权限是否允许访问接口
+// CheckCasbinAuth casbin检查用户对应的角色权限是否允许访问接口
 func CheckCasbinAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requstUrl := c.Request.URL.Path
@@ -99,7 +99,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 	}
 }
 
-// 验证码中间件
+// CheckCaptchaAuth 验证码中间件
 func CheckCaptchaAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		captchaIdKey := variable.ConfigYml.GetString("Captcha.captchaId")
