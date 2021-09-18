@@ -89,7 +89,7 @@ func (u *UsersModel) UpdateUserloginInfo(last_login_ip string,userId int64){
 }
 
 //当用户更改密码后，所有的token都失效，必须重新登录
-func (u *UsersModel) OauthResetToken(userId float64, newPass, clientIp string) bool {
+func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	userItem, err := u.ShowOneItem(userId)
 	if userItem != nil && err == nil && userItem.Pass == newPass {
@@ -104,7 +104,7 @@ func (u *UsersModel) OauthResetToken(userId float64, newPass, clientIp string) b
 }
 
 //当tb_users 删除数据，相关的token同步删除
-func (u *UsersModel) OauthDestroyToken(userId float64) bool {
+func (u *UsersModel) OauthDestroyToken(userId int) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	sql := "DELETE FROM  tb_oauth_access_tokens WHERE  fr_user_id=?  "
 	//判断>=0, 有些没有登录过的用户没有相关token，此语句执行影响行数为0，但是仍然是执行成功
@@ -149,7 +149,7 @@ func (u *UsersModel) SetTokenInvalid(userId int) bool {
 }
 
 //根据用户ID查询一条信息
-func (u *UsersModel) ShowOneItem(userId float64) (*UsersModel, error) {
+func (u *UsersModel) ShowOneItem(userId int) (*UsersModel, error) {
 	sql := "SELECT  `id`, `user_name`,`pass`, `real_name`, `phone`, `status` FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
 	result := u.Raw(sql, userId).First(u)
 	if result.Error == nil {
@@ -189,7 +189,7 @@ func (u *UsersModel) Store(userName string, pass string, realName string, phone 
 }
 
 //更新
-func (u *UsersModel) Update(id float64, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
+func (u *UsersModel) Update(id int, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update tb_users set user_name=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
 	if u.Exec(sql, userName, pass, realName, phone, remark, id).RowsAffected >= 0 {
 		if u.OauthResetToken(id, pass, clientIp) {
@@ -200,7 +200,7 @@ func (u *UsersModel) Update(id float64, userName string, pass string, realName s
 }
 
 //删除用户以及关联的token记录
-func (u *UsersModel) Destroy(id float64) bool {
+func (u *UsersModel) Destroy(id int) bool {
 	if u.Delete(u, id).Error == nil {
 		if u.OauthDestroyToken(id) {
 			return true
