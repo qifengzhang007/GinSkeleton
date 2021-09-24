@@ -39,6 +39,9 @@ type ChildrenTable struct {
 
 ```
 #### 接口验证器  ↓ 
+> 1.复杂接口参数前端都是通过json格式提交.  
+> 2.`go` 语言代码接受语法是 `context.ShouldBindJSON()`  
+
 ![form-parms3](https://www.ginskeleton.com/images/formparams3.png)  
 
 #### 接口验证器对应的数据类型  ↓  
