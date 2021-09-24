@@ -70,6 +70,11 @@ func (u *Users) RefreshToken(context *gin.Context) {
 	}
 }
 
+// 后面是 curd 部分，自带版本中为了降低初学者学习难度，使用了最简单的方式操作 增、删、改、查
+// 在开发企业实际项目中，建议使用我们提供的一整套 curd 快速操作模式
+// 参考地址：https://gitee.com/daitougege/GinSkeleton/blob/master/docs/concise.md
+// 您也可以参考 Admin 项目地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/ 中， app/model/  提供的示例语法
+
 //3.用户查询（show）
 func (u *Users) Show(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
@@ -110,7 +115,7 @@ func (u *Users) Update(context *gin.Context) {
 	userIp := context.ClientIP()
 	//注意：这里没有实现权限控制逻辑，例如：超级管理管理员可以更新全部用户数据，普通用户只能修改自己的数据。目前只是验证了token有效、合法之后就可以进行后续操作
 	// 实际使用请根据真是业务实现权限控制逻辑、再进行数据库操作
-	if curd.CreateUserCurdFactory().Update(userId, userName, pass, realName, phone, remark, userIp) {
+	if curd.CreateUserCurdFactory().Update(int(userId), userName, pass, realName, phone, remark, userIp) {
 		response.Success(context, consts.CurdStatusOkMsg, "")
 	} else {
 		response.Fail(context, consts.CurdUpdateFailCode, consts.CurdUpdateFailMsg, "")
@@ -121,7 +126,7 @@ func (u *Users) Update(context *gin.Context) {
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
-	if model.CreateUserFactory("").Destroy(userId) {
+	if model.CreateUserFactory("").Destroy(int(userId)) {
 		response.Success(context, consts.CurdStatusOkMsg, "")
 	} else {
 		response.Fail(context, consts.CurdDeleteFailCode, consts.CurdDeleteFailMsg, "")
