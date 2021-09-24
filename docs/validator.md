@@ -31,10 +31,12 @@ type Register struct {
     
     //  状态：必填，数字类型，大小范围：【0,1】 闭区间  ，
     //  注意： 如果你的表单参数含有0值是允许提交的，必须用指针类型（*float64），而 float64 类型则认为 0 值不合格
-	Status *float64 `form:"status" json:"status"  binding:"required,min=0，max=1"`   
+	Status *float64 `form:"status" json:"status"  binding:"required,min=0,max=1"`   
 }
 
-
+// 注意：这里的接收器 r，必须是 r Register, 绝对不能是 r *Register
+// 因为在 ginskeleton 里面表单参数验证器是注册在容器的代码段，
+// 如果是指针，带参数的接口请求，就会把容器的原始代码污染。
 func (r Register) CheckParams(context *gin.Context) {
     // context.ShouldBind(&r) 则自动绑定 form-data 提交的表单参数
 	if err := context.ShouldBind(&r); err != nil {
