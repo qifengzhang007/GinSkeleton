@@ -95,7 +95,7 @@
 ---|---|---
 1| 全局变量(日志、gorm、配置模块、雪花算法)|  [清单一览](docs/global_variable.md)  
 2 | 表单参数验证器语法| [validator](docs/validator.md)   
-3 | 复杂表单参数提交| [复杂表单参数提交文档](docs/validator.md)   
+3 | 复杂表单参数提交| [复杂表单参数提交文档](docs/formparams.md)   
 4 | 消息队列| [rabbitmq文档](docs/rabbitmq.md)   
 5 | cli命令| [cobra文档](docs/cobra.md) 
 6 | goCurl、httpClient|[httpClient客户端](https://gitee.com/daitougege/goCurl) 
