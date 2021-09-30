@@ -59,9 +59,9 @@ func (u *UsersModel) TableName() string {
 ```
     
 ####  1.新增数据  
-> 以下代码引用了 `data_bind.ShouldBindFormDataToModel(c, &tmp)` 函数，这个函数是我们对 gin.ShouldBind 函数的精简,加快数据绑定效率。 
-> 1.1 参数绑定的原则：model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.  
-> 1.2 gorm 的数据新增函数 Create 支持单条、批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,u.Create(&tmp)  
+> 以下代码引用了 `data_bind.ShouldBindFormDataToModel(c, &tmp)` 函数，这个函数是我们对 gin.ShouldBind 函数的精简,加快数据绑定效率。  
+> 1.1 参数绑定的原则：model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.   
+> 1.2 gorm 的数据新增函数 Create 支持单条、批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,u.Create(&tmp)    
 
 ```code  
 //新增数据
@@ -87,6 +87,9 @@ func (u *UsersModel) TableName() string {
 }
 
 ```
+> 1.3 关于model变量从上下文如何绑定，附一张绑定数据的逻辑图，也可以帮助大家理解.  
+
+![数据绑定原理](https://www.ginskeleton.com/images/bind_explain.png)
 
 ####  2.修改数据  
 > 2.1 gorm 的数据更新有两个函数： updates 不会处理零值字段，save 会全量覆盖式更新字段    
