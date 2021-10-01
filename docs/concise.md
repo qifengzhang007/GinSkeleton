@@ -138,7 +138,7 @@ return false
 func (u *UsersModel) DeleteData(ids  []int) bool {
 
     // ids 格式必须是：  [100,200,300,400]
-    if u.Where("id  in (?)",ids)Delete(u).Error == nil {
+    if u.Where("id  in (?)",ids).Delete(u).Error == nil {
         return  true
 }
 return false
