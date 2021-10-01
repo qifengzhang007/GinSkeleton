@@ -131,11 +131,11 @@ return false
 ```
 
 ####  4.批量删除数据
-> 如果用户传递的参数是  ids ,例如： 100,200,300,400
+> 如果用户传递的参数是  ids ,例如： [100,200,300,400]
 
 ```code
 //删除，我们根据Id删除
-func (u *UsersModel) DeleteData(ids  []string) bool {
+func (u *UsersModel) DeleteData(ids  []int) bool {
 
     // ids 格式必须是：  [100,200,300,400]
     if u.Where("id  in (?)",ids)Delete(u).Error == nil {
