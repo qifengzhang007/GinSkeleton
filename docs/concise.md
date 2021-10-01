@@ -53,15 +53,15 @@ func (u *UsersModel) TableName() string {
 	return "tb_users"
 }
 
-// UsersModel 结构体组合了  *gorm.DB 的所有功能，您可以通过 u.(xxx)  直接调用 gorm.DB 的所有功能
+// UsersModel 结构体组合了  *gorm.DB 的所有功能，您可以通过 u.xxx  直接调用 gorm.DB 的所有功能
 
 
 ```
     
 ####  1.新增数据  
 > 以下代码引用了 `data_bind.ShouldBindFormDataToModel(c, &tmp)` 函数，这个函数是我们对 gin.ShouldBind 函数的精简,加快数据绑定效率。  
-> 1.1 参数绑定的原则：model 定义的结构体字段和表单验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.   
-> 1.2 gorm 的数据新增函数 Create 支持单条、批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,u.Create(&tmp)    
+> 1.1 参数绑定的原则：model 定义的结构体字段和表单参数验证器结构体设置的json标签名称、数据类型一致，才可以绑定, UserModel 支持类似BaseModel等结构体组合.   
+> 1.2 gorm 的数据新增函数 Create 支持单条、批量，如果是批量，只需要定义被添加的数据为 切片即可,例如  	var tmp []UsersModel ,    u.Create(&tmp)    
 
 ```code  
 //新增数据
@@ -71,7 +71,8 @@ func (u *UsersModel) TableName() string {
 	var tmp UsersModel
 	
 	// data_bind.ShouldBindFormDataToModel 函数主要按照 UsersModel 结构体指定的json标签去gin.Context上去寻找相同名称的表单数据,绑定到新定义的变量.
-	// 这里不能使用  gin.ShouldBind 函数从上下文绑定数据，因为 UserModel 我们组合了  gorm.DB ，该函数功能太强大，会深入内部持续解析gorm.Db，产生死循环     
+	// 这里不能使用  gin.ShouldBind 函数从上下文绑定数据，因为 UserModel 我们组合了  gorm.DB ，该函数功能太强大，会深入内部持续解析gorm.Db，产生死循环  
+	// 使用我们提供的简化版本函数（data_bind.ShouldBindFormDataToModel）代替 gin.ShouldBind 即可   
 	
 	if err := data_bind.ShouldBindFormDataToModel(c, &tmp); err == nil {
 		// Create 函数会将新插入的数据Id 继续更新到 tmp 结构体的主键ID 字段，这里必须传递 指针. 最终的 tmp 其实就是一条新增加的完整数据
@@ -103,7 +104,8 @@ func (u *UsersModel) UpdateData(c *gin.Context) bool {
 	var tmp UsersModel
 	if err := data_bind.ShouldBindFormDataToModel(c, &tmp); err == nil {
 		
-		if res := u.Updates(tmp); res.Error == nil {
+		//tmp 会被自动绑定  CreatedAt、UpdatedAt 字段，更新时我们不希望更新 CreatedAt 字段，使用 Omit 语法忽略该字段
+		if res := u.Omit("CreatedAt").Save(tmp); res.Error == nil {
 			return true
 		} else {
 			variable.ZapLog.Error("UsersModel 数据更更新出错", zap.Error(err))
@@ -114,7 +116,7 @@ func (u *UsersModel) UpdateData(c *gin.Context) bool {
 
 ```
 
-####  3.删除数据  
+####  3.单条删除数据  
 > UsersModel 已经绑定了函数 TableName ,所以 u.Delete(u,id)  会自动解析出需要删除的表，然后根据Id删除数据.  
 
 ```code
@@ -128,8 +130,24 @@ return false
 
 ```
 
+####  4.批量删除数据
+> 如果用户传递的参数是  ids ,例如： 100,200,300,400
+
+```code
+//删除，我们根据Id删除
+func (u *UsersModel) DeleteData(ids  []string) bool {
+
+    // ids 格式必须是：  [100,200,300,400]
+    if u.Where("id  in (?)",ids)Delete(u).Error == nil {
+        return  true
+}
+return false
+}
+
+```
+
 ####  4.查询 
-> 4.1 查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
+> 5.1 查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
 ```code
     // 查询类 sql 语句
     u.Raw(sql语句,参数1,参数2... ... )
@@ -137,23 +155,25 @@ return false
     // 执行类 sql 语句
     u.Exec(sql语句,参数1,参数2... ... )
 ```
-> 4.2 接下来我们演示gorm自带查询     
+> 5.2 接下来我们演示gorm自带查询     
 ```code
     // 第一种情况   
 
-    // 如果 UsersModel 已经绑定 TableName 函数，那么查询语句对应的数据表明就是 tableName 的返回值； 
+    // 如果 UsersModel 结构体已经绑定 TableName 函数，那么查询语句对应的数据表名就是 tableName 的返回值； 
     var  tmp  []UsersModel
     //  Where  关键词前面没有指定表名,那么查询的数据库表名就是 tmp 对应的结构体 UsersModel 结构体绑定的 TableName 的返回值
     u.Where("ID = ?", user_id).Find(&tmp)
 
     // 第二种情况  
      var  tmp  []UsersList
-	//  假设 UsersList 是自定义数据类型，没有绑定 TbaleName ，那么在where 关键词开始时就必须指定表名
+	//  假设 UsersList 是自定义数据类型，没有绑定 TbaleName ，那么在 where 关键词开始时就必须指定表名
 	
 	//指定表名 有以下两种方式：
 	
 	//  u.Model(u)  表示从 u 结构体绑定的 tableName 函数获取对应的表名，如果 u 对应的结构体和 tmp 对应的结构体 UsersList 都没有绑定 TableName ，就会发生错误  
         u.Model(u).Where("ID = ?", user_id).Find(&tmp)  
+        
+        
     // u.Tbale(u.TableName()).Where("ID = ?", user_id).Find(&tmp)
 
 ```

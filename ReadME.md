@@ -102,7 +102,7 @@
 7|[websocket js客户端](docs/ws_js_client.md)| [websocket服务端](./docs/websocket.md)  
 8|控制器aop切面编程| [Aop切面编程](docs/aop.md) 
 9|redis| [redis使用示例](test/redis_test.go) 
-10|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 精华](docs/concise.md) 
+10|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 增删改查精华](docs/concise.md) 
 11|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
 12|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 13|日志记录|  [zap高性能日志](docs/zap_log.md) 
