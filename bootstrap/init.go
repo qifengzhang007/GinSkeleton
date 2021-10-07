@@ -35,7 +35,7 @@ func checkRequiredFolders() {
 	}
 	// 4.自动创建软连接、更好的管理静态资源
 	if _, err := os.Stat(variable.BasePath + "/public/storage"); err == nil {
-		if err = os.Remove(variable.BasePath + "/public/storage"); err != nil {
+		if err = os.RemoveAll(variable.BasePath + "/public/storage"); err != nil {
 			log.Fatal(my_errors.ErrorsSoftLinkDeleteFail + err.Error())
 		}
 	}
