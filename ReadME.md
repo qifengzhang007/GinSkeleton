@@ -168,7 +168,7 @@
   3.`token` 刷新路由与其他路由逻辑分离.
 * 漏洞修复：  
   1.` ≤ V 1.5.23 ` 包括此版本 `token` 认证中间件存在被恶意构造特殊 `token` 绕过的风险,请尽快升级到最新版.    
-  1.1 升级方法：使用最新的 `app/http/middleware/authorization/auth.go` 代码替换 `V1.5.23`以及之前的版本同位置代码即可.  
+  1.1 升级方法：使用最新的 `app/http/middleware/authorization/auth.go` 替换 `V1.5.23`以及之前的版本同位置代码即可.  
 
 #### V 1.5.27  2021-09-18  
 * 更新    
