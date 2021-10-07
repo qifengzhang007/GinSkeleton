@@ -79,10 +79,10 @@ func InitWebRouter() *gin.Engine {
 		}
 
 		// 刷新token
-		backend.Use(authorization.RefreshTokenConditionCheck())
+		refreshToken := backend.Group("users/")
 		{
 			// 刷新token，当过期的token在允许失效的延长时间范围内，用旧token换取新token
-			backend.POST("users/refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))
+			refreshToken.Use(authorization.RefreshTokenConditionCheck()).POST("refreshtoken", validatorFactory.Create(consts.ValidatorPrefix+"RefreshToken"))
 		}
 
 		// 【需要token】中间件验证的路由
