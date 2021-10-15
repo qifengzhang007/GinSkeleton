@@ -291,7 +291,11 @@ func TestCustomeParamsConnMysql(t *testing.T) {
 		gormDbMysql.Raw("select id,username,status,last_login_ip from tb_users").Find(&vDataList)
 		fmt.Printf("Read 数据库查询结果：%v\n", vDataList)
 		res := gormDbMysql.Exec("update tb_users  set  real_name='Write数据库更新' where   id<=2 ")
-		fmt.Printf("Write 数据库更新以后的影响行数：%d\n", res.RowsAffected)
+		if res.Error == nil {
+			fmt.Println("write 数据库更新成功")
+		} else {
+			t.Errorf("单元测试失败，相关错误：%s\n", res.Error.Error())
+		}
 	}
 }
 

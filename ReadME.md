@@ -104,14 +104,15 @@
 9|redis| [redis使用示例](test/redis_test.go) 
 10|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 增删改查精华](docs/concise.md) 
 11|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
-12|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
-13|日志记录|  [zap高性能日志](docs/zap_log.md) 
-14|ELK 项目日志顶级解决方案|  [elk 7.13.3 推荐使用](https://gitee.com/daitougege/elk-docker-compose)  <br/> <s>[elk 7.9.1 旧版本](docs/elk_log.md)</s>  
-15| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
-16| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
-17|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
-18|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
-19|Mysql主从同步(旨在实现读写分离)| [使用docker-compose快速搭建](https://gitee.com/daitougege/mysql-master-slave-docker-compose)
+12|多源数据库的操作| [同时连接多台服务器的mysql、sqlserver、postgresql操作](test/many_db_operate.md)
+13|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
+14|日志记录|  [zap高性能日志](docs/zap_log.md) 
+15|ELK 项目日志顶级解决方案|  [elk 7.13.3 推荐使用](https://gitee.com/daitougege/elk-docker-compose)  <br/> <s>[elk 7.9.1 旧版本](docs/elk_log.md)</s>  
+16| 验证码(captcha)以及验证码中间件|  [验证码使用详情](docs/captcha.md)
+17| nginx配置(https、负载均衡)|[nginx配置详情](docs/nginx.md)  
+18|主线解耦| [对验证器与控制器进行解耦](docs/low_coupling.md)  
+19|Casbin 接口访问权限管控| [Casbin使用介绍](docs/casbin.md)
+20|Mysql主从同步(旨在实现读写分离)| [使用docker-compose快速搭建](https://gitee.com/daitougege/mysql-master-slave-docker-compose)
 
 
 ###    项目部署方案
