@@ -104,7 +104,7 @@
 9|redis| [redis使用示例](test/redis_test.go) 
 10|gorm_v2 CURD 操作精华版| [ gorm+ginskeleton 增删改查精华](docs/concise.md) 
 11|gorm_v2操作(mysql、sqlserver、postgreSql)| [gorm v2 更多测试用例](test/gormv2_test.go)
-12|多源数据库的操作| [同时连接多台服务器的mysql、sqlserver、postgresql操作](test/many_db_operate.md)
+12|多源数据库的操作| [同时连接多台服务器的mysql、sqlserver、postgresql操作](docs/many_db_operate.md)
 13|gorm_v2 Scan Find函数查询结果一键树形化| [sql结果树形化反射扫描器](https://gitee.com/daitougege/sql_res_to_tree)
 14|日志记录|  [zap高性能日志](docs/zap_log.md) 
 15|ELK 项目日志顶级解决方案|  [elk 7.13.3 推荐使用](https://gitee.com/daitougege/elk-docker-compose)  <br/> <s>[elk 7.9.1 旧版本](docs/elk_log.md)</s>  
