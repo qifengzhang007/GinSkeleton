@@ -1,4 +1,4 @@
-package chaptcha
+package captcha
 
 import (
 	"bytes"
