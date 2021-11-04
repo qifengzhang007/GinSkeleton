@@ -26,6 +26,7 @@ func InitWebRouter() *gin.Engine {
 		gin.DefaultWriter = io.MultiWriter(f)
 		// 2.如果是有nginx前置做代理，基本不需要gin框架记录访问日志，开启下面一行代码，屏蔽上面的三行代码，性能提升 5%
 		//gin.SetMode(gin.ReleaseMode)
+		//gin.DefaultWriter = ioutil.Discard
 
 		router = gin.Default()
 	} else {
