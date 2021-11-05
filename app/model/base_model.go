@@ -6,6 +6,7 @@ import (
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"strings"
+	"time"
 )
 
 type BaseModel struct {
@@ -41,4 +42,20 @@ func UseDbConn(sqlType string) *gorm.DB {
 		variable.ZapLog.Error(my_errors.ErrorsDbDriverNotExists + sqlType)
 	}
 	return db
+}
+
+// 自动给 CreatedAt 和  UpdatedAt 字段赋值
+
+func (b *BaseModel) BeforeCreate(gormDb *gorm.DB) error {
+	if b.CreatedAt == "" {
+		b.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+	}
+	return nil
+}
+
+func (b *BaseModel) BeforeUpdate(gormDb *gorm.DB) error {
+	if b.UpdatedAt == "" {
+		b.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
+	}
+	return nil
 }
