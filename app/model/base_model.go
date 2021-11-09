@@ -48,14 +48,17 @@ func UseDbConn(sqlType string) *gorm.DB {
 
 func (b *BaseModel) BeforeCreate(gormDb *gorm.DB) error {
 	if b.CreatedAt == "" {
-		b.CreatedAt = time.Now().Format("2006-01-02 15:04:05")
+		b.CreatedAt = time.Now().Format(variable.DateFormat)
+	}
+	if b.UpdatedAt == "" {
+		b.UpdatedAt = b.CreatedAt
 	}
 	return nil
 }
 
 func (b *BaseModel) BeforeUpdate(gormDb *gorm.DB) error {
 	if b.UpdatedAt == "" {
-		b.UpdatedAt = time.Now().Format("2006-01-02 15:04:05")
+		b.UpdatedAt = time.Now().Format(variable.DateFormat)
 	}
 	return nil
 }
