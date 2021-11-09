@@ -2,6 +2,7 @@ package gorm_v2
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	gormLog "gorm.io/gorm/logger"
@@ -140,32 +141,34 @@ func (l logger) Error(_ context.Context, msg string, data ...interface{}) {
 }
 
 // Trace print sql message
-func (l logger) Trace(_ context.Context, begin time.Time, fc func() (string, int64), err error) {
-	if l.LogLevel > 0 {
-		elapsed := time.Since(begin)
-		switch {
-		case err != nil && l.LogLevel >= gormLog.Error:
-			sql, rows := fc()
-			if rows == -1 {
-				l.Printf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-1", sql)
-			} else {
-				l.Printf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
-		case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= gormLog.Warn:
-			sql, rows := fc()
-			slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
-			if rows == -1 {
-				l.Printf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-1", sql)
-			} else {
-				l.Printf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
-		case l.LogLevel >= gormLog.Info:
-			sql, rows := fc()
-			if rows == -1 {
-				l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-1", sql)
-			} else {
-				l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
-			}
+func (l logger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
+	if l.LogLevel <= gormLog.Silent {
+		return
+	}
+
+	elapsed := time.Since(begin)
+	switch {
+	case err != nil && l.LogLevel >= gormLog.Error && (!errors.Is(err, gormLog.ErrRecordNotFound) || !l.IgnoreRecordNotFoundError):
+		sql, rows := fc()
+		if rows == -1 {
+			l.Printf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, "-1", sql)
+		} else {
+			l.Printf(l.traceErrStr, utils.FileWithLineNum(), err, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+		}
+	case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= gormLog.Warn:
+		sql, rows := fc()
+		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
+		if rows == -1 {
+			l.Printf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-1", sql)
+		} else {
+			l.Printf(l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+		}
+	case l.LogLevel == gormLog.Info:
+		sql, rows := fc()
+		if rows == -1 {
+			l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-1", sql)
+		} else {
+			l.Printf(l.traceStr, utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	}
 }
