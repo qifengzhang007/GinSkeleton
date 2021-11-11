@@ -60,10 +60,10 @@ func (b *BaseModel) BeforeCreate(gormDB *gorm.DB) error {
 	return nil
 }
 
-//func (b *BaseModel) BeforeUpdate(gormDB *gorm.DB) error {
-//	b.DB = gormDB
-//	if b.UpdatedAt == "" {
-//		b.UpdatedAt = time.Now().Format(variable.DateFormat)
-//	}
-//	return nil
-//}
+func (b *BaseModel) BeforeUpdate(gormDB *gorm.DB) error {
+	b.DB = gormDB
+	if b.UpdatedAt == "" {
+		b.UpdatedAt = time.Now().Format(variable.DateFormat)
+	}
+	return nil
+}
