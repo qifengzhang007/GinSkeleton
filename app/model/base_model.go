@@ -49,8 +49,8 @@ func UseDbConn(sqlType string) *gorm.DB {
 // 所以 接收器 b 的所有参数都是没有赋值的,因此这里需要给 b.DB 赋予回调的 gormDb
 // gorm 支持的自动回调函数清单：https://github.com/go-gorm/gorm/blob/master/callbacks/interfaces.go
 
-func (b *BaseModel) BeforeCreate(gormDb *gorm.DB) error {
-	b.DB = gormDb
+func (b *BaseModel) BeforeCreate(gormDB *gorm.DB) error {
+	b.DB = gormDB
 	if b.CreatedAt == "" {
 		b.CreatedAt = time.Now().Format(variable.DateFormat)
 	}
@@ -60,10 +60,10 @@ func (b *BaseModel) BeforeCreate(gormDb *gorm.DB) error {
 	return nil
 }
 
-func (b *BaseModel) BeforeUpdate(gormDb *gorm.DB) error {
-	b.DB = gormDb
-	if b.UpdatedAt == "" {
-		b.UpdatedAt = time.Now().Format(variable.DateFormat)
-	}
-	return nil
-}
+//func (b *BaseModel) BeforeUpdate(gormDB *gorm.DB) error {
+//	b.DB = gormDB
+//	if b.UpdatedAt == "" {
+//		b.UpdatedAt = time.Now().Format(variable.DateFormat)
+//	}
+//	return nil
+//}
