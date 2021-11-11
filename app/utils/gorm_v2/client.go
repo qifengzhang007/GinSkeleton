@@ -83,6 +83,8 @@ func GetSqlDriver(sqlType string, readDbIsOpen int, dbConf ...ConfigParams) (*go
 
 	// https://github.com/go-gorm/gorm/issues/4838
 	_ = gormDb.Callback().Create().Before("gorm:before_create").Register("CreateBeforeHook", InterceptCreatePramsNotPtrError)
+	// 为了完美支持gorm的一系列回调函数，v1.5.29版本开始要求gorm 的 save、update 必须传递指针
+	_ = gormDb.Callback().Update().Before("gorm:before_update").Register("UpdateBeforeHook", InterceptUpdatePramsNotPtrError)
 
 	// 为主连接设置连接池(43行返回的数据库驱动指针)
 	if rawDb, err := gormDb.DB(); err != nil {

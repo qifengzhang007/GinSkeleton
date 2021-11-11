@@ -20,3 +20,12 @@ func InterceptCreatePramsNotPtrError(gormDB *gorm.DB) {
 		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBCreateParamsNotPtr))
 	}
 }
+
+// InterceptUpdatePramsNotPtrError 拦截 save、update 函数参数如果是非指针类型的错误
+// 该要求对于开发者来说，只需要在 update 、save 函数的参数前面添加 & 即可
+// 最终就可以完美兼支持、兼容 gorm 的所有回调函数
+func InterceptUpdatePramsNotPtrError(gormDB *gorm.DB) {
+	if reflect.TypeOf(gormDB.Statement.Dest).Kind() != reflect.Ptr {
+		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBUpdateParamsNotPtr))
+	}
+}
