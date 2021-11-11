@@ -76,6 +76,7 @@ func (u *UsersModel) TableName() string {
 	
 	if err := data_bind.ShouldBindFormDataToModel(c, &tmp); err == nil {
 		// Create 函数会将新插入的数据Id 继续更新到 tmp 结构体的主键ID 字段，这里必须传递 指针. 最终的 tmp 其实就是一条新增加的完整数据
+		// 注意： 在本项目骨架 Create 参数必须传递 指针类型，这样才能支持gorm的回调函数
 			if res := u.Create(&tmp); res.Error == nil {
 				return true
 			} else {
@@ -105,7 +106,9 @@ func (u *UsersModel) UpdateData(c *gin.Context) bool {
 	if err := data_bind.ShouldBindFormDataToModel(c, &tmp); err == nil {
 		
 		//tmp 会被自动绑定  CreatedAt、UpdatedAt 字段，更新时我们不希望更新 CreatedAt 字段，使用 Omit 语法忽略该字段
-		if res := u.Omit("CreatedAt").Save(tmp); res.Error == nil {
+		// 注意： 在本项目骨架 Save、Update 参数必须传递 指针类型，这样才能支持gorm的回调函数
+		
+		if res := u.Omit("CreatedAt").Save(&tmp); res.Error == nil {
 			return true
 		} else {
 			variable.ZapLog.Error("UsersModel 数据更更新出错", zap.Error(err))
