@@ -22,10 +22,11 @@ func InterceptCreatePramsNotPtrError(gormDB *gorm.DB) {
 }
 
 // InterceptUpdatePramsNotPtrError 拦截 save、update 函数参数如果是非指针类型的错误
-// 该要求对于开发者来说，只需要在 update 、save 函数的参数前面添加 & 即可
+// 对于开发者来说，以结构体形式更新数，只需要在 update 、save 函数的参数前面添加 & 即可
 // 最终就可以完美兼支持、兼容 gorm 的所有回调函数
+// 但是如果是指定字段更新，例如： UpdateColumn 函数则只传递值即可，不需要做校验
 func InterceptUpdatePramsNotPtrError(gormDB *gorm.DB) {
-	if reflect.TypeOf(gormDB.Statement.Dest).Kind() != reflect.Ptr {
+	if reflect.TypeOf(gormDB.Statement.Dest).Kind() == reflect.Struct {
 		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBUpdateParamsNotPtr))
 	}
 }
