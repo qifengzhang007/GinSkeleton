@@ -60,7 +60,7 @@ func CheckCasbinAuth() gin.HandlerFunc {
 		// 【需要token】中间件验证的路由
 		// 在某个分组或者模块，我们追加token校验完成后的具体模块接口校验机制
 		// 追加 authorization.CheckCasbinAuth() 中间件，凡是用户访问就必须经过 token校验+casbin 接口权限校验  
-		// casbin 需要用户id(最终自行转为角色id，因此必须放在 token 中间件后面)  
+		// casbin 匹配策略时需要将用户id 转为角色id，因此必须放在 token 中间件后面（token中才能解析出用户id）  
 		backend.Use(authorization.CheckTokenAuth(), authorization.CheckCasbinAuth() )
 		{
 			// 用户组路由
