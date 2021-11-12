@@ -59,7 +59,7 @@ func UseDbConn(sqlType string) *gorm.DB {
 //}
 
 //  BeforeUpdate、BeforeSave 函数都会因为 更新类的操作而被触发
-//  如果baseModel 和 普通业务 model 都想会回调，那么请设置不同的回调函数名，例如：这里设置 BeforeUpdate、普通业务model 设置 BeforeSave 即可
+//  如果baseModel 和 普通业务 model 都想使用回调函数，那么请设置不同的回调函数名，例如：这里设置 BeforeUpdate、普通业务model 设置 BeforeSave 即可
 //func (b *BaseModel) BeforeUpdate(gormDB *gorm.DB) error {
 //	 第一步必须反向将 gormDB 赋值给 b.DB
 //	b.DB = gormDB
