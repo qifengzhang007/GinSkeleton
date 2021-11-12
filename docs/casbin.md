@@ -8,7 +8,7 @@
 > 2.配置文件开启 Casbin 模块后，默认会在连接的数据库创建一张表，具体表名参见配置文件说明.  
 
 ### 根据用户请求接口时头部附带的token解析用户id等信息  
-> 每个用户带有token的请求，在验证ok之后自动会将token绑定在上线文(gin.Context) ,绑定的键名默认为: userToken（配置文件可自行设置键名）
+> 每个用户带有token的请求，在验证ok之后自动会将token绑定在上下文(gin.Context) ,绑定的键名默认为: userToken（配置文件可自行设置键名）
 > 通过token解析出用户id等信息的代码如下：       
 ```code   
 currentUser, exist := context.MustGet("userToken").(my_jwt.CustomClaims)
