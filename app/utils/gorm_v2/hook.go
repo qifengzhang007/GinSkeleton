@@ -23,8 +23,8 @@ func CreateBeforeHook(gormDB *gorm.DB) {
 		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBCreateParamsNotPtr))
 	} else {
 		// 参数校验无错误自动设置 CreatedAt、 UpdatedAt
-		gormDB.Statement.SetColumn("CreatedAt", time.Now().Format(variable.DateFormat))
-		gormDB.Statement.SetColumn("UpdatedAt", time.Now().Format(variable.DateFormat))
+		gormDB.Statement.SetColumn("created_at", time.Now().Format(variable.DateFormat))
+		gormDB.Statement.SetColumn("updated_at", time.Now().Format(variable.DateFormat))
 	}
 }
 
@@ -38,6 +38,6 @@ func UpdateBeforeHook(gormDB *gorm.DB) {
 		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBUpdateParamsNotPtr))
 	} else {
 		// 参数校验无错误自动设置 UpdatedAt
-		gormDB.Statement.SetColumn("UpdatedAt", time.Now().Format(variable.DateFormat))
+		gormDB.Statement.SetColumn("updated_at", time.Now().Format(variable.DateFormat))
 	}
 }
