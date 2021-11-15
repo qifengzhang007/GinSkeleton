@@ -120,15 +120,13 @@
 ---|---|---
 1 | 开发、调试环境| [最简单的 nohup](docs/deploy_nohup.md)
 2 | 生产环境之supervisor进程守护 | [稳定可靠的进程守护方案](docs/supervisor.md)
-3 | 生产环境之docker部署方案 | [版本回滚、扩容非常灵活的方案](docs/deploy_docker.md)
+3 | 生产环境之docker部署方案 | [稳定可靠、版本回滚、扩容非常灵活的方案](docs/deploy_docker.md)
 
 
 ###    项目上线后，运维方案(基于docker)    
 序号|运维模块 | 文档地址  
 ---|---|---
-1 | linux服务器| [性能指标监控](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>    
-2 | 其他指标(作为了解即可)| [mysql监控](docs/deploy_mysql.md)  <br />  [redis指标](docs/deploy_redis.md)  <br /> [nginx指标](docs/deploy_nginx.md) <br /> [go应用程序指标](docs/deploy_go.md)
-
+1 | linux服务器| [性能指标监控](http://gitee.com/daitougege/grafana-prometheus-nodeexpoter) <br/> <s>[旧版本](docs/deploy_linux.md)</s>
 
 ### 并发测试
 [点击查看详情](docs/bench_cpu_memory.md)
@@ -162,17 +160,17 @@
 
 #### 主线版本更新日志  
 
-#### V 1.5.29  2021-11-11
+#### V 1.5.29  2021-11-15
 * 新增    
     1.多源数据库操作文档.   
     2.在 `cli` 模式执行操作数据库命令时支持 `created_at` 和 `updated_at` 字段自动赋值.   
     3.`gorm v2` 接入层 `utils` 增加 `Create` 函数的参数类型非指针时拦截检查逻辑, 避免发生 `panic` ,该函数官方没有针对数据类型做安全检查.   
     4.`gorm v2` 接入层 `utils` 增加 `Save、Update` 函数的参数类型非指针时拦截检查逻辑,以便支持 `gorm` 的所有回调函数.    
-    5.为了完美支持第4条功能，今后开发者使用 `gorm` 函数 `Create 、Save、Update ` 时请统一传递指针类型的参数, 如果老项目直接合并 `ginskeleton` 的代码, 原来调用 `Save` 函数的参数需要手动修改为指针格式.  
+    5.为了完美支持第4条功能，今后开发者使用 `gorm` 函数 `Create 、Save、Update ` 时请统一传递指针类型的参数, 如果老项目直接合并 `ginskeleton` 的代码, 原来调用 `Save、Update` 函数的参数需要手动修改为指针类型.  
 * 更新  
     1.验证码控制器文件单词拼写错误修正.  
     2.路由中的一些注释更新.  
-    3.所有依赖包更新至最新版，与 `gorm` 包相关的接入层(utils)日志部分也同步更新.   
+    3.所有依赖包更新至最新版，与 `gorm` 包相关的接入层(utils)日志部分也同步更新.
 
 #### V 1.5.28  2021-10-07
 * 更新    
