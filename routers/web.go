@@ -20,7 +20,7 @@ func InitWebRouter() *gin.Engine {
 	// 非调试模式（生产模式） 日志写到日志文件
 	if variable.ConfigYml.GetBool("AppDebug") == false {
 
-		//1.将日志写入日志文件（gin自行记录接口访问日志，不需要nginx）
+		//1.gin自行记录接口访问日志，不需要nginx，如果开启以下3行，那么请屏蔽第 34 行代码
 		//gin.DisableConsoleColor()
 		//f, _ := os.Create(variable.BasePath + variable.ConfigYml.GetString("Logs.GinLogName"))
 		//gin.DefaultWriter = io.MultiWriter(f)
