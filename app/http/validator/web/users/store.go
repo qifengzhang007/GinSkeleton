@@ -6,7 +6,6 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
-	"net/http"
 )
 
 type Store struct {
@@ -22,12 +21,8 @@ type Store struct {
 func (s Store) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
 	if err := context.ShouldBind(&s); err != nil {
-		//errs := gin.H{
-		//	"tips": "UserStore参数校验失败，参数校验失败，请检查user_name(>=1)、pass(>=6)、real_name(>=2)、phone(=11)",
-		//	"err":  err.Error(),
-		//}
-		//response.ErrorParam(context, errs)
-		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
+		// 将表单参数验证器出现的错误直接交给错误翻译器统一处理即可
+		response.ValidatorError(context, err)
 		return
 	}
 

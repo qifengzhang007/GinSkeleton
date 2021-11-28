@@ -13,11 +13,10 @@ import (
 	"strings"
 )
 
-// 定义一个全局翻译器T
+//Trans 定义一个全局翻译器T
 var Trans ut.Translator
 
-//validator_Error_Translation
-
+//InitTrans 初始化表单参数验证器的翻译器
 func InitTrans(locale string) (err error) {
 	// 修改gin框架中的Validator引擎属性，实现自定制
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -57,12 +56,11 @@ func InitTrans(locale string) (err error) {
 	return
 }
 
-//将返回的结构体名去除掉，只留下需要的字段名
-
+//RemoveTopStruct 将返回的结构体名去除掉，只留下需要的字段名
 func RemoveTopStruct(fields map[string]string) map[string]string {
 	res := map[string]string{}
 	for field, err := range fields {
-		res[field[strings.Index(field, ".")+1:]] = err
+		res[field[strings.LastIndex(field, ".")+1:]] = err
 	}
 	return res
 }

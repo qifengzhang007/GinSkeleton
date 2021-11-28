@@ -44,7 +44,7 @@ Websocket: #该服务与Http具有相同的ip、端口，因此不需要额外�
   HeartbeatFailMaxTimes: 4            # 允许心跳失败的最大次数（默认设置为PingPeriod=30秒检测一次，连续4次没有心跳就会清除后端在线信息）
   ReadDeadline: 100                   # 客户端在线情况下，正常的业务消息间隔秒数必须小于该值，否则服务器将会主动断开，该值不能小于心跳频率*允许失败次数,单位：秒。 0 表示不设限制，即服务器不主动断开不发送任何消息的在线客户端，但会消耗服务器资源
   WriteDeadline: 35                   # 消息单次写入超时时间，单位：秒
-  
+
 SnowFlake:
   SnowFlakeMachineId: 2               #如果本项目同时部署在多台机器，并且需要同时使用该算法，请为每一台机器设置不同的ID，区间范围: [0,1023]
 
@@ -130,7 +130,7 @@ Captcha:
   captchaValue: "captcha_value"   #验证码值提交时的键名
   length: 4   # 验证码生成时的长度
 
-#validator 相关
+#表单参数验证器，将验证器未通过时的英文信息统一翻译为中文
 validator:
   IsInit: 1 #是否开启 validator 错误翻译 1 代表开启 0 代表不开启
   Language: "zh" #选择语言 可选择 zh 代表中文，en 代表英语 默认为英文

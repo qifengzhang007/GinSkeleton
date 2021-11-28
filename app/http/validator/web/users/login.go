@@ -6,7 +6,6 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
-	"net/http"
 )
 
 type Login struct {
@@ -25,7 +24,7 @@ func (l Login) CheckParams(context *gin.Context) {
 		//	"err":  err.Error(),
 		//}
 		//response.ErrorParam(context, errs)
-		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
+		response.ValidatorError(context, err)
 		return
 	}
 

@@ -64,4 +64,7 @@ const (
 	ErrorCasbinCreateAdaptFail        string = "casbin NewAdapterByDBUseTableName 发生错误："
 	ErrorCasbinCreateEnforcerFail     string = "casbin NewEnforcer 发生错误："
 	ErrorCasbinNewModelFromStringFail string = "NewModelFromString 调用时出错："
+
+	// 表单参数验证器
+	ErrorNotAllParamsIsBlank string = "该接口不允许所有参数都为空,请按照接口要求提交必填参数"
 )

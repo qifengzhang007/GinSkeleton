@@ -6,7 +6,6 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
-	"net/http"
 )
 
 // 验证器是本项目骨架的先锋队，必须发挥它的极致优势，具体参考地址：
@@ -35,12 +34,7 @@ type Register struct {
 func (r Register) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
 	if err := context.ShouldBind(&r); err != nil {
-		//errs := gin.H{
-		//	"tips": "UserRegister参数校验失败，参数不符合规定，user_name 长度(>=1)、pass长度[6,20]、不允许注册",
-		//	"err":  err.Error(),
-		//}
-		//response.ErrorParam(context, errs)
-		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
+		response.ValidatorError(context, err)
 		return
 	}
 	//2.继续验证具有中国特色的参数，例如 身份证号码等，基本语法校验了长度18位，然后可以自行编写正则表达式等更进一步验证每一部分组成

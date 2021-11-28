@@ -7,7 +7,6 @@ import (
 	common_data_type "goskeleton/app/http/validator/common/data_type"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
-	"net/http"
 )
 
 type Show struct {
@@ -20,12 +19,8 @@ type Show struct {
 func (s Show) CheckParams(context *gin.Context) {
 	//1.基本的验证规则没有通过
 	if err := context.ShouldBind(&s); err != nil {
-		//errs := gin.H{
-		//	"tips": "UserShow参数校验失败，参数不符合规定，user_name（长度>0）、page的值(>0)、limits的值（>0)",
-		//	"err":  err.Error(),
-		//}
-		//response.ErrorParam(context, errs)
-		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
+		// 将表单参数验证器出现的错误直接交给错误翻译器统一处理即可
+		response.ValidatorError(context, err)
 		return
 	}
 
