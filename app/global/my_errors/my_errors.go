@@ -35,7 +35,9 @@ const (
 	// 验证器错误
 	ErrorsValidatorNotExists      string = "不存在的验证器"
 	ErrorsValidatorTransInitFail  string = "validator的翻译器初始化错误"
+	ErrorNotAllParamsIsBlank      string = "该接口不允许所有参数都为空,请按照接口要求提交必填参数"
 	ErrorsValidatorBindParamsFail string = "验证器绑定参数失败"
+
 	//token部分
 	ErrorsTokenInvalid      string = "无效的token"
 	ErrorsTokenNotActiveYet string = "token 尚未激活"
@@ -64,7 +66,4 @@ const (
 	ErrorCasbinCreateAdaptFail        string = "casbin NewAdapterByDBUseTableName 发生错误："
 	ErrorCasbinCreateEnforcerFail     string = "casbin NewEnforcer 发生错误："
 	ErrorCasbinNewModelFromStringFail string = "NewModelFromString 调用时出错："
-
-	// 表单参数验证器
-	ErrorNotAllParamsIsBlank string = "该接口不允许所有参数都为空,请按照接口要求提交必填参数"
 )
