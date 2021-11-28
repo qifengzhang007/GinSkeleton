@@ -16,7 +16,8 @@ type Users struct {
 
 // 1.用户注册
 func (u *Users) Register(context *gin.Context) {
-	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、GetInt64()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名规则：  前缀+验证器结构体中的 json 标签
+	//  由于本项目骨架已经将表单验证器的字段(成员)绑定在上下文，因此可以按照 GetString()、context.GetBool()、GetFloat64（）等快捷获取需要的数据类型，注意：相关键名规则：  前缀+验证器结构体中的 json 标签
+	// 注意：在 ginskeleton 中获取表单参数验证器中的数字键（字段）,请统一使用 GetFloat64(),其它获取数字键（字段）的函数无效，例如：GetInt()、GetInt64()等
 	// 当然也可以通过gin框架的上下文原始方法获取，例如： context.PostForm("user_name") 获取，这样获取的数据格式为文本，需要自己继续转换
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
@@ -106,6 +107,7 @@ func (u *Users) Store(context *gin.Context) {
 
 //5.用户更新(update)
 func (u *Users) Update(context *gin.Context) {
+	//表单参数验证中的int、int16、int32 、int64、float332、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
@@ -125,6 +127,7 @@ func (u *Users) Update(context *gin.Context) {
 
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
+	//表单参数验证中的int、int16、int32 、int64、float332、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	if model.CreateUserFactory("").Destroy(int(userId)) {
 		response.Success(context, consts.CurdStatusOkMsg, "")
