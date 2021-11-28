@@ -129,3 +129,8 @@ Captcha:
   captchaId: "captcha_id"  # 验证码id提交时的键名
   captchaValue: "captcha_value"   #验证码值提交时的键名
   length: 4   # 验证码生成时的长度
+
+#validator 相关
+validator:
+  IsInit: 1 #是否开启 validator 错误翻译 1 代表开启 0 代表不开启
+  Language: "zh" #选择语言 可选择 zh 代表中文，en 代表英语 默认为英文
