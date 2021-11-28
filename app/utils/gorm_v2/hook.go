@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// 这里的函数都是gorm的hook函数，拦截一些官方我们认为不合格的操作行为，提升项目整体的完美性
+// 这里的函数都是gorm的hook函数，拦截一些官方认为标准提示，但是我们认为不合格的操作行为，提升项目整体的完美性
 
 // MaskNotDataError 解决gorm v2 包在查询无数据时，报错问题（record not found），但是官方认为报错是应该是，我们认为查询无数据，代码一切ok，不应该报错
 func MaskNotDataError(gormDB *gorm.DB) {
