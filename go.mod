@@ -10,9 +10,9 @@ require (
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-playground/locales v0.13.0
-	github.com/go-playground/universal-translator v0.17.0
-	github.com/go-playground/validator/v10 v10.4.1
+	github.com/go-playground/locales v0.14.0
+	github.com/go-playground/universal-translator v0.18.0
+	github.com/go-playground/validator/v10 v10.9.0
 	github.com/gomodule/redigo v1.8.5
 	github.com/gorilla/websocket v1.4.2
 	github.com/natefinch/lumberjack v2.0.0+incompatible
