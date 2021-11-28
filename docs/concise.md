@@ -133,8 +133,20 @@ return false
 
 ```
 
-####  4.批量删除数据
-> 如果用户传递的参数是  ids ,例如： [100,200,300,400]
+### 4.批量删除（推荐使用第一种方法）
+> 如果用户传递的参数是  ids 格式如右侧： "100,200,300,400"
+```code
+    //批量删除
+    func (i *IptvUser) BatchDeleteData(ids string) bool {
+        if i.Where(" FIND_IN_SET(id,?)", ids).Delete(i).Error == nil {
+            go i.syncDelTbUsers(ids)
+            return true
+        }
+        return false
+    }
+```
+####  5.批量删除数据（第二种方法）
+> 如果用户传递的参数是  ids 格式如右侧： [100,200,300,400]
 
 ```code
 //删除，我们根据Id删除
@@ -143,14 +155,14 @@ func (u *UsersModel) DeleteData(ids  []int) bool {
     // ids 格式必须是：  [100,200,300,400]
     if u.Where("id  in (?)",ids).Delete(u).Error == nil {
         return  true
-}
+    }
 return false
 }
 
 ```
 
-####  4.查询 
-> 5.1 查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
+####  6.查询 
+> 6.1 查询是sql操作最复杂的环节,如果业余复杂，那么请使用原生sql操作业务
 ```code
     // 查询类 sql 语句
     u.Raw(sql语句,参数1,参数2... ... )
@@ -158,7 +170,7 @@ return false
     // 执行类 sql 语句
     u.Exec(sql语句,参数1,参数2... ... )
 ```
-> 5.2 接下来我们演示gorm自带查询     
+> 6.2 接下来我们演示gorm自带查询     
 ```code
     // 第一种情况   
 
