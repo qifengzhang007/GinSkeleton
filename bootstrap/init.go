@@ -109,10 +109,8 @@ func init() {
 			log.Fatal(err.Error())
 		}
 	}
-	//10.全局注册 validator 错误翻译器
-	if variable.ConfigYml.GetInt("validator.IsInit") == 1 {
-		if err := validator_translation.InitTrans(variable.ConfigYml.GetString("validator.Language")); err != nil {
-			log.Fatal(my_errors.ErrorsValidatorTransInitFail + err.Error())
-		}
+	//10.全局注册 validator 错误翻译器,zh 代表中文，en 代表英语
+	if err := validator_translation.InitTrans("zh"); err != nil {
+		log.Fatal(my_errors.ErrorsValidatorTransInitFail + err.Error())
 	}
 }

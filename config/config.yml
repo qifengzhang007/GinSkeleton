@@ -130,7 +130,3 @@ Captcha:
   captchaValue: "captcha_value"   #验证码值提交时的键名
   length: 4   # 验证码生成时的长度
 
-#表单参数验证器，将验证器未通过时的英文信息统一翻译为中文
-validator:
-  IsInit: 1 #是否开启 validator 错误翻译 1 代表开启 0 代表不开启
-  Language: "zh" #选择语言 可选择 zh 代表中文，en 代表英语 默认为英文
