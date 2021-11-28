@@ -107,7 +107,7 @@ func (u *Users) Store(context *gin.Context) {
 
 //5.用户更新(update)
 func (u *Users) Update(context *gin.Context) {
-	//表单参数验证中的int、int16、int32 、int64、float332、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
+	//表单参数验证中的int、int16、int32 、int64、float32、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
@@ -127,7 +127,7 @@ func (u *Users) Update(context *gin.Context) {
 
 //6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
-	//表单参数验证中的int、int16、int32 、int64、float332、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
+	//表单参数验证中的int、int16、int32 、int64、float32、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
 	if model.CreateUserFactory("").Destroy(int(userId)) {
 		response.Success(context, consts.CurdStatusOkMsg, "")
