@@ -6,6 +6,7 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
+	"net/http"
 )
 
 type Login struct {
@@ -19,11 +20,12 @@ func (l Login) CheckParams(context *gin.Context) {
 
 	//1.基本的验证规则没有通过
 	if err := context.ShouldBind(&l); err != nil {
-		errs := gin.H{
-			"tips": "UserRegister参数校验失败，参数不符合规定，user_name、pass、 长度有问题，不允许登录",
-			"err":  err.Error(),
-		}
-		response.ErrorParam(context, errs)
+		//errs := gin.H{
+		//	"tips": "UserRegister参数校验失败，参数不符合规定，user_name、pass、 长度有问题，不允许登录",
+		//	"err":  err.Error(),
+		//}
+		//response.ErrorParam(context, errs)
+		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
 		return
 	}
 

@@ -2,8 +2,10 @@ package response
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/my_errors"
+	"goskeleton/app/utils/validator_translation"
 	"net/http"
 )
 
@@ -73,4 +75,20 @@ func ErrorParam(c *gin.Context, wrongParam interface{}) {
 func ErrorSystem(c *gin.Context, msg string, data interface{}) {
 	ReturnJson(c, http.StatusInternalServerError, consts.ServerOccurredErrorCode, consts.ServerOccurredErrorMsg+msg, data)
 	c.Abort()
+}
+
+// validator 错误专门使用的返回器
+func ValidatorError(ctx *gin.Context, httpCode int, dataCode int, msg string, err error) {
+	// 获取validator.ValidationErrors类型的errors
+	errs, ok := err.(validator.ValidationErrors)
+	if !ok {
+		// 非validator.ValidationErrors类型错误直接返回
+		Fail(ctx, dataCode, msg, "")
+		return
+	}
+	ctx.JSON(httpCode, gin.H{
+		"code": dataCode,
+		"msg":  msg,
+		"tips": validator_translation.RemoveTopStruct(errs.Translate(validator_translation.Trans)),
+	})
 }

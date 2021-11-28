@@ -6,6 +6,7 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
+	"net/http"
 )
 
 type Destroy struct {
@@ -18,11 +19,12 @@ type Destroy struct {
 func (d Destroy) CheckParams(context *gin.Context) {
 
 	if err := context.ShouldBind(&d); err != nil {
-		errs := gin.H{
-			"tips": "UserDestroy参数校验失败，参数校验失败，请检查id(>=1)",
-			"err":  err.Error(),
-		}
-		response.ErrorParam(context, errs)
+		//errs := gin.H{
+		//	"tips": "UserDestroy参数校验失败，参数校验失败，请检查id(>=1)",
+		//	"err":  err.Error(),
+		//}
+		//response.ErrorParam(context, errs)
+		response.ValidatorError(context, http.StatusBadRequest, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, err)
 		return
 	}
 
