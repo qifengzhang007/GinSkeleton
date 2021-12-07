@@ -69,5 +69,5 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	//参数二：写入器
 	//参数三：参数级别，debug级别支持后续调用的所有函数写日志，如果是 fatal 高级别，则级别>=fatal 才可以写日志
 	zapCore := zapcore.NewCore(encoder, writer, zap.InfoLevel)
-	return zap.New(zapCore, zap.AddCaller(), zap.Hooks(entry))
+	return zap.New(zapCore, zap.AddCaller(), zap.Hooks(entry), zap.AddStacktrace(zap.WarnLevel))
 }
