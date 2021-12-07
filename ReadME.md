@@ -4,7 +4,7 @@
 
 [GinSkeleton 在线文档](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/mar1g7)
 
-### GinSkeleton 正在参加2021中国开源软件评选,请投我宝贵的一票，感谢！
+### GinSkeleton 正在参加2021中国开源软件评选,请投出您宝贵的一票，感谢！
 [GinSkeleton 开源中国投票地址](https://www.oschina.net/project/top_cn_2021?id=552)
 
 ### 本项目主线逻辑图
