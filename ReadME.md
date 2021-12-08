@@ -29,5 +29,14 @@
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
 
   
+### [点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)
+#### V 1.5.30  2021-11-28 (最新版本)
+* 新增    
+  1.引入表单参数验证器全局自动翻译器,简化代码书写,提升开发效率.
+* 更新  
+  1.按照gin官方提示,当程序切换到生产模式时,对gin的路由进行二次封装、异常恢复中间件自定义重写,release模式经过并发测试可以获得5%的性能提升.  
+  1.1 当配置文件(config/config.yml)中的键 `AppDebug` 设置为 `false` 时,gin 路由默认启用 `release` 模式，并且不会记录接口访问日志,生产环境请使用 `nginx` 代理，也方便实现负载均衡.   
+  2.其他更新主要是一些细节：文档、程序注释方面.
+
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
