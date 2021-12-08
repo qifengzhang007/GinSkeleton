@@ -4,11 +4,9 @@
 >   3.<font color=#FF4500>本项目骨架请使用 `master` 分支版本即可, 该分支是最新稳定分支 </font>.   
 >   4.<font color=#FF4500>本项目骨架从V1.4.00开始，要求go语言版本必须 >=1.15，才能稳定地使用gorm v2读写分离方案,go1.15下载地址：https://studygolang.com/dl </font>
 
-### GinSkeleton 新版在线文档：
+### [GinSkeleton 新版在线文档](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/mar1g7)
 > 1.我们花费了极大的精力编写了非常完整、高质量的文档,初学者优先从如何使用学起, 成熟的开发者可以与我们一起研究 gin 内核源码,成为 gin 框架的高级开发.  
 > 2.学习 GinSkeleton 您只需要关注主线即可,我们没有创造太多新的语法,只要您会使用 gin 就可以迅速上手 Ginskeleton .  
-
-### [GinSkeleton 进入新版在线文档](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/mar1g7)
 
 [GinSkeleton 旧文档入口](./ReadMEBak.md)
 
