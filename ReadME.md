@@ -8,7 +8,7 @@
 > 1.我们花费了极大的精力编写了非常完整、高质量的文档,初学者优先从如何使用学起, 成熟的开发者可以与我们一起研究 gin 内核源码,成为 gin 框架的高级开发.  
 > 2.学习 GinSkeleton 您只需要关注主线即可,我们没有创造太多新的语法,只要您会使用 gin 就可以迅速上手 Ginskeleton .  
 
-[GinSkeleton 旧文档入口](./ReadMEBak.md)
+[旧文档入口](./ReadMEBak.md)
 
 ### GinSkeleton 正在参加2021中国开源软件评选,希望能获得您宝贵的一票，感谢！
 [GinSkeleton 开源中国投票地址](https://www.oschina.net/project/top_cn_2021?id=552)
@@ -17,7 +17,7 @@
 > ![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)
 
 ### 本项目的心脏——Gin 核心主线调用链图
-> ![Gin主线核心](https://www.ginskeleton.com/images/gin_main_thread.png)
+> ![Gin主线核心](https://www.ginskeleton.com/images/gin_core_main_thread.png)
 
 ###  GinSkeleton-Admin 后台系统
 >   1.本系统是基于 GinSkeleton(v1.5.xx) + Iview(v4.7.1) 开发而成的企业级项目后台骨架.   
