@@ -61,6 +61,7 @@ FileUploadSetting:
     - "application/zip"               #xlsx、docx、zip
     - "application/x-gzip"            #tar.gz
     - "text/plain; charset=utf-8"     #txt log json等文本文件
+    - "audio/mpeg"     #音频文件，例如: mp3
 
 # casbin 权限控制api接口
 Casbin:
