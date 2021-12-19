@@ -3,9 +3,10 @@ package hello_world
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/utils/rabbitmq/error_record"
 )
 
-// 创建一个生产者
+// CreateProducer 创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.HelloWorld.Addr"))
@@ -17,12 +18,12 @@ func CreateProducer() (*producer, error) {
 		return nil, err
 	}
 
-	producer := &producer{
+	prod := &producer{
 		connect:   conn,
 		queueName: queueName,
 		durable:   dura,
 	}
-	return producer, nil
+	return prod, nil
 }
 
 //  定义一个消息队列结构体：helloworld 模型
@@ -35,9 +36,9 @@ type producer struct {
 
 func (p *producer) Send(data string) bool {
 
-	// 获取一个频道
+	// 获取一个通道
 	ch, err := p.connect.Channel()
-	p.occurError = errorDeal(err)
+	p.occurError = error_record.ErrorDeal(err)
 
 	defer func() {
 		_ = ch.Close()
@@ -52,17 +53,23 @@ func (p *producer) Send(data string) bool {
 		false,       // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 		nil,         // 相关参数
 	)
-	p.occurError = errorDeal(err)
+	p.occurError = error_record.ErrorDeal(err)
 
+	// 如果队列的声明是持久化的，那么消息也设置为持久化
+	msgPersistent := amqp.Transient
+	if p.durable {
+		msgPersistent = amqp.Persistent
+	}
 	// 投递消息
 	err = ch.Publish(
 		"",          // helloworld 、workqueue 模式设置为空字符串，表示使用默认交换机
-		p.queueName, // 注意：简单模式 key 表示队列名称
+		p.queueName, //  routing key，注意：简单模式与队列名称相同
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(data),
+			DeliveryMode: msgPersistent, //消息是否持久化，这里与保持保持一致即可
+			ContentType:  "text/plain",
+			Body:         []byte(data),
 		})
 
 	if p.occurError != nil { //  发生错误，返回 false
@@ -72,15 +79,7 @@ func (p *producer) Send(data string) bool {
 	}
 }
 
-//发送完毕手动关闭，这样不影响send多次发送数据
+//Close 发送完毕手动关闭，这样不影响send多次发送数据
 func (p *producer) Close() {
 	_ = p.connect.Close()
-}
-
-// 定义一个错误处理函数
-func errorDeal(err error) error {
-	if err != nil {
-		variable.ZapLog.Error(err.Error())
-	}
-	return err
 }

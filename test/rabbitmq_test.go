@@ -13,6 +13,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 )
 
 // 1.HelloWorld 模式
@@ -100,7 +101,7 @@ func TestRabbitMqPublishSubscribeProducer(t *testing.T) {
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", i+1)
-		res = producer.Send(str)
+		res = producer.Send(str, 1000)
 		//time.Sleep(time.Second * 2)
 	}
 
@@ -135,7 +136,7 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 // Routing 路由模式
 func TestRabbitMqRoutingProducer(t *testing.T) {
 
-	producer, _ := routing.CreateProducer()
+	producer, _ := routing.CreateProducer(routing.SetProdMsgDelayParams(true))
 	var res bool
 	var key string
 	for i := 1; i <= 10; i++ {
@@ -146,8 +147,8 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 		} else {
 			key = "key_odd" //  奇数键
 		}
-		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i, key)
-		res = producer.Send(key, strData)
+		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试"+time.Now().Format("2006-01-02 15:04:05"), i, key)
+		res = producer.Send(key, strData, 1000)
 		//time.Sleep(time.Second * 1)
 	}
 
@@ -162,7 +163,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 
 // 消费者
 func TestRabbitMqRoutingConsumer(t *testing.T) {
-	consumer, err := routing.CreateConsumer()
+	consumer, err := routing.CreateConsumer(routing.SetConsMsgDelayParams(true))
 
 	if err != nil {
 		t.Errorf("Routing单元测试未通过。%s\n", err.Error())
@@ -175,14 +176,14 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 	// 通过route_key 匹配指定队列的消息来处理
 	consumer.Received("key_even", func(receivedData string) {
 
-		fmt.Printf("处理偶数的回调函数：--->%s\n", receivedData)
+		fmt.Printf("处理偶数的回调函数：--->收到消息时间：%s - 消息内容：%s\n", time.Now().Format("2006-01-02 15:04:05"), receivedData)
 	})
 }
 
 //topics 模式
 func TestRabbitMqTopicsProducer(t *testing.T) {
 
-	producer, _ := topics.CreateProducer()
+	producer, _ := topics.CreateProducer(topics.SetProdMsgDelayParams(true))
 	var res bool
 	var key string
 	for i := 1; i <= 10; i++ {
@@ -194,7 +195,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 			key = "key.odd" //  奇数键
 		}
 		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i, key)
-		res = producer.Send(key, strData)
+		res = producer.Send(key, strData, 1000)
 		//time.Sleep(time.Second * 1)
 	}
 
@@ -211,7 +212,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 // 消费者
 func TestRabbitMqTopicsConsumer(t *testing.T) {
 
-	consumer, err := topics.CreateConsumer()
+	consumer, err := topics.CreateConsumer(topics.SetConsMsgDelayParams(true))
 
 	if err != nil {
 		t.Errorf("Routing单元测试未通过。%s\n", err.Error())

@@ -3,6 +3,7 @@ package work_queue
 import (
 	"github.com/streadway/amqp"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/utils/rabbitmq/error_record"
 	"time"
 )
 
@@ -10,7 +11,7 @@ func CreateConsumer() (*consumer, error) {
 	// 获取配置信息
 	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.WorkQueue.Addr"))
 	queueName := variable.ConfigYml.GetString("RabbitMq.WorkQueue.QueueName")
-	dura := variable.ConfigYml.GetBool("RabbitMq.WorkQueue.Durable")
+	durable := variable.ConfigYml.GetBool("RabbitMq.WorkQueue.Durable")
 	chanNumber := variable.ConfigYml.GetInt("RabbitMq.WorkQueue.ConsumerChanNumber")
 	reconnectInterval := variable.ConfigYml.GetDuration("RabbitMq.WorkQueue.OffLineReconnectIntervalSec")
 	retryTimes := variable.ConfigYml.GetInt("RabbitMq.WorkQueue.RetryCount")
@@ -19,16 +20,16 @@ func CreateConsumer() (*consumer, error) {
 		return nil, err
 	}
 
-	consumer := &consumer{
+	cons := &consumer{
 		connect:                     conn,
 		queueName:                   queueName,
-		durable:                     dura,
+		durable:                     durable,
 		chanNumber:                  chanNumber,
 		connErr:                     conn.NotifyClose(make(chan *amqp.Error, 1)),
 		offLineReconnectIntervalSec: reconnectInterval,
 		retryTimes:                  retryTimes,
 	}
-	return consumer, nil
+	return cons, nil
 }
 
 //  定义一个消息队列结构体：WorkQueue 模型
@@ -45,7 +46,7 @@ type consumer struct {
 	callbackOffLine             func(err *amqp.Error) //   断线重连，结构体内部使用
 }
 
-// 接收、处理消息
+// Received 接收、处理消息
 func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 	defer func() {
 		_ = c.connect.Close()
@@ -59,7 +60,7 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 		go func(chanNo int) {
 
 			ch, err := c.connect.Channel()
-			c.occurError = errorDeal(err)
+			c.occurError = error_record.ErrorDeal(err)
 			defer func() {
 				_ = ch.Close()
 			}()
@@ -72,30 +73,30 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 				false,
 				nil,
 			)
-			c.occurError = errorDeal(err)
+			c.occurError = error_record.ErrorDeal(err)
 
 			err = ch.Qos(
-				1,     // 大于0，服务端将会传递该数量的消息到消费者端进行待处理（通俗的说，就是消费者端积压消息的数量最大值）
+				1,     // 大于0，服务端将会传递该数量的消息到消费者端进行待处理（通俗地说，就是消费者端积压消息的数量最大值）
 				0,     // prefetch size
-				false, // flase 表示本连接只针对本频道有效，true表示应用到本连接的所有频道
+				false, // false 表示本连接只针对本频道有效，true表示应用到本连接的所有频道
 			)
-			c.occurError = errorDeal(err)
+			c.occurError = error_record.ErrorDeal(err)
 
 			msgs, err := ch.Consume(
 				q.Name,
-				q.Name, //  消费者标记，请确保在一个消息频道唯一
-				false,  //是否自动响应确认，这里设置为false，手动确认
-				false,  //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
-				false,  //RabbitMQ不支持noLocal标志。
-				false,  // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
+				"",    //  消费者标记，请确保在一个消息频道唯一
+				true,  //是否自动确认，这里设置为 true 自动确认，如果是 false  后面需要调用 ack 函数确认
+				false, //是否私有队列，false标识允许多个 consumer 向该队列投递消息，true 表示独占
+				false, //RabbitMQ不支持noLocal标志。
+				false, // 队列如果已经在服务器声明，设置为 true ，否则设置为 false；
 				nil,
 			)
-			c.occurError = errorDeal(err)
+			c.occurError = error_record.ErrorDeal(err)
 
 			for msg := range msgs {
 				// 通过回调处理消息
 				callbackFunDealSmg(string(msg.Body))
-				_ = msg.Ack(false) //  false 表示只确认本通道（chan）的消息
+				// _ = msg.Ack(false) //  如果 autoAck 参数为false，那么这里需要主动调用 ack 确认
 			}
 
 		}(i)
@@ -105,7 +106,7 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 
 }
 
-//消费者端，掉线重连失败后的错误回调
+//OnConnectionError 消费者端，掉线重连失败后的错误回调
 func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 	c.callbackOffLine = callbackOfflineErr
 	go func() {
