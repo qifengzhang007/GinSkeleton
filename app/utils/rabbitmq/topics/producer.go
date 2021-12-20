@@ -13,7 +13,7 @@ func CreateProducer(options ...OptionsProd) (*producer, error) {
 	exchangeType := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeType")
 	exchangeName := variable.ConfigYml.GetString("RabbitMq.Topics.ExchangeName")
 	queueName := variable.ConfigYml.GetString("RabbitMq.Topics.QueueName")
-	dura := variable.ConfigYml.GetBool("RabbitMq.Topics.Durable")
+	durable := variable.ConfigYml.GetBool("RabbitMq.Topics.Durable")
 
 	if err != nil {
 		variable.ZapLog.Error(err.Error())
@@ -25,7 +25,7 @@ func CreateProducer(options ...OptionsProd) (*producer, error) {
 		exchangeType: exchangeType,
 		exchangeName: exchangeName,
 		queueName:    queueName,
-		durable:      dura,
+		durable:      durable,
 	}
 	// 加载用户设置的参数
 	for _, val := range options {
