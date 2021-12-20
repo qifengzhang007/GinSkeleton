@@ -80,7 +80,7 @@ func (p *producer) Send(routeKey, data string, delayMillisecond int) bool {
 	// 投递消息
 	err = ch.Publish(
 		p.exchangeName, // 交换机名称
-		routeKey,       // direct 模式默认为空即可
+		routeKey,       // topics 模式默认为空即可
 		false,
 		false,
 		amqp.Publishing{

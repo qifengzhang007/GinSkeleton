@@ -91,7 +91,7 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 			queue, err := ch.QueueDeclare(
 				c.queueName,
 				c.durable,
-				!c.durable,
+				true,
 				false,
 				false,
 				nil,

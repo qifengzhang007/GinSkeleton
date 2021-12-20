@@ -88,7 +88,7 @@ func (c *consumer) Received(routeKey string, callbackFunDealSmg func(receivedDat
 		queue, err := ch.QueueDeclare(
 			c.queueName,
 			c.durable,
-			!c.durable,
+			true,
 			false,
 			false,
 			nil,
