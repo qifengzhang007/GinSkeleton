@@ -109,6 +109,7 @@ func TestRabbitMqPublishSubscribeProducer(t *testing.T) {
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", i+1)
+		// 参数二： 消息延迟的毫秒数，只有创建的对象是延迟模式该参数才有效
 		res = producer.Send(str, 10000)
 		//time.Sleep(time.Second * 2)
 	}
@@ -161,6 +162,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 			key = "key_odd" //  奇数键
 		}
 		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试"+time.Now().Format("2006-01-02 15:04:05"), i, key)
+		// 参数三： 消息延迟的毫秒数，只有创建的对象是延迟模式该参数才有效
 		res = producer.Send(key, strData, 10000)
 		//time.Sleep(time.Second * 1)
 	}
@@ -212,6 +214,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 			key = "key.odd" //  奇数键
 		}
 		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i, key)
+		// 参数三： 消息延迟的毫秒数，只有创建的对象是延迟模式该参数才有效
 		res = producer.Send(key, strData, 10000)
 		//time.Sleep(time.Second * 1)
 	}
