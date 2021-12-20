@@ -87,21 +87,22 @@ Casbin:
 
 RabbitMq:
   HelloWorld:
-    Addr: "amqp://admin:admin9527@139.196.101.31:5672/ginskeleton"    #消息服务器地址、账号、密码、虚拟主机
+    #消息服务器地址、账号、密码， / (斜杠)表示默认的虚拟主机，如果是开发者自己创建的，直接追加在 / (斜杠)后面即可，例如：amqp://账号:密码@ip地址:5672/ginskeleton
+    Addr: "amqp://账号:密码@ip地址:5672/"
     QueueName: "helloword_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
-    OffLineReconnectIntervalSec: 5                       #消费者掉线后,重连间隔的秒数
+    OffLineReconnectIntervalSec: 5                        #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   WorkQueue:
-    Addr: "amqp://admin:admin9527@139.196.101.31:5672/ginskeleton"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672/"  #参照前文地址说明
     QueueName: "work_queue"
     Durable: false                                        #消息是否持久化
     ConsumerChanNumber: 2                                 #消费者通道数量（允许一个消费者使用几个连接通道消费、处理消息）
-    OffLineReconnectIntervalSec: 5                       #消费者掉线后,重连间隔的秒数
+    OffLineReconnectIntervalSec: 5                        #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   PublishSubscribe:
-    Addr: "amqp://admin:admin9527@139.196.101.31:5672/ginskeleton"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672/"   #消息服务器地址、账号、密码
     ExchangeType: "fanout"
     ExchangeName: "fanout_exchange"                       #即时消息队列名称，
     DelayedExchangeName: "delayed_fanout_exchange"        #延迟消息队列名称，必须事先在rabbitmq 服务器管理端手动创建
@@ -111,20 +112,20 @@ RabbitMq:
     OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   Routing:
-    Addr: "amqp://admin:admin9527@139.196.101.31:5672/ginskeleton"                       #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672/"   #参照前文地址说明
     ExchangeType: "direct"
     ExchangeName: "direct_exchange"
-    DelayedExchangeName: "delayed_direct_exchange"       #延迟消息队列名称，必须事先在rabbitmq 服务器管理端手动创建
-    Durable: true                                        #消息是否持久化
+    DelayedExchangeName: "delayed_direct_exchange"        #延迟消息队列名称，必须事先在rabbitmq 服务器管理端手动创建
+    Durable: false                                        #消息是否持久化，如果初始化的是延迟消息队列,那么该参数会被程序强制设置为 true
     QueueName: ""
     OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
   Topics:
-    Addr: "amqp://admin:admin9527@139.196.101.31:5672/ginskeleton"                        #消息服务器地址、账号、密码
+    Addr: "amqp://账号:密码@ip地址:5672/"   #参照前文地址说明
     ExchangeType: "topic"
     ExchangeName: "topic_exchange"
     DelayedExchangeName: "delayed_topic_exchange"         #延迟消息队列名称，必须事先在rabbitmq 服务器管理端手动创建
-    Durable: false                                        #消息是否持久化
+    Durable: false                                        #消息是否持久化，如果初始化的是延迟消息队列,那么该参数会被程序强制设置为 true
     QueueName: ""
     OffLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
     RetryCount: 5                                         #消费者掉线后,尝试重连最大次数
