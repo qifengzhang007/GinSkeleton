@@ -10,8 +10,6 @@
 
 [旧文档入口](./ReadMEBak.md)
 
-### GinSkeleton 正在参加2021中国开源软件评选,希望能获得您宝贵的一票，感谢！
-[GinSkeleton 开源中国投票地址](https://www.oschina.net/project/top_cn_2021?id=552)
 
 ### 本项目主线逻辑图
 > ![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)
