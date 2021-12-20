@@ -19,7 +19,11 @@ import (
 // 1.HelloWorld 模式
 func TestRabbitMqHelloWorldProducer(t *testing.T) {
 
-	helloProducer, _ := hello_world.CreateProducer()
+	helloProducer, err := hello_world.CreateProducer()
+	if err != nil {
+		t.Errorf("HelloWorld单元测试未通过。%s\n", err.Error())
+		os.Exit(1)
+	}
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_HelloWorld开始发送消息测试", i+1)
@@ -97,11 +101,15 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 // 3.PublishSubscribe 发布、订阅模式模式
 func TestRabbitMqPublishSubscribeProducer(t *testing.T) {
 
-	producer, _ := publish_subscribe.CreateProducer()
+	producer, err := publish_subscribe.CreateProducer()
+	if err != nil {
+		t.Errorf("WorkQueue 单元测试未通过。%s\n", err.Error())
+		os.Exit(1)
+	}
 	var res bool
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", i+1)
-		res = producer.Send(str, 1000)
+		res = producer.Send(str, 10000)
 		//time.Sleep(time.Second * 2)
 	}
 
@@ -136,7 +144,12 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 // Routing 路由模式
 func TestRabbitMqRoutingProducer(t *testing.T) {
 
-	producer, _ := routing.CreateProducer(routing.SetProdMsgDelayParams(true))
+	producer, err := routing.CreateProducer()
+
+	if err != nil {
+		t.Errorf("Routing单元测试未通过。%s\n", err.Error())
+		os.Exit(1)
+	}
 	var res bool
 	var key string
 	for i := 1; i <= 10; i++ {
@@ -148,7 +161,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 			key = "key_odd" //  奇数键
 		}
 		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试"+time.Now().Format("2006-01-02 15:04:05"), i, key)
-		res = producer.Send(key, strData, 1000)
+		res = producer.Send(key, strData, 10000)
 		//time.Sleep(time.Second * 1)
 	}
 
@@ -163,7 +176,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 
 // 消费者
 func TestRabbitMqRoutingConsumer(t *testing.T) {
-	consumer, err := routing.CreateConsumer(routing.SetConsMsgDelayParams(true))
+	consumer, err := routing.CreateConsumer()
 
 	if err != nil {
 		t.Errorf("Routing单元测试未通过。%s\n", err.Error())
@@ -183,7 +196,11 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 //topics 模式
 func TestRabbitMqTopicsProducer(t *testing.T) {
 
-	producer, _ := topics.CreateProducer(topics.SetProdMsgDelayParams(true))
+	producer, err := topics.CreateProducer()
+	if err != nil {
+		t.Errorf("Routing单元测试未通过。%s\n", err.Error())
+		os.Exit(1)
+	}
 	var res bool
 	var key string
 	for i := 1; i <= 10; i++ {
@@ -195,7 +212,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 			key = "key.odd" //  奇数键
 		}
 		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试", i, key)
-		res = producer.Send(key, strData, 1000)
+		res = producer.Send(key, strData, 10000)
 		//time.Sleep(time.Second * 1)
 	}
 
@@ -211,8 +228,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 
 // 消费者
 func TestRabbitMqTopicsConsumer(t *testing.T) {
-
-	consumer, err := topics.CreateConsumer(topics.SetConsMsgDelayParams(true))
+	consumer, err := topics.CreateConsumer()
 
 	if err != nil {
 		t.Errorf("Routing单元测试未通过。%s\n", err.Error())
@@ -223,7 +239,7 @@ func TestRabbitMqTopicsConsumer(t *testing.T) {
 		log.Fatal(my_errors.ErrorsRabbitMqReconnectFail + "\n" + err.Error())
 	})
 	// 通过route_key 模糊匹配队列路由键的消息来处理
-	consumer.Received("#.even", func(receivedData string) {
+	consumer.Received("#.odd", func(receivedData string) {
 
 		fmt.Printf("模糊匹配偶数键：--->%s\n", receivedData)
 	})
