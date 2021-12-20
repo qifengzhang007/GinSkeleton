@@ -32,8 +32,12 @@
 #### V 1.5.31  2021-12-20 (最新版本)
 * 更新  
   1.错误日志记录时同时记录调用链信息。  
-  2.`rabbitmq` 消息队列增加消息延迟发送功能，老版本最快升级方式： `app/utils/rabbitmq` 目录内的内容全部替换原有项目，消息发送函数 `send ` 多一个延迟参数.  
-  3.关于 `rabbitmq` 消息延迟使用请参考新版在线文档.
+  2.`rabbitmq` 消息队列增加消息延迟发送功能.  
+  3.关于 `rabbitmq` 消息延迟使用请参考新版在线文档.  
+  4.老版本最快升级方式： 
+   4.1`app/utils/rabbitmq` 目录内的内容全部替换原有项目.  
+   4.2 消息发送函数 `send ` 多一个延迟参数.  
+   4.3 配置文件: `config/config.yml` 文件 `RabbitMq` 项新增延迟交换机名称: `DelayedExchangeName` 
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
