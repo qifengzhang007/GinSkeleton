@@ -19,8 +19,21 @@ func MaskNotDataError(gormDB *gorm.DB) {
 // InterceptCreatePramsNotPtrError 拦截 create 函数参数如果是非指针类型的错误,新用户最容犯此错误
 
 func CreateBeforeHook(gormDB *gorm.DB) {
+	destValueOf := reflect.ValueOf(gormDB.Statement.Dest).Elem()
 	if reflect.TypeOf(gormDB.Statement.Dest).Kind() != reflect.Ptr {
 		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBCreateParamsNotPtr))
+	} else if destValueOf.Type().Kind() == reflect.Slice || destValueOf.Type().Kind() == reflect.Array {
+		inLen := destValueOf.Len()
+		for i := 0; i < inLen; i++ {
+			row := destValueOf.Index(i)
+			if row.Type().Kind() == reflect.Struct {
+				row.FieldByName("CreatedAt").Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+				row.FieldByName("UpdatedAt").Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+			} else if row.Type().Kind() == reflect.Map {
+				row.SetMapIndex(reflect.ValueOf("created_at"), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+				row.SetMapIndex(reflect.ValueOf("updated_at"), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+			}
+		}
 	} else {
 		// 参数校验无错误自动设置 CreatedAt、 UpdatedAt
 		gormDB.Statement.SetColumn("created_at", time.Now().Format(variable.DateFormat))
