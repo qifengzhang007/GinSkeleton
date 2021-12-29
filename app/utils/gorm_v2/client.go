@@ -168,7 +168,7 @@ func getDsn(sqlType, readWrite string, dbConf ...ConfigParams) string {
 
 	switch strings.ToLower(sqlType) {
 	case "mysql":
-		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local", User, Pass, Host, Port, DataBase, Charset)
+		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=false&loc=Local", User, Pass, Host, Port, DataBase, Charset)
 	case "sqlserver", "mssql":
 		return fmt.Sprintf("server=%s;port=%d;database=%s;user id=%s;password=%s;encrypt=disable", Host, Port, DataBase, User, Pass)
 	case "postgresql", "postgre", "postgres":
