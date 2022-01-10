@@ -84,7 +84,7 @@ func (y *ymlConfig) getValueFromCache(keyName string) interface{} {
 	return container.CreateContainersFactory().Get(variable.ConfigKeyPrefix + keyName)
 }
 
-// 清空已经窜换的配置项信息
+// 清空已经缓存的配置项信息
 func (y *ymlConfig) clearCache() {
 	container.CreateContainersFactory().FuzzyDelete(variable.ConfigKeyPrefix)
 }

@@ -9,8 +9,11 @@ import (
 )
 
 // 定义一个全局键值对存储容器
-
 var sMap sync.Map
+
+// 拦截开发者书写代码时犯错导致程序警告
+// 注册键时加锁,拦截开发者可能在一瞬间将一个键重复注册多次时触发程序警告 "重复注册该键..."
+var mu sync.Mutex
 
 // 创建一个容器工厂
 func CreateContainersFactory() *containers {
@@ -23,6 +26,8 @@ type containers struct {
 
 //  1.以键值对的形式将代码注册到容器
 func (c *containers) Set(key string, value interface{}) (res bool) {
+	mu.Lock()
+	defer mu.Unlock()
 
 	if _, exists := c.KeyIsExists(key); exists == false {
 		sMap.Store(key, value)
