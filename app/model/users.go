@@ -201,6 +201,13 @@ func (u *UsersModel) Store(userName string, pass string, realName string, phone 
 	return false
 }
 
+//UpdateDataCheckUserNameIsUsed 更新前检查新的用户名是否已经存在（避免和别的账号重名）
+func (u *UsersModel) UpdateDataCheckUserNameIsUsed(userId int, userName string) (exists int64) {
+	sql := "select count(*) as counts from tb_users where  id!=?  AND user_name=?"
+	_ = u.Raw(sql, userId, userName).First(&exists)
+	return exists
+}
+
 //更新
 func (u *UsersModel) Update(id int, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update tb_users set user_name=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"

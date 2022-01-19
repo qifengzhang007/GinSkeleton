@@ -115,7 +115,14 @@ func (u *Users) Update(context *gin.Context) {
 	phone := context.GetString(consts.ValidatorPrefix + "phone")
 	remark := context.GetString(consts.ValidatorPrefix + "remark")
 	userIp := context.ClientIP()
-	//注意：这里没有实现权限控制逻辑，例如：超级管理管理员可以更新全部用户数据，普通用户只能修改自己的数据。目前只是验证了token有效、合法之后就可以进行后续操作
+
+	// 检查正在修改的用户名是否被其他人使用
+	if model.CreateUserFactory("").UpdateDataCheckUserNameIsUsed(int(userId), userName) > 0 {
+		response.Fail(context, consts.CurdUpdateFailCode, consts.CurdUpdateFailMsg+", "+userName+" 已经被其他人使用", "")
+		return
+	}
+
+	//注意：这里没有实现更加精细的权限控制逻辑，例如：超级管理管理员可以更新全部用户数据，普通用户只能修改自己的数据。目前只是验证了token有效、合法之后就可以进行后续操作
 	// 实际使用请根据真是业务实现权限控制逻辑、再进行数据库操作
 	if curd.CreateUserCurdFactory().Update(int(userId), userName, pass, realName, phone, remark, userIp) {
 		response.Success(context, consts.CurdStatusOkMsg, "")
