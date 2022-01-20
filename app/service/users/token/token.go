@@ -107,8 +107,13 @@ func (u *userToken) IsEffective(token string) bool {
 	customClaims, code := u.isNotExpired(token, 0)
 	if consts.JwtTokenOK == code {
 		//1.首先在redis检测是否存在某个用户对应的有效token，如果存在就直接返回，不再继续查询mysql，否则最后查询mysql逻辑，确保万无一失
-		if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 && token_cache_redis.CreateUsersTokenCacheFactory(customClaims.UserId).TokenCacheIsExists(token) {
-			return true
+		if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+			tokenRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(customClaims.UserId)
+			defer tokenRedisFact.ReleaseRedisConn()
+			if tokenRedisFact != nil {
+				tokenRedisFact.TokenCacheIsExists(token)
+				return true
+			}
 		}
 		//2.token符合token本身的规则以后，继续在数据库校验是不是符合本系统其他设置，例如：一个用户默认只允许10个账号同时在线（10个token同时有效）
 		if model.CreateUserFactory("").OauthCheckTokenIsOk(customClaims.UserId, token) {
