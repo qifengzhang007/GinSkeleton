@@ -6,6 +6,7 @@ import (
 	"goskeleton/app/utils/redis_factory"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func CreateUsersTokenCacheFactory(userId int64) *userTokenCacheRedis {
@@ -46,12 +47,19 @@ func (u *userTokenCacheRedis) DelOverMaxOnlineCache() bool {
 
 // TokenCacheIsExists 查询token是否在redis存在
 func (u *userTokenCacheRedis) TokenCacheIsExists(token string) (exists bool) {
+	curTimestamp := time.Now().Unix()
 	onlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	if strSlice, err := u.redisClient.Strings(u.redisClient.Execute("zRevRange", u.userTokenKey, 0, onlineUsers-1)); err == nil {
 		for _, val := range strSlice {
-			if strings.Compare(val, token) == 0 {
-				exists = true
-				break
+			if score, err := u.redisClient.Int64(u.redisClient.Execute("zScore", u.userTokenKey, token)); err == nil {
+				if score > curTimestamp {
+					if strings.Compare(val, token) == 0 {
+						exists = true
+						break
+					}
+				} else {
+					exists = false
+				}
 			}
 		}
 	} else {
