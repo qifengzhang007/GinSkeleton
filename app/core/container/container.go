@@ -11,11 +11,7 @@ import (
 // 定义一个全局键值对存储容器
 var sMap sync.Map
 
-// 拦截开发者书写代码时犯错导致程序警告
-// 注册键时加锁,拦截开发者可能在一瞬间将一个键重复注册多次时触发程序警告 "重复注册该键..."
-var mu sync.Mutex
-
-// 创建一个容器工厂
+// CreateContainersFactory 创建一个容器工厂
 func CreateContainersFactory() *containers {
 	return &containers{}
 }
@@ -24,10 +20,8 @@ func CreateContainersFactory() *containers {
 type containers struct {
 }
 
-//  1.以键值对的形式将代码注册到容器
+// Set  1.以键值对的形式将代码注册到容器
 func (c *containers) Set(key string, value interface{}) (res bool) {
-	mu.Lock()
-	defer mu.Unlock()
 
 	if _, exists := c.KeyIsExists(key); exists == false {
 		sMap.Store(key, value)
@@ -44,12 +38,12 @@ func (c *containers) Set(key string, value interface{}) (res bool) {
 	return
 }
 
-//  2.删除
+// Delete  2.删除
 func (c *containers) Delete(key string) {
 	sMap.Delete(key)
 }
 
-//  3.传递键，从容器获取值
+// Get 3.传递键，从容器获取值
 func (c *containers) Get(key string) interface{} {
 	if value, exists := c.KeyIsExists(key); exists {
 		return value
@@ -57,12 +51,12 @@ func (c *containers) Get(key string) interface{} {
 	return nil
 }
 
-//  4. 判断键是否被注册
+// KeyIsExists 4. 判断键是否被注册
 func (c *containers) KeyIsExists(key string) (interface{}, bool) {
 	return sMap.Load(key)
 }
 
-// 按照键的前缀模糊删除容器中注册的内容
+// FuzzyDelete 按照键的前缀模糊删除容器中注册的内容
 func (c *containers) FuzzyDelete(keyPre string) {
 	sMap.Range(func(key, value interface{}) bool {
 		if keyname, ok := key.(string); ok {

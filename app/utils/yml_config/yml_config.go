@@ -9,21 +9,23 @@ import (
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"log"
+	"sync"
 	"time"
 )
 
 // 由于 vipver 包本身对于文件的变化事件有一个bug，相关事件会被回调两次
 // 常年未彻底解决，相关的 issue 清单：https://github.com/spf13/viper/issues?q=OnConfigChange
 // 设置一个内部全局变量，记录配置文件变化时的时间点，如果两次回调事件事件差小于1秒，我们认为是第二次回调事件，而不是人工修改配置文件
-// 这样就避免了 vipver 包的这个bug
+// 这样就避免了 viper 包的这个bug
 
 var lastChangeTime time.Time
+var containerFactory = container.CreateContainersFactory()
 
 func init() {
 	lastChangeTime = time.Now()
 }
 
-// 创建一个yaml配置文件工厂
+// CreateYamlFactory 创建一个yaml配置文件工厂
 // 参数设置为可变参数的文件名，这样参数就可以不需要传递，如果传递了多个，我们只取第一个参数作为配置文件名
 func CreateYamlFactory(fileName ...string) ymlconfig_interf.YmlConfigInterf {
 
@@ -44,15 +46,17 @@ func CreateYamlFactory(fileName ...string) ymlconfig_interf.YmlConfigInterf {
 	}
 
 	return &ymlConfig{
-		yamlConfig,
+		viper: yamlConfig,
+		mu:    new(sync.Mutex),
 	}
 }
 
 type ymlConfig struct {
 	viper *viper.Viper
+	mu    *sync.Mutex
 }
 
-//监听文件变化
+//ConfigFileChangeListen 监听文件变化
 func (y *ymlConfig) ConfigFileChangeListen() {
 	y.viper.OnConfigChange(func(changeEvent fsnotify.Event) {
 		if time.Now().Sub(lastChangeTime).Seconds() >= 1 {
@@ -65,9 +69,9 @@ func (y *ymlConfig) ConfigFileChangeListen() {
 	y.viper.WatchConfig()
 }
 
-// 判断相关键是否已经缓存
+// keyIsCache 判断相关键是否已经缓存
 func (y *ymlConfig) keyIsCache(keyName string) bool {
-	if _, exists := container.CreateContainersFactory().KeyIsExists(variable.ConfigKeyPrefix + keyName); exists {
+	if _, exists := containerFactory.KeyIsExists(variable.ConfigKeyPrefix + keyName); exists {
 		return true
 	} else {
 		return false
@@ -76,20 +80,26 @@ func (y *ymlConfig) keyIsCache(keyName string) bool {
 
 // 对键值进行缓存
 func (y *ymlConfig) cache(keyName string, value interface{}) bool {
-	return container.CreateContainersFactory().Set(variable.ConfigKeyPrefix+keyName, value)
+	// 避免瞬间缓存键、值时，程序提示键名已经被注册的日志输出
+	y.mu.Lock()
+	defer y.mu.Unlock()
+	if _, exists := containerFactory.KeyIsExists(variable.ConfigKeyPrefix + keyName); exists {
+		return true
+	}
+	return containerFactory.Set(variable.ConfigKeyPrefix+keyName, value)
 }
 
 // 通过键获取缓存的值
 func (y *ymlConfig) getValueFromCache(keyName string) interface{} {
-	return container.CreateContainersFactory().Get(variable.ConfigKeyPrefix + keyName)
+	return containerFactory.Get(variable.ConfigKeyPrefix + keyName)
 }
 
 // 清空已经缓存的配置项信息
 func (y *ymlConfig) clearCache() {
-	container.CreateContainersFactory().FuzzyDelete(variable.ConfigKeyPrefix)
+	containerFactory.FuzzyDelete(variable.ConfigKeyPrefix)
 }
 
-// 允许 clone 一个相同功能的结构体
+// Clone 允许 clone 一个相同功能的结构体
 func (y *ymlConfig) Clone(fileName string) ymlconfig_interf.YmlConfigInterf {
 	// 这里存在一个深拷贝，需要注意，避免拷贝的结构体操作对原始结构体造成影响
 	var ymlC = *y
@@ -114,7 +124,7 @@ func (y *ymlConfig) Get(keyName string) interface{} {
 	}
 }
 
-// GetString
+// GetString 字符串格式返回值
 func (y *ymlConfig) GetString(keyName string) string {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(string)
@@ -126,7 +136,7 @@ func (y *ymlConfig) GetString(keyName string) string {
 
 }
 
-// GetBool
+// GetBool 布尔格式返回值
 func (y *ymlConfig) GetBool(keyName string) bool {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(bool)
@@ -137,7 +147,7 @@ func (y *ymlConfig) GetBool(keyName string) bool {
 	}
 }
 
-// GetInt
+// GetInt 整数格式返回值
 func (y *ymlConfig) GetInt(keyName string) int {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(int)
@@ -148,7 +158,7 @@ func (y *ymlConfig) GetInt(keyName string) int {
 	}
 }
 
-// GetInt32
+// GetInt32 整数格式返回值
 func (y *ymlConfig) GetInt32(keyName string) int32 {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(int32)
@@ -159,7 +169,7 @@ func (y *ymlConfig) GetInt32(keyName string) int32 {
 	}
 }
 
-// GetInt64
+// GetInt64 整数格式返回值
 func (y *ymlConfig) GetInt64(keyName string) int64 {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(int64)
@@ -170,7 +180,7 @@ func (y *ymlConfig) GetInt64(keyName string) int64 {
 	}
 }
 
-// float64
+// GetFloat64 小数格式返回值
 func (y *ymlConfig) GetFloat64(keyName string) float64 {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(float64)
@@ -181,7 +191,7 @@ func (y *ymlConfig) GetFloat64(keyName string) float64 {
 	}
 }
 
-// GetDuration
+// GetDuration 时间单位格式返回值
 func (y *ymlConfig) GetDuration(keyName string) time.Duration {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).(time.Duration)
@@ -192,7 +202,7 @@ func (y *ymlConfig) GetDuration(keyName string) time.Duration {
 	}
 }
 
-// GetStringSlice
+// GetStringSlice 字符串切片数格式返回值
 func (y *ymlConfig) GetStringSlice(keyName string) []string {
 	if y.keyIsCache(keyName) {
 		return y.getValueFromCache(keyName).([]string)

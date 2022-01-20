@@ -106,6 +106,12 @@ func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool 
 	if userItem != nil && err == nil && userItem.Pass == newPass {
 		return true
 	} else if userItem != nil {
+
+		// 如果用户密码被修改，那么redis中的token值也清除
+		if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+			go u.DelTokenCacheFromRedis(int64(userId))
+		}
+
 		sql := "UPDATE  tb_oauth_access_tokens  SET  revoked=1,updated_at=NOW(),action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
 		if u.Exec(sql, clientIp, userId).Error == nil {
 			return true
@@ -127,11 +133,16 @@ func (u *UsersModel) OauthDestroyToken(userId int) bool {
 
 // 判断用户token是否在数据库存在+状态OK
 func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
+	// 异步缓存用户有效的token到redis
+	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+		go u.ValidTokenCacheToRedis(userId)
+	}
+
 	sql := "SELECT   token  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
 	defer func() {
-		//  凡是查询类记得释放记录集
+		//  凡是获取原生结果集的查询，记得释放记录集
 		_ = rows.Close()
 	}()
 
@@ -184,7 +195,7 @@ func (u *UsersModel) counts(userName string) (counts int64) {
 // 查询（根据关键词模糊查询）
 func (u *UsersModel) Show(userName string, limitStart, limitItems int) (counts int64, temp []UsersModel) {
 	if counts = u.counts(userName); counts > 0 {
-		sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
+		sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`,updated_at,updated_at  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
 		if res := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Find(&temp); res.RowsAffected > 0 {
 			return counts, temp
 		}
@@ -221,6 +232,11 @@ func (u *UsersModel) Update(id int, userName string, pass string, realName strin
 
 //删除用户以及关联的token记录
 func (u *UsersModel) Destroy(id int) bool {
+
+	// 删除用户时，清除用户缓存在redis的全部token
+	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+		go u.DelTokenCacheFromRedis(int64(id))
+	}
 	if u.Delete(u, id).Error == nil {
 		if u.OauthDestroyToken(id) {
 			return true
