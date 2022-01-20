@@ -111,8 +111,9 @@ func (u *userToken) IsEffective(token string) bool {
 			tokenRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(customClaims.UserId)
 			defer tokenRedisFact.ReleaseRedisConn()
 			if tokenRedisFact != nil {
-				tokenRedisFact.TokenCacheIsExists(token)
-				return true
+				if tokenRedisFact.TokenCacheIsExists(token) {
+					return true
+				}
 			}
 		}
 		//2.token符合token本身的规则以后，继续在数据库校验是不是符合本系统其他设置，例如：一个用户默认只允许10个账号同时在线（10个token同时有效）
