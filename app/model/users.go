@@ -246,7 +246,8 @@ func (u *UsersModel) Destroy(id int) bool {
 	return false
 }
 
-// 本文件专门处理 token 缓存到 redis 的相关逻辑
+// 后续两个函数专门处理用户 token 缓存到 redis 逻辑
+
 func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
 	tokenCacheRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(userId)
 	if tokenCacheRedisFact == nil {
