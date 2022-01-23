@@ -3,8 +3,8 @@ module goskeleton
 go 1.15
 
 require (
-	github.com/casbin/casbin/v2 v2.39.0
-	github.com/casbin/gorm-adapter/v3 v3.4.5
+	github.com/casbin/casbin/v2 v2.40.6
+	github.com/casbin/gorm-adapter/v3 v3.4.6
 	github.com/dchest/captcha v0.0.0-20200903113550-03f5f0333e1f
 	github.com/dgrijalva/jwt-go v3.2.1-0.20210802184156-9742bd7fca1c+incompatible
 	github.com/fsnotify/fsnotify v1.5.1
