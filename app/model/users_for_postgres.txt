@@ -3,12 +3,14 @@ package model
 import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/service/users/token_cache_redis"
 	"goskeleton/app/utils/md5_encrypt"
+	"strconv"
 	"time"
 )
-// 本文件针对 sqlserver 数据库有效，请手动使用本文件的所有代码替换 users.go 中的所有代码即可
-// 针对数据库选型为sqlserver的开发者使用
 
+// 本文件针对 postgresql 数据库有效，请手动使用本文件的所有代码替换同目录的 users.go 中的所有代码即可
+// 针对数据库选型为 postgresql 的开发者使用
 
 // 操作数据库喜欢使用gorm自带语法的开发者可以参考 GinSkeleton-Admin 系统相关代码
 // Admin 项目地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/
@@ -21,7 +23,7 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-	BaseModel   `json:"-"`
+	BaseModel
 	UserName    string `gorm:"column:user_name" json:"user_name"`
 	Pass        string `json:"-"`
 	Phone       string `json:"phone"`
@@ -31,12 +33,12 @@ type UsersModel struct {
 	LastLoginIp string `gorm:"column:last_login_ip" json:"last_login_ip"`
 }
 
-// 表名
+// TableName 表名
 func (u *UsersModel) TableName() string {
 	return "web.tb_users"
 }
 
-// 用户注册（写一个最简单的使用账号、密码注册即可）
+// Register 用户注册（写一个最简单的使用账号、密码注册即可）
 func (u *UsersModel) Register(userName, pass, userIp string) bool {
 	sql := "INSERT  INTO web.tb_users(user_name,pass,last_login_ip) SELECT ?,?,?    WHERE NOT EXISTS (SELECT 1  FROM web.tb_users WHERE  user_name=?)"
 	result := u.Exec(sql, userName, pass, userIp, userName)
@@ -47,7 +49,7 @@ func (u *UsersModel) Register(userName, pass, userIp string) bool {
 	}
 }
 
-// 用户登录,
+// Login 用户登录,
 func (u *UsersModel) Login(userName string, pass string) *UsersModel {
 	sql := "select id, user_name,real_name,pass,phone  from web.tb_users where  user_name=? limit 1"
 	result := u.Raw(sql, userName).First(u)
@@ -62,8 +64,13 @@ func (u *UsersModel) Login(userName string, pass string) *UsersModel {
 	return nil
 }
 
-//记录用户登陆（login）生成的token，每次登陆记录一次token
+// OauthLoginToken 记录用户登陆（login）生成的token，每次登陆记录一次token
 func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64, clientIp string) bool {
+	// 异步缓存用户有效的token到redis
+	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+		go u.ValidTokenCacheToRedis(userId)
+	}
+
 	sql := `INSERT   INTO  web.tb_oauth_access_tokens(fr_user_id,action_name,token,expires_at,client_ip)
 		SELECT  ?,'login',? ,?,?    WHERE   NOT   EXISTS(SELECT  1  FROM  web.tb_oauth_access_tokens a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)
 		`
@@ -75,29 +82,47 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 	return false
 }
 
-//用户刷新token
-func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
-	sql := "UPDATE   web.tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at= now() ,action_name='refresh'  WHERE   fr_user_id=? AND token=?"
-	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
-        go u.UpdateUserloginInfo(clientIp,userId)
+// OauthRefreshConditionCheck 用户刷新token,条件检查: 相关token在过期的时间之内，就符合刷新条件
+func (u *UsersModel) OauthRefreshConditionCheck(userId int64, oldToken string) bool {
+	// 首先判断旧token在本系统自带的数据库已经存在，才允许继续执行刷新逻辑
+	var oldTokenIsExists int
+	sql := "SELECT count(*)  as  counts FROM  web.tb_oauth_access_tokens  WHERE fr_user_id =? and token=? and NOW() < (expires_at + cast(? as interval)) "
+	refreshSec := variable.ConfigYml.GetInt64("Token.JwtTokenRefreshAllowSec")
+	if u.Raw(sql, userId, oldToken, strconv.FormatInt(refreshSec, 10)+" second").First(&oldTokenIsExists).Error == nil && oldTokenIsExists == 1 {
 		return true
 	}
 	return false
 }
 
-// 更新用户登陆次数、最近一次登录ip、最近一次登录时间
-func (u *UsersModel) UpdateUserloginInfo(last_login_ip string,userId int64){
+// OauthRefreshToken 用户刷新token
+func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
+	sql := "UPDATE   web.tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at= now() ,action_name='refresh'  WHERE   fr_user_id=? AND token=?"
+	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
+		go u.UpdateUserloginInfo(clientIp, userId)
+		return true
+	}
+	return false
+}
+
+// UpdateUserloginInfo 更新用户登陆次数、最近一次登录ip、最近一次登录时间
+func (u *UsersModel) UpdateUserloginInfo(last_login_ip string, userId int64) {
 	sql := "UPDATE  web.tb_users   SET  login_times=COALESCE(login_times,0)+1,last_login_ip=?,last_login_time=?  WHERE   id=?  "
 	_ = u.Exec(sql, last_login_ip, time.Now().Format(variable.DateFormat), userId)
 }
 
-//当用户更改密码后，所有的token都失效，必须重新登录
+// OauthResetToken 当用户更改密码后，所有的token都失效，必须重新登录
 func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	userItem, err := u.ShowOneItem(userId)
 	if userItem != nil && err == nil && userItem.Pass == newPass {
 		return true
 	} else if userItem != nil {
+
+		// 如果用户密码被修改，那么redis中的token值也清除
+		if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+			go u.DelTokenCacheFromRedis(int64(userId))
+		}
+
 		sql := "UPDATE  web.tb_oauth_access_tokens  SET  revoked=1,updated_at= now() ,action_name='ResetPass',client_ip=?  WHERE  fr_user_id=?  "
 		if u.Exec(sql, clientIp, userId).Error == nil {
 			return true
@@ -106,7 +131,7 @@ func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool 
 	return false
 }
 
-//当tb_users 删除数据，相关的token同步删除
+//OauthDestroyToken 当tb_users 删除数据，相关的token同步删除
 func (u *UsersModel) OauthDestroyToken(userId int) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	sql := "DELETE FROM  web.tb_oauth_access_tokens WHERE  fr_user_id=?  "
@@ -117,7 +142,7 @@ func (u *UsersModel) OauthDestroyToken(userId int) bool {
 	return false
 }
 
-// 判断用户token是否在数据库存在+状态OK
+// OauthCheckTokenIsOk 判断用户token是否在数据库存在+状态OK
 func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	sql := `
 		SELECT  token  FROM  web.tb_oauth_access_tokens
@@ -137,7 +162,7 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 				}
 			}
 		}
-		//  凡是查询类记得释放记录集
+		//  凡是获取原生结果集的查询，记得释放记录集
 		_ = rows.Close()
 	}
 	return false
@@ -157,7 +182,7 @@ func (u *UsersModel) SetTokenInvalid(userId int) bool {
 
 //根据用户ID查询一条信息
 func (u *UsersModel) ShowOneItem(userId int) (*UsersModel, error) {
-	sql := "SELECT id, user_name,pass, real_name, phone, status FROM  web.tb_users  WHERE status=1 and   id=? limit 1"
+	sql := "SELECT id, user_name,pass, real_name, phone, status,TO_CHAR(created_at,'yyyy-mm-dd hh24:mi:ss') as created_at, TO_CHAR(updated_at,'yyyy-mm-dd hh24:mi:ss') as updated_at FROM  web.tb_users  WHERE status=1 and   id=? limit 1"
 	result := u.Raw(sql, userId).First(u)
 	if result.Error == nil {
 		return u, nil
@@ -166,7 +191,7 @@ func (u *UsersModel) ShowOneItem(userId int) (*UsersModel, error) {
 	}
 }
 
-// 查询数据之前统计条数
+// counts 查询数据之前统计条数
 func (u *UsersModel) counts(userName string) (counts int64) {
 	sql := "SELECT  count(*) as counts  FROM  web.tb_users  WHERE status=1 and   user_name like ?"
 	if res := u.Raw(sql, "%"+userName+"%").First(&counts); res.Error != nil {
@@ -175,11 +200,12 @@ func (u *UsersModel) counts(userName string) (counts int64) {
 	return counts
 }
 
-// 查询（根据关键词模糊查询）
+// Show 查询（根据关键词模糊查询）
 func (u *UsersModel) Show(userName string, limitStart, limitItems int) (counts int64, temp []UsersModel) {
 	if counts = u.counts(userName); counts > 0 {
 		sql := `
-		SELECT  id, user_name, real_name, phone, status, TO_CHAR(created_at,'YYYY-MM-DD HH24:MI:SS') as created_at, TO_CHAR(updated_at,'YYYY-MM-DD HH24:MI:SS') as updated_at
+		SELECT  id, user_name, real_name, phone, status, last_login_ip,phone,
+		TO_CHAR(created_at,'yyyy-mm-dd hh24:mi:ss') as created_at, TO_CHAR(updated_at,'yyyy-mm-dd hh24:mi:ss') as updated_at
 		FROM  web.tb_users  WHERE status=1 and   user_name like ? limit ? offset ?
 		`
 		if res := u.Raw(sql, "%"+userName+"%", limitItems, limitStart).Find(&temp); res.RowsAffected > 0 {
@@ -189,7 +215,7 @@ func (u *UsersModel) Show(userName string, limitStart, limitItems int) (counts i
 	return 0, nil
 }
 
-//新增
+// Store 新增
 func (u *UsersModel) Store(userName string, pass string, realName string, phone string, remark string) bool {
 	sql := "INSERT  INTO web.tb_users(user_name,pass,real_name,phone,remark) SELECT ?,?,?,?,?   WHERE NOT EXISTS (SELECT 1  FROM web.tb_users WHERE  user_name=?)"
 	if u.Exec(sql, userName, pass, realName, phone, remark, userName).RowsAffected > 0 {
@@ -198,7 +224,14 @@ func (u *UsersModel) Store(userName string, pass string, realName string, phone 
 	return false
 }
 
-//更新
+// UpdateDataCheckUserNameIsUsed 更新前检查新的用户名是否已经存在（避免和别的账号重名）
+func (u *UsersModel) UpdateDataCheckUserNameIsUsed(userId int, userName string) (exists int64) {
+	sql := "select count(*) as counts from web.tb_users where  id!=?  AND user_name=?"
+	_ = u.Raw(sql, userId, userName).First(&exists)
+	return exists
+}
+
+// Update 更新
 func (u *UsersModel) Update(id int, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update web.tb_users set user_name=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
 	if u.Exec(sql, userName, pass, realName, phone, remark, id).RowsAffected >= 0 {
@@ -209,12 +242,61 @@ func (u *UsersModel) Update(id int, userName string, pass string, realName strin
 	return false
 }
 
-//删除用户以及关联的token记录
+// Destroy 删除用户以及关联的token记录
 func (u *UsersModel) Destroy(id int) bool {
+	// 删除用户时，清除用户缓存在redis的全部token
+	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+		go u.DelTokenCacheFromRedis(int64(id))
+	}
 	if u.Delete(u, id).Error == nil {
 		if u.OauthDestroyToken(id) {
 			return true
 		}
 	}
 	return false
+}
+
+// 后续两个函数专门处理用户 token 缓存到 redis 逻辑
+
+func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
+	tokenCacheRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(userId)
+	if tokenCacheRedisFact == nil {
+		variable.ZapLog.Error("redis连接失败，请检查配置")
+		return
+	}
+	defer tokenCacheRedisFact.ReleaseRedisConn()
+
+	sql := "SELECT   token,to_char(expires_at,'yyyy-mm-dd hh24:mi:ss') as expires_at  FROM  web.tb_oauth_access_tokens  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
+	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
+	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
+	var tempToken, expires string
+	if err == nil && rows != nil {
+		for rows.Next() {
+			err = rows.Scan(&tempToken, &expires)
+			if err == nil {
+				if ts, err := time.ParseInLocation(variable.DateFormat, expires, time.Local); err == nil {
+					tokenCacheRedisFact.SetTokenCache(ts.Unix(), tempToken)
+				} else {
+					variable.ZapLog.Error("expires_at 抓换位时间戳出错", zap.Error(err))
+				}
+			} else {
+				variable.ZapLog.Error("缓存用户token到redis出错", zap.Error(err))
+			}
+		}
+		//  凡是获取原生结果集的查询，记得释放记录集
+		_ = rows.Close()
+	}
+	// 缓存结束之后删除超过系统设置最大在线数量的token
+	tokenCacheRedisFact.DelOverMaxOnlineCache()
+}
+
+// DelTokenCacheFromRedis 用户密码修改后，删除redis所有的token
+func (u *UsersModel) DelTokenCacheFromRedis(userId int64) {
+	tokenCacheRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(userId)
+	if tokenCacheRedisFact == nil {
+		variable.ZapLog.Error("redis连接失败，请检查配置")
+		return
+	}
+	tokenCacheRedisFact.ClearUserToken()
+	tokenCacheRedisFact.ReleaseRedisConn()
 }

@@ -28,6 +28,8 @@ func (u *userTokenCacheRedis) SetTokenCache(tokenExpire int64, token string) boo
 	// 存储用户token时转为MD5，下一步比较的时候可以更加快速地比较是否一致
 	if _, err := u.redisClient.Int(u.redisClient.Execute("zAdd", u.userTokenKey, tokenExpire, md5_encrypt.MD5(token))); err == nil {
 		return true
+	} else {
+		variable.ZapLog.Error("缓存用户token到redis出错", zap.Error(err))
 	}
 	return false
 }
