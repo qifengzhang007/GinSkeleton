@@ -264,6 +264,8 @@ func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
 			if err == nil {
 				if ts, err := time.ParseInLocation(variable.DateFormat, expires, time.Local); err == nil {
 					tokenCacheRedisFact.SetTokenCache(ts.Unix(), tempToken)
+				} else {
+					variable.ZapLog.Error("expires_at 转换位时间戳出错", zap.Error(err))
 				}
 			}
 		}
