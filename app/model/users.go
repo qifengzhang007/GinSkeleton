@@ -20,7 +20,7 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-	BaseModel   `json:"-"`
+	BaseModel
 	UserName    string `gorm:"column:user_name" json:"user_name"`
 	Pass        string `json:"-"`
 	Phone       string `json:"phone"`
@@ -63,6 +63,11 @@ func (u *UsersModel) Login(userName string, pass string) *UsersModel {
 
 //记录用户登陆（login）生成的token，每次登陆记录一次token
 func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64, clientIp string) bool {
+	// 异步缓存用户有效的token到redis
+	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+		go u.ValidTokenCacheToRedis(userId)
+	}
+
 	sql := "INSERT   INTO  `tb_oauth_access_tokens`(fr_user_id,`action_name`,token,expires_at,client_ip) " +
 		"SELECT  ?,'login',? ,?,? FROM DUAL    WHERE   NOT   EXISTS(SELECT  1  FROM  `tb_oauth_access_tokens` a WHERE  a.fr_user_id=?  AND a.action_name='login' AND a.token=?)"
 	//注意：token的精确度为秒，如果在一秒之内，一个账号多次调用接口生成的token其实是相同的，这样写入数据库，第二次的影响行数为0，知己实际上操作仍然是有效的。
@@ -134,18 +139,9 @@ func (u *UsersModel) OauthDestroyToken(userId int) bool {
 
 // 判断用户token是否在数据库存在+状态OK
 func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
-	// 异步缓存用户有效的token到redis
-	if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
-		go u.ValidTokenCacheToRedis(userId)
-	}
-
 	sql := "SELECT   token  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
-	defer func() {
-		//  凡是获取原生结果集的查询，记得释放记录集
-		_ = rows.Close()
-	}()
 
 	if err == nil && rows != nil {
 		for rows.Next() {
@@ -157,6 +153,8 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 				}
 			}
 		}
+		//  凡是获取原生结果集的查询，记得释放记录集
+		_ = rows.Close()
 	}
 	return false
 }
@@ -196,7 +194,7 @@ func (u *UsersModel) counts(userName string) (counts int64) {
 // 查询（根据关键词模糊查询）
 func (u *UsersModel) Show(userName string, limitStart, limitItems int) (counts int64, temp []UsersModel) {
 	if counts = u.counts(userName); counts > 0 {
-		sql := "SELECT  `id`, `user_name`, `real_name`, `phone`, `status`,updated_at,updated_at  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
+		sql := "SELECT  `id`, `user_name`, `real_name`, `phone`,last_login_ip, `status`,created_at,updated_at  FROM  `tb_users`  WHERE `status`=1 and   user_name like ? LIMIT ?,?"
 		if res := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Find(&temp); res.RowsAffected > 0 {
 			return counts, temp
 		}
@@ -259,10 +257,6 @@ func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
 	sql := "SELECT   token,expires_at  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
-	defer func() {
-		//  凡是获取原生结果集的查询，记得释放记录集
-		_ = rows.Close()
-	}()
 	var tempToken, expires string
 	if err == nil && rows != nil {
 		for rows.Next() {
@@ -273,6 +267,8 @@ func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
 				}
 			}
 		}
+		//  凡是获取原生结果集的查询，记得释放记录集
+		_ = rows.Close()
 	}
 	// 缓存结束之后删除超过系统设置最大在线数量的token
 	tokenCacheRedisFact.DelOverMaxOnlineCache()

@@ -22,9 +22,9 @@ require (
 	github.com/streadway/amqp v1.0.0
 	go.uber.org/zap v1.19.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gorm.io/driver/mysql v1.1.3
-	gorm.io/driver/postgres v1.2.1
-	gorm.io/driver/sqlserver v1.2.0
-	gorm.io/gorm v1.22.2
-	gorm.io/plugin/dbresolver v1.1.1-0.20211101061850-337f9c843efc
+	gorm.io/driver/mysql v1.2.3
+	gorm.io/driver/postgres v1.2.3
+	gorm.io/driver/sqlserver v1.2.1
+	gorm.io/gorm v1.22.5
+	gorm.io/plugin/dbresolver v1.1.1-0.20211202034046-9692d72da69a
 )
