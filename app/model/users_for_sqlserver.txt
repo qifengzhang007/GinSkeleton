@@ -3,6 +3,7 @@ package model
 import (
 	"go.uber.org/zap"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/service/users/token_cache_redis"
 	"goskeleton/app/utils/md5_encrypt"
 	"time"
 )
@@ -21,7 +22,7 @@ func CreateUserFactory(sqlType string) *UsersModel {
 }
 
 type UsersModel struct {
-	BaseModel  `json:"-"`
+	BaseModel
 	UserName    string `gorm:"column:user_name" json:"user_name"`
 	Pass        string `json:"-"`
 	Phone       string `json:"phone"`
@@ -73,6 +74,16 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 	}
 	return false
 }
+//用户刷新token,条件检查: 相关token在过期的时间之内，就符合刷新条件
+func (u *UsersModel) OauthRefreshConditionCheck(userId int64, oldToken string) bool {
+	// 首先判断旧token在本系统自带的数据库已经存在，才允许继续执行刷新逻辑
+	var oldTokenIsExists int
+	sql := "SELECT count(*)  as  counts FROM tb_oauth_access_tokens  WHERE fr_user_id =? and token=? and GETDATE()<DATEADD(SS,?,expires_at)"
+	if u.Raw(sql, userId, oldToken, variable.ConfigYml.GetInt64("Token.JwtTokenRefreshAllowSec")).First(&oldTokenIsExists).Error == nil && oldTokenIsExists == 1 {
+		return true
+	}
+	return false
+}
 
 //用户刷新token
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
@@ -119,8 +130,8 @@ func (u *UsersModel) OauthDestroyToken(userId int) bool {
 // 判断用户token是否在数据库存在+状态OK
 func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	sql := `
-		SELECT  token  FROM  tb_oauth_access_tokens  
-		WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>GETDATE()  
+		SELECT  token  FROM  tb_oauth_access_tokens
+		WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>GETDATE()
 		ORDER  BY   expires_at  DESC , updated_at  DESC
 		OFFSET 0 ROW FETCH NEXT ? ROWS ONLY
 	`
@@ -178,7 +189,7 @@ func (u *UsersModel) counts(userName string) (counts  int64){
 func (u *UsersModel) Show(userName string, limitStart, limitItems int)(counts int64,temp []UsersModel) {
 	if counts=u.counts(userName);counts>0{
 		sql := `
-		SELECT  id, user_name, real_name, phone, status, CONVERT(varchar(30), created_at, 120 ) as created_at, CONVERT(varchar(30), updated_at, 120 ) as updated_at
+		SELECT  id, user_name, real_name, phone,last_login_ip, status, CONVERT(varchar(20), created_at, 120 ) as created_at, CONVERT(varchar(20), updated_at, 120 ) as updated_at
 		FROM  tb_users  WHERE status=1 and   user_name like ? order  by id  desc OFFSET ? ROW FETCH NEXT ? ROWS ONLY
 		`
 		if res := u.Raw(sql, "%"+userName+"%", limitStart, limitItems).Find(&temp); res.RowsAffected > 0 {
@@ -216,4 +227,49 @@ func (u *UsersModel) Destroy(id int) bool {
 		}
 	}
 	return false
+}
+
+// 后续两个函数专门处理用户 token 缓存到 redis 逻辑
+
+func (u *UsersModel) ValidTokenCacheToRedis(userId int64) {
+	tokenCacheRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(userId)
+	if tokenCacheRedisFact == nil {
+		variable.ZapLog.Error("redis连接失败，请检查配置")
+		return
+	}
+	defer tokenCacheRedisFact.ReleaseRedisConn()
+
+	sql := "SELECT   token,CONVERT(varchar(20), expires_at, 120 )  as expires_at  FROM  tb_oauth_access_tokens  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
+	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
+	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
+	var tempToken, expires string
+	if err == nil && rows != nil {
+		for rows.Next() {
+			err = rows.Scan(&tempToken, &expires)
+			if err == nil {
+				if ts, err := time.ParseInLocation(variable.DateFormat, expires, time.Local); err == nil {
+					tokenCacheRedisFact.SetTokenCache(ts.Unix(), tempToken)
+				} else {
+					variable.ZapLog.Error("expires_at 抓换位时间戳出错", zap.Error(err))
+				}
+			} else {
+				variable.ZapLog.Error("缓存用户token到redis出错", zap.Error(err))
+			}
+		}
+		//  凡是获取原生结果集的查询，记得释放记录集
+		_ = rows.Close()
+	}
+	// 缓存结束之后删除超过系统设置最大在线数量的token
+	tokenCacheRedisFact.DelOverMaxOnlineCache()
+}
+
+// DelTokenCacheFromRedis 用户密码修改后，删除redis所有的token
+func (u *UsersModel) DelTokenCacheFromRedis(userId int64) {
+	tokenCacheRedisFact := token_cache_redis.CreateUsersTokenCacheFactory(userId)
+	if tokenCacheRedisFact == nil {
+		variable.ZapLog.Error("redis连接失败，请检查配置")
+		return
+	}
+	tokenCacheRedisFact.ClearUserToken()
+	tokenCacheRedisFact.ReleaseRedisConn()
 }
