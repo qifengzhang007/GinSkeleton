@@ -12,6 +12,7 @@ const (
 	//服务器代码发生错误
 	ServerOccurredErrorCode int    = -500100
 	ServerOccurredErrorMsg  string = "服务器内部发生代码执行错误, "
+	GinSetTrustProxyError   string = "Gin 设置信任代理服务器出错"
 
 	// token相关
 	JwtTokenOK            int    = 200100                      //token有效
@@ -68,7 +69,6 @@ const (
 	CaptchaCheckParamsInvalidMsg  string = "校验验证码：提交的参数无效，请检查 【验证码ID、验证码值】 提交时的键名是否与配置项一致"
 	CaptchaCheckParamsInvalidCode int    = -400351
 	CaptchaCheckOkMsg             string = "验证码校验通过"
-	//CaptchaCheckOkCode            int    = 200
-	CaptchaCheckFailCode int    = -400355
-	CaptchaCheckFailMsg  string = "验证码校验失败"
+	CaptchaCheckFailCode          int    = -400355
+	CaptchaCheckFailMsg           string = "验证码校验失败"
 )

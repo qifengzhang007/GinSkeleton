@@ -6,6 +6,11 @@ HttpServer:
   Web:
     Port: ":20201"                 #后端应用类端口,注意前面有冒号
   AllowCrossDomain: true           #是否允许跨域，默认 允许，注意：本项目跨域和nginx跨域只能允许设置一个即可，如果同时设置跨域，反而会造成无法跨域
+  TrustProxies:                    #设置gin可以信任的代理服务器,
+    IsOpen: 0                      # 可选值（0 或者 1）, 详情参见文档：
+    ProxyServerList:               # IsOpen = 1 时请设置正确的信任代理机器
+      - "192.168.10.1"             # 例如 gin 服务的 nginx 代理服务器ip 列表
+      - "192.168.10.2"
 
 Token:
   JwtTokenSignKey: "goskeleton"   #设置token生成时加密的签名
@@ -14,7 +19,7 @@ Token:
   JwtTokenRefreshAllowSec: 86400   #对于过期的token，允许在多少小时之内刷新，超过此时间则不允许刷新换取新token，86400=3600*24，即token过期24小时之内允许换新token
   JwtTokenRefreshExpireAt: 36000  #对于过期的token，支持从相关接口刷新获取新的token，它有效期为10个小时，3600*10=36000 等于10小时
   BindContextKeyName: "userToken"  #用户在 header 头部提交的token绑定到上下文时的键名，方便直接从上下文(gin.context)直接获取每个用户的id等信息
-  IsCacheToRedis: 0                #用户token是否缓存到redis, 如果已经正确配置了redis,建议设置为1, 开启redis缓存token，（1=用户token缓存到redis; 0=token只存在于mysql）
+  IsCacheToRedis: 1                #用户token是否缓存到redis, 如果已经正确配置了redis,建议设置为1, 开启redis缓存token，（1=用户token缓存到redis; 0=token只存在于mysql）
 
 Redis:
   Host: "127.0.0.1"
