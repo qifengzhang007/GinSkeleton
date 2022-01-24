@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/http/middleware/cors"
@@ -33,6 +34,14 @@ func InitApiRouter() *gin.Engine {
 		// 调试模式，开启 pprof 包，便于开发阶段分析程序性能
 		router = gin.Default()
 		pprof.Register(router)
+	}
+	// 设置可信任的代理服务器列表,gin (2021-11-24发布的v1.7.7版本之后出的新功能)
+	if variable.ConfigYml.GetInt("HttpServer.TrustProxies.IsOpen") == 1 {
+		if err := router.SetTrustedProxies(variable.ConfigYml.GetStringSlice("HttpServer.TrustProxies.ProxyServerList")); err != nil {
+			variable.ZapLog.Error(consts.GinSetTrustProxyError, zap.Error(err))
+		}
+	} else {
+		_ = router.SetTrustedProxies(nil)
 	}
 
 	//根据配置进行设置跨域
