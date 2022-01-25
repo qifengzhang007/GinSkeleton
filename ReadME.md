@@ -29,10 +29,15 @@
   
 ### [点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)
 
-#### V 1.5.32  2021-12-29 (最新版本)
+#### V 1.5.40  2022-01-25 (最新版本)
+* 新增
+- 1.用户 `token` 缓存到 `redis` 功能,如果项目使用了 `redis` , 请直接在 config/config.yml 文件中设置 `Token.IsCacheToRedis = 1`  
+- 2.项目初始化时增加设置信任代理服务器ip列表，gin(v1.7.7)新增功能,详情参见相关配置项说明. 
 * 更新
-- 1.gorm 查询时,调整 created_at、updated_at字段默认格式为 yyyy-mm-dd (2021-12-29 11:20:00) 格式,不在需要手动转换。
-- 2.gorm 批量新增时支持自动给切片的中的created_at、updated_at字段赋值。
+- 1.配置文件缓存时加锁,避免开发者频繁注册时,程序出现提示。
+- 2.用户token鉴权时,如果开启了redis缓存功能，优先查询redis.
+- 3.users_for_postgresql 、users_for_sqlserver 文件同步更新 .
+- 4.所有底层依赖包更新至最新版.
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
