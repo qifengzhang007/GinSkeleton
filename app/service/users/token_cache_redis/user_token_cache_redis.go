@@ -74,6 +74,15 @@ func (u *userTokenCacheRedis) TokenCacheIsExists(token string) (exists bool) {
 	return
 }
 
+// SetUserTokenExpire 设置用户的 usertoken 键过期时间
+// 参数： 时间戳
+func (u *userTokenCacheRedis) SetUserTokenExpire(ts int64) bool {
+	if _, err := u.redisClient.Execute("expireAt", u.userTokenKey, ts); err == nil {
+		return true
+	}
+	return false
+}
+
 // ClearUserToken 清除某个用户的全部缓存，当用户更改密码或者用户被禁用则删除该用户的全部缓存
 func (u *userTokenCacheRedis) ClearUserToken() bool {
 	if _, err := u.redisClient.Execute("del", u.userTokenKey); err == nil {
