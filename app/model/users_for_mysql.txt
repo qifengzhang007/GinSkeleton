@@ -93,6 +93,10 @@ func (u *UsersModel) OauthRefreshConditionCheck(userId int64, oldToken string) b
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
+		// 异步缓存用户有效的token到redis
+		if variable.ConfigYml.GetInt("Token.IsCacheToRedis") == 1 {
+			go u.ValidTokenCacheToRedis(userId)
+		}
 		go u.UpdateUserloginInfo(clientIp, userId)
 		return true
 	}
@@ -142,7 +146,10 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	sql := "SELECT   token  FROM  `tb_oauth_access_tokens`  WHERE   fr_user_id=?  AND  revoked=0  AND  expires_at>NOW() ORDER  BY  expires_at  DESC , updated_at  DESC  LIMIT ?"
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	rows, err := u.Raw(sql, userId, maxOnlineUsers).Rows()
-
+	defer func() {
+		//  凡是查询类记得释放记录集
+		_ = rows.Close()
+	}()
 	if err == nil && rows != nil {
 		for rows.Next() {
 			var tempToken string
@@ -153,8 +160,6 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 				}
 			}
 		}
-		//  凡是获取原生结果集的查询，记得释放记录集
-		_ = rows.Close()
 	}
 	return false
 }

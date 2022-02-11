@@ -137,6 +137,10 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 	`
 	maxOnlineUsers := variable.ConfigYml.GetInt("Token.JwtTokenOnlineUsers")
 	rows, err := u.Raw(sql,userId,maxOnlineUsers ).Rows()
+    defer func() {
+        //  凡是查询类记得释放记录集
+        _ = rows.Close()
+    }()
 	if err == nil && rows != nil {
 		for rows.Next() {
 			var tempToken string
@@ -148,8 +152,6 @@ func (u *UsersModel) OauthCheckTokenIsOk(userId int64, token string) bool {
 				}
 			}
 		}
-		//  凡是查询类记得释放记录集
-		_ = rows.Close()
 	}
 	return false
 }
