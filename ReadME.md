@@ -29,10 +29,9 @@
   
 ### [点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)
 
-#### V 1.5.42  2022-02-10 (最新版本)
-* bug修复 ： 受影响版本 ≥ V 1.5.40 .
-- 1.数据库连接没有及时释放的bug, 在高并发场景下容易导致系统卡住.  
-- 2.增量更新方式：`app/model/user.go 145行 函数 OauthCheckTokenIsOk 整体替换原有函数`  
+#### V 1.5.43  2022-02-25 (最新版本)
+* 更新  
+- 1.`token` 缓存到 `redis` 逻辑加强严谨性. 
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
