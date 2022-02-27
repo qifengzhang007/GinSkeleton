@@ -32,7 +32,7 @@
 #### V 1.5.44  2022-02-27 (最新版本)
 * 更新  
 - 1.`token` 缓存到 `redis` 逻辑加强严谨性.   
-- 2. 与第一条相关的`postgresql` 、`sqlserver` 备份文件更新.   
+- 2.与第一条相关的`postgresql` 、`sqlserver` 备份文件更新.   
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
