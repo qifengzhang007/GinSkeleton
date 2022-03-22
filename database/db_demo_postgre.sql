@@ -39,7 +39,7 @@ SET default_with_oids = false;
 
 CREATE TABLE web.tb_auth_casbin_rule (
                                          id integer NOT NULL,
-                                         ptype character varying(100) DEFAULT ''::character varying NOT NULL,
+                                         ptype character varying(100) DEFAULT 'p'::character varying NOT NULL,
                                          p0 character varying(100) DEFAULT ''::character varying NOT NULL,
                                          p1 character varying(100) DEFAULT ''::character varying NOT NULL,
                                          p2 character varying(100) DEFAULT ''::character varying NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE web.tb_oauth_access_tokens (
                                             id integer NOT NULL,
                                             fr_user_id integer DEFAULT 0,
                                             client_id integer DEFAULT 1,
-                                            token character varying(600) DEFAULT ''::character varying NOT NULL,
+                                            token character varying(500) DEFAULT ''::character varying NOT NULL,
                                             action_name character varying(100) DEFAULT ''::character varying NOT NULL,
                                             scopes character varying(100) DEFAULT '*'::character varying NOT NULL,
                                             revoked smallint DEFAULT 0 NOT NULL,

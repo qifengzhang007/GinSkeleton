@@ -14,7 +14,7 @@ CREATE TABLE `tb_users` (
   `real_name` VARCHAR(30) DEFAULT '' COMMENT '姓名',
   `phone` CHAR(11) DEFAULT '' COMMENT '手机',
   `status` TINYINT(4) DEFAULT 1 COMMENT '状态',
-  `remark` VARCHAR(300) DEFAULT '' COMMENT '备注',
+  `remark` VARCHAR(255) DEFAULT '' COMMENT '备注',
   `last_login_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `last_login_ip` CHAR(30) DEFAULT '' COMMENT '最近一次登录ip',
   `login_times` INT(11) DEFAULT 0 COMMENT '累计登录次数',
@@ -30,7 +30,7 @@ CREATE TABLE `tb_oauth_access_tokens` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `fr_user_id` INT(11) DEFAULT 0 COMMENT '外键:tb_users表id',
   `client_id` INT(10) UNSIGNED DEFAULT 1 COMMENT '普通用户的授权，默认为1',
-  `token` VARCHAR(600) DEFAULT NULL,
+  `token` VARCHAR(500) DEFAULT NULL,
   `action_name` VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '' COMMENT 'login|refresh|reset表示token生成动作',
   `scopes` VARCHAR(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '[*]' COMMENT '暂时预留,未启用',
   `revoked` TINYINT(1) DEFAULT 0 COMMENT '是否撤销',
@@ -46,7 +46,7 @@ CREATE TABLE `tb_oauth_access_tokens` (
 DROP TABLE IF EXISTS `tb_auth_casbin_rule`;
 CREATE TABLE `tb_auth_casbin_rule` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-`ptype` varchar(100) DEFAULT '',
+`ptype` varchar(100) DEFAULT 'p',
 `v0` varchar(100) DEFAULT '',
 `v1` varchar(100) DEFAULT '',
 `v2` varchar(100) DEFAULT '*',
