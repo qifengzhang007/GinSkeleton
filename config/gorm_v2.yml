@@ -7,7 +7,7 @@ Gormv2: # 只针对 gorm  操作数据库有效
       Host: "127.0.0.1"
       DataBase: "db_goskeleton"
       Port: 3306
-      Prefix: "tb_"
+      Prefix: "tb_"   #  目前没有用到该配置项
       User: "root"
       Pass: "DRsXT5ZJ6Oi55LPQ"
       Charset: "utf8"

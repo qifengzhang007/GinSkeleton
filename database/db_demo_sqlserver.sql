@@ -27,7 +27,7 @@ CREATE TABLE [dbo].[tb_oauth_access_tokens](
     [id] [int] IDENTITY(1,1) NOT NULL,
     [fr_user_id] [int]  DEFAULT ((0)),
     [client_id] [int]  DEFAULT ((0)),
-    [token] [varchar](600)  DEFAULT (''),
+    [token] [varchar](500)  DEFAULT (''),
     [action_name] [varchar](50)   DEFAULT ('login') ,
     [scopes] [varchar](128) DEFAULT ('*') ,
     [revoked] [tinyint] DEFAULT ((0)),
@@ -41,7 +41,7 @@ CREATE TABLE [dbo].[tb_oauth_access_tokens](
 -- -- 创建  tb_casbin 接口鉴权表
 CREATE TABLE [dbo].[tb_auth_casbin_rule](
     [id] [int] IDENTITY(1,1) NOT NULL,
-    [ptype] [varchar](100)  DEFAULT (''),
+    [ptype] [varchar](100)  DEFAULT ('p'),
     [v0] [varchar](100)  DEFAULT (''),
     [v1] [varchar](100)  DEFAULT (''),
     [v2] [varchar](100)  DEFAULT (''),
