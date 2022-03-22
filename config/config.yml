@@ -28,7 +28,7 @@ Redis:
   MaxIdle: 10
   MaxActive: 1000
   IdleTimeout: 60
-  IndexDb: 1
+  IndexDb: 1      # 注意 redis 默认连接的是 1 号数据库，不是 0号数据库
   ConnFailRetryTimes: 3    #从连接池获取连接失败，最大重试次数
   ReConnectInterval: 1     # 从连接池获取连接失败，每次重试之间间隔的秒数
 
