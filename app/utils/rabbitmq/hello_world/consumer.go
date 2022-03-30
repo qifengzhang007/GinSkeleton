@@ -55,7 +55,7 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 	// 将回调函数地址赋值给结构体变量，用于掉线重连使用
 	c.callbackForReceived = callbackFunDealSmg
 
-	blocking := make(chan bool)
+	blocking := make(chan struct{})
 
 	for i := 1; i <= c.chanNumber; i++ {
 		go func(chanNo int) {
@@ -91,12 +91,10 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 				// 通过回调处理消息
 				callbackFunDealSmg(string(msg.Body))
 			}
-
 		}(i)
 	}
 
 	<-blocking
-
 }
 
 //OnConnectionError 消费者端，掉线重连监听器

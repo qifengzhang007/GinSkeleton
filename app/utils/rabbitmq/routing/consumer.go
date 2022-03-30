@@ -64,7 +64,7 @@ func (c *consumer) Received(routeKey string, callbackFunDealSmg func(receivedDat
 	c.routeKey = routeKey
 	c.callbackForReceived = callbackFunDealSmg
 
-	blocking := make(chan bool)
+	blocking := make(chan struct{})
 
 	go func(key string) {
 
