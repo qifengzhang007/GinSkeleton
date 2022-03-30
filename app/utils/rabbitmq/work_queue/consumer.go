@@ -49,7 +49,7 @@ type consumer struct {
 // Received 接收、处理消息
 func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 	defer func() {
-		_ = c.connect.Close()
+		c.close()
 	}()
 	// 将回调函数地址赋值给结构体变量，用于掉线重连使用
 	c.callbackForReceived = callbackFunDealSmg
@@ -116,6 +116,8 @@ func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 			for i = 1; i <= c.retryTimes; i++ {
 				// 自动重连机制
 				time.Sleep(c.offLineReconnectIntervalSec * time.Second)
+				// 发生连接错误时先关闭原来的连接
+				c.close()
 				conn, err := CreateConsumer()
 				if err != nil {
 					continue
@@ -133,4 +135,9 @@ func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 			}
 		}
 	}()
+}
+
+// close 关闭连接
+func (c *consumer) close() {
+	_ = c.connect.Close()
 }
