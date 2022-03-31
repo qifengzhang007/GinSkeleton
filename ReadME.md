@@ -6,7 +6,7 @@
 
 ### [GinSkeleton 新版在线文档](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/mar1g7)
 > 1.我们花费了极大的精力编写了非常完整、高质量的文档,初学者优先从如何使用学起, 成熟的开发者可以与我们一起研究 gin 内核源码,成为 gin 框架的高级开发.  
-> 2.学习 GinSkeleton 您只需要关注主线即可,我们没有创造太多新的语法,只要您会使用 gin 就可以迅速上手 Ginskeleton .  
+> 2.学习 GinSkeleton 您只需要关注主线即可,我们没有创造太多新的语法,只要您会使用 gin 就可以迅速上手 Ginskeleton .
 
 [旧文档入口](./ReadMEBak.md)
 
@@ -26,12 +26,12 @@
 ### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
 
-#### V 1.5.45  2022-03-22（最新版本）
+
+#### V 1.5.46  2022-03-31（最新版本）
 *  细节完善
-- 1.gorm 相关的回调函数增强条件判断, 加强程序严谨性。
-- 2.自带数据库文件更新, 给字段设置了默认值.
+- 1.rabbitmq 消息队列客户端掉线重连成功后，含有回调函数的旧协程及时释放.
+- 2.rabbitmq 消息队列相关的单元测试更新.
+- **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
-####  [点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)
-
-### 感谢 jetbrains 为本项目提供的 goland 激活码  
+### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
