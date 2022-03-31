@@ -29,7 +29,7 @@
 
 #### V 1.5.46  2022-03-31（最新版本）  
 *  细节完善
-- 1.rabbitmq 消息队列客户端掉线重连成功后，释放旧的协程.   
+- 1.rabbitmq 消息队列客户端掉线重连成功后，含有回调函数的旧协程及时释放.   
 - 2.rabbitmq 消息队列相关的单元测试更新.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
