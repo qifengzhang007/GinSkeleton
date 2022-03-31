@@ -27,12 +27,11 @@
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
 
 
-#### V 1.5.45  2022-03-22（最新版本）  
+#### V 1.5.46  2022-03-31（最新版本）  
 *  细节完善
-- 1.gorm 相关的回调函数增强条件判断, 加强程序严谨性。
-- 2.自带数据库文件更新, 给字段设置了默认值.
-
-####  [点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)
+- 1.rabbitmq 消息队列客户端掉线重连成功后，释放旧的协程.   
+- 2.rabbitmq 消息队列相关的单元测试更新.
+- **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
