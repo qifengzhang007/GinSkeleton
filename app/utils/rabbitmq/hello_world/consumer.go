@@ -143,11 +143,19 @@ func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 						go conn.OnConnectionError(c.callbackOffLine)
 						conn.Received(c.callbackForReceived)
 					}()
+					// 新的客户端重连成功后，释放旧的回调函数 - OnConnectionError
+					if c.status == 0 {
+						return
+					}
 					break
 				}
 			}
 			if i > c.retryTimes {
 				callbackOfflineErr(err)
+				// 如果超过最大重连次数，同样需要释放回调函数 - OnConnectionError
+				if c.status == 0 {
+					return
+				}
 			}
 		}
 	}()
