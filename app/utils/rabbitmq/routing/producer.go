@@ -78,20 +78,22 @@ func (p *producer) Send(routeKey, data string, delayMillisecond int) bool {
 		msgPersistent = amqp.Persistent
 	}
 	// 投递消息
-	err = ch.Publish(
-		p.exchangeName, // 交换机名称
-		routeKey,       // direct 模式默认为空即可
-		false,
-		false,
-		amqp.Publishing{
-			DeliveryMode: msgPersistent, //消息是否持久化，这里与保持保持一致即可
-			ContentType:  "text/plain",
-			Body:         []byte(data),
-			Headers: amqp.Table{
-				"x-delay": delayMillisecond, // 延迟时间: 毫秒
-			},
-		})
-
+	if err == nil {
+		err = ch.Publish(
+			p.exchangeName, // 交换机名称
+			routeKey,       // direct 模式默认为空即可
+			false,
+			false,
+			amqp.Publishing{
+				DeliveryMode: msgPersistent, //消息是否持久化，这里与保持保持一致即可
+				ContentType:  "text/plain",
+				Body:         []byte(data),
+				Headers: amqp.Table{
+					"x-delay": delayMillisecond, // 延迟时间: 毫秒
+				},
+			})
+	}
+	p.occurError = error_record.ErrorDeal(err)
 	if p.occurError != nil { //  发生错误，返回 false
 		return false
 	} else {

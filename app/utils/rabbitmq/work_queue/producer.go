@@ -62,17 +62,19 @@ func (p *producer) Send(data string) bool {
 	}
 
 	// 投递消息
-	err = ch.Publish(
-		"",          // helloworld 、workqueue 模式设置为空字符串，表示使用默认交换机
-		p.queueName, // 注意：简单模式 key 表示队列名称
-		false,
-		false,
-		amqp.Publishing{
-			DeliveryMode: msgPersistent, //消息是否持久化，这里与保持保持一致即可
-			ContentType:  "text/plain",
-			Body:         []byte(data),
-		})
-
+	if err == nil {
+		err = ch.Publish(
+			"",          // helloworld 、workqueue 模式设置为空字符串，表示使用默认交换机
+			p.queueName, // 注意：简单模式 key 表示队列名称
+			false,
+			false,
+			amqp.Publishing{
+				DeliveryMode: msgPersistent, //消息是否持久化，这里与保持保持一致即可
+				ContentType:  "text/plain",
+				Body:         []byte(data),
+			})
+	}
+	p.occurError = error_record.ErrorDeal(err)
 	if p.occurError != nil { //  发生错误，返回 false
 		return false
 	} else {
