@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+//  消息队列（rabbitmq）在线文档地址：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/tkcuc8
+// 延迟消息队列在线文档地址：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/grroyv
+// 本篇的单元测试提供的是非延迟消息队列的测试，只要学会单元测试提供的示例，延迟队列也是非常简单的，参考在线文档即可
+
 // 1.HelloWorld 模式
 func TestRabbitMqHelloWorldProducer(t *testing.T) {
 
