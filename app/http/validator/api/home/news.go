@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"goskeleton/app/global/consts"
 	"goskeleton/app/http/controller/api"
+	common_data_type "goskeleton/app/http/validator/common/data_type"
 	"goskeleton/app/http/validator/core/data_transfer"
 	"goskeleton/app/utils/response"
 )
@@ -11,9 +12,8 @@ import (
 // 门户类前端接口模拟一个获取新闻的参数验证器
 
 type News struct {
-	Artitle
-	//NewsType string `form:"newsType" json:"newsType"  binding:"required,min=1"` //  验证规则：必填，最小长度为1
-	//common_data_type.Page
+	NewsType string `form:"newsType" json:"newsType"  binding:"required,min=1"` //  验证规则：必填，最小长度为1
+	common_data_type.Page
 }
 
 func (n News) CheckParams(context *gin.Context) {
