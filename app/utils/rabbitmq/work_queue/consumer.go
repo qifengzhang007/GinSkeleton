@@ -114,6 +114,8 @@ func (c *consumer) Received(callbackFunDealMsg func(receivedData string)) {
 						}
 					}
 				}
+			} else {
+				return
 			}
 		}(i)
 	}

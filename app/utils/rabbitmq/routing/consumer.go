@@ -138,6 +138,8 @@ func (c *consumer) Received(routeKey string, callbackFunDealMsg func(receivedDat
 					}
 				}
 			}
+		} else {
+			return
 		}
 	}(routeKey)
 

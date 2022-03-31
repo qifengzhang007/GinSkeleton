@@ -108,6 +108,8 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 						}
 					}
 				}
+			} else {
+				return
 			}
 		}(i)
 	}
