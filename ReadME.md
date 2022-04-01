@@ -11,7 +11,12 @@
 [旧文档入口](./ReadMEBak.md)
 
 
-### 本项目主线逻辑图
+###  ginskeleton 路由跳转插件
+- ginskeleton 的路由是基于容器加载的，需要安装插件才能实现快速跳转.
+- 安装步骤：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/ngfzv1
+
+
+###  本项目主线逻辑图
 > ![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)
 
 ### 本项目的心脏——Gin 核心主线调用链图
