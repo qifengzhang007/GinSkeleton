@@ -38,7 +38,13 @@ func (r Register) CheckParams(context *gin.Context) {
 		return
 	}
 	//2.继续验证具有中国特色的参数，例如 身份证号码等，基本语法校验了长度18位，然后可以自行编写正则表达式等更进一步验证每一部分组成
-	// r.CardNo  获取值继续校验，这里省略.....
+	// r.CardNo  获取身份证号码继续校验，可能需要开发者编写正则表达式，稍微复杂，这里忽略
+
+	// r.Phone	获取手机号码，可以根据手机号码开头等等自定义验证，例如 如果不是以138 开头的手机号码，则报错
+	//if !strings.HasPrefix(r.CardNo, "138") {
+	//	response.ErrorParam(context, gin.H{"tips": "手机号码字段：card_no 必须以138开头"})
+	//	return
+	//}
 
 	//  该函数主要是将本结构体的字段（成员）按照 consts.ValidatorPrefix+ json标签对应的 键 => 值 形式绑定在上下文，便于下一步（控制器）可以直接通过 context.Get(键) 获取相关值
 	extraAddBindDataContext := data_transfer.DataAddContext(r, consts.ValidatorPrefix, context)
