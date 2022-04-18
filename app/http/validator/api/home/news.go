@@ -18,7 +18,7 @@ type News struct {
 
 func (n News) CheckParams(context *gin.Context) {
 	//1.先按照验证器提供的基本语法，基本可以校验90%以上的不合格参数
-	if err := context.ShouldBindJSON(&n); err != nil {
+	if err := context.ShouldBind(&n); err != nil {
 		// 将表单参数验证器出现的错误直接交给错误翻译器统一处理即可
 		response.ValidatorError(context, err)
 		return

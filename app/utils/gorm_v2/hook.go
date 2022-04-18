@@ -1,11 +1,11 @@
 package gorm_v2
 
 import (
-	"errors"
 	"gorm.io/gorm"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -28,29 +28,37 @@ func CreateBeforeHook(gormDB *gorm.DB) {
 			for i := 0; i < inLen; i++ {
 				row := destValueOf.Index(i)
 				if row.Type().Kind() == reflect.Struct {
-					if structHasSpecialField("CreatedAt", row) {
-						destValueOf.Index(i).FieldByName("CreatedAt").Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+					if b, column := structHasSpecialField("CreatedAt", row); b {
+						destValueOf.Index(i).FieldByName(column).Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
 					}
-					if structHasSpecialField("UpdatedAt", row) {
-						destValueOf.Index(i).FieldByName("UpdatedAt").Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+					if b, column := structHasSpecialField("UpdatedAt", row); b {
+						destValueOf.Index(i).FieldByName(column).Set(reflect.ValueOf(time.Now().Format(variable.DateFormat)))
 					}
 
 				} else if row.Type().Kind() == reflect.Map {
-					if structHasSpecialField("created_at", row) {
-						row.SetMapIndex(reflect.ValueOf("created_at"), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+					if b, column := structHasSpecialField("created_at", row); b {
+						row.SetMapIndex(reflect.ValueOf(column), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
 					}
-					if structHasSpecialField("updated_at", row) {
-						row.SetMapIndex(reflect.ValueOf("updated_at"), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+					if b, column := structHasSpecialField("updated_at", row); b {
+						row.SetMapIndex(reflect.ValueOf(column), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
 					}
 				}
 			}
-		} else {
+		} else if destValueOf.Type().Kind() == reflect.Struct {
+			//  if destValueOf.Type().Kind() == reflect.Struct
 			// 参数校验无错误自动设置 CreatedAt、 UpdatedAt
-			if structHasSpecialField("CreatedAt", gormDB.Statement.Dest) {
-				gormDB.Statement.SetColumn("created_at", time.Now().Format(variable.DateFormat))
+			if b, column := structHasSpecialField("CreatedAt", gormDB.Statement.Dest); b {
+				gormDB.Statement.SetColumn(column, time.Now().Format(variable.DateFormat))
 			}
-			if structHasSpecialField("UpdatedAt", gormDB.Statement.Dest) {
-				gormDB.Statement.SetColumn("updated_at", time.Now().Format(variable.DateFormat))
+			if b, column := structHasSpecialField("UpdatedAt", gormDB.Statement.Dest); b {
+				gormDB.Statement.SetColumn(column, time.Now().Format(variable.DateFormat))
+			}
+		} else if destValueOf.Type().Kind() == reflect.Map {
+			if b, column := structHasSpecialField("created_at", gormDB.Statement.Dest); b {
+				destValueOf.SetMapIndex(reflect.ValueOf(column), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+			}
+			if b, column := structHasSpecialField("updated_at", gormDB.Statement.Dest); b {
+				destValueOf.SetMapIndex(reflect.ValueOf(column), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
 			}
 		}
 	}
@@ -63,63 +71,96 @@ func CreateBeforeHook(gormDB *gorm.DB) {
 // 但是如果是指定字段更新，例如： UpdateColumn 函数则只传递值即可，不需要做校验
 func UpdateBeforeHook(gormDB *gorm.DB) {
 	if reflect.TypeOf(gormDB.Statement.Dest).Kind() == reflect.Struct {
-		_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBUpdateParamsNotPtr))
-	} else {
+		//_ = gormDB.AddError(errors.New(my_errors.ErrorsGormDBUpdateParamsNotPtr))
+		variable.ZapLog.Warn(my_errors.ErrorsGormDBUpdateParamsNotPtr)
+	} else if reflect.TypeOf(gormDB.Statement.Dest).Kind() == reflect.Map {
+		// 如果是调用了 gorm.Update 、updates 函数 , 在参数没有传递指针的情况下，无法触发回调函数
+
+	} else if reflect.TypeOf(gormDB.Statement.Dest).Kind() == reflect.Ptr && reflect.ValueOf(gormDB.Statement.Dest).Elem().Kind() == reflect.Struct {
 		// 参数校验无错误自动设置 UpdatedAt
-		if structHasSpecialField("UpdatedAt", gormDB.Statement.Dest) {
-			gormDB.Statement.SetColumn("updated_at", time.Now().Format(variable.DateFormat))
+		if b, column := structHasSpecialField("UpdatedAt", gormDB.Statement.Dest); b {
+			gormDB.Statement.SetColumn(column, time.Now().Format(variable.DateFormat))
 		}
-		// 更新不需要处理  CreatedAt 字段
-		//if structHasSpecialField("CreatedAt", gormDB.Statement.Dest) {
-		//	gormDB.Statement.SetColumn("created_at", time.Now().Format(variable.DateFormat))
-		//}
+	} else if reflect.TypeOf(gormDB.Statement.Dest).Kind() == reflect.Ptr && reflect.ValueOf(gormDB.Statement.Dest).Elem().Kind() == reflect.Map {
+		if b, column := structHasSpecialField("updated_at", gormDB.Statement.Dest); b {
+			destValueOf := reflect.ValueOf(gormDB.Statement.Dest).Elem()
+			destValueOf.SetMapIndex(reflect.ValueOf(column), reflect.ValueOf(time.Now().Format(variable.DateFormat)))
+		}
 	}
 }
 
 // structHasSpecialField  检查结构体是否有特定字段
-func structHasSpecialField(fieldName string, anyStructPtr interface{}) bool {
+func structHasSpecialField(fieldName string, anyStructPtr interface{}) (bool, string) {
 	var tmp reflect.Type
 	if reflect.TypeOf(anyStructPtr).Kind() == reflect.Ptr && reflect.ValueOf(anyStructPtr).Elem().Kind() == reflect.Map {
 		destValueOf := reflect.ValueOf(anyStructPtr).Elem()
 		for _, item := range destValueOf.MapKeys() {
 			if item.String() == fieldName {
-				return true
+				return true, fieldName
 			}
 		}
-	} else if reflect.TypeOf(anyStructPtr).Kind() == reflect.Ptr {
+	} else if reflect.TypeOf(anyStructPtr).Kind() == reflect.Ptr && reflect.ValueOf(anyStructPtr).Elem().Kind() == reflect.Struct {
 		destValueOf := reflect.ValueOf(anyStructPtr).Elem()
 		tf := destValueOf.Type()
 		for i := 0; i < tf.NumField(); i++ {
 			if !tf.Field(i).Anonymous && tf.Field(i).Type.Kind() != reflect.Struct {
 				if tf.Field(i).Name == fieldName {
-					return true
+					return true, getColumnNameFromGormTag(fieldName, tf.Field(i).Tag.Get("gorm"))
 				}
 			} else if tf.Field(i).Type.Kind() == reflect.Struct {
 				tmp = tf.Field(i).Type
 				for j := 0; j < tmp.NumField(); j++ {
 					if tmp.Field(j).Name == fieldName {
-						return true
+						return true, getColumnNameFromGormTag(fieldName, tmp.Field(j).Tag.Get("gorm"))
 					}
 				}
 			}
 		}
-	} else if reflect.TypeOf(anyStructPtr).Kind() == reflect.Struct {
+	} else if reflect.Indirect(anyStructPtr.(reflect.Value)).Type().Kind() == reflect.Struct {
+		// 处理结构体
 		destValueOf := anyStructPtr.(reflect.Value)
 		tf := destValueOf.Type()
 		for i := 0; i < tf.NumField(); i++ {
 			if !tf.Field(i).Anonymous && tf.Field(i).Type.Kind() != reflect.Struct {
 				if tf.Field(i).Name == fieldName {
-					return true
+					return true, getColumnNameFromGormTag(fieldName, tf.Field(i).Tag.Get("gorm"))
 				}
 			} else if tf.Field(i).Type.Kind() == reflect.Struct {
 				tmp = tf.Field(i).Type
 				for j := 0; j < tmp.NumField(); j++ {
 					if tmp.Field(j).Name == fieldName {
-						return true
+						return true, getColumnNameFromGormTag(fieldName, tmp.Field(j).Tag.Get("gorm"))
 					}
 				}
 			}
 		}
+	} else if reflect.Indirect(anyStructPtr.(reflect.Value)).Type().Kind() == reflect.Map {
+		destValueOf := anyStructPtr.(reflect.Value)
+		for _, item := range destValueOf.MapKeys() {
+			if item.String() == fieldName {
+				return true, fieldName
+			}
+		}
 	}
-	return false
+	return false, ""
+}
+
+// getColumnNameFromGormTag 从 gorm 标签中获取字段名
+// @defaultColumn 如果没有 gorm：column 标签为字段重命名，则使用默认字段名
+// @TagValue 字段中含有的gorm："column:created_at" 标签值，可能的格式：1. column:created_at    、2. default:null;  column:created_at  、3.  column:created_at; default:null
+func getColumnNameFromGormTag(defaultColumn, TagValue string) (str string) {
+	pos1 := strings.Index(TagValue, "column:")
+	if pos1 == -1 {
+		str = defaultColumn
+		return
+	} else {
+		TagValue = TagValue[pos1+7:]
+	}
+	pos2 := strings.Index(TagValue, ";")
+	if pos2 == -1 {
+		str = TagValue
+	} else {
+		str = TagValue[:pos2]
+	}
+	return strings.ReplaceAll(str, " ", "")
 }
