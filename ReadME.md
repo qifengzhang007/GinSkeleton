@@ -33,8 +33,9 @@
 
 #### V 1.5.47  2022-04-18（最新版本）
 *  细节完善
-- 1.gorm hook完善细节：在开发者通过 gorm:"column:自定义字段" 时，也能给created_at和updated_at函数赋值。
-- 2.其他地方主要是注释部分更新.  
+- 1.gorm hook完善细节：在开发者通过 gorm:"column:自定义字段" 时，也能自动给created_at和updated_at函数赋值。
+- 2.精简部分代码.    
+- 3.其他地方主要是注释部分更新.  
 
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
