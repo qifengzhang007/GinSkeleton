@@ -36,7 +36,7 @@
 - 1.gorm hook完善细节：在开发者通过 gorm:"column:自定义字段" 时，也能自动给created_at和updated_at函数赋值。
 - 2.精简部分代码.    
 - 3.其他地方主要是注释部分更新.  
-
+- **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
