@@ -31,12 +31,11 @@
 ### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
 
-
-#### V 1.5.46  2022-03-31（最新版本）  
+#### V 1.5.47  2022-04-18（最新版本）
 *  细节完善
-- 1.rabbitmq 消息队列客户端掉线重连成功后，含有回调函数的旧协程及时释放.   
-- 2.rabbitmq 消息队列相关的单元测试更新.
-- **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
+- 1.gorm hook完善细节：在开发者通过 gorm:"column:自定义字段" 时，也能给created_at和updated_at函数赋值。
+- 2.其他地方主要是注释部分更新.  
+
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
