@@ -12,23 +12,26 @@ import (
 	"time"
 )
 
-type Captcha struct {
-	Id      string `json:"id"`
-	ImgUrl  string `json:"img_url"`
-	Refresh string `json:"refresh"`
-	Verify  string `json:"verify"`
-}
+type Captcha struct{}
 
 // 生成验证码ID
 func (c *Captcha) GenerateId(context *gin.Context) {
 	// 设置验证码的数字长度（个数）
 	var length = variable.ConfigYml.GetInt("Captcha.length")
-	captchaId := captcha.NewLen(length)
-	c.Id = captchaId
-	c.ImgUrl = "/captcha/" + captchaId + ".png"
-	c.Refresh = c.ImgUrl + "?reload=1"
-	c.Verify = "/captcha/" + captchaId + "/这里替换为正确的验证码进行验证"
-	response.Success(context, "验证码信息", c)
+	var captchaId, imgUrl, refresh, verify string
+
+	captchaId = captcha.NewLen(length)
+	imgUrl = "/captcha/" + captchaId + ".png"
+	refresh = imgUrl + "?reload=1"
+	verify = "/captcha/" + captchaId + "/这里替换为正确的验证码进行验证"
+
+	response.Success(context, "验证码信息", gin.H{
+		"id":      captchaId,
+		"img_url": imgUrl,
+		"refresh": refresh,
+		"verify":  verify,
+	})
+
 }
 
 // 获取验证码图像
