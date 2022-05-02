@@ -5,9 +5,9 @@ HttpServer:
     Port: ":20191"                 #门户网站类端口,注意前面有冒号
   Web:
     Port: ":20201"                 #后端应用类端口,注意前面有冒号
-  AllowCrossDomain: true           #是否允许跨域，默认 允许，更多关于跨域的介绍从参考：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/kxddzd
+  AllowCrossDomain: true  #是否允许跨域，默认 允许，更多关于跨域的介绍从参考：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/kxddzd
   TrustProxies:                    #设置gin可以信任的代理服务器(例如 nginx 前置代理服务器),详情参见文档：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/vmobe7
-    IsOpen: 0                      # 可选值（0 或者 1）,如果 go 服务是被 nginx 代理，建议该值设置为 1，将 nginx 代理及机器的ip添加到 ProxyServerList 列表
+    IsOpen: 0                       # 可选值（0 或者 1）,如果 go 服务是被 nginx 代理，建议该值设置为 1，将 nginx 代理及机器的ip添加到 ProxyServerList 列表
     ProxyServerList:
       - "192.168.10.1"             # nginx 代理服务器ip地址
       - "192.168.10.2"
