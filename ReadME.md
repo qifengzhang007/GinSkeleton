@@ -31,9 +31,9 @@
 ### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)
 ### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
 
-#### V 1.5.48  2022-04-29（最新版本）
-bug修复：
-- 1.修复验证码存在的线程安全问题.  
+#### V 1.5.49  2022-05-04（最新版本）
+更新：
+- 1.更新全部依赖包至最新版本.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
