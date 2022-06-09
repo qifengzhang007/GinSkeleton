@@ -60,6 +60,12 @@ func ErrorTokenRefreshFail(c *gin.Context) {
 	c.Abort()
 }
 
+//token 参数校验错误
+func TokenErrorParam(c *gin.Context, wrongParam interface{}) {
+	ReturnJson(c, http.StatusUnauthorized, consts.ValidatorParamsCheckFailCode, consts.ValidatorParamsCheckFailMsg, wrongParam)
+	c.Abort()
+}
+
 // ErrorCasbinAuthFail 鉴权失败，返回 405 方法不允许访问
 func ErrorCasbinAuthFail(c *gin.Context, msg interface{}) {
 	ReturnJson(c, http.StatusMethodNotAllowed, http.StatusMethodNotAllowed, my_errors.ErrorsCasbinNoAuthorization, msg)

@@ -22,7 +22,7 @@ func CheckTokenAuth() gin.HandlerFunc {
 
 		//  推荐使用 ShouldBindHeader 方式获取头参数
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
-			response.ErrorParam(context, consts.JwtTokenMustValid+err.Error())
+			response.TokenErrorParam(context, consts.JwtTokenMustValid+err.Error())
 			return
 		}
 		token := strings.Split(headerParams.Authorization, " ")
@@ -50,7 +50,7 @@ func RefreshTokenConditionCheck() gin.HandlerFunc {
 
 		headerParams := HeaderParams{}
 		if err := context.ShouldBindHeader(&headerParams); err != nil {
-			response.ErrorParam(context, consts.JwtTokenMustValid+err.Error())
+			response.TokenErrorParam(context, consts.JwtTokenMustValid+err.Error())
 			return
 		}
 		token := strings.Split(headerParams.Authorization, " ")
