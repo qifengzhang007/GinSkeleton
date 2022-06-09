@@ -16,24 +16,15 @@
 - 安装步骤：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/ngfzv1
 
 
-###  本项目主线逻辑图
-> ![业务主线图](https://www.ginskeleton.com/GinSkeleton.jpg)
+### [GinSkeleton-Admin2 系统](https://www.yuque.com/xiaofensinixidaouxiang/qmanaq/qmucb4)
+> 集成界面, 侧重业务快发, 可以在不需要修改一行代码的情况下，快速进入业务开发模式.
 
-### 本项目的心脏——Gin 核心主线调用链图
-> ![Gin主线核心](https://www.ginskeleton.com/images/gin_core_main_thread.png)
 
-###  GinSkeleton-Admin 后台系统
->   1.本系统是基于 GinSkeleton(v1.5.xx) + Iview(v4.7.1) 开发而成的企业级项目后台骨架.   
->   2.在线演示系统相比本地运行的版本收缩了修改、删除 数据的权限.  
-![预览图](https://www.ginskeleton.com/images/home_page1.png)
 
-### [在线演示系统: GinSkeleton-Admin](http://139.196.101.31:20202/)
-### [admin 后端仓库](https://gitee.com/daitougege/gin-skeleton-admin-backend)
-### [admin 前端仓库](https://gitee.com/daitougege/gin-skeleton-admin-frontend)
-
-#### V 1.5.49  2022-05-04（最新版本）
+#### V 1.5.50  2022-06-09（最新版本）
 更新：
-- 1.更新全部依赖包至最新版本.
+- 1.token相关的所有错误码统一为401.
+- 2.增加从上下文获取user_id的快捷函数，方便token鉴权下接口使用.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码  
