@@ -3,6 +3,7 @@
 >   2.本项目骨架封装了以`tb_users`表为核心的全部功能（主要包括用户相关的接口参数验证器、注册、登录获取token、刷新token、CURD以及token鉴权等），开发者拉取本项目骨架，在此基础上就可以快速开发自己的项目。  
 >   3.<font color=#FF4500>本项目骨架请使用 `master` 分支版本即可, 该分支是最新稳定分支 </font>.   
 >   4.<font color=#FF4500>本项目骨架从V1.4.00开始，要求go语言版本必须 >=1.15，才能稳定地使用gorm v2读写分离方案,go1.15下载地址：https://studygolang.com/dl </font>
+>   5.该版本定位为主线版本,总体追求简洁、无界面，业务太多的业务逻辑，适合开发者自己随意扩展.
 
 ### [GinSkeleton 新版在线文档](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/mar1g7)
 > 1.我们花费了极大的精力编写了非常完整、高质量的文档,初学者优先从如何使用学起, 成熟的开发者可以与我们一起研究 gin 内核源码,成为 gin 框架的高级开发.  
@@ -16,8 +17,8 @@
 - 安装步骤：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/ngfzv1
 
 
-### [GinSkeleton-Admin2 系统](https://www.yuque.com/xiaofensinixidaouxiang/qmanaq/qmucb4)
-> 集成界面, 侧重业务快发, 可以在不需要修改一行代码的情况下，快速进入业务开发模式.
+### [点击进入 GinSkeleton-Admin2 系统](https://www.yuque.com/xiaofensinixidaouxiang/qmanaq/qmucb4)
+> admin 系统集成界面, 定位快速开发业务方向, 可以在不需要修改一行代码的情况下，快速进入业务开发模式.
 
 
 
