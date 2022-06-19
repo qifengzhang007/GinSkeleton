@@ -45,8 +45,8 @@ variable.GormDbPostgreSql  <====完全等于==>      gorm.Open(postgres.Open(dsn
 // 获取 config/config.yml 文件中 Websocket.Start 对应的 Int 值
 variable.ConfigYml.GetInt("Websocket.Start")
 
-// 获取 config/gorm_v2.yml 文件中 Gormv2.Mysql.IsInitGolobalGormMysql 对应的 Int 值
-variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGolobalGormMysql")
+// 获取 config/gorm_v2.yml 文件中 Gormv2.Mysql.IsInitGlobalGormMysql 对应的 Int 值
+variable.ConfigGormv2Yml.GetInt("Gormv2.Mysql.IsInitGlobalGormMysql")
 
 ```
 >   5.获取配置文件中键对应的值数据类型，函数清单，您可以使用 `variable.ConfigYml.` 或者  `variable.ConfigGormv2Yml.` 以下函数名 获取值   
