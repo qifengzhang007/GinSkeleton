@@ -24,7 +24,8 @@
 
 #### V 1.5.51  2022-06-19（最新版本）
 更新：
-- 1.修正单词拼写错误.
+- 1.修正全局 `Golobal` 单词拼写错误.
+- 2.需要特别注意的是：`config/gorm_v2.yml` 文件中，单词 `IsInitGolobalGormMysql` 修正为： `IsInitGlobalGormMysql`, 因此使用新版本编译后的软件，如果有旧的配置文件，必须及时更新.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
