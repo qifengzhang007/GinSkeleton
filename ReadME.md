@@ -22,10 +22,9 @@
 
 
 
-#### V 1.5.50  2022-06-09（最新版本）
+#### V 1.5.51  2022-06-19（最新版本）
 更新：
-- 1.token相关的所有错误码统一为401.
-- 2.增加从上下文获取user_id的快捷函数，方便token鉴权下接口使用.
+- 1.修正单词拼写错误.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
