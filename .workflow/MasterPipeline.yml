@@ -22,9 +22,9 @@ stages:
           - go env -w GO111MODULE=on
           - go env -w GOPROXY=https://goproxy.cn,direct
           - GOOS=linux GOARCH=amd64 go build -o output/main.amd64  -ldflags "-w  -s"  -trimpath  ./cmd/web/main.go
-          - chmod +X output/main.linux32
+          - chmod +X output/main.amd64
           - cp  -r  ./config/  ./public/  ./storage/ ./output
-          - cd ./output  &&   ./main.linux32
+          - cd ./output  &&   ./main.amd64
           - ''
         artifacts:
           - name: BUILD_ARTIFACT
