@@ -19,8 +19,11 @@ stages:
         golangVersion: 1.18
         commands:
           - mkdir output
-          - GOOS=linux GOARCH=amd64 go build -o output/main.amd64 cmd/web/main.go
+          - go env -w GO111MODULE=on
+          - go env -w GOPROXY=https://goproxy.cn,direct
+          - GOOS=linux GOARCH=amd64 go build -o output/main.amd64  -ldflags "-w  -s"  -trimpath  ./cmd/web/main.go
           - chmod +X output/main.linux32
+          - cp  -r  ./config/  ./public/  ./storage/ ./output
           - cd ./output  &&   ./main.linux32
           - ''
         artifacts:
