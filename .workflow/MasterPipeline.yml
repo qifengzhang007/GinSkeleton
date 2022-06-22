@@ -20,10 +20,6 @@ stages:
         commands:
           - mkdir output
           - GOOS=linux GOARCH=amd64 go build -o output/main.amd64 cmd/web/main.go
-          - GOOS=linux GOARCH=386 go build -o output/main.linux32 cmd/web/main.go
-          - GOOS=windows GOARCH=amd64 go build -o output/main.win64.exe cmd/web/main.go
-          - GOOS=windows GOARCH=386 go build -o output/main.win32.exe cmd/web/main.go
-          - 'GOOS=darwin GOARCH=amd64 go build -o output/main.darwin cmd/web/main.go '
           - chmod +X output/main.linux32
           - cd ./output  &&   ./main.linux32
           - ''
