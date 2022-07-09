@@ -11,6 +11,7 @@ import (
 	"goskeleton/app/utils/rabbitmq/work_queue"
 	_ "goskeleton/bootstrap"
 	"os"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -113,7 +114,8 @@ func TestRabbitMqPublishSubscribeProducer(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		str := fmt.Sprintf("%d_PublishSubscribe开始发送消息测试", i+1)
 		// 参数二： 消息延迟的毫秒数，只有创建的对象是延迟模式该参数才有效
-		res = producer.Send(str, 10000)
+		res = producer.Send(str, 1000)
+		fmt.Println(str, res)
 		//time.Sleep(time.Second * 2)
 	}
 
@@ -156,7 +158,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 	}
 	var res bool
 	var key string
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= 20; i++ {
 
 		//  将 偶数 和  奇数 分发到不同的key，消费者端，启动两个也各自处理偶数和奇数
 		if i%2 == 0 {
@@ -164,9 +166,10 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 		} else {
 			key = "key_odd" //  奇数键
 		}
-		strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试"+time.Now().Format("2006-01-02 15:04:05"), i, key)
+
+		//strData := fmt.Sprintf("%d_Routing_%s, 开始发送消息测试"+time.Now().Format("2006-01-02 15:04:05"), i, key)
 		// 参数三： 消息延迟的毫秒数，只有创建的对象是延迟模式该参数才有效
-		res = producer.Send(key, strData, 10000)
+		res = producer.Send(key, strconv.Itoa(i)+"- Routing开始发送消息测试", 10000)
 		//time.Sleep(time.Second * 1)
 	}
 
@@ -192,7 +195,7 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + "， %s\n" + err.Error())
 	})
 	// 通过route_key 匹配指定队列的消息来处理
-	consumer.Received("key_even", func(receivedData string) {
+	consumer.Received("key_odd", func(receivedData string) {
 
 		fmt.Printf("处理偶数的回调函数：--->收到消息时间：%s - 消息内容：%s\n", time.Now().Format("2006-01-02 15:04:05"), receivedData)
 	})

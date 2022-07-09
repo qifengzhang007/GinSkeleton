@@ -22,10 +22,10 @@
 
 
 
-#### V 1.5.51  2022-06-19（最新版本）
-更新：
-- 1.修正全局 `Golobal` 单词拼写错误.
-- 2.需要特别注意的是：`config/gorm_v2.yml` 文件中，单词 `IsInitGolobalGormMysql` 修正为： `IsInitGlobalGormMysql`, 因此使用新版本编译后的软件，如果有旧的配置文件，必须及时更新.
+#### V 1.5.52  2022-07-09（最新版本）
+bug修复：
+ - 1.修复rabbitmq消费者端在linux系统会导致cpu单个核100%占用的情况。
+ - 2.老版本修复方式，使用 `app/utils/rabbitmq` 目录全量覆盖老版本同目录即可.
 - **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
