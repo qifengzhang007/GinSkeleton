@@ -97,14 +97,8 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 						// 消息处理
 						if c.status == 1 && len(msg.Body) > 0 {
 							callbackFunDealSmg(string(msg.Body))
-						} else {
+						} else if c.status == 0 {
 							return
-						}
-					default:
-						if c.status == 0 {
-							return
-						} else {
-							time.Sleep(time.Nanosecond * 10)
 						}
 					}
 				}
