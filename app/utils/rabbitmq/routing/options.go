@@ -1,7 +1,7 @@
 package routing
 
 import (
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/variable"
 )
 
@@ -10,7 +10,7 @@ import (
 
 // 1.生产者初始化参数定义
 
-//OptionsProd 定义动态设置参数接口
+// OptionsProd 定义动态设置参数接口
 type OptionsProd interface {
 	apply(*producer)
 }
@@ -22,7 +22,7 @@ func (f OptionFunc) apply(prod *producer) {
 	f(prod)
 }
 
-//SetProdMsgDelayParams 开发者设置生产者初始化时的参数
+// SetProdMsgDelayParams 开发者设置生产者初始化时的参数
 func SetProdMsgDelayParams(enableMsgDelayPlugin bool) OptionsProd {
 	return OptionFunc(func(p *producer) {
 		p.enableDelayMsgPlugin = enableMsgDelayPlugin
@@ -38,7 +38,7 @@ func SetProdMsgDelayParams(enableMsgDelayPlugin bool) OptionsProd {
 
 // 2.消费者端初始化参数定义
 
-//OptionsConsumer 定义动态设置参数接口
+// OptionsConsumer 定义动态设置参数接口
 type OptionsConsumer interface {
 	apply(*consumer)
 }
@@ -50,7 +50,7 @@ func (f OptionsConsumerFunc) apply(cons *consumer) {
 	f(cons)
 }
 
-//SetConsMsgDelayParams 开发者设置消费者端初始化时的参数
+// SetConsMsgDelayParams 开发者设置消费者端初始化时的参数
 func SetConsMsgDelayParams(enableDelayMsgPlugin bool) OptionsConsumer {
 	return OptionsConsumerFunc(func(c *consumer) {
 		c.enableDelayMsgPlugin = enableDelayMsgPlugin

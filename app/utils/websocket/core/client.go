@@ -4,6 +4,7 @@ import (
 	"errors"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
+	"goskeleton/app/service/websocket/on_open_success"
 	"net/http"
 	"sync"
 	"time"
@@ -23,6 +24,7 @@ type Client struct {
 	HeartbeatFailTimes int
 	State              uint8 // ws状态，1=ok；0=出错、掉线等
 	sync.RWMutex
+	on_open_success.ClientMoreParams // 这里追加一个结构体，方便开发者在成功上线后，可以自定义追加更多字段信息
 }
 
 // 处理握手+协议升级

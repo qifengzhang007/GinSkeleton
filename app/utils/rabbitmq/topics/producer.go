@@ -1,12 +1,12 @@
 package topics
 
 import (
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/rabbitmq/error_record"
 )
 
-//CreateProducer 创建一个生产者
+// CreateProducer 创建一个生产者
 func CreateProducer(options ...OptionsProd) (*producer, error) {
 	// 获取配置信息
 	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.Topics.Addr"))
@@ -34,7 +34,7 @@ func CreateProducer(options ...OptionsProd) (*producer, error) {
 	return prod, nil
 }
 
-//  定义一个消息队列结构体：Topics 模型
+// 定义一个消息队列结构体：Topics 模型
 type producer struct {
 	connect              *amqp.Connection
 	exchangeType         string
@@ -46,11 +46,11 @@ type producer struct {
 	args                 amqp.Table
 }
 
-//Send 发送消息
+// Send 发送消息
 // 参数：
-//routeKey 路由键、
-//data 发送的数据、
-//delayMillisecond 延迟时间(毫秒)，只有启用了消息延迟插件才有效果
+// routeKey 路由键、
+// data 发送的数据、
+// delayMillisecond 延迟时间(毫秒)，只有启用了消息延迟插件才有效果
 func (p *producer) Send(routeKey, data string, delayMillisecond int) bool {
 
 	// 获取一个频道
@@ -101,7 +101,7 @@ func (p *producer) Send(routeKey, data string, delayMillisecond int) bool {
 	}
 }
 
-//Close 发送完毕手动关闭，这样不影响send多次发送数据
+// Close 发送完毕手动关闭，这样不影响send多次发送数据
 func (p *producer) Close() {
 	_ = p.connect.Close()
 }

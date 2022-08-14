@@ -1,7 +1,7 @@
 package work_queue
 
 import (
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/rabbitmq/error_record"
 	"time"
@@ -34,7 +34,7 @@ func CreateConsumer() (*consumer, error) {
 	return cons, nil
 }
 
-//  定义一个消息队列结构体：WorkQueue 模型
+// 定义一个消息队列结构体：WorkQueue 模型
 type consumer struct {
 	connect                     *amqp.Connection
 	queueName                   string
@@ -120,7 +120,7 @@ func (c *consumer) Received(callbackFunDealMsg func(receivedData string)) {
 
 }
 
-//OnConnectionError 消费者端，掉线重连失败后的错误回调
+// OnConnectionError 消费者端，掉线重连失败后的错误回调
 func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 	c.callbackOffLine = callbackOfflineErr
 	go func() {

@@ -10,7 +10,7 @@ import (
 )
 
 type Connect struct {
-	Token string `form:"token" binding:"required,min=10"`
+	Token string `form:"token" json:"token" binding:"required,min=10"`
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
@@ -25,7 +25,7 @@ func (c Connect) CheckParams(context *gin.Context) {
 	//2.基本的验证规则没有通过
 	if err := context.ShouldBind(&c); err != nil {
 		errs := gin.H{
-			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:2020?token=this is a series token...",
+			"tips": "请在get参数中提交token信息,demo格式：ws://127.0.0.1:20201?token=this is a series token...",
 			"err":  err.Error(),
 		}
 		response.ErrorParam(context, errs)

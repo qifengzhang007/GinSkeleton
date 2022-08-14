@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/utils/rabbitmq/hello_world"
 	"goskeleton/app/utils/rabbitmq/publish_subscribe"
@@ -13,7 +13,6 @@ import (
 	"os"
 	"strconv"
 	"testing"
-	"time"
 )
 
 //  消息队列（rabbitmq）在线文档地址：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/tkcuc8
@@ -38,7 +37,7 @@ func TestRabbitMqHelloWorldProducer(t *testing.T) {
 	helloProducer.Close() // 消息投递结束，必须关闭连接
 	// 总共发送了10条消息，我们简单判断一下最后一条消息返回的结果
 	if res {
-		fmt.Printf("消息发送OK")
+		t.Log("消息发送OK")
 	} else {
 		t.Errorf("HelloWorld模式消息发送失败")
 	}
@@ -59,7 +58,7 @@ func TestMqHelloWorldConsumer(t *testing.T) {
 
 	consumer.Received(func(receivedData string) {
 
-		fmt.Printf("HelloWorld回调函数处理消息：--->%s\n", receivedData)
+		t.Logf("HelloWorld回调函数处理消息：--->%s\n", receivedData)
 	})
 }
 
@@ -77,7 +76,7 @@ func TestRabbitMqWorkQueueProducer(t *testing.T) {
 	producer.Close() // 消息投递结束，必须关闭连接
 
 	if res {
-		fmt.Printf("消息发送OK")
+		t.Logf("消息发送OK")
 	} else {
 		t.Errorf("WorkQueue模式消息发送失败")
 	}
@@ -98,7 +97,7 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 
 	consumer.Received(func(receivedData string) {
 
-		fmt.Printf("WorkQueue回调函数处理消息：--->%s\n", receivedData)
+		t.Logf("WorkQueue回调函数处理消息：--->%s\n", receivedData)
 	})
 }
 
@@ -122,13 +121,13 @@ func TestRabbitMqPublishSubscribeProducer(t *testing.T) {
 	producer.Close() // 消息投递结束，必须关闭连接
 
 	if res {
-		fmt.Printf("消息发送OK")
+		t.Log("消息发送OK")
 	} else {
 		t.Errorf("PublishSubscribe 模式消息发送失败")
 	}
 }
 
-//消费者
+// 消费者
 func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 
 	consumer, err := publish_subscribe.CreateConsumer()
@@ -143,7 +142,7 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 
 	consumer.Received(func(receivedData string) {
 
-		fmt.Printf("PublishSubscribe回调函数处理消息：--->%s\n", receivedData)
+		t.Logf("PublishSubscribe回调函数处理消息：--->%s\n", receivedData)
 	})
 }
 
@@ -176,7 +175,7 @@ func TestRabbitMqRoutingProducer(t *testing.T) {
 	producer.Close() // 消息投递结束，必须关闭连接
 
 	if res {
-		fmt.Printf("消息发送OK")
+		t.Logf("消息发送OK")
 	} else {
 		t.Errorf("Routing 模式消息发送失败")
 	}
@@ -195,13 +194,13 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + "， %s\n" + err.Error())
 	})
 	// 通过route_key 匹配指定队列的消息来处理
-	consumer.Received("key_odd", func(receivedData string) {
-
-		fmt.Printf("处理偶数的回调函数：--->收到消息时间：%s - 消息内容：%s\n", time.Now().Format("2006-01-02 15:04:05"), receivedData)
+	consumer.Received("key_even", func(receivedData string) {
+		fmt.Println("处理偶数的回调函数 ---> 收到消息内容: " + receivedData)
+		//	t.Logf("处理偶数的回调函数：--->收到消息时间：%s - 消息内容：%s\n", time.Now().Format("2006-01-02 15:04:05"), receivedData)
 	})
 }
 
-//topics 模式
+// topics 模式
 func TestRabbitMqTopicsProducer(t *testing.T) {
 
 	producer, err := topics.CreateProducer()
@@ -228,7 +227,7 @@ func TestRabbitMqTopicsProducer(t *testing.T) {
 	producer.Close() // 消息投递结束，必须关闭连接
 
 	if res {
-		fmt.Printf("消息发送OK")
+		t.Logf("消息发送OK")
 	} else {
 		t.Errorf("topics 模式消息发送失败")
 	}
@@ -250,6 +249,6 @@ func TestRabbitMqTopicsConsumer(t *testing.T) {
 	// 通过route_key 模糊匹配队列路由键的消息来处理
 	consumer.Received("#.odd", func(receivedData string) {
 
-		fmt.Printf("模糊匹配偶数键：--->%s\n", receivedData)
+		t.Logf("模糊匹配偶数键：--->%s\n", receivedData)
 	})
 }
