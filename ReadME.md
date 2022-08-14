@@ -22,11 +22,11 @@
 
 
 
-#### V 1.5.52  2022-07-09（最新版本）
-bug修复：
- - 1.修复rabbitmq消费者端在linux系统会导致cpu单个核100%占用的情况。
- - 2.老版本修复方式，使用 `app/utils/rabbitmq` 目录全量覆盖老版本同目录即可.
-- **[点击查看更多更新日志](https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/sqhlxn)**
+#### V 1.5.53  2022-08-14（最新版本）
+**更新**
+1.websocket成功上线后追加结构体，方便开发者为 client 设置更多其他字段信息。
+2.rabbitmq 消息队列更新底层库更新至新包。
+3.本项目依赖的所有包更新至最新版本.
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
