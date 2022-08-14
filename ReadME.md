@@ -24,9 +24,9 @@
 
 #### V 1.5.53  2022-08-14（最新版本）
 **更新**
-1.websocket成功上线后追加结构体，方便开发者为 client 设置更多其他字段信息。
-2.rabbitmq 消息队列更新底层库更新至新包。
-3.本项目依赖的所有包更新至最新版本.
+- 1.websocket成功上线后追加结构体，方便开发者为 client 设置更多其他字段信息。
+- 2.rabbitmq 消息队列更新底层库更新至新包。
+- 3.本项目依赖的所有包更新至最新版本.
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
