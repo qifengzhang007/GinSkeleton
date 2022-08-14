@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
+	"goskeleton/app/global/consts"
 	"goskeleton/app/global/my_errors"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/websocket/core"
@@ -22,9 +23,19 @@ type Ws struct {
 	WsClient *core.Client
 }
 
-// onOpen 基本不需要做什么
+// OnOpen 事件函数
 func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 	if client, ok := (&core.Client{}).OnOpen(context); ok {
+
+		token := context.GetString(consts.ValidatorPrefix + "token")
+		variable.ZapLog.Info("获取到的客户端上线时携带的唯一标记值：", zap.String("token", token))
+
+		// 成功上线以后，开发者可以基于客户端上线时携带的唯一参数(这里用token键表示)
+		// 在数据库查询更多的其他字段信息，直接追加在 Client 结构体上，方便后续使用
+		//client.ClientMoreParams.UserParams1 = "123"
+		//client.ClientMoreParams.UserParams2 = "456"
+		//fmt.Printf("最终每一个客户端(client) 已有的参数：%+v\n", client)
+
 		w.WsClient = client
 		go w.WsClient.Heartbeat() // 一旦握手+协议升级成功，就为每一个连接开启一个自动化的隐式心跳检测包
 		return w, true
@@ -62,13 +73,13 @@ func (w *Ws) OnClose() {
 	w.WsClient.Hub.UnRegister <- w.WsClient // 向hub管道投递一条注销消息，由hub中心负责关闭连接、删除在线数据
 }
 
-//获取在线的全部客户端
+// GetOnlineClients  获取在线的全部客户端
 func (w *Ws) GetOnlineClients() {
 
 	fmt.Printf("在线客户端数量：%d\n", len(w.WsClient.Hub.Clients))
 }
 
-// (每一个客户端都有能力)向全部在线客户端广播消息
+// BroadcastMsg  (每一个客户端都有能力)向全部在线客户端广播消息
 func (w *Ws) BroadcastMsg(sendMsg string) {
 	for onlineClient := range w.WsClient.Hub.Clients {
 

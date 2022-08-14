@@ -1,12 +1,12 @@
 package work_queue
 
 import (
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/rabbitmq/error_record"
 )
 
-//CreateProducer  创建一个生产者
+// CreateProducer  创建一个生产者
 func CreateProducer() (*producer, error) {
 	// 获取配置信息
 	conn, err := amqp.Dial(variable.ConfigYml.GetString("RabbitMq.WorkQueue.Addr"))
@@ -26,7 +26,7 @@ func CreateProducer() (*producer, error) {
 	return prod, nil
 }
 
-//  定义一个消息队列结构体：helloworld 模型
+// 定义一个消息队列结构体：helloworld 模型
 type producer struct {
 	connect    *amqp.Connection
 	queueName  string
@@ -82,7 +82,7 @@ func (p *producer) Send(data string) bool {
 	}
 }
 
-//Close 发送完毕手动关闭，这样不影响send多次发送数据
+// Close 发送完毕手动关闭，这样不影响send多次发送数据
 func (p *producer) Close() {
 	_ = p.connect.Close()
 }

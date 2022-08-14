@@ -1,7 +1,7 @@
 package hello_world
 
 import (
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"goskeleton/app/global/variable"
 	"goskeleton/app/utils/rabbitmq/error_record"
 	"time"
@@ -35,7 +35,7 @@ func CreateConsumer() (*consumer, error) {
 	return cons, nil
 }
 
-//  定义一个消息队列结构体：helloworld 模型
+// 定义一个消息队列结构体：helloworld 模型
 type consumer struct {
 	connect                     *amqp.Connection
 	queueName                   string
@@ -114,7 +114,7 @@ func (c *consumer) Received(callbackFunDealSmg func(receivedData string)) {
 	}
 }
 
-//OnConnectionError 消费者端，掉线重连监听器
+// OnConnectionError 消费者端，掉线重连监听器
 func (c *consumer) OnConnectionError(callbackOfflineErr func(err *amqp.Error)) {
 	c.callbackOffLine = callbackOfflineErr
 	go func() {
