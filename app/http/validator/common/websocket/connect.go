@@ -14,6 +14,7 @@ type Connect struct {
 }
 
 // 验证器语法，参见 Register.go文件，有详细说明
+// 注意：websocket 连接建立之前如果有错误，只能在服务端同构日志输出方式记录（因为使用response.Fail等函数，客户端是收不到任何信息的）
 
 func (c Connect) CheckParams(context *gin.Context) {
 
