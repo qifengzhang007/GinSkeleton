@@ -55,7 +55,7 @@ func ErrorTokenAuthFail(c *gin.Context) {
 
 //ErrorTokenRefreshFail token不符合刷新条件
 func ErrorTokenRefreshFail(c *gin.Context) {
-	ReturnJson(c, http.StatusBadRequest, http.StatusBadRequest, my_errors.ErrorsRefreshTokenFail, "")
+	ReturnJson(c, http.StatusUnauthorized, http.StatusUnauthorized, my_errors.ErrorsRefreshTokenFail, "")
 	//终止可能已经被加载的其他回调函数的执行
 	c.Abort()
 }
