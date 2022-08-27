@@ -23,7 +23,7 @@ type userToken struct {
 	userJwt *my_jwt.JwtSign
 }
 
-//GenerateToken 生成token
+// GenerateToken 生成token
 func (u *userToken) GenerateToken(userid int64, username string, phone string, expireAt int64) (tokens string, err error) {
 
 	// 根据实际业务自定义token需要包含的参数，生成token，注意：用户密码请勿包含在token
@@ -51,7 +51,7 @@ func (u *userToken) RecordLoginToken(userToken, clientIp string) bool {
 	}
 }
 
-//TokenIsMeetRefreshCondition 检查token是否满足刷新条件
+// TokenIsMeetRefreshCondition 检查token是否满足刷新条件
 func (u *userToken) TokenIsMeetRefreshCondition(token string) bool {
 	// token基本信息是否有效：1.过期时间在允许的过期范围内;2.基本格式正确
 	customClaims, code := u.isNotExpired(token, variable.ConfigYml.GetInt64("Token.JwtTokenRefreshAllowSec"))
@@ -68,7 +68,7 @@ func (u *userToken) TokenIsMeetRefreshCondition(token string) bool {
 // RefreshToken 刷新token的有效期（默认+3600秒，参见常量配置项）
 func (u *userToken) RefreshToken(oldToken, clientIp string) (newToken string, res bool) {
 	var err error
-	//如果token是有效的、后者在在过期时间内，那么执行更新，换取新token
+	//如果token是有效的、或者在过期时间内，那么执行更新，换取新token
 	if newToken, err = u.userJwt.RefreshToken(oldToken, variable.ConfigYml.GetInt64("Token.JwtTokenRefreshExpireAt")); err == nil {
 		if customClaims, err := u.userJwt.ParseToken(newToken); err == nil {
 			userId := customClaims.UserId

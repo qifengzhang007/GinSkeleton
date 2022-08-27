@@ -29,10 +29,10 @@ func CheckTokenAuth() gin.HandlerFunc {
 		if len(token) == 2 && len(token[1]) >= 20 {
 			tokenIsEffective := userstoken.CreateUserFactory().IsEffective(token[1])
 			if tokenIsEffective {
-				if customeToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
+				if customToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
 					key := variable.ConfigYml.GetString("Token.BindContextKeyName")
 					// token验证通过，同时绑定在请求上下文
-					context.Set(key, customeToken)
+					context.Set(key, customToken)
 				}
 				context.Next()
 			} else {
@@ -60,10 +60,10 @@ func CheckTokenAuthWithRefresh() gin.HandlerFunc {
 			tokenIsEffective := userstoken.CreateUserFactory().IsEffective(token[1])
 			// 判断token是否有效
 			if tokenIsEffective {
-				if customeToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
+				if customToken, err := userstoken.CreateUserFactory().ParseToken(token[1]); err == nil {
 					key := variable.ConfigYml.GetString("Token.BindContextKeyName")
 					// token验证通过，同时绑定在请求上下文
-					context.Set(key, customeToken)
+					context.Set(key, customToken)
 				}
 				context.Next()
 			} else {
@@ -71,10 +71,10 @@ func CheckTokenAuthWithRefresh() gin.HandlerFunc {
 				if userstoken.CreateUserFactory().TokenIsMeetRefreshCondition(token[1]) {
 					// 刷新token
 					if newToken, ok := userstoken.CreateUserFactory().RefreshToken(token[1], context.ClientIP()); ok {
-						if customeToken, err := userstoken.CreateUserFactory().ParseToken(newToken); err == nil {
+						if customToken, err := userstoken.CreateUserFactory().ParseToken(newToken); err == nil {
 							key := variable.ConfigYml.GetString("Token.BindContextKeyName")
 							// token刷新成功，同时绑定在请求上下文
-							context.Set(key, customeToken)
+							context.Set(key, customToken)
 						}
 						// 新token放入header返回
 						context.Header("Authorization", "Bearer "+newToken)
