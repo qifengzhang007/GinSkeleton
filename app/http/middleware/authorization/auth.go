@@ -64,6 +64,9 @@ func CheckTokenAuthWithRefresh() gin.HandlerFunc {
 					key := variable.ConfigYml.GetString("Token.BindContextKeyName")
 					// token验证通过，同时绑定在请求上下文
 					context.Set(key, customToken)
+					// 在自动刷新token的中间件中，将请求的认证键、值，原路返回，与后续刷新逻辑格式保持一致
+					context.Header("Refresh-Token", token[1])
+					context.Header("Access-Control-Expose-Headers", "Authorization")
 				}
 				context.Next()
 			} else {
@@ -77,7 +80,7 @@ func CheckTokenAuthWithRefresh() gin.HandlerFunc {
 							context.Set(key, customToken)
 						}
 						// 新token放入header返回
-						context.Header("Authorization", "Bearer "+newToken)
+						context.Header("Refresh-Token", newToken)
 						context.Header("Access-Control-Expose-Headers", "Authorization")
 						context.Next()
 					} else {
