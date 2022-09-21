@@ -7,6 +7,7 @@ import (
 	"goskeleton/app/http/controller/web"
 	"goskeleton/app/utils/files"
 	"goskeleton/app/utils/response"
+	"strconv"
 	"strings"
 )
 
@@ -23,8 +24,9 @@ func (u UpFiles) CheckParams(context *gin.Context) {
 		return
 	}
 	//超过系统设定的最大值：32M，tmpFile.Size 的单位是 bytes 和我们定义的文件单位M 比较，就需要将我们的单位*1024*1024(即2的20次方)，一步到位就是 << 20
-	if tmpFile.Size > variable.ConfigYml.GetInt64("FileUploadSetting.Size")<<20 {
-		response.Fail(context, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+variable.ConfigYml.GetString("FileUploadSetting.Size"), "")
+	sizeLimit := variable.ConfigYml.GetInt64("FileUploadSetting.Size")
+	if tmpFile.Size > sizeLimit<<20 {
+		response.Fail(context, consts.FilesUploadMoreThanMaxSizeCode, consts.FilesUploadMoreThanMaxSizeMsg+strconv.FormatInt(sizeLimit, 10)+"M", "")
 		return
 	}
 	//不允许的文件mime类型
