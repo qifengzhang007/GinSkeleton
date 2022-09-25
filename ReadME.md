@@ -24,7 +24,7 @@
 
 #### V 1.5.54  2022-09-25（最新版本）
 **BUG修复**
-- 1.上传文件超过配置项最大值(默认32M)时，日志记录异常处理。
+- 1.上传文件超过配置项最大值(默认32M)时，日志记录异常。
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
