@@ -23,9 +23,9 @@
 
 
 
-#### V 1.5.55  2022-09-25（最新版本）
-**BUG修复**
-- 1.上传文件超过配置项最大值(默认32M)时，日志记录异常。
+#### V 1.5.56  2022-10-16（最新版本）
+**新增**
+- 1.增加 `makefile` 编译方式, 方便 `linux` 系统快速编译.
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
