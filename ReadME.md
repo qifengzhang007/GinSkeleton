@@ -27,5 +27,12 @@
 **新增**
 - 1.增加 `makefile` 编译方式, 方便 `linux` 系统快速编译.
 
+
+### 插播一条广告 - 华为云服务器双11优惠活动
+- 欢迎**新用户**通过有实力的代理商渠道购买，才可以享受全网最低价.
+
+![https://www.jetbrains.com/](./storage/app/img/huawei-cloud-server-small.png)
+
+
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
