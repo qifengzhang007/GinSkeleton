@@ -23,15 +23,15 @@
 
 
 
-#### V 1.5.56  2022-10-16（最新版本）
-**新增**
-- 1.增加 `makefile` 编译方式, 方便 `linux` 系统快速编译.
+#### V 1.5.57  2022-11-27（最新版本）
+**更新**
+- 1.项目所有依赖包版本更新至最新版.
 
 
 ### 插播一条广告 - 华为云服务器双11优惠活动
 - 只有**新用户**，才可以享受全网最低价, 若有疑问请加图片中本人qq进行咨询.
 
-![https://www.jetbrains.com/](./storage/app/img/huawei-cloud-server-small.png)
+![华为云服务器](./storage/app/img/huawei-cloud-server-small.png)
 
 
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
