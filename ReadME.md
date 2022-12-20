@@ -29,11 +29,5 @@
 - 2.以上BUG由开发者(qq2423067094上报),再次感谢.
 
 
-### 插播一条广告 - 华为云服务器双11优惠活动
-- 只有**新用户**，才可以享受全网最低价, 若有疑问请加图片中本人qq进行咨询.
-
-![华为云服务器](./storage/app/img/huawei-cloud-server-small.png)
-
-
 ### 感谢 jetbrains 为本项目提供的 goland 激活码
 ![https://www.jetbrains.com/](https://www.ginskeleton.com/images/jetbrains.jpg)
