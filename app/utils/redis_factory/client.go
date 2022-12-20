@@ -43,19 +43,31 @@ func initRedisClientPool() *redis.Pool {
 		},
 	}
 	// 将redis的关闭事件，注册在全局事件统一管理器，由程序退出时统一销毁
-	event_manage.CreateEventManageFactory().Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
-		_ = redisPool.Close()
-	})
+	eventManageFactory := event_manage.CreateEventManageFactory()
+	if _, exists := eventManageFactory.Get(variable.EventDestroyPrefix + "Redis"); exists == false {
+		eventManageFactory.Set(variable.EventDestroyPrefix+"Redis", func(args ...interface{}) {
+			_ = redisPool.Close()
+		})
+	}
 	return redisPool
 }
 
-//  从连接池获取一个redis连接
+// 从连接池获取一个redis连接
 func GetOneRedisClient() *RedisClient {
 	maxRetryTimes := configYml.GetInt("Redis.ConnFailRetryTimes")
 	var oneConn redis.Conn
 	for i := 1; i <= maxRetryTimes; i++ {
 		oneConn = redisPool.Get()
-		if oneConn.Err() != nil {
+		// 首先通过执行一个获取时间的命令检测连接是否有效，如果已有的连接无法执行命令，则重新尝试连接到redis服务器获取新的连接池地址
+		// 连接不可用可能会发生的场景主要有：服务端redis重启、客户端网络在有线和无线之间切换等
+		if _, replyErr := oneConn.Do("time"); replyErr != nil {
+			//fmt.Printf("连接已经失效(出错)：%+v\n", replyErr.Error())
+			// 如果已有的redis连接池获取连接出错(官方库的说法是连接不可用)，那么继续使用从新初始化连接池
+			initRedisClientPool()
+			oneConn = redisPool.Get()
+		}
+
+		if err := oneConn.Err(); err != nil {
 			//variable.ZapLog.Error("Redis：网络中断,开始重连进行中..." , zap.Error(oneConn.Err()))
 			if i == maxRetryTimes {
 				variable.ZapLog.Error(my_errors.ErrorsRedisGetConnFail, zap.Error(oneConn.Err()))
@@ -87,62 +99,62 @@ func (r *RedisClient) ReleaseOneRedisClient() {
 
 //  封装几个数据类型转换的函数
 
-//bool 类型转换
+// bool 类型转换
 func (r *RedisClient) Bool(reply interface{}, err error) (bool, error) {
 	return redis.Bool(reply, err)
 }
 
-//string 类型转换
+// string 类型转换
 func (r *RedisClient) String(reply interface{}, err error) (string, error) {
 	return redis.String(reply, err)
 }
 
-//string map 类型转换
+// string map 类型转换
 func (r *RedisClient) StringMap(reply interface{}, err error) (map[string]string, error) {
 	return redis.StringMap(reply, err)
 }
 
-//strings 类型转换
+// strings 类型转换
 func (r *RedisClient) Strings(reply interface{}, err error) ([]string, error) {
 	return redis.Strings(reply, err)
 }
 
-//Float64 类型转换
+// Float64 类型转换
 func (r *RedisClient) Float64(reply interface{}, err error) (float64, error) {
 	return redis.Float64(reply, err)
 }
 
-//int 类型转换
+// int 类型转换
 func (r *RedisClient) Int(reply interface{}, err error) (int, error) {
 	return redis.Int(reply, err)
 }
 
-//int64 类型转换
+// int64 类型转换
 func (r *RedisClient) Int64(reply interface{}, err error) (int64, error) {
 	return redis.Int64(reply, err)
 }
 
-//int map 类型转换
+// int map 类型转换
 func (r *RedisClient) IntMap(reply interface{}, err error) (map[string]int, error) {
 	return redis.IntMap(reply, err)
 }
 
-//Int64Map 类型转换
+// Int64Map 类型转换
 func (r *RedisClient) Int64Map(reply interface{}, err error) (map[string]int64, error) {
 	return redis.Int64Map(reply, err)
 }
 
-//int64s 类型转换
+// int64s 类型转换
 func (r *RedisClient) Int64s(reply interface{}, err error) ([]int64, error) {
 	return redis.Int64s(reply, err)
 }
 
-//uint64 类型转换
+// uint64 类型转换
 func (r *RedisClient) Uint64(reply interface{}, err error) (uint64, error) {
 	return redis.Uint64(reply, err)
 }
 
-//Bytes 类型转换
+// Bytes 类型转换
 func (r *RedisClient) Bytes(reply interface{}, err error) ([]byte, error) {
 	return redis.Bytes(reply, err)
 }
