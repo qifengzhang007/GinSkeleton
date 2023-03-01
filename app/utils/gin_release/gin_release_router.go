@@ -35,12 +35,12 @@ func CustomRecovery() gin.HandlerFunc {
 	})
 }
 
-//PanicExceptionRecord  panic等异常记录
+// PanicExceptionRecord  panic等异常记录
 type PanicExceptionRecord struct{}
 
 func (p *PanicExceptionRecord) Write(b []byte) (n int, err error) {
 	errStr := string(b)
 	err = errors.New(errStr)
-	variable.ZapLog.Error(consts.ServerOccurredErrorMsg, zap.String("msg", errStr))
+	variable.ZapLog.Error(consts.ServerOccurredErrorMsg, zap.String("errStrace", errStr))
 	return len(errStr), err
 }
