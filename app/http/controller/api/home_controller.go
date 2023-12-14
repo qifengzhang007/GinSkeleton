@@ -18,6 +18,7 @@ func (u *Home) News(context *gin.Context) {
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
 	limit := context.GetFloat64(consts.ValidatorPrefix + "limit")
 	userIp := context.ClientIP()
+	ref := context.GetHeader("Referer")
 
 	// 这里随便模拟一条数据返回
 	response.Success(context, "ok", gin.H{
@@ -27,5 +28,6 @@ func (u *Home) News(context *gin.Context) {
 		"userIp":   userIp,
 		"title":    "门户首页公司新闻标题001",
 		"content":  "门户新闻内容001",
+		"referer":  ref,
 	})
 }

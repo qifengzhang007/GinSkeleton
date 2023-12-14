@@ -56,6 +56,7 @@ const (
 	FilesUploadMoreThanMaxSizeMsg  string = "长传文件超过系统设定的最大值,系统允许的最大值："
 	FilesUploadMimeTypeFailCode    int    = -400252
 	FilesUploadMimeTypeFailMsg     string = "文件mime类型不允许"
+	FilesUploadIsEmpty             string = "不允许上传空文件"
 
 	//websocket
 	WsServerNotStartCode int    = -400300
