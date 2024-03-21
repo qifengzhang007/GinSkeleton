@@ -1,5 +1,6 @@
 Gormv2: # 只针对 gorm  操作数据库有效
   UseDbType: "mysql"  # 备选项 mysql 、sqlserver、 postgresql
+  SqlDebug: true   # sql是否在控制台输出
   Mysql:
     IsInitGlobalGormMysql: 0    # 随项目启动为gorm db初始化一个全局 variable.GormDbMysql（完全等于*gorm.Db）,正确配置数据库，该值必须设置为: 1
     SlowThreshold: 30            # 慢 SQL 阈值(sql执行时间超过此时间单位（秒），就会触发系统日志记录)

@@ -94,7 +94,12 @@ func GetSqlDriver(sqlType string, readDbIsOpen int, dbConf ...ConfigParams) (*go
 		rawDb.SetConnMaxLifetime(variable.ConfigGormv2Yml.GetDuration("Gormv2."+sqlType+".Write.SetConnMaxLifetime") * time.Second)
 		rawDb.SetMaxIdleConns(variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + ".Write.SetMaxIdleConns"))
 		rawDb.SetMaxOpenConns(variable.ConfigGormv2Yml.GetInt("Gormv2." + sqlType + ".Write.SetMaxOpenConns"))
-		return gormDb, nil
+		// 全局sql的debug配置
+		if variable.ConfigGormv2Yml.GetBool("Gormv2.SqlDebug") {
+			return gormDb.Debug(), nil
+		} else {
+			return gormDb, nil
+		}
 	}
 }
 
@@ -115,7 +120,7 @@ func getDbDialector(sqlType, readWrite string, dbConf ...ConfigParams) (gorm.Dia
 	return dbDialector, nil
 }
 
-//  根据配置参数生成数据库驱动 dsn
+// 根据配置参数生成数据库驱动 dsn
 func getDsn(sqlType, readWrite string, dbConf ...ConfigParams) string {
 	Host := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".Host")
 	DataBase := variable.ConfigGormv2Yml.GetString("Gormv2." + sqlType + "." + readWrite + ".DataBase")
