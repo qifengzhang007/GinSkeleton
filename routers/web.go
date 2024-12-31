@@ -21,11 +21,6 @@ func InitWebRouter() *gin.Engine {
 	// 非调试模式（生产模式） 日志写到日志文件
 	if variable.ConfigYml.GetBool("AppDebug") == false {
 
-		//1.gin自行记录接口访问日志，不需要nginx，如果开启以下3行，那么请屏蔽第 34 行代码
-		//gin.DisableConsoleColor()
-		//f, _ := os.Create(variable.BasePath + variable.ConfigYml.GetString("Logs.GinLogName"))
-		//gin.DefaultWriter = io.MultiWriter(f)
-
 		//【生产模式】
 		// 根据 gin 官方的说明：[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
 		// 如果部署到生产环境，请使用以下模式：
