@@ -141,7 +141,7 @@ func (l logger) Error(_ context.Context, msg string, data ...interface{}) {
 }
 
 // Trace print sql message
-func (l logger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
+func (l logger) Trace(_ context.Context, begin time.Time, fc func() (string, int64), err error) {
 	if l.LogLevel <= gormLog.Silent {
 		return
 	}
