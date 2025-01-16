@@ -186,5 +186,5 @@ func getDsn(sqlType, readWrite string, dbConf ...ConfigParams) string {
 func redefineLog(sqlType string) gormLog.Interface {
 	return createCustomGormLog(sqlType,
 		SetInfoStrFormat("[info] %s\n"), SetWarnStrFormat("[warn] %s\n"), SetErrStrFormat("[error] %s\n"),
-		SetTraceStrFormat("[traceStr] %s [%.3fms] [rows:%v] %s\n"), SetTracWarnStrFormat("[traceWarn] %s %s [%.3fms] [rows:%v] %s\n"), SetTracErrStrFormat("[traceErr] %s %s [%.3fms] [rows:%v] %s\n"))
+		SetTraceStrFormat("[traceStr] %s [%.3fms] [rows:%v] %s\n"), SetTraceWarnStrFormat("[traceWarn] %s %s [%.3fms] [rows:%v] %s\n"), SetTraceErrStrFormat("[traceErr] %s %s [%.3fms] [rows:%v] %s\n"))
 }

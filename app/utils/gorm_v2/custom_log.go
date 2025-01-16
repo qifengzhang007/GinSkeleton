@@ -93,13 +93,13 @@ func SetTraceStrFormat(format string) Options {
 		log.traceStr = format
 	})
 }
-func SetTracWarnStrFormat(format string) Options {
+func SetTraceWarnStrFormat(format string) Options {
 	return OptionFunc(func(log *logger) {
 		log.traceWarnStr = format
 	})
 }
 
-func SetTracErrStrFormat(format string) Options {
+func SetTraceErrStrFormat(format string) Options {
 	return OptionFunc(func(log *logger) {
 		log.traceErrStr = format
 	})
