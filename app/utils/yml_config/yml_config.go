@@ -56,7 +56,7 @@ type ymlConfig struct {
 	mu    *sync.Mutex
 }
 
-//ConfigFileChangeListen 监听文件变化
+// ConfigFileChangeListen 监听文件变化
 func (y *ymlConfig) ConfigFileChangeListen() {
 	y.viper.OnConfigChange(func(changeEvent fsnotify.Event) {
 		if time.Now().Sub(lastChangeTime).Seconds() >= 1 {
@@ -108,7 +108,12 @@ func (y *ymlConfig) Clone(fileName string) ymlconfig_interf.YmlConfigInterf {
 
 	(&ymlC).viper.SetConfigName(fileName)
 	if err := (&ymlC).viper.ReadInConfig(); err != nil {
-		variable.ZapLog.Error(my_errors.ErrorsConfigInitFail, zap.Error(err))
+		// 程序启动阶段，zaplog 未初始化，使用系统log打印启动时候发生的异常日志
+		if variable.ZapLog == nil {
+			log.Fatal(my_errors.ErrorsConfigInitFail+", error: ", err.Error())
+		} else {
+			variable.ZapLog.Error(my_errors.ErrorsConfigInitFail, zap.Error(err))
+		}
 	}
 	return &ymlC
 }

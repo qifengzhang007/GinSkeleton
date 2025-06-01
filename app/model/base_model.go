@@ -25,17 +25,17 @@ func UseDbConn(sqlType string) *gorm.DB {
 	switch strings.ToLower(sqlType) {
 	case "mysql":
 		if variable.GormDbMysql == nil {
-			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+			variable.ZapLog.Error(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
 		}
 		db = variable.GormDbMysql
 	case "sqlserver":
 		if variable.GormDbSqlserver == nil {
-			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+			variable.ZapLog.Error(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
 		}
 		db = variable.GormDbSqlserver
 	case "postgres", "postgre", "postgresql":
 		if variable.GormDbPostgreSql == nil {
-			variable.ZapLog.Fatal(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
+			variable.ZapLog.Error(fmt.Sprintf(my_errors.ErrorsGormNotInitGlobalPointer, sqlType, sqlType))
 		}
 		db = variable.GormDbPostgreSql
 	default:
