@@ -1,8 +1,8 @@
 package test
 
 import (
-	"goskeleton/app/global/variable"
-	_ "goskeleton/bootstrap"
+	"ginskeleton/app/global/variable"
+	_ "ginskeleton/bootstrap"
 	"sync"
 	"testing"
 )

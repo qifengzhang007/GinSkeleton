@@ -2,8 +2,8 @@ package data_bind
 
 import (
 	"errors"
+	"ginskeleton/app/global/consts"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
 	"reflect"
 )
 

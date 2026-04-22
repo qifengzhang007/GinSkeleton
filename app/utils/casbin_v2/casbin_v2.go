@@ -2,17 +2,17 @@ package casbin_v2
 
 import (
 	"errors"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
 	"strings"
 	"time"
 )
 
-//创建 casbin Enforcer(执行器)
+// 创建 casbin Enforcer(执行器)
 func InitCasbinEnforcer() (*casbin.SyncedEnforcer, error) {
 	var tmpDbConn *gorm.DB
 	var Enforcer *casbin.SyncedEnforcer

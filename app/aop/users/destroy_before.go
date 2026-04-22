@@ -1,9 +1,9 @@
 package users
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
 )
 
 // 模拟Aop 实现对某个控制器函数的前置和后置回调

@@ -2,9 +2,9 @@ package model
 
 import (
 	"go.uber.org/zap"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/service/users/token_cache_redis"
-	"goskeleton/app/utils/md5_encrypt"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/service/users/token_cache_redis"
+	"ginskeleton/app/utils/md5_encrypt"
 	"time"
 )
 

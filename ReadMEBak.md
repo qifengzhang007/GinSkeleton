@@ -40,7 +40,7 @@
     
  
 // 3.PostgreSql 数据库用户
-    1.首先使用相关的客户端软件，手动创建数据 db_goskeleton，选择该数据库.
+    1.首先使用相关的客户端软件，手动创建数据 db_ginskeleton，选择该数据库.
     2.找到`database/db_demo_postgre.sql`，复制内容，在相关的客户端窗口界面一次性执行即可，
     3.在 app/model 目录内，使用 users_for_postgres.txt 的内容覆盖同目录的 users.go 已有内容
     4.在 config/gorm_v2.yml 中，修改 UseDbType：postgresql
@@ -76,7 +76,7 @@
   // 编译时建议追加参数：-ldflags "-w -s"  ，-w 表示去除调试信息，禁止gdb调试，-s 表示去除符号表(符号表在链接时起着按符号寻址的作用,静态编译后用不到)
   // 追加参数编译后的程序体积也会比原来减少25%左右.
   // web|api|cli 三个目录选择其一即可，表示编译的入口目录  
-  go build -o demo_goskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go   
+  go build -o demo_ginskeleton  -ldflags "-w -s"  cmd/(web|api|cli)/main.go   
   
 ```
 

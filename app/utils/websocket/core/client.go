@@ -2,9 +2,9 @@ package core
 
 import (
 	"errors"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/service/websocket/on_open_success"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/service/websocket/on_open_success"
 	"net/http"
 	"sync"
 	"time"

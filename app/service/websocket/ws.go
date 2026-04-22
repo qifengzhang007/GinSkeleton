@@ -2,13 +2,13 @@ package websocket
 
 import (
 	"fmt"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/websocket/core"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/websocket/core"
 )
 
 /**

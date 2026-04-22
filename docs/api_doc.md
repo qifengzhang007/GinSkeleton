@@ -57,8 +57,8 @@
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-user_name|form-data|string|必填|goskeleton1.4  
-pass|form-data|string|必填|goskeleton1.4  
+user_name|form-data|string|必填|ginskeleton1.4  
+pass|form-data|string|必填|ginskeleton1.4  
 > 返回示例：
 ```json
 {
@@ -74,8 +74,8 @@ pass|form-data|string|必填|goskeleton1.4
 
 参数字段|参数属性|类型|选项|默认值
 ---|---|---|---|---
-user_name|form-data|string|必填|goskeleton1.4
-pass|form-data|string|必填|goskeleton1.4
+user_name|form-data|string|必填|ginskeleton1.4
+pass|form-data|string|必填|ginskeleton1.4
 captcha_id|form-data|string|如果登录接口使用了验证码中间件，则必填|uY26gnHcHNnhot0lYkG8
 captcha_value|form-data|string|如果登录接口使用了验证码中间件，则必填|1234
 
@@ -89,7 +89,7 @@ captcha_value|form-data|string|如果登录接口使用了验证码中间件，�
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjQ3LCJ1c2VyX25hbWUiOiJnb3NrZWxldG9uMS40IiwicGhvbmUiOiIiLCJleHAiOjE2MDQwNTIxNzMsIm5iZiI6MTYwNDA0ODU2M30.YNhN9_QasHc5XILQiilZvhxpPDnmC_j82y4JfYPnI7A",
         "updated_at": "2020-10-30 17:02:53",
         "userId": 47,
-        "user_name": "goskeleton1.4"
+        "user_name": "ginskeleton1.4"
     },
     "msg": "Success"
 }
@@ -121,7 +121,7 @@ limit|form-data|int|必填|20
             "last_login_ip": ""
         },
         {
-            "user_name": "goskeleton51",
+            "user_name": "ginskeleton51",
             "phone": "1580403xxxx",
             "real_name": "新的姓名",
             "status": 1,

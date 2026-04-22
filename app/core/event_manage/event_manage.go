@@ -1,8 +1,8 @@
 package event_manage
 
 import (
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
 	"strings"
 	"sync"
 )
@@ -20,7 +20,7 @@ func CreateEventManageFactory() *eventManage {
 type eventManage struct {
 }
 
-//  1.注册事件
+// 1.注册事件
 func (e *eventManage) Set(key string, keyFunc func(args ...interface{})) bool {
 	//判断key下是否已有事件
 	if _, exists := e.Get(key); exists == false {
@@ -40,7 +40,7 @@ func (e *eventManage) Get(key string) (interface{}, bool) {
 	return nil, false
 }
 
-//  3.执行事件
+// 3.执行事件
 func (e *eventManage) Call(key string, args ...interface{}) {
 	if valueInterface, exists := e.Get(key); exists {
 		if fn, ok := valueInterface.(func(args ...interface{})); ok {
@@ -54,12 +54,12 @@ func (e *eventManage) Call(key string, args ...interface{}) {
 	}
 }
 
-//  4.删除事件
+// 4.删除事件
 func (e *eventManage) Delete(key string) {
 	sMap.Delete(key)
 }
 
-//  5.根据键的前缀，模糊调用. 使用请谨慎.
+// 5.根据键的前缀，模糊调用. 使用请谨慎.
 func (e *eventManage) FuzzyCall(keyPre string) {
 
 	sMap.Range(func(key, value interface{}) bool {

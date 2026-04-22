@@ -1,12 +1,12 @@
 package websocket
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	controllerWs "ginskeleton/app/http/controller/websocket"
+	"ginskeleton/app/http/validator/core/data_transfer"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	controllerWs "goskeleton/app/http/controller/websocket"
-	"goskeleton/app/http/validator/core/data_transfer"
 )
 
 type Connect struct {

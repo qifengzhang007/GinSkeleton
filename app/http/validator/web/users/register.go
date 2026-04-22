@@ -1,11 +1,11 @@
 package users
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/http/controller/web"
+	"ginskeleton/app/http/validator/core/data_transfer"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/http/controller/web"
-	"goskeleton/app/http/validator/core/data_transfer"
-	"goskeleton/app/utils/response"
 )
 
 // 验证器是本项目骨架的先锋队，必须发挥它的极致优势，具体参考地址：

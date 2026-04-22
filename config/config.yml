@@ -11,9 +11,11 @@ HttpServer:
     ProxyServerList:
       - "192.168.10.1"             # nginx 代理服务器ip地址
       - "192.168.10.2"
+GrpcServer:
+  Port: ":20202"                 #grpc 服务端口,注意前面有冒号
 
 Token:
-  JwtTokenSignKey: "goskeleton"    #设置token生成时加密的签名
+  JwtTokenSignKey: "ginskeleton"    #设置token生成时加密的签名
   JwtTokenOnlineUsers: 10          #一个账号密码允许最大获取几个有效的token，当超过这个值，第一次获取的token的账号、密码就会失效
   JwtTokenCreatedExpireAt: 28800   #创建时token默认有效秒数（token生成时间加上该时间秒数，算做有效期）,3600*8=28800 等于8小时
   JwtTokenRefreshAllowSec: 86400   #对于过期的token，允许在多少小时之内刷新，超过此时间则不允许刷新换取新token，86400=3600*24，即token过期24小时之内允许换新token
@@ -34,7 +36,7 @@ Redis:
 
 Logs:
   GinLogName: "/storage/logs/gin.log"                  #设置 gin 框架的接口访问日志
-  GoSkeletonLogName: "/storage/logs/goskeleton.log"    #设置GoSkeleton项目骨架运行时日志文件名，注意该名称不要与上一条重复 ,避免和 gin 框架的日志掺杂一起，造成混乱。
+  ginskeletonLogName: "/storage/logs/ginskeleton.log"    #设置ginskeleton项目骨架运行时日志文件名，注意该名称不要与上一条重复 ,避免和 gin 框架的日志掺杂一起，造成混乱。
   TextFormat: "json"                                #记录日志的格式，参数选项：console、json ， console 表示一般的文本格式
   TimePrecision: "millisecond"                         #记录日志时，相关的时间精度，该参数选项：second  、 millisecond ， 分别表示 秒 和 毫秒 ,默认为毫秒级别
   MaxSize: 10                                           #每个日志的最大尺寸(以MB为单位）， 超过该值，系统将会自动进行切割

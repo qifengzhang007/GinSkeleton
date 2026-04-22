@@ -2,17 +2,18 @@ package test
 
 import (
 	"fmt"
-	amqp "github.com/rabbitmq/amqp091-go"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/utils/rabbitmq/hello_world"
-	"goskeleton/app/utils/rabbitmq/publish_subscribe"
-	"goskeleton/app/utils/rabbitmq/routing"
-	"goskeleton/app/utils/rabbitmq/topics"
-	"goskeleton/app/utils/rabbitmq/work_queue"
-	_ "goskeleton/bootstrap"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/utils/rabbitmq/hello_world"
+	"ginskeleton/app/utils/rabbitmq/publish_subscribe"
+	"ginskeleton/app/utils/rabbitmq/routing"
+	"ginskeleton/app/utils/rabbitmq/topics"
+	"ginskeleton/app/utils/rabbitmq/work_queue"
+	_ "ginskeleton/bootstrap"
 	"os"
 	"strconv"
 	"testing"
+
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 //  消息队列（rabbitmq）在线文档地址：https://www.yuque.com/xiaofensinixidaouxiang/bkfhct/tkcuc8
@@ -92,7 +93,7 @@ func TestMqWorkQueueConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + ", %s" + err.Error())
+		t.Errorf("%s, %s", my_errors.ErrorsRabbitMqReconnectFail, err.Error())
 	})
 
 	consumer.Received(func(receivedData string) {
@@ -137,7 +138,7 @@ func TestRabbitMqPublishSubscribeConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + "，%s\n" + err.Error())
+		t.Errorf("%s，%s\n", my_errors.ErrorsRabbitMqReconnectFail, err.Error())
 	})
 
 	consumer.Received(func(receivedData string) {
@@ -191,7 +192,7 @@ func TestRabbitMqRoutingConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + "， %s\n" + err.Error())
+		t.Errorf("%s， %s\n", my_errors.ErrorsRabbitMqReconnectFail, err.Error())
 	})
 	// 通过route_key 匹配指定队列的消息来处理
 	consumer.Received("key_even", func(receivedData string) {
@@ -244,7 +245,7 @@ func TestRabbitMqTopicsConsumer(t *testing.T) {
 	}
 
 	consumer.OnConnectionError(func(err *amqp.Error) {
-		t.Errorf(my_errors.ErrorsRabbitMqReconnectFail + "， %s\n" + err.Error())
+		t.Errorf("%s， %s\n", my_errors.ErrorsRabbitMqReconnectFail, err.Error())
 	})
 	// 通过route_key 模糊匹配队列路由键的消息来处理
 	consumer.Received("#.odd", func(receivedData string) {

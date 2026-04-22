@@ -19,7 +19,7 @@ docker run -d --name redis_exporter -p 172.19.130.185:9121:9121 -e TZ=Asia/Shang
     static_configs:
     - targets: ['172.19.130.185:9121']
       labels:
-        instance: "Redis_GoSkeleton"
+        instance: "Redis_ginskeleton"
 
 #step4 重启docker启动的 prometheus 服务
 docker  restart prometheus  #prometheus 如果你全程是根据我们的部署文档进行部署的，那么你的premetheus服务就是名就是 prometheus ，否则自己替换成自己的服务名称即可。  

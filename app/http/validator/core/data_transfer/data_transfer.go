@@ -2,9 +2,9 @@ package data_transfer
 
 import (
 	"encoding/json"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/validator/core/interf"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/validator/core/interf"
 	"time"
 )
 

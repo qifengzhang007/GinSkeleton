@@ -11,9 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/websocket/core"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/websocket/core"
 )
 
 /**
@@ -95,7 +95,7 @@ func (w *Ws) BroadcastMsg(sendMsg string) {
 package demo1
 
 import (
-    	serviceWs   "goskeleton/app/service/websocket"
+    	serviceWs   "ginskeleton/app/service/websocket"
 )
 
 // 省略其他无关代码，相关的核心代码如下

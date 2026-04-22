@@ -1,15 +1,16 @@
 package routers
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/middleware/cors"
+	validatorFactory "ginskeleton/app/http/validator/core/factory"
+	"ginskeleton/app/utils/gin_release"
+	"net/http"
+
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/middleware/cors"
-	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/gin_release"
-	"net/http"
 )
 
 // 该路由主要设置门户类网站等前台路由

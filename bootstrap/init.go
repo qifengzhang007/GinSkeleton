@@ -1,18 +1,18 @@
 package bootstrap
 
 import (
-	_ "goskeleton/app/core/destroy" // 监听程序退出信号，用于资源的释放
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/validator/common/register_validator"
-	"goskeleton/app/service/sys_log_hook"
-	"goskeleton/app/utils/casbin_v2"
-	"goskeleton/app/utils/gorm_v2"
-	"goskeleton/app/utils/snow_flake"
-	"goskeleton/app/utils/validator_translation"
-	"goskeleton/app/utils/websocket/core"
-	"goskeleton/app/utils/yml_config"
-	"goskeleton/app/utils/zap_factory"
+	_ "ginskeleton/app/core/destroy" // 监听程序退出信号，用于资源的释放
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/validator/common/register_validator"
+	"ginskeleton/app/service/sys_log_hook"
+	"ginskeleton/app/utils/casbin_v2"
+	"ginskeleton/app/utils/gorm_v2"
+	"ginskeleton/app/utils/snow_flake"
+	"ginskeleton/app/utils/validator_translation"
+	"ginskeleton/app/utils/websocket/core"
+	"ginskeleton/app/utils/yml_config"
+	"ginskeleton/app/utils/zap_factory"
 	"log"
 	"os"
 )

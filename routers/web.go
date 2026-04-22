@@ -1,17 +1,18 @@
 package routers
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/controller/captcha"
+	"ginskeleton/app/http/middleware/authorization"
+	"ginskeleton/app/http/middleware/cors"
+	validatorFactory "ginskeleton/app/http/validator/core/factory"
+	"ginskeleton/app/utils/gin_release"
+	"net/http"
+
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/controller/captcha"
-	"goskeleton/app/http/middleware/authorization"
-	"goskeleton/app/http/middleware/cors"
-	validatorFactory "goskeleton/app/http/validator/core/factory"
-	"goskeleton/app/utils/gin_release"
-	"net/http"
 )
 
 // 该路由主要设置 后台管理系统等后端应用路由

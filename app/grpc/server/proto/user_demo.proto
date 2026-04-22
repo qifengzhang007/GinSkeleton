@@ -1,0 +1,52 @@
+
+//  这是一个简易的grpc-server  样例代码，定义一个 userService 服务
+//  本示例演示了 google.protobuf.Any 的任意类型语法，主要用于底层复杂场景的返回结果
+
+// 定义 grpc 协议版本
+syntax = "proto3" ;
+
+// 定义包名
+package  proto;
+
+option go_package = "./user_demo_pb";
+
+import "google/protobuf/any.proto";
+//import "google/protobuf/descriptor.proto";
+// 请求参数验证器
+import "validate/validate.proto";
+
+
+// 定义入参（请求参数）格式
+// @id 根据用户id 查询基本信息
+message userRequest{
+int64 id =  1   ;
+}
+
+
+//测试参数请求的校验逻辑
+message userIdRequest {
+  string name = 2   [(validate.rules).string = {min_len:1,max_len:10}]   ;
+//int64 id = 1   [(validate.rules).int64 = {ignore_empty: true, gt: 0}]   ;
+//int32 uuid = 3    [(validate.rules).int32 = {gt:0}]   ;
+}
+
+
+// 定义响应消息
+message userResponse{
+int64 code = 1 ;
+string  msg = 2 ;
+repeated  data2  data = 3 ;
+}
+
+message data2 {
+  // 演示一种比较的复杂的any方式返回结果
+  map<string, google.protobuf.Any> oneItem = 1;
+}
+
+
+// 定义外部可以调用的grpc接口
+service  UserService {
+// 定义一个测试函方法
+rpc  GetUserInfo(userRequest) returns  (userResponse){}
+rpc  GetItem(userIdRequest) returns  (userResponse){}
+}

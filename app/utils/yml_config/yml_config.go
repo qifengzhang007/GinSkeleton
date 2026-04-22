@@ -1,13 +1,13 @@
 package yml_config
 
 import (
+	"ginskeleton/app/core/container"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/yml_config/ymlconfig_interf"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"goskeleton/app/core/container"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"log"
 	"sync"
 	"time"

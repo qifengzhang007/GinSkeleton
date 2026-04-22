@@ -1,12 +1,12 @@
 package upload_files
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/controller/web"
+	"ginskeleton/app/utils/files"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/controller/web"
-	"goskeleton/app/utils/files"
-	"goskeleton/app/utils/response"
 	"strconv"
 	"strings"
 )

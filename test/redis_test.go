@@ -2,15 +2,16 @@ package test
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/redis_factory"
-	_ "goskeleton/bootstrap"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/redis_factory"
+	_ "ginskeleton/bootstrap"
 	"testing"
 	"time"
+
+	"go.uber.org/zap"
 )
 
-//  普通的key  value
+// 普通的key  value
 func TestRedisKeyValue(t *testing.T) {
 	// 从连接池获取一个连接
 	redisClient := redis_factory.GetOneRedisClient()
@@ -32,7 +33,7 @@ func TestRedisKeyValue(t *testing.T) {
 
 }
 
-//  hash 键、值
+// hash 键、值
 func TestRedisHashKey(t *testing.T) {
 
 	redisClient := redis_factory.GetOneRedisClient()
@@ -69,7 +70,7 @@ func TestRedisConnPool(t *testing.T) {
 	time.Sleep(time.Second * 20)
 }
 
-//  测试redis 网络中断自动重连机制
+// 测试redis 网络中断自动重连机制
 func TestRedisReConn(t *testing.T) {
 	redisClient := redis_factory.GetOneRedisClient()
 	res, err := redisClient.String(redisClient.Execute("set", "key2020", "测试网络抖动，自动重连机制"))
@@ -94,7 +95,7 @@ func TestRedisReConn(t *testing.T) {
 	redisClient.ReleaseOneRedisClient()
 }
 
-//  测试返回值为多值的情况
+// 测试返回值为多值的情况
 func TestRedisMulti(t *testing.T) {
 	redisClient := redis_factory.GetOneRedisClient()
 
@@ -106,10 +107,10 @@ func TestRedisMulti(t *testing.T) {
 		if strs, err := redisClient.Int64s(redisClient.Execute("exec")); err == nil {
 			t.Logf("直接输出切片：%#+v\n", strs)
 		} else {
-			t.Errorf(err.Error())
+			t.Errorf("%s", err.Error())
 		}
 	} else {
-		t.Errorf(err.Error())
+		t.Errorf("%s", err.Error())
 	}
 	redisClient.ReleaseOneRedisClient()
 }

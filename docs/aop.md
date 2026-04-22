@@ -28,7 +28,7 @@ func (u *Users) Destroy(context *gin.Context) {
 package Users
 
 import (
-	"goskeleton/app/global/consts"
+	"ginskeleton/app/global/consts"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -56,7 +56,7 @@ func (d *destroy_before) Before(context *gin.Context) bool {
 package users
 
 import (
-	"goskeleton/app/global/consts"
+	"ginskeleton/app/global/consts"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )

@@ -67,7 +67,7 @@ scrape_configs:
     static_configs:
       - targets: ["172.19.130.185:9100"]
         labels:
-          instance: "GoSkeleton"  #标记一下目标服务器的作用，请自行设置
+          instance: "ginskeleton"  #标记一下目标服务器的作用，请自行设置
 
 #启动promethus
 docker container  run  --name prometheus  -d -p    172.19.130.185:9090:9090  -e TZ=Asia/Shanghai  -v  /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  prom/prometheus

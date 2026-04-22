@@ -3,11 +3,11 @@ package gin_release
 import (
 	"errors"
 	"fmt"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/response"
 	"io/ioutil"
 )
 

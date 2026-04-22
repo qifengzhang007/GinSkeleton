@@ -1,8 +1,8 @@
 package curd
 
 import (
-	"goskeleton/app/model"
-	"goskeleton/app/utils/md5_encrypt"
+	"ginskeleton/app/model"
+	"ginskeleton/app/utils/md5_encrypt"
 )
 
 func CreateUserCurdFactory() *UsersCurd {

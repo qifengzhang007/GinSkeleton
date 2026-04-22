@@ -15,8 +15,8 @@
 ###  3.本次我们要对接的日志清单    
 >   1.nginx 的 access.log.  
 >   2.nginx 的 error.log.  
->   3.本项目骨架 的 goskeleton.log ,该日志是项目运行日志,按照行业标准提供了 info 、 warn 、error 、fatal 等不同级别日志.    
->   提醒：本项目骨架版本 >= v1.3.00, 则 `storage/logs/goskeleton.log` 格式已经默认设置ok（json格式，记录的时间字段已经调整为 created_at）,否则，请您升级版本至最新版，或者自行修改配置文件 config/config.yml 中的日志部分，
+>   3.本项目骨架 的 ginskeleton.log ,该日志是项目运行日志,按照行业标准提供了 info 、 warn 、error 、fatal 等不同级别日志.    
+>   提醒：本项目骨架版本 >= v1.3.00, 则 `storage/logs/ginskeleton.log` 格式已经默认设置ok（json格式，记录的时间字段已经调整为 created_at）,否则，请您升级版本至最新版，或者自行修改配置文件 config/config.yml 中的日志部分，
  修改日志格式为 json，此外还需要调整一个地方：
  参见最新版本代码 app/utils/zap_factory/zap_factory.go ，47行，重新定义日志记录的时间字段：encoderConfig.TimeKey = "created_at"
 
@@ -133,10 +133,10 @@ docker restart  kibana7
 > 4.4.1 由于logstash 需要修改、配置的地方特别多，而且本次的难度基本都集中的这块儿，因此，配置文件等需要频繁修改的变动的我们映射出来.  
 ```code  
 docker pull logstash:7.9.1
-# goskeleton 请确保版本 >= v1.3.00 版本，默认配置项开启了日志 json 格式，如果老日志不是json，请自行重命名备份原始文件，新日志确保 100% json格式。    
+# ginskeleton 请确保版本 >= v1.3.00 版本，默认配置项开启了日志 json 格式，如果老日志不是json，请自行重命名备份原始文件，新日志确保 100% json格式。    
 # 以下涉及到的参数需要您根据您的实际情况修改
-# 启动 logstash 容器，注意这里有两个映射目录，第一个是配置文件目录，第二个是 nginx 日志目录（包括 access、error 日志），第三个是 goskeleton.log 映射    
-docker    container    run  --name    logstash7  -d    -v  /home/mysoft/logstash/conf/:/usr/share/logstash/pipeline/    -v   /home/wwwlogs/project_log/:/usr/share/data/project_log/nginx/   -v /home/wwwroot/project2020/goskeleton/storage/logs/:/usr/share/data/project_log/goskeleton/  logstash:7.9.1
+# 启动 logstash 容器，注意这里有两个映射目录，第一个是配置文件目录，第二个是 nginx 日志目录（包括 access、error 日志），第三个是 ginskeleton.log 映射    
+docker    container    run  --name    logstash7  -d    -v  /home/mysoft/logstash/conf/:/usr/share/logstash/pipeline/    -v   /home/wwwlogs/project_log/:/usr/share/data/project_log/nginx/   -v /home/wwwroot/project2020/ginskeleton/storage/logs/:/usr/share/data/project_log/ginskeleton/  logstash:7.9.1
 
 #修改容器时间为北京时间，ffe8df018624 为刚启动的容器ID, 请自行替换  
 docker   cp  /usr/share/zoneinfo/Asia/Shanghai   ffe8df018624:/etc/localtime
@@ -157,7 +157,7 @@ xpack.monitoring.elasticsearch.hosts: [ "http://172.21.0.13:9200" ]
 docker restart  logstash
 
 ```
-> 4.4.2 接下来我们继续修改数据采集配置项,主要是实现采集 nginx 的 access、error 日志, goskeleton 项目的运行日志到 elk 服务器 .   
+> 4.4.2 接下来我们继续修改数据采集配置项,主要是实现采集 nginx 的 access、error 日志, ginskeleton 项目的运行日志到 elk 服务器 .   
 > logstash配置文件我们已经映射出来了，相关位置： `/home/mysoft/logstash/conf/logstash.conf`  
 > 以下配置必须完全按照我们提供的文档操作，否则很容易报错，全程必须是小写，不小心使用大写都有可能都会报错.  
 ```code   
@@ -173,10 +173,10 @@ input {
         # codec => json
    }
     
-    # goskeleton 日志采集配置
+    # ginskeleton 日志采集配置
     file {
-    type => "goskeleton" 
-    path => "/usr/share/data/project_log/goskeleton/goskeleton.log"
+    type => "ginskeleton" 
+    path => "/usr/share/data/project_log/ginskeleton/ginskeleton.log"
     start_position => "beginning"
     stat_interval => "3"
     # codec => json
@@ -221,9 +221,9 @@ filter {
                 database => "/usr/share/data/testlog/GeoLite2-City.mmdb"
             }
 
-	}else if [type] == "goskeleton" {
+	}else if [type] == "ginskeleton" {
 
-           mutate { add_field => { "[@metadata][target_index]" => "logstash-goskeleton-%{+YYYY.MM.dd}" } }
+           mutate { add_field => { "[@metadata][target_index]" => "logstash-ginskeleton-%{+YYYY.MM.dd}" } }
 
     }else if [type]=="nginxerr"{
 
@@ -280,8 +280,8 @@ docker  logs  --since  3m logstash7
 > nginx access 的日志  
 ![nginx_access日志](https://www.ginskeleton.com/images/elk005.png)        
 
->> goskeleton 的日志  
-![goskeleton的elk日志](https://www.ginskeleton.com/images/elk006.png)   
+>> ginskeleton 的日志  
+![ginskeleton的elk日志](https://www.ginskeleton.com/images/elk006.png)   
 
 > nginx error 的日志  
 ![nginx_access日志](https://www.ginskeleton.com/images/elk007.png)      

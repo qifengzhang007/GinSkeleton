@@ -2,13 +2,13 @@ package token
 
 import (
 	"errors"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/middleware/my_jwt"
+	"ginskeleton/app/model"
+	"ginskeleton/app/service/users/token_cache_redis"
 	"github.com/dgrijalva/jwt-go"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/middleware/my_jwt"
-	"goskeleton/app/model"
-	"goskeleton/app/service/users/token_cache_redis"
 	"time"
 )
 

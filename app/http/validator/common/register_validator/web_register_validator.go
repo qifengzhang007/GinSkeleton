@@ -1,11 +1,11 @@
 package register_validator
 
 import (
-	"goskeleton/app/core/container"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/http/validator/common/upload_files"
-	"goskeleton/app/http/validator/common/websocket"
-	"goskeleton/app/http/validator/web/users"
+	"ginskeleton/app/core/container"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/http/validator/common/upload_files"
+	"ginskeleton/app/http/validator/common/websocket"
+	"ginskeleton/app/http/validator/web/users"
 )
 
 // 各个业务模块验证器必须进行注册（初始化），程序启动时会自动加载到容器

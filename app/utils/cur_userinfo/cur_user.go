@@ -1,9 +1,9 @@
 package cur_userinfo
 
 import (
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/http/middleware/my_jwt"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/http/middleware/my_jwt"
 )
 
 // GetCurrentUserId 获取当前用户的id

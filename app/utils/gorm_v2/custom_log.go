@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"ginskeleton/app/global/variable"
 	"go.uber.org/zap"
 	gormLog "gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
-	"goskeleton/app/global/variable"
 	"strings"
 	"time"
 )

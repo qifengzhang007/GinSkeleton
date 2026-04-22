@@ -1,7 +1,7 @@
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_goskeleton` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_ginskeleton` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `db_goskeleton`;
+USE `db_ginskeleton`;
 
 /*Table structure for table `tb_users` */
 

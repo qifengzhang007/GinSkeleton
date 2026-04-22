@@ -1,11 +1,11 @@
--- 创建数据库,例如：  db_goskeleton
+-- 创建数据库,例如：  db_ginskeleton
 USE [master]
-IF NOT EXISTS(SELECT 1 FROM sysdatabases WHERE NAME=N'db_goskeleton')
+IF NOT EXISTS(SELECT 1 FROM sysdatabases WHERE NAME=N'db_ginskeleton')
 BEGIN
-CREATE DATABASE db_goskeleton
+CREATE DATABASE db_ginskeleton
 END
 GO
-use db_goskeleton ;
+use db_ginskeleton ;
 --  创建用户表
 CREATE TABLE [dbo].[tb_users](
     [id] [int] IDENTITY(1,1) NOT NULL,

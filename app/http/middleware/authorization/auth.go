@@ -1,12 +1,12 @@
 package authorization
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	userstoken "ginskeleton/app/service/users/token"
+	"ginskeleton/app/utils/response"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	userstoken "goskeleton/app/service/users/token"
-	"goskeleton/app/utils/response"
 	"strings"
 )
 

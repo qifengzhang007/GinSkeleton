@@ -1,8 +1,8 @@
 package demo_simple
 
 import (
+	"ginskeleton/app/global/variable"
 	"github.com/spf13/cobra"
-	"goskeleton/app/global/variable"
 	"time"
 )
 

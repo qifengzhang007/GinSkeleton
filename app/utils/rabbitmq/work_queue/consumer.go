@@ -1,9 +1,9 @@
 package work_queue
 
 import (
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/rabbitmq/error_record"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/rabbitmq/error_record"
 	"time"
 )
 

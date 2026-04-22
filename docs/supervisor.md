@@ -20,9 +20,9 @@ vim /etc/supervisord.d/supervisord.conf
 
 # 在[include]节点前添加以下内容，保存
 
-[program:GoSkeleton]
+[program:ginskeleton]
 # 设置命令在指定的目录内执行
-directory=/home/wwwroot/GoProject2020/goskeleton/
+directory=/home/wwwroot/GoProject2020/ginskeleton/
 #例如，我们编译完以后的go程序名为：main 
 command= /bin/bash -c   ./main  
 user=root
@@ -62,12 +62,12 @@ supervisord -c /etc/supervisord.d/supervisord.conf
 ####  使用 supervisorctl 命令管理项目
 >   此时你也可以通过浏览器打开 `ip:9001` 地址，输入账号、密码对应用程序进行可视化管理。  
 ```bash
-# 启动 Goskeleton 应用
-supervisorctl start Goskeleton
-# 重启 GoSkeleton 应用
-supervisorctl restart Goskeleton
-# 停止 GoSkeleton 应用
-supervisorctl stop Goskeleton  
+# 启动 ginskeleton 应用
+supervisorctl start ginskeleton
+# 重启 ginskeleton 应用
+supervisorctl restart ginskeleton
+# 停止 ginskeleton 应用
+supervisorctl stop ginskeleton  
 # 查看所有被管理项目运行状态
 supervisorctl status
 # 重新加载配置文件,一般是增加了新的项目节点，执行此命令即可使新项目运行起来而不影响老项目  

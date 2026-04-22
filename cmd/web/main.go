@@ -1,9 +1,9 @@
 package main
 
 import (
-	"goskeleton/app/global/variable"
-	_ "goskeleton/bootstrap"
-	"goskeleton/routers"
+	"ginskeleton/app/global/variable"
+	_ "ginskeleton/bootstrap"
+	"ginskeleton/routers"
 )
 
 // 这里可以存放后端路由（例如后台管理系统）

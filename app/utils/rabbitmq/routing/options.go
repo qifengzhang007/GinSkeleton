@@ -1,8 +1,8 @@
 package routing
 
 import (
+	"ginskeleton/app/global/variable"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"goskeleton/app/global/variable"
 )
 
 // 等 go 泛型稳定以后，生产者和消费者初始化参数的设置，本段代码就可以继续精简

@@ -1,9 +1,9 @@
 package test
 
 import (
+	"ginskeleton/app/global/variable"
+	_ "ginskeleton/bootstrap" //  为了保证单元测试与正常启动效果一致，记得引入该包
 	"github.com/qifengzhang007/goCurl"
-	"goskeleton/app/global/variable"
-	_ "goskeleton/bootstrap" //  为了保证单元测试与正常启动效果一致，记得引入该包
 	"testing"
 )
 

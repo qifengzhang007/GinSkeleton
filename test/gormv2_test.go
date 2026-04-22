@@ -2,9 +2,9 @@ package test
 
 import (
 	"fmt"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/gorm_v2"
-	_ "goskeleton/bootstrap"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/gorm_v2"
+	_ "ginskeleton/bootstrap"
 	"sync"
 	"testing"
 	"time"
@@ -34,7 +34,7 @@ func (*tb_users) TableName() string {
 	return "tb_users"
 }
 
-//角色表
+// 角色表
 type tb_role struct {
 	Id          uint   `json:"id"  gorm:"primaryKey" `
 	Name        string `json:"name"`
@@ -356,7 +356,8 @@ func TestCustomeParamsConnMysql(t *testing.T) {
 //
 //}
 
-//  sqlserver 数据库测试, 以查询为例，其他操作参见mysql
+//	sqlserver 数据库测试, 以查询为例，其他操作参见mysql
+//
 // 请在配置项 config > gorm_v2.yml 中，sqlserver 部分，正确配置数据库参数
 // 设置 IsInitGolobalGormSqlserver =1 ，程序自动初始化全局变量
 func TestSqlserver(t *testing.T) {
@@ -376,7 +377,8 @@ func TestSqlserver(t *testing.T) {
 	fmt.Printf("sqlserver数据查询结果：%v\n", users)
 }
 
-//  PostgreSql 数据库测试
+//	PostgreSql 数据库测试
+//
 // 请在配置项 config > gorm_v2.yml 中，PostgreSql 部分，正确配置数据库参数。
 // 设置 IsInitGolobalGormPostgreSql =1 ，程序自动初始化全局变量
 func TestPostgreSql(t *testing.T) {

@@ -1,8 +1,8 @@
 package websocket
 
 import (
+	serviceWs "ginskeleton/app/service/websocket"
 	"github.com/gin-gonic/gin"
-	serviceWs "goskeleton/app/service/websocket"
 )
 
 /**

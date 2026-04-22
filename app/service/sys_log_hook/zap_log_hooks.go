@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// GoSkeleton 系统运行日志钩子函数
+// ginskeleton 系统运行日志钩子函数
 // 1.单条日志就是一个结构体格式，本函数拦截每一条日志，您可以进行后续处理，例如：推送到阿里云日志管理面板、ElasticSearch 日志库等
 
 func ZapLogHandler(entry zapcore.Entry) error {
@@ -20,7 +20,7 @@ func ZapLogHandler(entry zapcore.Entry) error {
 
 	//这里启动一个协程，hook丝毫不会影响程序性能，
 	go func(paramEntry zapcore.Entry) {
-		//fmt.Println(" GoSkeleton  hook ....，你可以在这里继续处理系统日志....")
+		//fmt.Println(" ginskeleton  hook ....，你可以在这里继续处理系统日志....")
 		//fmt.Printf("%#+v\n", paramEntry)
 	}(entry)
 	return nil

@@ -5,7 +5,7 @@
 >   1.如果你的 `go` 服务是通过 `nginx` 代理访问的，那么需要进行配置        
 ```code  
 #注意，upstream 部分放置在 server 块之外,至少需要一个服务器ip。 
-upstream  goskeleton_list {
+upstream  ginskeleton_list {
     # 设置负载均衡模式为ip算法模式，这样不同的客户端每次请求都会与第一次建立对话的后端服务器进行交互
     ip_hash;
     server  127.0.0.1:20202  ;
@@ -16,7 +16,7 @@ server{
     listen 80  ; 
     #  站点域名，没有的话，写项目名称即可
     server_name     www.ginskeleton.com ;  
-    root            /home/wwwroot/goproject2020/goskeleton/public ;
+    root            /home/wwwroot/goproject2020/ginskeleton/public ;
     index           index.htm  index.html ;   
     charset         utf-8 ;
     
@@ -30,9 +30,9 @@ server{
     
      location ~ / {
          # 静态资源、目录交给ngixn本身处理，动态路由请求执行后续的代理代码
-         try_files $uri $uri/  @goskeleton;
+         try_files $uri $uri/  @ginskeleton;
      }
-    location   @goskeleton {
+    location   @ginskeleton {
 
         #将客户端的ip和头域信息一并转发到后端服务器  
         proxy_set_header Host $http_host;
@@ -43,7 +43,7 @@ server{
         proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
 
         # 最后，执行代理访问真实服务器
-        proxy_pass http://goskeleton_list   ;
+        proxy_pass http://ginskeleton_list   ;
     
     }
      # 以下是静态资源缓存配置
@@ -123,7 +123,7 @@ server {
 ```nginx
 
 #注意，upstream 部分放置在 server 块之外,至少需要一个服务器ip。 
-upstream  goskeleton_list {
+upstream  ginskeleton_list {
     # 设置负载均衡模式为ip算法模式，这样不同的客户端每次请求都会与第一次建立对话的后端服务器进行交互
     ip_hash;
     server  127.0.0.1:20202  ;
@@ -141,7 +141,7 @@ server{
     listen 443 ssl  ; 
     #  站点域名，没有的话，写项目名称即可
     server_name     www.ginskeleton.com ;  
-    root            /home/wwwroot/goproject2020/goskeleton/public ;
+    root            /home/wwwroot/goproject2020/ginskeleton/public ;
     index           index.html  index.htm ;   
     charset         utf-8 ;
 
@@ -163,10 +163,10 @@ server{
      
      location ~ / {
          # 静态资源、目录交给ngixn本身处理，动态路由请求执行后续的代理代码
-         try_files $uri $uri/  @goskeleton;
+         try_files $uri $uri/  @ginskeleton;
      }
-    // 这里的 @goskeleton 和 try_files 语法块的名称必须一致 
-    location   @goskeleton {
+    // 这里的 @ginskeleton 和 try_files 语法块的名称必须一致 
+    location   @ginskeleton {
 
         #将客户端的ip和头域信息一并转发到后端服务器  
         proxy_set_header Host $http_host;
@@ -177,7 +177,7 @@ server{
         proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
 
         # 最后，执行代理访问真实服务器
-        proxy_pass http://goskeleton_list   ;
+        proxy_pass http://ginskeleton_list   ;
     
     }
      # 以下是静态资源缓存配置

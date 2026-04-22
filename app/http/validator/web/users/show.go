@@ -1,12 +1,12 @@
 package users
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/http/controller/web"
+	common_data_type "ginskeleton/app/http/validator/common/data_type"
+	"ginskeleton/app/http/validator/core/data_transfer"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/http/controller/web"
-	common_data_type "goskeleton/app/http/validator/common/data_type"
-	"goskeleton/app/http/validator/core/data_transfer"
-	"goskeleton/app/utils/response"
 )
 
 type Show struct {

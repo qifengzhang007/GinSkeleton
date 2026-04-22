@@ -2,9 +2,9 @@ package model
 
 import (
 	"fmt"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
 	"gorm.io/gorm"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
 	"strings"
 )
 

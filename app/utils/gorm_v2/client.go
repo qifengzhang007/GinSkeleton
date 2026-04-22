@@ -3,6 +3,8 @@ package gorm_v2
 import (
 	"errors"
 	"fmt"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -10,8 +12,6 @@ import (
 	"gorm.io/gorm"
 	gormLog "gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
 	"strings"
 	"time"
 )

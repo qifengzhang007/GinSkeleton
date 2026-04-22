@@ -1,8 +1,8 @@
 package demo
 
 import (
+	"ginskeleton/app/global/variable"
 	"github.com/spf13/cobra"
-	"goskeleton/app/global/variable"
 )
 
 // Demo示例文件，我们假设一个场景：

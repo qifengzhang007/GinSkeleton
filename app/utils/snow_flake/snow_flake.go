@@ -1,9 +1,9 @@
 package snow_flake
 
 import (
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/snow_flake/snowflake_interf"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/snow_flake/snowflake_interf"
 	"sync"
 	"time"
 )

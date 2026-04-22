@@ -1,9 +1,9 @@
 package api
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/utils/response"
 )
 
 type Home struct {

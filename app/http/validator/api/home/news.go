@@ -1,12 +1,12 @@
 package home
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/http/controller/api"
+	common_data_type "ginskeleton/app/http/validator/common/data_type"
+	"ginskeleton/app/http/validator/core/data_transfer"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/http/controller/api"
-	common_data_type "goskeleton/app/http/validator/common/data_type"
-	"goskeleton/app/http/validator/core/data_transfer"
-	"goskeleton/app/utils/response"
 )
 
 // 门户类前端接口模拟一个获取新闻的参数验证器

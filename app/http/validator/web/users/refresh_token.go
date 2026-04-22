@@ -1,10 +1,10 @@
 package users
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/http/controller/web"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/http/controller/web"
-	"goskeleton/app/utils/response"
 	"strings"
 )
 

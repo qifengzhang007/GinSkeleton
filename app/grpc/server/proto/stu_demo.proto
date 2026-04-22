@@ -1,0 +1,40 @@
+
+//  这是一个简易的 grpc-server  样例代码，定义一个 studentService 服务
+
+// 定义 grpc 协议版本
+syntax = "proto3" ;
+
+// 定义包名
+package  proto;
+option go_package = "./stu_demo_pb";
+// 请求参数验证器
+import "validate/validate.proto";
+
+
+// 定义入参（请求参数）格式
+// @id 根据用户id 查询基本信息
+message studentRequest{
+   string name = 1   [(validate.rules).string = {ignore_empty: true, min_len:1,max_len:30}]  ;
+}
+
+// 定义响应消息
+message studentResponse{
+  int64 code = 1 ;
+  string  msg = 2 ;
+  repeated data data = 3;  // 数组 +对象方式返回结果
+}
+
+message data{
+  int64 id = 1 ;
+  string  name = 2 ;
+  int32  age = 3 ;
+  string  school = 4 ;
+}
+
+
+// 定义外部可以调用的grpc接口
+service  StudentService {
+  // 定义一个测试函方法
+  rpc  GetStudentInfo(studentRequest) returns  (studentResponse){}
+}
+

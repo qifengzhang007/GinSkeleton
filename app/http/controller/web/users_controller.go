@@ -1,13 +1,13 @@
 package web
 
 import (
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/model"
+	"ginskeleton/app/service/users/curd"
+	userstoken "ginskeleton/app/service/users/token"
+	"ginskeleton/app/utils/response"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/model"
-	"goskeleton/app/service/users/curd"
-	userstoken "goskeleton/app/service/users/token"
-	"goskeleton/app/utils/response"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func (u *Users) Register(context *gin.Context) {
 	}
 }
 
-//  2.用户登录
+// 2.用户登录
 func (u *Users) Login(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
@@ -76,7 +76,7 @@ func (u *Users) RefreshToken(context *gin.Context) {
 // 参考地址：https://gitee.com/daitougege/GinSkeleton/blob/master/docs/concise.md
 // 您也可以参考 Admin 项目地址：https://gitee.com/daitougege/gin-skeleton-admin-backend/ 中， app/model/  提供的示例语法
 
-//3.用户查询（show）
+// 3.用户查询（show）
 func (u *Users) Show(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	page := context.GetFloat64(consts.ValidatorPrefix + "page")
@@ -90,7 +90,7 @@ func (u *Users) Show(context *gin.Context) {
 	}
 }
 
-//4.用户新增(store)
+// 4.用户新增(store)
 func (u *Users) Store(context *gin.Context) {
 	userName := context.GetString(consts.ValidatorPrefix + "user_name")
 	pass := context.GetString(consts.ValidatorPrefix + "pass")
@@ -105,7 +105,7 @@ func (u *Users) Store(context *gin.Context) {
 	}
 }
 
-//5.用户更新(update)
+// 5.用户更新(update)
 func (u *Users) Update(context *gin.Context) {
 	//表单参数验证中的int、int16、int32 、int64、float32、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")
@@ -132,7 +132,7 @@ func (u *Users) Update(context *gin.Context) {
 
 }
 
-//6.删除记录
+// 6.删除记录
 func (u *Users) Destroy(context *gin.Context) {
 	//表单参数验证中的int、int16、int32 、int64、float32、float64等数字键（字段），请统一使用 GetFloat64() 获取，其他函数无效
 	userId := context.GetFloat64(consts.ValidatorPrefix + "id")

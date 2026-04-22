@@ -2,15 +2,15 @@ package my_jwt
 
 import (
 	"errors"
+	"ginskeleton/app/global/my_errors"
 	"github.com/dgrijalva/jwt-go"
-	"goskeleton/app/global/my_errors"
 	"time"
 )
 
 // 使用工厂创建一个 JWT 结构体
 func CreateMyJWT(signKey string) *JwtSign {
 	if len(signKey) <= 0 {
-		signKey = "goskeleton"
+		signKey = "ginskeleton"
 	}
 	return &JwtSign{
 		[]byte(signKey),

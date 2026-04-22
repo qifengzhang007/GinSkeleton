@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"ginskeleton/command/demo"
+	"ginskeleton/command/demo_simple"
 	"github.com/spf13/cobra"
-	"goskeleton/command/demo"
-	"goskeleton/command/demo_simple"
 	"os"
 )
 

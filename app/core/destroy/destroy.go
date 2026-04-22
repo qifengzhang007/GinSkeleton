@@ -1,13 +1,14 @@
 package destroy
 
 import (
-	"go.uber.org/zap"
-	"goskeleton/app/core/event_manage"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
+	"ginskeleton/app/core/event_manage"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"go.uber.org/zap"
 )
 
 func init() {

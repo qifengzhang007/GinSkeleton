@@ -1,12 +1,12 @@
 package variable
 
 import (
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/utils/snow_flake/snowflake_interf"
+	"ginskeleton/app/utils/yml_config/ymlconfig_interf"
 	"github.com/casbin/casbin/v2"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/utils/snow_flake/snowflake_interf"
-	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"log"
 	"os"
 	"strings"

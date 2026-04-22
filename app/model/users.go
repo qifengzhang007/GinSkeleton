@@ -1,10 +1,10 @@
 package model
 
 import (
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/service/users/token_cache_redis"
+	"ginskeleton/app/utils/md5_encrypt"
 	"go.uber.org/zap"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/service/users/token_cache_redis"
-	"goskeleton/app/utils/md5_encrypt"
 	"time"
 )
 
@@ -61,7 +61,7 @@ func (u *UsersModel) Login(userName string, pass string) *UsersModel {
 	return nil
 }
 
-//记录用户登陆（login）生成的token，每次登陆记录一次token
+// 记录用户登陆（login）生成的token，每次登陆记录一次token
 func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64, clientIp string) bool {
 	sql := `
 		INSERT   INTO  tb_oauth_access_tokens(fr_user_id,action_name,token,expires_at,client_ip)
@@ -79,7 +79,7 @@ func (u *UsersModel) OauthLoginToken(userId int64, token string, expiresAt int64
 	return false
 }
 
-//用户刷新token,条件检查: 相关token在过期的时间之内，就符合刷新条件
+// 用户刷新token,条件检查: 相关token在过期的时间之内，就符合刷新条件
 func (u *UsersModel) OauthRefreshConditionCheck(userId int64, oldToken string) bool {
 	// 首先判断旧token在本系统自带的数据库已经存在，才允许继续执行刷新逻辑
 	var oldTokenIsExists int
@@ -90,7 +90,7 @@ func (u *UsersModel) OauthRefreshConditionCheck(userId int64, oldToken string) b
 	return false
 }
 
-//用户刷新token
+// 用户刷新token
 func (u *UsersModel) OauthRefreshToken(userId, expiresAt int64, oldToken, newToken, clientIp string) bool {
 	sql := "UPDATE   tb_oauth_access_tokens   SET  token=? ,expires_at=?,client_ip=?,updated_at=NOW(),action_name='refresh'  WHERE   fr_user_id=? AND token=?"
 	if u.Exec(sql, newToken, time.Unix(expiresAt, 0).Format(variable.DateFormat), clientIp, userId, oldToken).Error == nil {
@@ -110,7 +110,7 @@ func (u *UsersModel) UpdateUserloginInfo(last_login_ip string, userId int64) {
 	_ = u.Exec(sql, last_login_ip, time.Now().Format(variable.DateFormat), userId)
 }
 
-//当用户更改密码后，所有的token都失效，必须重新登录
+// 当用户更改密码后，所有的token都失效，必须重新登录
 func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	userItem, err := u.ShowOneItem(userId)
@@ -131,7 +131,7 @@ func (u *UsersModel) OauthResetToken(userId int, newPass, clientIp string) bool 
 	return false
 }
 
-//当tb_users 删除数据，相关的token同步删除
+// 当tb_users 删除数据，相关的token同步删除
 func (u *UsersModel) OauthDestroyToken(userId int) bool {
 	//如果用户新旧密码一致，直接返回true，不需要处理
 	sql := "DELETE FROM  tb_oauth_access_tokens WHERE  fr_user_id=?  "
@@ -177,7 +177,7 @@ func (u *UsersModel) SetTokenInvalid(userId int) bool {
 	return false
 }
 
-//根据用户ID查询一条信息
+// 根据用户ID查询一条信息
 func (u *UsersModel) ShowOneItem(userId int) (*UsersModel, error) {
 	sql := "SELECT  `id`, `user_name`,`pass`, `real_name`, `phone`, `status` FROM  `tb_users`  WHERE `status`=1 and   id=? LIMIT 1"
 	result := u.Raw(sql, userId).First(u)
@@ -208,7 +208,7 @@ func (u *UsersModel) Show(userName string, limitStart, limitItems int) (counts i
 	return 0, nil
 }
 
-//新增
+// 新增
 func (u *UsersModel) Store(userName string, pass string, realName string, phone string, remark string) bool {
 	sql := "INSERT  INTO tb_users(user_name,pass,real_name,phone,remark) SELECT ?,?,?,?,? FROM DUAL   WHERE NOT EXISTS (SELECT 1  FROM tb_users WHERE  user_name=?)"
 	if u.Exec(sql, userName, pass, realName, phone, remark, userName).RowsAffected > 0 {
@@ -217,14 +217,14 @@ func (u *UsersModel) Store(userName string, pass string, realName string, phone 
 	return false
 }
 
-//UpdateDataCheckUserNameIsUsed 更新前检查新的用户名是否已经存在（避免和别的账号重名）
+// UpdateDataCheckUserNameIsUsed 更新前检查新的用户名是否已经存在（避免和别的账号重名）
 func (u *UsersModel) UpdateDataCheckUserNameIsUsed(userId int, userName string) (exists int64) {
 	sql := "select count(*) as counts from tb_users where  id!=?  AND user_name=?"
 	_ = u.Raw(sql, userId, userName).First(&exists)
 	return exists
 }
 
-//更新
+// 更新
 func (u *UsersModel) Update(id int, userName string, pass string, realName string, phone string, remark string, clientIp string) bool {
 	sql := "update tb_users set user_name=?,pass=?,real_name=?,phone=?,remark=?  WHERE status=1 AND id=?"
 	if u.Exec(sql, userName, pass, realName, phone, remark, id).RowsAffected >= 0 {
@@ -235,7 +235,7 @@ func (u *UsersModel) Update(id int, userName string, pass string, realName strin
 	return false
 }
 
-//删除用户以及关联的token记录
+// 删除用户以及关联的token记录
 func (u *UsersModel) Destroy(id int) bool {
 
 	// 删除用户时，清除用户缓存在redis的全部token

@@ -2,11 +2,11 @@ package captcha
 
 import (
 	"bytes"
+	"ginskeleton/app/global/consts"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/response"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/consts"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/response"
 	"net/http"
 	"path"
 	"time"

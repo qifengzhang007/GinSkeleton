@@ -1,13 +1,13 @@
 package redis_factory
 
 import (
+	"ginskeleton/app/core/event_manage"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/yml_config"
+	"ginskeleton/app/utils/yml_config/ymlconfig_interf"
 	"github.com/gomodule/redigo/redis"
 	"go.uber.org/zap"
-	"goskeleton/app/core/event_manage"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/yml_config"
-	"goskeleton/app/utils/yml_config/ymlconfig_interf"
 	"time"
 )
 

@@ -3,10 +3,10 @@ package upload_file
 import (
 	"errors"
 	"fmt"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
+	"ginskeleton/app/utils/md5_encrypt"
 	"github.com/gin-gonic/gin"
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
-	"goskeleton/app/utils/md5_encrypt"
 	"os"
 	"path"
 	"strings"

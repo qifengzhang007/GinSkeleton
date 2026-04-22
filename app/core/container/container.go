@@ -1,8 +1,8 @@
 package container
 
 import (
-	"goskeleton/app/global/my_errors"
-	"goskeleton/app/global/variable"
+	"ginskeleton/app/global/my_errors"
+	"ginskeleton/app/global/variable"
 	"log"
 	"strings"
 	"sync"
