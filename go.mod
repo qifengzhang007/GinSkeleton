@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/casbin/casbin/v2 v2.135.0
-	github.com/casbin/gorm-adapter/v3 v3.41.0
+	github.com/casbin/gorm-adapter/v3 v3.39.0
 	github.com/dchest/captcha v1.1.0
 	github.com/dgrijalva/jwt-go v3.2.1-0.20210802184156-9742bd7fca1c+incompatible
 	github.com/envoyproxy/protoc-gen-validate v1.3.3
