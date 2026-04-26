@@ -2,10 +2,8 @@ package main
 
 import (
 	"ginskeleton/app/global/variable"
-	"ginskeleton/app/grpc/server/proto/stu_demo_pb"
-	"ginskeleton/app/grpc/server/proto/user_demo_pb"
-	"ginskeleton/app/grpc/server/service_implement"
 	_ "ginskeleton/bootstrap"
+	"ginskeleton/routers"
 	"log"
 	"net"
 
@@ -20,11 +18,10 @@ func main() {
 		log.Fatalf("Tcp 监听失败: %v", err)
 	}
 
-	//2.建立 gPRC 服务器，并注册服务
+	//2.初始化 gPRC 服务，并注册服务
 	grpcServ := grpc.NewServer()
-	// PB 文件调用注册函数，将grpc与业务service进行绑定、注册
-	user_demo_pb.RegisterUserServiceServer(grpcServ, &service_implement.UserService{})
-	stu_demo_pb.RegisterStudentServiceServer(grpcServ, &service_implement.StuService{})
+	routers.InitGrpcService(grpcServ)
+	variable.ZapLog.Info("开始启动 grpc 服务, 监听端口: " + variable.ConfigYml.GetString("GrpcServer.Port"))
 
 	variable.ZapLog.Info("Grpc 服务启动, 监听端口: " + variable.ConfigYml.GetString("GrpcServer.Port"))
 	//3.启动服务
