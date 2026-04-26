@@ -22,8 +22,6 @@ func main() {
 	grpcServ := grpc.NewServer()
 	routers.InitGrpcService(grpcServ)
 	variable.ZapLog.Info("开始启动 grpc 服务, 监听端口: " + variable.ConfigYml.GetString("GrpcServer.Port"))
-
-	variable.ZapLog.Info("Grpc 服务启动, 监听端口: " + variable.ConfigYml.GetString("GrpcServer.Port"))
 	//3.启动服务
 	if err = grpcServ.Serve(lis); err != nil {
 		log.Fatalf("Grpc 服务启动失败,错误: %v", err)
