@@ -2,6 +2,7 @@ package main
 
 import (
 	"ginskeleton/app/global/variable"
+	grpc_interceptor "ginskeleton/app/grpc/server/interceptor"
 	_ "ginskeleton/bootstrap"
 	"ginskeleton/routers"
 	"log"
@@ -19,12 +20,13 @@ func main() {
 	}
 
 	//2.初始化 gPRC 服务，并注册服务
-	grpcServ := grpc.NewServer()
+	grpcServ := grpc.NewServer(grpc.UnaryInterceptor(grpc_interceptor.GrpcRequestLog()))
+	//  业务服务注册
 	routers.InitGrpcService(grpcServ)
 	variable.ZapLog.Info("开始启动 grpc 服务, 监听端口: " + variable.ConfigYml.GetString("GrpcServer.Port"))
 	//3.启动服务
 	if err = grpcServ.Serve(lis); err != nil {
-		log.Fatalf("Grpc 服务启动失败,错误: %v", err)
+		log.Fatalf("grpc 服务启动失败,错误: %v", err)
 	}
 
 }
